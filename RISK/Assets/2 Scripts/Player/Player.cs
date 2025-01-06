@@ -31,6 +31,8 @@ public class Player : MonoBehaviour, ITakedamage
     public float curHp;
     [SerializeField]
     private bl_Joystick joystick;
+    [SerializeField] private WeaponController weaponController;
+
 
     private PlayerState currentState;
     private bool isMobile;
@@ -57,6 +59,14 @@ public class Player : MonoBehaviour, ITakedamage
         #else
             isMobile = false;
         #endif
+    }
+
+    private void Start()
+    {
+        if (weaponController == null)
+        {
+            weaponController = GetComponent<WeaponController>();
+        }
     }
 
     //public virtual void Start()
