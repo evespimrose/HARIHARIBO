@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.WSA;
 
-public class MeleeEnemy : Enemy
+public class MeleeMonster : Monster
 {
     public enum Stats
     {
@@ -136,10 +136,10 @@ public class MeleeEnemy : Enemy
         isAction = true;
         isGround = false;
         float airborneTime = 1f;
-        float upDuration = airborneTime * 0.3f;
-        float downDuration = airborneTime * 0.7f;
+        float upDuration = airborneTime * 0.4f;
+        float downDuration = airborneTime * 0.6f;
 
-        float startY = transform.position.y;
+        float startY = model.transform.position.y;
         float targetY = startY + 5f;
         float elapsedTime = 0f;
         //다른행동 중지하고 애니메이션 변경하고  에어본모션
@@ -149,23 +149,23 @@ public class MeleeEnemy : Enemy
         {
             elapsedTime += Time.deltaTime;
             float newY = Mathf.Lerp(startY, targetY, elapsedTime / upDuration);
-            transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+            model.transform.position = new Vector3(model.transform.position.x, newY, model.transform.position.z);
             yield return null;
         }
-        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+        model.transform.position = new Vector3(model.transform.position.x, targetY, model.transform.position.z);
 
         //내려오는 부분
         elapsedTime = 0f;
-        float originalY = transform.position.y;
+        float originalY = model.transform.position.y;
 
         while (elapsedTime < downDuration)
         {
             elapsedTime += Time.deltaTime;
             float newY = Mathf.Lerp(originalY, startY, elapsedTime / downDuration);
-            transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+            model.transform.position = new Vector3(model.transform.position.x, newY, model.transform.position.z);
             yield return null;
         }
-        transform.position = new Vector3(transform.position.x, startY, transform.position.z);
+        model.transform.position = new Vector3(model.transform.position.x, startY, model.transform.position.z);
 
         yield return new WaitUntil(() => isGround == true);
         isAirborne = false;
@@ -175,7 +175,7 @@ public class MeleeEnemy : Enemy
     public void Did()
     {
         //애니메이션실행 마지막부분에 실행
-        UnitManager.Instance.enemys.Remove(this.gameObject);
+        UnitManager.Instance.monsters.Remove(this.gameObject);
         Destroy(this.gameObject);
     }
 
