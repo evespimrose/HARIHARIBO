@@ -52,6 +52,7 @@ public class Monster : MonoBehaviour, ITakedamage
 
     protected void Move()
     {
+        transform.LookAt(target);
         Vector3 dir = (target.position - transform.position).normalized;
         Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(moveDir);

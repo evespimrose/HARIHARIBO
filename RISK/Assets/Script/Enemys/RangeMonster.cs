@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class MeleeMonster : Monster
+public class RangeMonster : Monster
 {
+    public Transform shotPos;
+    public GameObject bulletPrefab;
+
     public enum Stats
     {
         Move,
@@ -32,7 +34,7 @@ public class MeleeMonster : Monster
         if (isAction == true) return;
         if (target == null) Targeting();
         StatsChange();
-        switch(stats)
+        switch (stats)
         {
             case Stats.Move:
                 break;
@@ -116,16 +118,9 @@ public class MeleeMonster : Monster
         transform.LookAt(target);
         yield return new WaitForSeconds(0.2f);
         //공격범위바꿀거면 atkRange만 바꾸면됨
-        Collider[] cols = Physics.OverlapSphere(transform.position, atkRange);
-        foreach (Collider col in cols)
-        {
-            if (col.gameObject.CompareTag("Player"))
-            {
-                print($"{col.name}을 공격");
-                col.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
-            }
-        }
-        yield return new WaitForSeconds(0.5f);
+        GameObject bullet = Instantiate(bulletPrefab, shotPos.position, bulletPrefab.transform.rotation);
+        bullet.GetComponent<RangeSpear>().BulletSeting(this.target, atkDamage);
+        yield return new WaitForSeconds(0.2f);
         isAction = false;
     }
 
@@ -185,5 +180,4 @@ public class MeleeMonster : Monster
         UnitManager.Instance.monsters.Remove(this.gameObject);
         Destroy(this.gameObject);
     }
-
 }
