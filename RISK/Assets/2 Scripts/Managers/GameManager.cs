@@ -13,20 +13,20 @@ public class GameManager : SingletonManager<GameManager>
     {
     }
 
-    //Photon¿¡¼­ ÄÁÆ®·Ñ µ¿±âÈ­ ÇÏ´Â ¹æ¹ý
-    //1. ÇÁ¸®ÆÕ¿¡ PhotonView ÄÄÆ÷³ÍÆ®¸¦ ºÙÀÌ°í, PhotonNetwork.Instantiate¸¦ ÅëÇØ ¿ø°Ý Å¬¶óÀÌ¾ðÆ®µé¿¡°Ôµµ
-    //µ¿±âÈ­µÈ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÏµµ·Ï ÇÔ.
-    //2. PhotonView°¡ Observing ÇÒ ¼ö ÀÖµµ·Ï View ÄÄÆ÷³ÍÆ®¸¦ ºÎÂø.
-    //3. ³» View°¡ ºÎÂøµÇÁö ¾ÊÀº ¿ÀºêÁ§Æ®´Â ³»°¡ Á¦¾îÇÏÁö ¾Êµµ·Ï ¿¹¿ÜÃ³¸®¸¦ ¹Ýµå½Ã ÇÒ°Í.
+    //Photonï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
+    //1. ï¿½ï¿½ï¿½ï¿½ï¿½Õ¿ï¿½ PhotonView ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½, PhotonNetwork.Instantiateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½é¿¡ï¿½Ôµï¿½
+    //ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½.
+    //2. PhotonViewï¿½ï¿½ Observing ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ View ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+    //3. ï¿½ï¿½ Viewï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Ýµï¿½ï¿½ ï¿½Ò°ï¿½.
 
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => isGameReady);
         yield return new WaitForSeconds(1f);
 
-        //GetPlayerNumber È®ÀåÇÔ¼ö : Æ÷Åæ ³×Æ®¿öÅ©¿¡ ¿¬°áµÈ ´Ù¸¥ ÇÃ·¹ÀÌ¾îµé »çÀÌ¿¡¼­ µ¿±âÈ­ µÈ ÇÃ·¹ÀÌ¾î ¹øÈ£.
-        //Actor Number¿Í ´Ù¸§. (Scene¸¶´Ù ¼±Âø¼øÀ¸·Î 0~ÇÃ·¹ÀÌ¾î ¼ö ¸¸Å­ ºÎ¿©µÊ)
-        //GetPlayerNumber È®ÀåÇÔ¼ö°¡ µ¿ÀÛÇÏ±â À§ÇØ¼­´Â ¾À¿¡ PlayerNumbering ÄÄÆ÷³ÍÆ®°¡ ÇÊ¿äÇÏ´Ù.
+        //GetPlayerNumber È®ï¿½ï¿½ï¿½Ô¼ï¿½ : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½È£.
+        //Actor Numberï¿½ï¿½ ï¿½Ù¸ï¿½. (Sceneï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0~ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ ï¿½ï¿½Å­ ï¿½Î¿ï¿½ï¿½ï¿½)
+        //GetPlayerNumber È®ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ PlayerNumbering ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Ï´ï¿½.
         int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
         GameObject playerObj = PhotonNetwork.Instantiate("Player", playerPos, Quaternion.identity);
@@ -37,20 +37,20 @@ public class GameManager : SingletonManager<GameManager>
         //PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity).name
         //    = PhotonNetwork.NickName;
 
-        // ÀÌ ¹Ø¿¡¼­´Â ³»°¡ MasterClient°¡ ¾Æ´Ï¸é µ¿ÀÛÇÏÁö ¾ÊÀ½
+        // ï¿½ï¿½ ï¿½Ø¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ MasterClientï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (false == PhotonNetwork.IsMasterClient)
         {
             yield break;
         }
 
-        // MasterClient¸¸ 5ÃÊ¸¶´Ù PillÀ» PhotonNetwork¸¦ ÅëÇØ Instantiate.
+        // MasterClientï¿½ï¿½ 5ï¿½Ê¸ï¿½ï¿½ï¿½ Pillï¿½ï¿½ PhotonNetworkï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Instantiate.
         while (true)
         {
             Vector3 spawnPos = Random.insideUnitSphere * 15f;
             spawnPos.y = 0;
             Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 180f), 0);
 
-            // °¢ Pill¸¶´Ù random color¿Í random healAmount¸¦ ÁÖÀÔÇÏ°í ½ÍÀ¸¸é?
+            // ï¿½ï¿½ Pillï¿½ï¿½ï¿½ï¿½ random colorï¿½ï¿½ random healAmountï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 
             Vector3 color = new Vector3(Random.value, Random.value, Random.value);
             float healAmount = Random.Range(10f, 30f);

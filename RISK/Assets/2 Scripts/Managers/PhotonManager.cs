@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//Æ÷Åæ ÄÝ¹é ¸®½º³Ê
+//ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
 

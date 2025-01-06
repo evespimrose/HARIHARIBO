@@ -1,11 +1,19 @@
 {
     "name": "PhotonUnityNetworking.Utilities",
+    "rootNamespace": "",
     "references": [
         "PhotonRealtime",
         "PhotonUnityNetworking"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false
+    "excludePlatforms": [
+        "Android"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

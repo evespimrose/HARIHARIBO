@@ -26,13 +26,13 @@ public class PanelManager : MonoBehaviourPunCallbacks
         Instance = this;
         panelDic = new Dictionary<string, GameObject>()
         {
-            { "Login", login.gameObject},
-            { "Signup", signup.gameObject},
-            { "SelectCharacter", selectCharacter.gameObject},
-            { "Popup" , popup.gameObject },
-            { "CreateCharacter", createCharacter.gameObject},
-            { "TwoButtonPopup", twoButtonPopup.gameObject},
-            { "Channel", channel.gameObject},
+            { "Login", login.gameObject },
+            { "Signup", signup.gameObject },
+            { "SelectCharacter", selectCharacter.gameObject },
+            { "Popup", popup.gameObject },
+            { "CreateCharacter", createCharacter.gameObject },
+            { "TwoButtonPopup", twoButtonPopup.gameObject },
+            { "Channel", channel.gameObject },
         };
 
         PanelOpen("Login");
@@ -49,46 +49,43 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public override void OnEnable()
     {
         base.OnEnable();
-        //MonoBehaviourPunCallbacks¸¦ »ó¼ÓÇÑ Å¬·¡½º´Â OnEnableÀ»
-        //ÀçÁ¤ÀÇ ÇÒ ¶§ ²À ºÎ¸ðÀÇ OnEnableÀ» È£ÃâÇØ¾ß ÇÔ
-        //print("ÇÏÀÌ");
     }
 
-    public override void OnConnected() //Æ÷Åæ ¼­¹ö¿¡ Á¢¼Ó µÇ¾úÀ» ¶§ È£Ãâ
+    public override void OnConnected() //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
     {
-        PanelOpen("Menu");
+        PanelOpen("Channel");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         PanelOpen("Login");
     }
-    public override void OnCreatedRoom() //¹æÀ» »ý¼ºÇÏ¿´À»¶§ È£Ãâ
-    {
-        PanelOpen("Room");
+    //public override void OnCreatedRoom() //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+    //{
+    //    PanelOpen("Room");
 
-    }
-    public override void OnJoinedRoom() //¹æ¿¡ Âü¿©
-    {
-        PanelOpen("Room");
-        HashTable roomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-        if (roomCustomProperties.ContainsKey("Difficulty"))
-        {
-            //room.OnDifficultyChange((Difficulty)roomCustomProperties["Difficulty"]);
-        }
-    }
-    public override void OnLeftRoom() //¹æ¿¡¼­ ¶°³µÀ» ¶§ È£Ãâ
-    {
-        PanelOpen("Menu");
-    }
-    public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
-    {
-        //room.JoinPlayer(newPlayer);
-    }
-    public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
-    {
-        //room.LeavePlayer(otherPlayer);
-    }
+    //}
+    //public override void OnJoinedRoom() //ï¿½æ¿¡ ï¿½ï¿½ï¿½ï¿½
+    //{
+    //    PanelOpen("Room");
+    //    HashTable roomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+    //    if (roomCustomProperties.ContainsKey("Difficulty"))
+    //    {
+    //        //room.OnDifficultyChange((Difficulty)roomCustomProperties["Difficulty"]);
+    //    }
+    //}
+    //public override void OnLeftRoom() //ï¿½æ¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
+    //{
+    //    PanelOpen("Menu");
+    //}
+    //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
+    //{
+    //    //room.JoinPlayer(newPlayer);
+    //}
+    //public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
+    //{
+    //    //room.LeavePlayer(otherPlayer);
+    //}
     public override void OnJoinedLobby()
     {
         PanelOpen("Lobby");
