@@ -30,7 +30,7 @@ public class Player : MonoBehaviour, ITakedamage
     [Tooltip("현재 체력")]
     public float curHp;
     [SerializeField]
-    private Joystick joystick;
+    private bl_Joystick joystick;
 
     private PlayerState currentState;
     private bool isMobile;
@@ -70,7 +70,7 @@ public class Player : MonoBehaviour, ITakedamage
 
         if (isMobile)
         {
-            moveDirection = new Vector3(joystick.Direction.x, 0f, joystick.Direction.y);
+            moveDirection = new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
         }
         else
         {
