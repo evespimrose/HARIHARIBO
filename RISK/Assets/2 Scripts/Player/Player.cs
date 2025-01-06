@@ -13,8 +13,8 @@ public class Player : MonoBehaviour, ITakedamage
         Dead,
     }
 
-    [Tooltip("플레이어 스텟")]
-    public PlayerScroptableObjects playerStats;
+    //[Tooltip("플레이어 스텟")]
+    //public PlayerScroptableObjects playerStats;
     [Tooltip("공격 데미지")]
     public float atkDamage;
     [Tooltip("공격 속도")]
@@ -44,13 +44,13 @@ public class Player : MonoBehaviour, ITakedamage
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         currentState = PlayerState.Idle;
-        atkDamage = playerStats.atkDamage;
-        atkSpeed = playerStats.atkSpeed;
-        moveSpeed = playerStats.moveSpeed;
-        criticalChance = playerStats.criticalChance;
-        criticalDamage = playerStats.criticalDamage;
-        cooldownReduction = playerStats.cooldownReduction;
-        curHp = playerStats.curHp;
+        //atkDamage = playerStats.atkDamage;
+        //atkSpeed = playerStats.atkSpeed;
+        //moveSpeed = playerStats.moveSpeed;
+        //criticalChance = playerStats.criticalChance;
+        //criticalDamage = playerStats.criticalDamage;
+        //cooldownReduction = playerStats.cooldownReduction;
+        //curHp = playerStats.curHp;
         maxHp = curHp;
         #if UNITY_ANDROID || UNITY_IOS
             isMobile = true;
@@ -59,9 +59,23 @@ public class Player : MonoBehaviour, ITakedamage
         #endif
     }
 
-    public virtual void Start()
+    //public virtual void Start()
+    //{
+    //    UnitManager.Instance.players.Add(this.gameObject);
+    //}
+    private void Update()
     {
-        UnitManager.Instance.players.Add(this.gameObject);
+        switch (currentState)
+        {
+            case PlayerState.Idle:
+            case PlayerState.Moving:
+                Move();  
+                break;
+            case PlayerState.Skill:
+                break;
+            case PlayerState.Dead:
+                break;
+        }
     }
 
     public void Move()
@@ -70,6 +84,11 @@ public class Player : MonoBehaviour, ITakedamage
 
         if (isMobile)
         {
+            if (joystick == null)
+            {
+                Debug.LogError("Joystick reference is missing!");
+                return;
+            }
             moveDirection = new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
         }
         else
@@ -82,7 +101,10 @@ public class Player : MonoBehaviour, ITakedamage
         if (moveDirection.magnitude > 0)
         {
             currentState = PlayerState.Moving;
-            animator.SetBool("IsMoving", true);
+            if (animator != null)
+            {
+                animator.SetBool("IsMoving", true);
+            }
 
             Vector3 movement = moveDirection * moveSpeed * Time.deltaTime;
             rb.MovePosition(transform.position + movement);
@@ -97,7 +119,10 @@ public class Player : MonoBehaviour, ITakedamage
         else
         {
             currentState = PlayerState.Idle;
-            animator.SetBool("IsMoving",false);
+            if (animator != null)
+            {
+                animator.SetBool("IsMoving", false);
+            }
         }
 
     }

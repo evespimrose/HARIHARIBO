@@ -28,6 +28,8 @@ public class bl_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private Canvas m_Canvas;
     private float diff;
     private Vector3 PressScaleVector;
+    private bool useKeyboard = true;
+    private Vector2 keyboardInput;
 
     /// <summary>
     /// 
@@ -75,17 +77,51 @@ public class bl_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     void Update()
     {
         DeathArea = CenterReference.position;
-        //If this not free (not touched) then not need continue
-        if (!isFree)
-            return;
-
-        //Return to default position with a smooth movement
-        StickRect.position = Vector3.SmoothDamp(StickRect.position, DeathArea, ref currentVelocity, smoothTime);
-        //When is in default position, we not need continue update this
-        if (Vector3.Distance(StickRect.position, DeathArea) < .1f)
+        if (useKeyboard)
         {
-            isFree = false;
-            StickRect.position = DeathArea;
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            keyboardInput = new Vector2(h, v).normalized;
+
+            if (keyboardInput != Vector2.zero)
+            {
+                isFree = false;
+                Vector3 targetPosition = DeathArea + new Vector3(keyboardInput.x, keyboardInput.y, 0) * radio;
+                StickRect.position = targetPosition;
+
+                if (lastId == -2)
+                {
+                    lastId = -1;
+                    if (backImage != null)
+                    {
+                        backImage.CrossFadeColor(PressColor, Duration, true, true);
+                        stickImage.CrossFadeColor(PressColor, Duration, true, true);
+                    }
+                    StopAllCoroutines();
+                    StartCoroutine(ScaleJoysctick(true));
+                }
+            }
+            else if (lastId == -1)
+            {
+                isFree = true;
+                lastId = -2;
+                if (backImage != null)
+                {
+                    backImage.CrossFadeColor(NormalColor, Duration, true, true);
+                    stickImage.CrossFadeColor(NormalColor, Duration, true, true);
+                }
+                StopAllCoroutines();
+                StartCoroutine(ScaleJoysctick(false));
+            }
+        }
+        if (isFree)
+        {
+            StickRect.position = Vector3.SmoothDamp(StickRect.position, DeathArea, ref currentVelocity, smoothTime);
+            if (Vector3.Distance(StickRect.position, DeathArea) < .1f)
+            {
+                isFree = false;
+                StickRect.position = DeathArea;
+            }
         }
     }
 
@@ -146,18 +182,13 @@ public class bl_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         isFree = true;
         currentVelocity = Vector3.zero;
-        //leave the default id again
-        if (data.pointerId == lastId)
+        lastId = -2;
+        StopAllCoroutines();
+        StartCoroutine(ScaleJoysctick(false));
+        if (backImage != null)
         {
-            //-2 due -1 is the first touch id
-            lastId = -2;
-            StopAllCoroutines();
-            StartCoroutine(ScaleJoysctick(false));
-            if (backImage != null)
-            {
-                backImage.CrossFadeColor(NormalColor, Duration, true, true);
-                stickImage.CrossFadeColor(NormalColor, Duration, true, true);
-            }
+            backImage.CrossFadeColor(NormalColor, Duration, true, true);
+            stickImage.CrossFadeColor(NormalColor, Duration, true, true);
         }
     }
 
@@ -217,6 +248,8 @@ public class bl_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         get
         {
+            if (useKeyboard && keyboardInput != Vector2.zero)
+                return keyboardInput.x;
             return (StickRect.position.x - DeathArea.x) / Radio;
         }
     }
@@ -229,6 +262,8 @@ public class bl_Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         get
         {
+            if (useKeyboard && keyboardInput != Vector2.zero)
+                return keyboardInput.y;
             return (StickRect.position.y - DeathArea.y) / Radio;
         }
     }
