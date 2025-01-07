@@ -234,7 +234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &706857899
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -310,19 +310,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 706857898}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49428093e24cd9f41b8bb66f6d64d69f, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ba51ad72c1573a408285a0f58218cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterState: {fileID: 11400000, guid: 759aff86e13ba02409ee049caec3bbde, type: 2}
-  animator: {fileID: 0}
-  target: {fileID: 0}
+  maxHp: 10
+  curHp: 10
+  moveSpeed: 10
   atkDamage: 0
-  moveSpeed: 0
-  atkRange: 0
-  curHp: 0
-  atkDelay: 0
-  model: {fileID: 0}
+  atkSpeed: 1
+  animator: {fileID: 1786317798}
+  monsterType: 0
+  monsterState: {fileID: 11400000, guid: 759aff86e13ba02409ee049caec3bbde, type: 2}
+  atkRange: 10
+  atkDelay: 5
+  model: {fileID: 1314875249}
+  isGround: 0
   isAirborne: 0
+  isAtk: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,7 +607,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1057057974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,6 +805,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1314875249 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 171076, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
+  m_PrefabInstance: {fileID: 1032156426}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1531428187
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,6 +890,11 @@ Transform:
 --- !u!4 &1786317797 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 476532, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
+  m_PrefabInstance: {fileID: 1032156426}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1786317798 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9542556, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
   m_PrefabInstance: {fileID: 1032156426}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2027494040
@@ -1032,7 +1046,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 5163b1063ff61be46a18accb63ab77eb, type: 2}
-  animator: {fileID: 0}
   atkDamage: 0
   atkSpeed: 0
   moveSpeed: 0
@@ -1040,6 +1053,8 @@ MonoBehaviour:
   criticalDamage: 0
   cooldownReduction: 0
   curHp: 0
+  joystick: {fileID: 0}
+  weaponController: {fileID: 0}
 --- !u!1001 &4264248393970214354
 PrefabInstance:
   m_ObjectHideFlags: 0

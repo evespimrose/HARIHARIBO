@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BaseCharacter : MonoBehaviour , ITakedamage
@@ -9,14 +10,15 @@ public abstract class BaseCharacter : MonoBehaviour , ITakedamage
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected float atkDamage;
     [SerializeField] protected float atkSpeed;
+    
 
     protected IState<BaseCharacter> currentState;
     public float MaxHp => maxHp;
     public float MoveSpeed => moveSpeed;
     public float AtkDamage => atkDamage;
     public float AtkSpeed => atkSpeed;
-    public Animator animator { get; private set; }
-    public Rigidbody rb { get; private set; }
+    public Animator animator;
+    public Rigidbody rb { get; set; }
 
     protected virtual void Awake()
     {
@@ -32,7 +34,7 @@ public abstract class BaseCharacter : MonoBehaviour , ITakedamage
         currentState?.Update(this);
     }
 
-    public virtual void ChangeState<TState>(TState newState) where TState : IState<BaseCharacter>
+    public virtual void ChangeState(IState<BaseCharacter> newState)
     {
         currentState?.Exit(this);
         currentState = newState;
