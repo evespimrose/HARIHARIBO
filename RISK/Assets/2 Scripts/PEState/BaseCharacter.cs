@@ -5,12 +5,16 @@ using UnityEngine;
 public abstract class BaseCharacter : MonoBehaviour , ITakedamage
 {
     [SerializeField] protected float maxHp;
-    [SerializeField] protected float curHp;
+    [SerializeField] public float curHp;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected float atkDamage;
     [SerializeField] protected float atkSpeed;
 
     protected IState<BaseCharacter> currentState;
+    public float MaxHp => maxHp;
+    public float MoveSpeed => moveSpeed;
+    public float AtkDamage => atkDamage;
+    public float AtkSpeed => atkSpeed;
     public Animator animator { get; private set; }
     public Rigidbody rb { get; private set; }
 
