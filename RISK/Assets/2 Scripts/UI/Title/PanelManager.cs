@@ -15,11 +15,14 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public SignupPanel signup;
     public SelectCharacterPanel selectCharacter;
     public CreateCharacterPanel createCharacter;
+
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
-    public ChannelPanel channel;
 
-    Dictionary<string, GameObject> panelDic;
+
+    private Dictionary<string, GameObject> panelDic;
+    private Dictionary<string, GameObject> popupDic;
+    private Stack<UIPopup> openPopups = new Stack<UIPopup>();
 
     private void Awake()
     {
@@ -29,10 +32,13 @@ public class PanelManager : MonoBehaviourPunCallbacks
             { "Login", login.gameObject },
             { "Signup", signup.gameObject },
             { "SelectCharacter", selectCharacter.gameObject },
+            { "CreateCharacter", createCharacter.gameObject }
+        };
+
+        popupDic = new Dictionary<string, GameObject>()
+        {
             { "Popup", popup.gameObject },
-            { "CreateCharacter", createCharacter.gameObject },
-            { "TwoButtonPopup", twoButtonPopup.gameObject },
-            { "Channel", channel.gameObject },
+            { "TwoButtonPopup", twoButtonPopup.gameObject }
         };
 
         PanelOpen("Login");
@@ -44,6 +50,32 @@ public class PanelManager : MonoBehaviourPunCallbacks
         {
             row.Value.SetActive(row.Key == panelName);
         }
+    }
+
+    public T PopupOpen<T>() where T : UIPopup
+    {
+        foreach (var popup in popupDic.Values)
+        {
+            T component = popup.GetComponent<T>();
+            if (component != null)
+            {
+                component.gameObject.SetActive(true);
+                openPopups.Push(component);
+                return component;
+            }
+        }
+
+        return null;
+    }
+
+    public void PopupClose()
+    {
+        if (openPopups.Count > 0)
+        {
+            UIPopup targetPopup = openPopups.Pop();
+            targetPopup.gameObject.SetActive(false);
+        }
+
     }
 
     public override void OnEnable()

@@ -1,18 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class TwoButtonPopupPanel : MonoBehaviour
+public class TwoButtonPopupPanel : UIPopup
 {
-    // Start is called before the first frame update
-    void Start()
+    public Button okButton;
+    private bool isOk = false;
+
+    protected override void Awake()
     {
-        
+        base.Awake();
+        okButton.onClick.AddListener(OkButtonClick);
+    }
+    public void SetPopup(string title, string message, Action<bool> callback)
+    {
+        base.SetPopup(title, message, () => callback?.Invoke(isOk));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OkButtonClick()
     {
-        
+        isOk = true;
+        callback?.Invoke();
+        PanelManager.Instance.PopupClose();
+    }
+
+    protected override void CloseButtonClick()
+    {
+        isOk = false;
+        callback?.Invoke();
+        PanelManager.Instance.PopupClose();
     }
 }
