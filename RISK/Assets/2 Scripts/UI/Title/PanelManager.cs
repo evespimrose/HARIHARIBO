@@ -19,6 +19,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
 
+    private string openPanel = null;
 
     private Dictionary<string, GameObject> panelDic;
     private Dictionary<string, GameObject> popupDic;
@@ -46,22 +47,33 @@ public class PanelManager : MonoBehaviourPunCallbacks
 
     public void PanelOpen(string panelName)
     {
-        foreach (var row in panelDic)
+        if (openPanel == panelName) return;
+
+        if (openPanel != null && panelDic.TryGetValue(openPanel, out var previousPanel))
         {
-            row.Value.SetActive(row.Key == panelName);
+            previousPanel.SetActive(false);
+        }
+
+        if (panelDic.TryGetValue(panelName, out var newPanel))
+        {
+            newPanel.SetActive(true);
+            openPanel = panelName;
+        }
+        else
+        {
+            Debug.LogWarning($"Panel '{panelName}' not found in panelDic.");
         }
     }
 
     public T PopupOpen<T>() where T : UIPopup
     {
-        foreach (var popup in popupDic.Values)
+        foreach (GameObject popup in popupDic.Values)
         {
-            T component = popup.GetComponent<T>();
-            if (component != null)
+            if (popup.TryGetComponent(out T popupComponent))
             {
-                component.gameObject.SetActive(true);
-                openPopups.Push(component);
-                return component;
+                if (!popup.activeSelf) popup.SetActive(true);
+                openPopups.Push(popupComponent);
+                return popupComponent;
             }
         }
 
@@ -83,21 +95,19 @@ public class PanelManager : MonoBehaviourPunCallbacks
         base.OnEnable();
     }
 
-    public override void OnConnected() //���� ������ ���� �Ǿ��� �� ȣ��
-    {
-        PanelOpen("Channel");
-    }
+    public override void OnConnected()
+    { PanelOpen("Channel"); }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         PanelOpen("Login");
     }
-    //public override void OnCreatedRoom() //���� �����Ͽ����� ȣ��
+    //public override void OnCreatedRoom()
     //{
     //    PanelOpen("Room");
 
     //}
-    //public override void OnJoinedRoom() //�濡 ����
+    //public override void OnJoinedRoom()
     //{
     //    PanelOpen("Room");
     //    HashTable roomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;

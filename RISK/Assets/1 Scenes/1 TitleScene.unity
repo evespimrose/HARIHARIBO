@@ -1266,8 +1266,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -2337,7 +2337,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &329983296
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2360,10 +2360,10 @@ RectTransform:
   - {fileID: 1687756464}
   m_Father: {fileID: 1229994411}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: -1820, y: -786}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &329983297
 MonoBehaviour:
@@ -2380,9 +2380,10 @@ MonoBehaviour:
   idInput: {fileID: 1176385589}
   pwInput: {fileID: 114048876}
   pwMatchInput: {fileID: 1159401114}
+  duplicationCheckResultText: {fileID: 901039259}
   signupButton: {fileID: 1112352517}
   duplicateCheckButton: {fileID: 1712669652}
-  isDuplicateChecked: 0
+  isDuplicationChecked: 0
   isDuplicate: 0
   termToggle: {fileID: 1687756465}
 --- !u!1 &340922628
@@ -4872,9 +4873,9 @@ RectTransform:
   m_Father: {fileID: 89725432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: -17, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &634517937
 MonoBehaviour:
@@ -5878,9 +5879,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05b099e8fe1b0134c99bd814ce058efa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: {fileID: 0}
-  message: {fileID: 0}
-  closeButton: {fileID: 0}
+  title: {fileID: 1587032158}
+  message: {fileID: 427814788}
+  closeButton: {fileID: 108856483}
 --- !u!1 &711821134
 GameObject:
   m_ObjectHideFlags: 0
@@ -6408,9 +6409,9 @@ RectTransform:
   m_Father: {fileID: 89725432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: -17}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &795840822
 MonoBehaviour:
@@ -7039,6 +7040,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901039257}
   m_CullTransparentMesh: 1
+--- !u!1 &901675629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 901675631}
+  - component: {fileID: 901675630}
+  m_Layer: 0
+  m_Name: FirebaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &901675630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901675629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881a70fac1d68da4e9bdc24988f4d03f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &901675631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901675629}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1051.5608, y: 524.0859, z: -1134.1472}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &918196356
 GameObject:
   m_ObjectHideFlags: 0
@@ -9877,8 +9922,8 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -9982,7 +10027,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1165571361
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10320,14 +10365,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 7
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -10655,10 +10700,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9a2fbab1a13b6f4198fcefdf96d088c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: {fileID: 0}
-  message: {fileID: 0}
-  closeButton: {fileID: 0}
-  okButton: {fileID: 0}
+  title: {fileID: 951888505}
+  message: {fileID: 1272050429}
+  closeButton: {fileID: 1044038008}
+  okButton: {fileID: 513094389}
 --- !u!1 &1225236698
 GameObject:
   m_ObjectHideFlags: 0
@@ -12332,6 +12377,7 @@ MonoBehaviour:
   pwInput: {fileID: 484298490}
   signupButton: {fileID: 340922630}
   loginButton: {fileID: 785861269}
+  quitButton: {fileID: 516309704}
 --- !u!1 &1408301391
 GameObject:
   m_ObjectHideFlags: 0
@@ -14008,9 +14054,9 @@ RectTransform:
   m_Father: {fileID: 89725432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1700915806
 MonoBehaviour:
@@ -14921,7 +14967,7 @@ RectTransform:
   m_Father: {fileID: 758736617}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -16623,8 +16669,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 691288715}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5515153}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -16764,3 +16810,4 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 1229994411}
   - {fileID: 1212070717}
+  - {fileID: 901675631}

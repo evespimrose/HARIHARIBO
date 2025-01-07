@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "128945884110",
+    "firebase_url": "https://hariharibo-cc5fb-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hariharibo-cc5fb",
+    "storage_bucket": "hariharibo-cc5fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128945884110:android:890db7cc2531c7f4c1f99f",
+        "android_client_info": {
+          "package_name": "com.HARIHARIBO.RISK"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128945884110-ilsd9hhdeasp8s28j530kjli80qi5157.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5LxgaWy-t78lTsDKf4H-_HqAVrB5MWSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128945884110-ilsd9hhdeasp8s28j530kjli80qi5157.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
