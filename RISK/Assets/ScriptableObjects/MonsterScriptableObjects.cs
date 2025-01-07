@@ -2,7 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemysStats", menuName =
     "Scriptable Object/Enemy", order = int.MaxValue)]
-public class EnemyScriptableObjects : ScriptableObject
+public class MonsterScriptableObjects : ScriptableObject
 {
     [Tooltip("공격데미지")]
     public float atkDamage;

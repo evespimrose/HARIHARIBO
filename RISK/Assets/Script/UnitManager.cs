@@ -7,7 +7,7 @@ public class UnitManager : MonoBehaviour
     public static UnitManager Instance;
 
     public List<GameObject> players;
-    public List<GameObject> enemys;
+    public List<GameObject> monsters;
 
     private void Awake()
     {
