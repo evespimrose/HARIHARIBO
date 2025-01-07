@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 79146900347486979}
   - component: {fileID: 6718819727048818878}
   m_Layer: 0
-  m_Name: RangeSpear
+  m_Name: RangeSpearBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

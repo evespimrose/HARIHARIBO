@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33232132123932442}
   - component: {fileID: 23869780975297548}
   m_Layer: 0
-  m_Name: MeleeMace
+  m_Name: MeleeWeaponA(Mace)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
