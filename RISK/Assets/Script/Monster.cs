@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, ITakedamage
+public class Monster : MonoBehaviour, ITakedamage
 {
     [Tooltip("유닛스텟")]
-    public EnemyScriptableObjects enemyState;
+    public MonsterScriptableObjects monsterState;
     [Tooltip("애니메이터")]
     public Animator animator;
     [Tooltip("공격대상")]
@@ -20,13 +20,14 @@ public class Enemy : MonoBehaviour, ITakedamage
     public float curHp;
     [Tooltip("공격딜레이")]
     public float atkDelay;
-
+    [Tooltip("모델링")]
+    public GameObject model;
+    [Tooltip("에어본")]
+    public bool isAirborne = false;
     protected Coroutine action;
     protected bool isAction = false;
-    protected bool isHit = false;
     protected bool isDie = false;
-    [SerializeField]
-    protected bool isAirborne = false;
+    protected bool isHit = false;
     protected bool isGround = false;
 
     protected float maxHp;
@@ -35,22 +36,23 @@ public class Enemy : MonoBehaviour, ITakedamage
     public virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        atkDamage = enemyState.atkDamage;
-        moveSpeed = enemyState.moveSpeed;
-        atkRange = enemyState.atkRange;
-        curHp = enemyState.curHp;
-        atkDelay = enemyState.atkDelay;
+        atkDamage = monsterState.atkDamage;
+        moveSpeed = monsterState.moveSpeed;
+        atkRange = monsterState.atkRange;
+        curHp = monsterState.curHp;
+        atkDelay = monsterState.atkDelay;
         maxHp = curHp;
     }
 
     public virtual void Start()
     {
-        UnitManager.Instance.enemys.Add(this.gameObject);
+        UnitManager.Instance.monsters.Add(this.gameObject);
         Targeting();
     }
 
     protected void Move()
     {
+        transform.LookAt(target);
         Vector3 dir = (target.position - transform.position).normalized;
         Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(moveDir);
