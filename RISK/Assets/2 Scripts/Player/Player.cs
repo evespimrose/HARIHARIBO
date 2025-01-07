@@ -13,8 +13,8 @@ public class Player : MonoBehaviour, ITakedamage
         Dead,
     }
 
-    //[Tooltip("플레이어 스텟")]
-    //public PlayerScroptableObjects playerStats;
+    [Tooltip("플레이어 스텟")]
+    public PlayerScroptableObjects playerStats;
     [Tooltip("공격 데미지")]
     public float atkDamage;
     [Tooltip("공격 속도")]
@@ -46,13 +46,13 @@ public class Player : MonoBehaviour, ITakedamage
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         currentState = PlayerState.Idle;
-        //atkDamage = playerStats.atkDamage;
-        //atkSpeed = playerStats.atkSpeed;
-        //moveSpeed = playerStats.moveSpeed;
-        //criticalChance = playerStats.criticalChance;
-        //criticalDamage = playerStats.criticalDamage;
-        //cooldownReduction = playerStats.cooldownReduction;
-        //curHp = playerStats.curHp;
+        atkDamage = playerStats.atkDamage;
+        atkSpeed = playerStats.atkSpeed;
+        moveSpeed = playerStats.moveSpeed;
+        criticalChance = playerStats.criticalChance;
+        criticalDamage = playerStats.criticalDamage;
+        cooldownReduction = playerStats.cooldownReduction;
+        curHp = playerStats.curHp;
         maxHp = curHp;
         #if UNITY_ANDROID || UNITY_IOS
             isMobile = true;
@@ -67,12 +67,10 @@ public class Player : MonoBehaviour, ITakedamage
         {
             weaponController = GetComponent<WeaponController>();
         }
+        UnitManager.Instance.players.Add(this.gameObject);
     }
 
-    //public virtual void Start()
-    //{
-    //    UnitManager.Instance.players.Add(this.gameObject);
-    //}
+   
     private void Update()
     {
         switch (currentState)
