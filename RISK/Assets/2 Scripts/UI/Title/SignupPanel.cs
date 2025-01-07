@@ -123,7 +123,7 @@ public class SignupPanel : MonoBehaviour
     private void CreateCallback(FirebaseUser user)
     {
         PanelManager.Instance.PopupOpen<PopupPanel>().
-            SetPopup("회원가입 완료", "회원 가입이 완료 되었습니다.\n 로그인 해주세요. ", DialogCallback);
+            SetPopup("Auth Successed!", "Auth is Successed.\nPlease LogIn.", DialogCallback);
     }
 
     private void DialogCallback()

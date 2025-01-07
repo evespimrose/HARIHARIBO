@@ -22,16 +22,13 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
 
     private async void Start()
     {
-        //파이어베이스 초기화 상태 체크. 비동기(Async)함수이므로 완료될 때 까지 대기
         DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
-        //초기화 성공
         if (status == DependencyStatus.Available)
         {
             App = FirebaseApp.DefaultInstance;
             Auth = FirebaseAuth.DefaultInstance;
             DB = FirebaseDatabase.DefaultInstance;
         }
-        //초기화 실패
         else
         {
             Debug.LogWarning($"파이어베이스 초기화 실패 : {status}");
@@ -100,7 +97,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         {
             Debug.LogError($"Duplication Check Failed: {e.Message}");
             PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Failed to check duplication.\n" + e.Message);
-            callback?.Invoke(false); // 기본적으로 중복 아님 처리
+            callback?.Invoke(false);
         }
     }
 
