@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atkDamage: 10
   atkSpeed: 0
-  moveSpeed: 5
+  moveSpeed: 2
   criticalChance: 0
   criticalDamage: 0
   cooldownReduction: 0
