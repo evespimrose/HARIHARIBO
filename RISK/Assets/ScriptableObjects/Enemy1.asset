@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4e4fcbddc9d8c42af7b4beefa42d38, type: 3}
   m_Name: Enemy1
   m_EditorClassIdentifier: 
-  atkDamage: 0
-  moveSpeed: 10
-  atkRange: 20
-  curHp: 0
-  atkDelay: 0
+  atkDamage: 1
+  moveSpeed: 5
+  atkRange: 5
+  curHp: 100
+  atkDelay: 5
