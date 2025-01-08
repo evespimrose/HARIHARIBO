@@ -24,7 +24,7 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
         if (atkDuration - curTime < 0.1f)
         {
             //공격종료
-            //entity.ChangeState(new MonsterIdle());
+            entity.nMHandler.ChangeState(typeof(NormalMonsterIdle));
         }
         if (atkDelay - curTime < 0.1f && isAtk == false)
         {
@@ -35,7 +35,6 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
 
     public override void Exit(NormalMonster entity)
     {
-        entity.StartCoroutine(entity.AtkCoolTime());
     }
 
     private void Atk(NormalMonster entity)
@@ -51,5 +50,6 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
                 col.gameObject.GetComponent<ITakedamage>().Takedamage(entity.atkDamage);
             }
         }
+        entity.StartCoroutine(entity.AtkCoolTime());
     }
 }

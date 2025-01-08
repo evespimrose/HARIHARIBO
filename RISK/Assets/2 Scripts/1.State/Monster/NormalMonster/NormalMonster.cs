@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.GraphicsBuffer;
 
 public class NormalMonster : MonoBehaviour, ITakedamage
 {
@@ -16,7 +18,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     public Transform target;
     protected Collider col;
     protected Rigidbody rb;
-    protected StateHandler<NormalMonster> nMHandler;
+    public StateHandler<NormalMonster> nMHandler;
 
     [Tooltip("모델링")]
     public GameObject model;
@@ -46,15 +48,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     protected void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
-        animator = GetComponentInChildren<Animator>();
-        this.atkDamage = monsterState.atkDamage;
-        this.atkRange = monsterState.atkRange;
-        this.atkDelay = monsterState.atkDelay;
-        this.moveSpeed = monsterState.moveSpeed;
-        this.curHp = monsterState.curHp;
-        this.maxHp = curHp;
+        InitializeComponents();
         InitializeStateHandler();
     }
 
@@ -69,18 +63,39 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         nMHandler.Update();
     }
 
+    private void InitializeComponents()
+    {
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
+        animator = GetComponentInChildren<Animator>();
+        this.atkDamage = monsterState.atkDamage;
+        this.atkRange = monsterState.atkRange;
+        this.atkDelay = monsterState.atkDelay;
+        this.moveSpeed = monsterState.moveSpeed;
+        this.curHp = monsterState.curHp;
+        this.maxHp = curHp;
+    }
+
     protected void InitializeStateHandler()
     {
         nMHandler = new StateHandler<NormalMonster>(this);
 
         // 상태들 등록
-        //nMHandler.RegisterState(new NormalMonsterIdleState(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterMoveState(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterAttackState(nMHandler));
-
+        nMHandler.RegisterState(new NormalMonsterIdle(nMHandler));
+        nMHandler.RegisterState(new NormalMonsterMove(nMHandler));
+        switch (monsterType)
+        {
+            case MonsterType.Melee:
+                nMHandler.RegisterState(new NormalMonsterMeleeAtk(nMHandler));
+                break;
+            case MonsterType.Range:
+                nMHandler.RegisterState(new NormalMonsterRangeAtk(nMHandler));
+                break;
+        }
         // 초기 상태 설정
-        nMHandler.ChangeState(typeof(PlayerIdleState));
+        nMHandler.ChangeState(typeof(NormalMonsterIdle));
     }
+
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))

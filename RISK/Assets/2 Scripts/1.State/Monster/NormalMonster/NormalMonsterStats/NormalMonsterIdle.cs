@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static NormalMonster;
 
 public class NormalMonsterIdle : BaseState<NormalMonster>
 {
@@ -21,18 +22,19 @@ public class NormalMonsterIdle : BaseState<NormalMonster>
         }
         else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            if (monster.monsterType == NormalMonster.MonsterType.Melee)
+            switch (monster.monsterType)
             {
-                //monster.ChangeState(new MonsterMeleeAtk());
-            }
-            else if (monster.monsterType == NormalMonster.MonsterType.Range)
-            {
-                //monster.ChangeState(new NormalMonsterRangeAtk());
+                case MonsterType.Melee:
+                    monster.nMHandler.ChangeState(typeof(NormalMonsterMeleeAtk));
+                    break;
+                case MonsterType.Range:
+                    monster.nMHandler.ChangeState(typeof(NormalMonsterRangeAtk));
+                    break;
             }
         }
         else
         {
-            //monster.ChangeState(new MonsterMove());
+            monster.nMHandler.ChangeState(typeof(NormalMonsterMove));
         }
     }
 

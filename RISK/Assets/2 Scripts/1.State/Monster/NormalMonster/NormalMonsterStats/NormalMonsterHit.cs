@@ -28,7 +28,7 @@ public class NormalMonsterHit : BaseState<NormalMonster>
         }
         if (isHit == false)
         {
-            //entity.ChangeState(new MonsterIdle());
+            entity.nMHandler.ChangeState(typeof(NormalMonsterIdle));
             //³ª°¡±â
         }
     }

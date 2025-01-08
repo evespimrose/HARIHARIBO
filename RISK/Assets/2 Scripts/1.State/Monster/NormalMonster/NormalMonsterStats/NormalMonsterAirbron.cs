@@ -67,7 +67,7 @@ public class NormalMonsterAirbron : BaseState<NormalMonster>
             // 지면에 닿았는지 체크
             if (enemy.isGround)
             {
-                //enemy.ChangeState(new MonsterIdle());
+                enemy.nMHandler.ChangeState(typeof(NormalMonsterIdle));
             }
         }
     }

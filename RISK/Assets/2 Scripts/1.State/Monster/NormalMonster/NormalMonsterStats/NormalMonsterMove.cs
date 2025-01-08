@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using static NormalMonster;
 
 public class NormalMonsterMove : BaseState<NormalMonster>
 {
@@ -14,18 +16,22 @@ public class NormalMonsterMove : BaseState<NormalMonster>
 
     public override void Update(NormalMonster entity)
     {
-        if (Vector3.Distance(entity.target.position, entity.transform.position) < entity.atkRange)
+        if (Vector3.Distance(entity.target.position, entity.transform.position) < entity.atkRange && entity.isAtk == false)
         {
-            if (entity.monsterType == NormalMonster.MonsterType.Melee)
+            switch (entity.monsterType)
             {
-                //entity.ChangeState(new MonsterMeleeAtk());
-            }
-            else if (entity.monsterType == NormalMonster.MonsterType.Range)
-            {
-                //entity.ChangeState(new NormalMonsterRangeAtk());
+                case MonsterType.Melee:
+                    entity.nMHandler.ChangeState(typeof(NormalMonsterMeleeAtk));
+                    break;
+                case MonsterType.Range:
+                    entity.nMHandler.ChangeState(typeof(NormalMonsterRangeAtk));
+                    break;
             }
         }
-        entity.Move();
+        else
+        {
+            entity.Move();
+        }
     }
 
     public override void Exit(NormalMonster entity)

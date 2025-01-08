@@ -23,7 +23,7 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
         if (curTime - atkDuration < 0.1f)
         {
             //공격종료
-            //entity.ChangeState(new MonsterIdle());
+            entity.nMHandler.ChangeState(typeof(NormalMonsterIdle));
         }
         if (curTime - atkDelay < 0.1f && isAtk == false)
         {
@@ -41,5 +41,6 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     private void Atk(NormalMonster entity)
     {
 
+        entity.StartCoroutine(entity.AtkCoolTime());
     }
 }
