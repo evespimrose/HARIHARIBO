@@ -1,45 +1,44 @@
 using Photon.Pun.Demo.Cockpit;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ITakedamage
 {
     [SerializeField] private bl_Joystick joystick;
-    [SerializeField] private WeaponController weaponController;
     [SerializeField] private Animator animator;
 
     private StateHandler<Player> stateHandler;
     private bool isMobile;
-    private float moveSpeed = 5f;
+    private float moveSpeed = 2f;
 
     public Animator Animator => animator;
-    public WeaponController WeaponController => weaponController;
+    //public Playerstats Stats => stats;
+    public int ComboCount { get; set; } = 0;
+
 
     private void Awake()
     {
         InitializeComponents();
         InitializeStateHandler();
         SetPlatform();
+        UnitManager.Instance.players.Add(this.gameObject);
     }
 
     private void InitializeComponents()
     {
-        animator = GetComponent<Animator>();
-        if (weaponController == null)
-            weaponController = GetComponent<WeaponController>();
+        animator = GetComponent<Animator>();      
     }
 
     private void InitializeStateHandler()
     {
         stateHandler = new StateHandler<Player>(this);
 
-        // 상태들 등록
         stateHandler.RegisterState(new PlayerIdleState(stateHandler));
         stateHandler.RegisterState(new PlayerMoveState(stateHandler));
-        //stateHandler.RegisterState(new PlayerAttackState(stateHandler));
+        stateHandler.RegisterState(new PlayerAttackState(stateHandler));
 
-        // 초기 상태 설정
         stateHandler.ChangeState(typeof(PlayerIdleState));
     }
 
@@ -54,6 +53,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            stateHandler.ChangeState(typeof(PlayerAttackState));
+        }
         stateHandler.Update();
     }
 
@@ -79,6 +82,11 @@ public class Player : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(direction);
         }
+    }
+
+    public void Takedamage(float damage)
+    {
+        print("아야");
     }
 }
 
