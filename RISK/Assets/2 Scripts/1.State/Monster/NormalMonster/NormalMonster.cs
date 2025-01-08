@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -39,12 +40,17 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     [Tooltip("최대체력")]
     protected float maxHp;
 
-    public bool isGround = false;
     [Tooltip("에어본")]
     public bool isAirborne = false;
+    protected bool isAirborneAction = false;
     protected bool isDie = false;
     protected bool isHit = false;
     public bool isAtk = false;
+
+    public bool isStun = false;
+    public bool isSlow = false;
+    public bool isBleeding = false;
+    public bool isPoison = false;
 
     protected void Awake()
     {
@@ -61,6 +67,10 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     private void Update()
     {
         nMHandler.Update();
+        if (isAirborne == true && isAirborneAction == false)
+        {
+            nMHandler.ChangeState(typeof(NormalMonsterAirborne));
+        }
     }
 
     private void InitializeComponents()
@@ -92,16 +102,11 @@ public class NormalMonster : MonoBehaviour, ITakedamage
                 nMHandler.RegisterState(new NormalMonsterRangeAtk(nMHandler));
                 break;
         }
+        nMHandler.RegisterState(new NormalMonsterHit(nMHandler));
+        nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
+        nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
         // 초기 상태 설정
         nMHandler.ChangeState(typeof(NormalMonsterIdle));
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGround = true;
-        }
     }
 
     public void Targeting()
@@ -126,6 +131,58 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         rb.MovePosition(moveDir);
     }
 
+    public void StartAirborne()
+    {
+        if (isAirborneAction == false)
+        {
+            StartCoroutine(Airborne());
+        }
+    }
+
+    private IEnumerator Airborne()
+    {
+        this.isAirborneAction = true;
+
+        float airborneTime = 2f;//에어본지속시간
+        float airborneDelay = airborneTime / 2f;
+        float upDuration = airborneTime * 0.2f;//올라가는시간
+        float downDuration = airborneTime * 0.3f;//내려가는시간
+        float startY = this.model.transform.position.y;//돌아올위치
+        float targetY = startY + 5f;//올라갈위치
+        float timer = 0f;
+
+        // 상승 단계 (0.4초 동안 위로 이동)
+        while (timer < upDuration)
+        {
+            float newY = Mathf.Lerp(startY, targetY, timer / upDuration);  // 상승 비율을 시간에 맞게 계산
+            this.model.transform.position = new Vector3(
+                this.model.transform.position.x,
+                newY,
+                this.model.transform.position.z
+            );
+            timer += Time.deltaTime; // 시간 누적
+            yield return null; // 프레임마다 업데이트
+        }
+
+        // 하강 단계 (0.6초 동안 원래 위치로 내려옴)
+        while (timer < airborneTime)
+        {
+            float newY = Mathf.Lerp(targetY, startY, (timer - upDuration) / downDuration);  // 하강 비율을 시간에 맞게 계산
+            this.model.transform.position = new Vector3(
+                this.model.transform.position.x,
+                newY,
+                this.model.transform.position.z
+            );
+            timer += Time.deltaTime; // 시간 누적
+            yield return null; // 프레임마다 업데이트
+        }
+
+        yield return new WaitForSeconds(airborneDelay);
+        //에어본후 일어나는 시간
+        this.isAirborneAction = false;
+        this.isAirborne = false;
+    }
+
     protected void Die()
     {
         Destroy(this.gameObject);
@@ -142,6 +199,15 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     public void Takedamage(float damage)
     {
         curHp -= damage;
-
+        if (curHp <= 0)
+        {
+            isDie = true;
+            this.nMHandler.ChangeState(typeof(NormalMonsterDie));
+        }
+        else
+        {
+            isHit = true;
+            this.nMHandler.ChangeState(typeof(NormalMonsterHit));
+        }
     }
 }

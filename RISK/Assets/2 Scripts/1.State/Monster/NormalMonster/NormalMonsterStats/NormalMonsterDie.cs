@@ -6,17 +6,17 @@ public class NormalMonsterDie : BaseState<NormalMonster>
 {
     public NormalMonsterDie(StateHandler<NormalMonster> handler) : base(handler) { }
 
-    public override void Enter(NormalMonster entity)
+    public override void Enter(NormalMonster monster)
     {
-        entity.animator.SetBool("Die", true);
+        //monster.animator.SetBool("Die", true);
     }
 
-    public override void Update(NormalMonster entity)
+    public override void Update(NormalMonster monster)
     {
         
     }
 
-    public override void Exit(NormalMonster entity)
+    public override void Exit(NormalMonster monster)
     {
         
     }

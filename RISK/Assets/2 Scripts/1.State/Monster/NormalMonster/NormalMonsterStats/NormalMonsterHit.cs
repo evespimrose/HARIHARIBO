@@ -9,14 +9,15 @@ public class NormalMonsterHit : BaseState<NormalMonster>
     public float hitDuration;
     private float curTime;
     private bool isHit = false;
-    public override void Enter(NormalMonster entity)
+
+    public override void Enter(NormalMonster monster)
     {
-        entity.animator.SetTrigger("Hit");
+        monster.animator.SetTrigger("Hit");
         isHit = true;
         curTime = 0f;
     }
 
-    public override void Update(NormalMonster entity)
+    public override void Update(NormalMonster monster)
     {
         if (curTime < hitDuration)
         {
@@ -28,12 +29,12 @@ public class NormalMonsterHit : BaseState<NormalMonster>
         }
         if (isHit == false)
         {
-            entity.nMHandler.ChangeState(typeof(NormalMonsterIdle));
+            monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
             //³ª°¡±â
         }
     }
 
-    public override void Exit(NormalMonster entity)
+    public override void Exit(NormalMonster monster)
     {
 
     }

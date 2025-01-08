@@ -92,8 +92,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 734925667163758415}
-  - component: {fileID: 79146900347486979}
   - component: {fileID: 6718819727048818878}
+  - component: {fileID: 8770751526792949019}
   m_Layer: 0
   m_Name: RangeSpearBullet
   m_TagString: Untagged
@@ -117,20 +117,6 @@ Transform:
   - {fileID: 5300833116382747166}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &79146900347486979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9195278396479520162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d83a937fb58e0804eb39bde6a1b39f25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 10
-  bulletLifeTime: 5
 --- !u!65 &6718819727048818878
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -152,3 +138,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3, y: 0.4, z: 2.5}
   m_Center: {x: 0, y: 0.09, z: -0.05}
+--- !u!114 &8770751526792949019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9195278396479520162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2b7971543c3824c9832e4c6ddc63b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 20
+  lifeTime: 5
