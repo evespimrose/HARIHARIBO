@@ -8,34 +8,34 @@ public class NormalMonsterMove : BaseState<NormalMonster>
 {
     public NormalMonsterMove(StateHandler<NormalMonster> handler) : base(handler) { }
 
-    public override void Enter(NormalMonster entity)
+    public override void Enter(NormalMonster monster)
     {
         Debug.Log("Move¡¯¿‘");
-        entity.animator.SetBool("Move", true);
+        monster.animator.SetBool("Move", true);
     }
 
-    public override void Update(NormalMonster entity)
+    public override void Update(NormalMonster monster)
     {
-        if (Vector3.Distance(entity.target.position, entity.transform.position) < entity.atkRange && entity.isAtk == false)
+        if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            switch (entity.monsterType)
+            switch (monster.monsterType)
             {
                 case MonsterType.Melee:
-                    entity.nMHandler.ChangeState(typeof(NormalMonsterMeleeAtk));
+                    monster.nMHandler.ChangeState(typeof(NormalMonsterMeleeAtk));
                     break;
                 case MonsterType.Range:
-                    entity.nMHandler.ChangeState(typeof(NormalMonsterRangeAtk));
+                    monster.nMHandler.ChangeState(typeof(NormalMonsterRangeAtk));
                     break;
             }
         }
         else
         {
-            entity.Move();
+            monster.Move();
         }
     }
 
-    public override void Exit(NormalMonster entity)
+    public override void Exit(NormalMonster monster)
     {
-        entity.animator.SetBool("Move", false);
+        monster.animator.SetBool("Move", false);
     }
 }
