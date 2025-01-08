@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 48566ab8be1103144a10cbb53a45a4ce
-timeCreated: 1554785614
+guid: 8c62a730971cc934c88a622c7237487c
+timeCreated: 1554785615
 licenseType: Store
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: SM_Wep_Sword_Rapier_01
+    4300000: SM_Wep_Sword_Large_01
     9500000: //RootNode
   materials:
     importMaterials: 0

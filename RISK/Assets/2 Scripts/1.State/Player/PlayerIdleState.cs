@@ -22,10 +22,10 @@ public class PlayerIdleState : BaseState<Player>
             return;
         }
 
-        // 공격 입력 확인
-        //if (Input.GetButtonDown("Fire1"))
-        //{
-        //    handler.ChangeState(typeof(PlayerAttackState));
-        //}
+        
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            handler.ChangeState(typeof(PlayerAttackState));
+        }
     }
 }
