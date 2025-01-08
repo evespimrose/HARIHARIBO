@@ -3,140 +3,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour, ITakedamage
+public class Player : MonoBehaviour
 {
-    public enum PlayerState
-    {
-        Idle,
-        Moving,
-        Skill,
-        Dead,
-    }
-
-    [Tooltip("플레이어 스텟")]
-    public PlayerScroptableObjects playerStats;
-    [Tooltip("공격 데미지")]
-    public float atkDamage;
-    [Tooltip("공격 속도")]
-    public float atkSpeed;
-    [Tooltip("이동 속도")]
-    public float moveSpeed;
-    [Tooltip("치명타 확률")]
-    public float criticalChance;
-    [Tooltip("치병타 데미지")]
-    public float criticalDamage;
-    [Tooltip("스킬 쿨타임 감소율")]
-    public float cooldownReduction;
-    [Tooltip("현재 체력")]
-    public float curHp;
-    [SerializeField]
-    private bl_Joystick joystick;
+    [SerializeField] private bl_Joystick joystick;
     [SerializeField] private WeaponController weaponController;
+    [SerializeField] private Animator animator;
 
-
-    private PlayerState currentState;
+    private StateHandler<Player> stateHandler;
     private bool isMobile;
-    private float maxHp;
-    private Rigidbody rb;
-    private Animator animator;
+    private float moveSpeed = 5f;
 
-    
-    public virtual void Awake()
+    public Animator Animator => animator;
+    public WeaponController WeaponController => weaponController;
+
+    private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        InitializeComponents();
+        InitializeStateHandler();
+        SetPlatform();
+    }
+
+    private void InitializeComponents()
+    {
         animator = GetComponent<Animator>();
-        currentState = PlayerState.Idle;
-        atkDamage = playerStats.atkDamage;
-        atkSpeed = playerStats.atkSpeed;
-        moveSpeed = playerStats.moveSpeed;
-        criticalChance = playerStats.criticalChance;
-        criticalDamage = playerStats.criticalDamage;
-        cooldownReduction = playerStats.cooldownReduction;
-        curHp = playerStats.curHp;
-        maxHp = curHp;
-        #if UNITY_ANDROID || UNITY_IOS
-            isMobile = true;
-        #else
-            isMobile = false;
-        #endif
-    }
-
-    private void Start()
-    {
         if (weaponController == null)
-        {
             weaponController = GetComponent<WeaponController>();
-        }
-        UnitManager.Instance.players.Add(this.gameObject);
     }
 
-   
+    private void InitializeStateHandler()
+    {
+        stateHandler = new StateHandler<Player>(this);
+
+        // 상태들 등록
+        stateHandler.RegisterState(new PlayerIdleState(stateHandler));
+        stateHandler.RegisterState(new PlayerMoveState(stateHandler));
+        //stateHandler.RegisterState(new PlayerAttackState(stateHandler));
+
+        // 초기 상태 설정
+        stateHandler.ChangeState(typeof(PlayerIdleState));
+    }
+
+    private void SetPlatform()
+    {
+#if UNITY_ANDROID || UNITY_IOS
+            isMobile = true;
+#else
+        isMobile = false;
+#endif
+    }
+
     private void Update()
     {
-        switch (currentState)
-        {
-            case PlayerState.Idle:
-            case PlayerState.Moving:
-                Move();  
-                break;
-            case PlayerState.Skill:
-                break;
-            case PlayerState.Dead:
-                break;
-        }
+        stateHandler.Update();
     }
 
-    public void Move()
+    public Vector3 GetMove()
     {
-        Vector3 moveDirection;
-
         if (isMobile)
         {
-            if (joystick == null)
-            {
-                Debug.LogError("Joystick reference is missing!");
-                return;
-            }
-            moveDirection = new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
+            if (joystick == null) return Vector3.zero;
+            return new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
         }
         else
         {
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
-            moveDirection = new Vector3(horizontal, 0f, vertical).normalized;
+            return new Vector3(horizontal, 0f, vertical).normalized;
         }
-
-        if (moveDirection.magnitude > 0)
-        {
-            currentState = PlayerState.Moving;
-            if (animator != null)
-            {
-                animator.SetBool("IsMoving", true);
-            }
-
-            Vector3 movement = moveDirection * moveSpeed * Time.deltaTime;
-            rb.MovePosition(transform.position + movement);
-
-            if (moveDirection != Vector3.zero)
-            {
-                Quaternion toRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 720f * Time.deltaTime);
-
-            }
-        }
-        else
-        {
-            currentState = PlayerState.Idle;
-            if (animator != null)
-            {
-                animator.SetBool("IsMoving", false);
-            }
-        }
-
     }
 
-    public void Takedamage(float damage)
+    public void Move(Vector3 direction)
     {
-        curHp -= damage;
+        transform.position += direction * moveSpeed * Time.deltaTime;
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
     }
 }
+
