@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Photon.Pun;
 using System.Linq;
+using static UnityEngine.GraphicsBuffer;
 
 public class FirebaseManager : SingletonManager<FirebaseManager>
 {
@@ -18,7 +19,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
 
     private DatabaseReference usersRef;
 
-    //public UserData currentUserData { get; private set; }
+    public FireBaseUserData currentUserData { get; private set; }
 
     private async void Start()
     {
@@ -31,7 +32,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         else
         {
-            Debug.LogWarning($"ÆÄÀÌ¾îº£ÀÌ½º ÃÊ±âÈ­ ½ÇÆĞ : {status}");
+            Debug.LogWarning($"ï¿½ï¿½ï¿½Ì¾îº£ï¿½Ì½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½ : {status}");
         }
 
     }
@@ -43,12 +44,12 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, passwd);
             usersRef = DB.GetReference($"users/{result.User.UserId}");
 
-            // È¸¿øÀÇ µ¥ÀÌÅÍ¸¦ Database¿¡ »ı¼º
-            //UserData userData = new UserData(result.User.UserId);
+            // È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ Databaseï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            FireBaseUserData userData = new FireBaseUserData(result.User.UserId);
 
-            //string userDataJson = JsonConvert.SerializeObject(userData);
+            string userDataJson = JsonConvert.SerializeObject(userData);
 
-            //await usersRef.SetRawJsonValueAsync(userDataJson);
+            await usersRef.SetRawJsonValueAsync(userDataJson);
 
             callback?.Invoke(result.User);
         }
@@ -58,7 +59,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
     }
 
-    //·Î±×ÀÎ
+    //ï¿½Î±ï¿½ï¿½ï¿½
     public async void SignIn(string email, string passwd, Action<FirebaseUser> callback = null)
     {
         try
@@ -67,15 +68,15 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
 
             usersRef = DB.GetReference($"users/{result.User.UserId}");
 
-            // µ¥ÀÌÅÍ ºÒ·¯¿À±â
-            //DataSnapshot userDataValues = await usersRef.GetValueAsync();
-            //UserData userData = null;
-            //if (userDataValues.Exists)
-            //{
-            //    string json = userDataValues.GetRawJsonValue();
-            //    userData = JsonConvert.DeserializeObject<UserData>(json);
-            //}
-            //currentUserData = userData;
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
+            DataSnapshot userDataValues = await usersRef.GetValueAsync();
+            FireBaseUserData userData = null;
+            if (userDataValues.Exists)
+            {
+                string json = userDataValues.GetRawJsonValue();
+                userData = JsonConvert.DeserializeObject<FireBaseUserData>(json);
+            }
+            currentUserData = userData;
             callback?.Invoke(result.User);
         }
         catch (FirebaseException e)
@@ -101,4 +102,54 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
     }
 
+    public async void CreateCharacter(string nickName, ClassType classType)
+    {
+        try
+        {
+            FireBaseCharacterData characterData = new FireBaseCharacterData(nickName, classType);
+            
+            string characterDataJson = JsonConvert.SerializeObject(characterData);
+
+            DatabaseReference charactersRef = DB.GetReference($"characters/{Auth.CurrentUser.UserId}");
+
+            await charactersRef.Child(nickName).SetRawJsonValueAsync(characterDataJson);
+            
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "character creation successed.");
+            
+            PanelManager.Instance.PanelOpen("SelectCharacter");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"ìºë¦­í„° ìƒì„± ì‹¤íŒ¨: {e.Message}");
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "character creation failed.\n" + e.Message);
+        }
+    }
+
+    public async Task<List<FireBaseCharacterData>> LoadCharacterDataList()
+    {
+        List<FireBaseCharacterData> result = new List<FireBaseCharacterData>();
+        try
+        {
+            DatabaseReference charactersRef = DB.GetReference($"characters/{Auth.CurrentUser.UserId}");
+            
+            DataSnapshot snapshot = await charactersRef.GetValueAsync();
+            
+            if (snapshot.Exists)
+            {
+                foreach (var childSnapshot in snapshot.Children)
+                {
+                    string json = childSnapshot.GetRawJsonValue();
+                    FireBaseCharacterData characterData = JsonConvert.DeserializeObject<FireBaseCharacterData>(json);
+                    result.Add(characterData);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"ìºë¦­í„° ï¿½ï¿½ë¡ ë¡œë“œ ì‹¤íŒ¨: {e.Message}");
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "ï¿½ï¿½ë¦­í„° ëª©ë¡ì„ ë¶ˆëŸ¬ì˜¤ëŠ”ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n" + e.Message);
+        }
+        
+        return result;
+    }
 }
