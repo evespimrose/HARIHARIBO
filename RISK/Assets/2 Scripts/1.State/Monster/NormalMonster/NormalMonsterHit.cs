@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterHit : NormalMonsterBaseState
+public class NormalMonsterHit : BaseState<NormalMonster>
 {
-    private NormalMonster normalMonster;
+    public NormalMonsterHit(StateHandler<NormalMonster> handler) : base(handler) { }
 
     public float hitDuration;
     private float curTime;
     private bool isHit = false;
-    public override void Enter(BaseCharacter entity)
+    public override void Enter(NormalMonster entity)
     {
-        normalMonster = entity as NormalMonster;
-        normalMonster.animator.SetTrigger("Hit");
+        entity.animator.SetTrigger("Hit");
         isHit = true;
         curTime = 0f;
     }
 
-    public override void Update(BaseCharacter entity)
+    public override void Update(NormalMonster entity)
     {
         if (curTime < hitDuration)
         {
@@ -29,12 +28,12 @@ public class MonsterHit : NormalMonsterBaseState
         }
         if (isHit == false)
         {
-            normalMonster.ChangeState(new MonsterIdle());
+            //entity.ChangeState(new MonsterIdle());
             //³ª°¡±â
         }
     }
 
-    public override void Exit(BaseCharacter entity)
+    public override void Exit(NormalMonster entity)
     {
 
     }

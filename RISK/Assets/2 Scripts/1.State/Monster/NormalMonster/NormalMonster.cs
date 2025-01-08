@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class NormalMonster : BaseCharacter
+public class NormalMonster : MonoBehaviour, ITakedamage
 {
     public enum MonsterType
     {
@@ -12,17 +13,29 @@ public class NormalMonster : BaseCharacter
     }
     public MonsterType monsterType;
     [Tooltip("공격대상")]
-    public Transform target { get; private set; }
-    private Collider col;
+    public Transform target;
+    protected Collider col;
+    protected Rigidbody rb;
+    protected StateHandler<NormalMonster> nMHandler;
 
+    [Tooltip("모델링")]
+    public GameObject model;
+    [Tooltip("모델링의 애니메이터")]
+    public Animator animator;
     [Tooltip("유닛스텟")]
     public MonsterScriptableObjects monsterState;
+    [Tooltip("공격데미지")]
+    public float atkDamage;
+    [Tooltip("이동속도")]
+    public float moveSpeed;
     [Tooltip("공격범위")]
     public float atkRange;
     [Tooltip("공격딜레이")]
     public float atkDelay;
-    [Tooltip("모델링")]
-    public GameObject model;
+    [Tooltip("현재체력")]
+    public float curHp;
+    [Tooltip("최대체력")]
+    protected float maxHp;
 
     public bool isGround = false;
     [Tooltip("에어본")]
@@ -31,30 +44,42 @@ public class NormalMonster : BaseCharacter
     protected bool isHit = false;
     public bool isAtk = false;
 
-    protected override void Awake()
+    protected void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+        animator = GetComponentInChildren<Animator>();
         this.atkDamage = monsterState.atkDamage;
         this.atkRange = monsterState.atkRange;
         this.atkDelay = monsterState.atkDelay;
         this.moveSpeed = monsterState.moveSpeed;
         this.curHp = monsterState.curHp;
         this.maxHp = curHp;
-        animator = GetComponentInChildren<Animator>();
-        InitializeState();
+        InitializeStateHandler();
     }
 
     protected virtual void Start()
     {
         UnitManager.Instance.monsters.Add(this.gameObject);
         Targeting();
-        InitializeState();
     }
 
-    protected override void InitializeState()
+    private void Update()
     {
-        this.ChangeState(new MonsterIdle());
+        nMHandler.Update();
+    }
+
+    protected void InitializeStateHandler()
+    {
+        nMHandler = new StateHandler<NormalMonster>(this);
+
+        // 상태들 등록
+        //nMHandler.RegisterState(new NormalMonsterIdleState(nMHandler));
+        //nMHandler.RegisterState(new NormalMonsterMoveState(nMHandler));
+        //nMHandler.RegisterState(new NormalMonsterAttackState(nMHandler));
+
+        // 초기 상태 설정
+        nMHandler.ChangeState(typeof(PlayerIdleState));
     }
     private void OnCollisionStay(Collision collision)
     {
@@ -78,9 +103,17 @@ public class NormalMonster : BaseCharacter
         }
     }
 
-    protected override void Die()
+    public void Move()
     {
-        base.Die();
+        transform.LookAt(target);
+        Vector3 dir = (target.position - transform.position).normalized;
+        Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
+        rb.MovePosition(moveDir);
+    }
+
+    protected void Die()
+    {
+        Destroy(this.gameObject);
     }
 
     public IEnumerator AtkCoolTime()
@@ -89,5 +122,11 @@ public class NormalMonster : BaseCharacter
         yield return new WaitForSeconds(atkDelay);
         Debug.Log("공격쿨타임 종료");
         isAtk = false;
-    }    
+    }
+
+    public void Takedamage(float damage)
+    {
+        curHp -= damage;
+
+    }
 }

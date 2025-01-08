@@ -2,39 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterRangeAtk : NormalMonsterBaseState
+public class NormalMonsterRangeAtk : BaseState<NormalMonster>
 {
-    private NormalMonster normalMonster;
+    public NormalMonsterRangeAtk(StateHandler<NormalMonster> handler) : base(handler) { }
 
     public float atkDuration = 1f;
     public float atkDelay = 0.4f;
     private float curTime = 0;
     private bool isAtk = false;
 
-    public override void Enter(BaseCharacter entity)
+    public override void Enter(NormalMonster entity)
     {
-        normalMonster = entity as NormalMonster;
         entity.animator.SetTrigger("Atk");
         curTime = 0;
         isAtk = false;
     }
 
-    public override void Update(BaseCharacter entity)
+    public override void Update(NormalMonster entity)
     {
         if (curTime - atkDuration < 0.1f)
         {
             //공격종료
-            normalMonster.ChangeState(new MonsterIdle());
+            //entity.ChangeState(new MonsterIdle());
         }
         if (curTime - atkDelay < 0.1f && isAtk == false)
         {
-            Atk(normalMonster);
-            normalMonster.isAtk = true;
+            Atk(entity);
+            entity.isAtk = true;
         }
         curTime += Time.deltaTime;
     }
 
-    public override void Exit(BaseCharacter entity)
+    public override void Exit(NormalMonster entity)
     {
          
     }
