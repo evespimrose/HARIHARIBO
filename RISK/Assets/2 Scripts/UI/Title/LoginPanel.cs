@@ -32,7 +32,7 @@ public class LoginPanel : MonoBehaviour
 
     private void OnLoginButtonClick()
     {
-        // ÀÌ¸ÞÀÏ Çü½Ä °Ë»ç
+        // ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½
         string email = idInput.text;
         if (!IsValidEmail(email))
         {
@@ -41,7 +41,7 @@ public class LoginPanel : MonoBehaviour
             return;
         }
 
-        //·Î±×ÀÎ ¼º°ø ÈÄ µ¥º£ Á¢±ÙÇØ¼­ Ä³¸¯ÅÍ ¼Â ºÒ·¯¿À°í, Ä³¸¯ÅÍ °í¸£´Â Ã¢À¸·Î ³Ñ¾î°¡¾ßµÊ.
+        //ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½, Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¢ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¡ï¿½ßµï¿½.
         FirebaseManager.Instance.SignIn(email, pwInput.text, (firebaseUser) => { PanelManager.Instance.PanelOpen("SelectCharacter"); });
     }
     private bool IsValidEmail(string email)

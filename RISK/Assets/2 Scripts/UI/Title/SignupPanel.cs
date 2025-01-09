@@ -1,4 +1,4 @@
-using Firebase.Auth;
+ï»¿using Firebase.Auth;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ public class SignupPanel : MonoBehaviour
 
     private void OnDuplicateCheckButtonClick()
     {
-        // ÀÌ¸ÞÀÏ ÀÔ·Â È®ÀÎ
+        // ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ È®ï¿½ï¿½
         if (string.IsNullOrEmpty(idInput.text))
         {
             duplicationCheckResultText.text = "ID is Null.";
@@ -43,7 +43,7 @@ public class SignupPanel : MonoBehaviour
         }
 
         // Firebase Duplication Check
-        FirebaseManager.Instance.DuplicationCheck(idInput.text, DuplicationConfirmed);
+        FirebaseManager.Instance.EmailDuplicationCheck(idInput.text, DuplicationConfirmed);
     }
 
     private void DuplicationConfirmed(bool isDuplicate)
@@ -72,7 +72,7 @@ public class SignupPanel : MonoBehaviour
 
     private bool isValidIDPW()
     {
-        // ¾ÆÀÌµðÃ¢ ºñ¿öÁü, ºñ¹Ð¹øÈ£Ã¢ ºñ¿öÁü, ºñ¹Ð¹øÈ£!=ºñ¹Ð¹øÈ£È®ÀÎ, ºñ¹Ð¹øÈ£È®ÀÎÃ¢ ºñ¿öÁü, Åä±Û ºñ¿öÁü, ¾ÆÀÌµð ¾ç½Ä ¾È¸ÂÀ½, ºñ¹Ð¹øÈ£ ¾ç½Ä ¾È¸ÂÀ½, Áßº¹ ½ÃµµÇØºÃ¾ú¾î¾ßµÊ, Áßº¹ ¾Æ´Ñ ¾ÆÀÌµð¿©¾ßµÊ
+        // ï¿½ï¿½ï¿½Ìµï¿½Ã¢ ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ð¹ï¿½È£Ã¢ ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Ð¹ï¿½È£!=ï¿½ï¿½Ð¹ï¿½È£È®ï¿½ï¿½, ï¿½ï¿½Ð¹ï¿½È£È®ï¿½ï¿½Ã¢ ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ ï¿½È¸ï¿½ï¿½ï¿½, ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ ï¿½È¸ï¿½ï¿½ï¿½, ï¿½ßºï¿½ ï¿½Ãµï¿½ï¿½ØºÃ¾ï¿½ï¿½ï¿½ßµï¿½, ï¿½ßºï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½Ìµð¿©¾ßµï¿½
         if (string.IsNullOrEmpty(idInput.text))
         {
             var popup = PanelManager.Instance.PopupOpen<PopupPanel>();
@@ -115,7 +115,7 @@ public class SignupPanel : MonoBehaviour
             popup.SetPopup("Auth Failed", "yakgwan.");
             return false;
         }
-        // ¾ÆÀÌµð ¾ç½Ä ¾È¸ÂÀ½, ºñ¹Ð¹øÈ£ ¾ç½Ä ¾È¸ÂÀ½(¹Ì±¸Çö)
+        // ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ ï¿½È¸ï¿½ï¿½ï¿½, ï¿½ï¿½Ð¹ï¿½È£ ï¿½ï¿½ï¿½ ï¿½È¸ï¿½ï¿½ï¿½(ï¿½Ì±ï¿½ï¿½ï¿½)
 
         return true;
     }
