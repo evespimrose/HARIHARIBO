@@ -30,7 +30,6 @@ public class SignupPanel : MonoBehaviour
 
     private void OnDuplicateCheckButtonClick()
     {
-        // �̸��� �Է� Ȯ��
         if (string.IsNullOrEmpty(idInput.text))
         {
             duplicationCheckResultText.text = "ID is Null.";

@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Playerstats
 {
-    public event Action<int> OnHealthChanged;
+    public event Action<float> OnHealthChanged;
     public event Action<int> OnLevelUp;
     public event Action<float> OnExpChanged;
 
@@ -21,8 +21,8 @@ public class Playerstats
     public float _currentExp = 0f;
 
     [Header("±âº» ½ºÅÝ")]
-    public int maxHealth = 100;
-    private int _currentHealth;
+    public float maxHealth = 100;
+    private float _currentHealth;
     public float attackPower = 10;
     public float moveSpeed = 2f;
     [Range(0f, 1f)]
@@ -40,7 +40,7 @@ public class Playerstats
     [Range(0f, 1f)]
     public float cooldownReduction = 0f;
 
-    public int currentHealth
+    public float currentHealth
     {
         get => _currentHealth;
         set

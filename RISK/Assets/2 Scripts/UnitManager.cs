@@ -6,8 +6,8 @@ public class UnitManager : MonoBehaviour
 {
     public static UnitManager Instance { get; private set; }
 
-    public List<GameObject> players;
-    public List<GameObject> monsters;
+    public List<GameObject> players = new List<GameObject>();
+    public List<GameObject> monsters = new List<GameObject>();
 
     private void Awake()
     {
@@ -21,4 +21,22 @@ public class UnitManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void RegisterPlayer(GameObject player)
+    {
+        if (!players.Contains(player))
+        {
+            players.Add(player);
+        }
+    }
+
+    public void UnregisterPlayer(GameObject player)
+    {
+        if (players.Contains(player))
+        {
+            players.Remove(player);
+        }
+    }
+
+    // 추가적인 관리 기능을 여기에 구현
 }

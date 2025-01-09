@@ -199,12 +199,10 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                         await characterRef.Child(dataName).SetValueAsync(currentCharacterData.maxHp + 1);
                         currentCharacterData.maxHp += 1;
                         break;
-
                     case "moveSpeed":
                         await characterRef.Child(dataName).SetValueAsync(currentCharacterData.moveSpeed + 1);
                         currentCharacterData.moveSpeed += 1;
                         break;
-
                     default:
                         Debug.LogWarning($"Unknown dataName: {dataName}");
                         break;
@@ -238,4 +236,5 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Character deletion failed.\n" + e.Message);
         }
     }
+
 }

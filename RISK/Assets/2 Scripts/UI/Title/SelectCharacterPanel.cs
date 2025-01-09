@@ -1,8 +1,11 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SelectCharacterPanel : MonoBehaviour
@@ -37,10 +40,7 @@ public class SelectCharacterPanel : MonoBehaviour
     {
         ReLoadCharacterList();
 
-        currentCharacterData = characterDatalist[0];
 
-        levelText.text = currentCharacterData.level.ToString();
-        nickNameText.text = currentCharacterData.nickName;
     }
 
     private void OnCreateCharacterButtonClick()
@@ -127,13 +127,44 @@ public class SelectCharacterPanel : MonoBehaviour
         }
 
         characterSelectDic.Add("create", createCharacterButton);
+
+        if (characterDatalist.Count > 0)
+        {
+            currentCharacterData = characterDatalist[0];
+
+            levelText.text = currentCharacterData.level.ToString();
+            nickNameText.text = currentCharacterData.nickName;
+        }
     }
 
     private void OnSelectButtonClick()
     {
+        FirebaseManager.Instance.currentCharacterData = currentCharacterData;
 
+        Playerstats playerStats = new Playerstats
+        {
+            nickName = FirebaseManager.Instance.currentCharacterData.nickName,
+            level = FirebaseManager.Instance.currentCharacterData.level,
+            maxHealth = FirebaseManager.Instance.currentCharacterData.maxHp,
+            currentHealth = FirebaseManager.Instance.currentCharacterData.maxHp,
+            moveSpeed = 2f
+        };
 
+        SceneManager.LoadScene("LobbyScene", LoadSceneMode.Single);
+
+        StartCoroutine(InstantiatePlayer(playerStats));
     }
 
+    private IEnumerator InstantiatePlayer(Playerstats playerStats)
+    {
+        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "LobbyScene");
+
+        Vector3 spawnPosition = Vector3.zero;
+        GameObject playerObj = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
+        Player player = playerObj.GetComponent<Player>();
+        player.InitializeStats(playerStats);
+
+        UnitManager.Instance.RegisterPlayer(playerObj);
+    }
 
 }
