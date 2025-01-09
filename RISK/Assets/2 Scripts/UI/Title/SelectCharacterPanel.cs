@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,9 +19,12 @@ public class SelectCharacterPanel : MonoBehaviour
     public Transform characterListTransform;
 
     public Dictionary<string, GameObject> characterSelectDic = new Dictionary<string, GameObject>();
+    List<FireBaseCharacterData> characterDatalist = new List<FireBaseCharacterData>();
 
     public FireBaseCharacterData currentCharacterData;
 
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI nickNameText;
 
     private void Awake()
     {
@@ -31,11 +35,18 @@ public class SelectCharacterPanel : MonoBehaviour
 
     private async void OnEnable()
     {
-        List<FireBaseCharacterData> list = await FirebaseManager.Instance.LoadCharacterDataList();
+        GameObject createCharacterButton = Instantiate(createCharacterPrefab, characterListTransform);
 
-        if (list != null)
+        if (createCharacterButton.TryGetComponent(out Button button))
         {
-            foreach (var data in list)
+            button.onClick.AddListener(OnCreateCharacterButtonClick);
+        }
+
+        characterDatalist = await FirebaseManager.Instance.LoadCharacterDataList();
+
+        if (characterDatalist != null)
+        {
+            foreach (var data in characterDatalist)
             {
                 if (!characterSelectDic.ContainsKey(data.nickName))
                 {
@@ -44,25 +55,25 @@ public class SelectCharacterPanel : MonoBehaviour
                     {
                         characterSelectButton.nickNameText.text = data.nickName;
                         characterSelectButton.levelText.text = data.level.ToString();
-                        // ì¶”í›„ ?´ëž˜???€?…ì— ?°ë¼??ìºë¦­???´ë?ì§€ ?…ë¡œ??
+                        // TODO : class image load
                     }
                     if (characterData.TryGetComponent(out Button databutton))
                     {
-                        //databutton.onClick.AddListener(() =>
-                        //{
-                        //    currentClassType = characterInfoUI.classType;
-                        //});
+                        databutton.onClick.AddListener(() =>
+                        {
+                            levelText.text = characterSelectButton.levelText.text;
+                            nickNameText.text = characterSelectButton.nickNameText.text;
+                            currentCharacterData = data;
+                        });
                     }
                     characterSelectDic.Add(data.nickName, characterData);
                 }
             }
         }
-        GameObject createCharacterButton = Instantiate(createCharacterPrefab, characterListTransform);
+        currentCharacterData = characterDatalist[0];
 
-        if (createCharacterButton.TryGetComponent(out Button button))
-        {
-            button.onClick.AddListener(OnCreateCharacterButtonClick);
-        }
+        levelText.text = currentCharacterData.level.ToString();
+        nickNameText.text = characterSelectButton.nickNameText.text;
     }
 
     private void OnCreateCharacterButtonClick()

@@ -21,6 +21,8 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
 
     public FireBaseUserData currentUserData { get; private set; }
 
+    public FireBaseCharacterData currentCharacterData;
+
     private async void Start()
     {
         DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
@@ -185,4 +187,24 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
 
         return result;
     }
+
+    public async void UpgradeCharacter(string dataName)
+    {
+        if (currentCharacterData != null)
+        {
+            try
+            {
+                DatabaseReference characterRef = FirebaseManager.Instance.DB.GetReference($"characters/{FirebaseManager.Instance.Auth.CurrentUser.UserId}/{currentCharacterData.nickName}");
+                await characterRef.Child(dataName).SetValueAsync(currentCharacterData.maxHp + 1);
+                currentCharacterData.maxHp += 1;
+                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Character Upgrade Failed: {e.Message}");
+                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Character upgrade failed.\n" + e.Message);
+            }
+        }
+    }
+
 }

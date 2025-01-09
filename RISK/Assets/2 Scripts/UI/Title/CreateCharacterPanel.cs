@@ -80,7 +80,6 @@ public class CreateCharacterPanel : MonoBehaviour
         {
             FirebaseManager.Instance.CharacterDuplicationCheck(nickNameInputfield.text, (bool result) => FirebaseManager.Instance.CreateCharacter(nickNameInputfield.text, currentClassType));
             return;
-
         }
         PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Please fill in nickname space.\n");
     }
