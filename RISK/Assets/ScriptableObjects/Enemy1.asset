@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy1
   m_EditorClassIdentifier: 
   atkDamage: 1
-  moveSpeed: 5
+  moveSpeed: 1
   atkRange: 5
   curHp: 100
   atkDelay: 5
