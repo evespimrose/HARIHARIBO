@@ -145,26 +145,11 @@ public class SelectCharacterPanel : MonoBehaviour
         {
             nickName = FirebaseManager.Instance.currentCharacterData.nickName,
             level = FirebaseManager.Instance.currentCharacterData.level,
-            maxHealth = FirebaseManager.Instance.currentCharacterData.maxHp,
-            currentHealth = FirebaseManager.Instance.currentCharacterData.maxHp,
+            maxHealth = 200f,
+            currentHealth = 200f,
             moveSpeed = 2f
         };
 
-        SceneManager.LoadScene("LobbyScene", LoadSceneMode.Single);
-
-        StartCoroutine(InstantiatePlayer(playerStats));
+        GameManager.Instance.StartCoroutine(GameManager.Instance.InstantiatePlayer(playerStats));
     }
-
-    private IEnumerator InstantiatePlayer(Playerstats playerStats)
-    {
-        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "LobbyScene");
-
-        Vector3 spawnPosition = Vector3.zero;
-        GameObject playerObj = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
-        Player player = playerObj.GetComponent<Player>();
-        player.InitializeStats(playerStats);
-
-        UnitManager.Instance.RegisterPlayer(playerObj);
-    }
-
 }
