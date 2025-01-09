@@ -1,4 +1,4 @@
-using Firebase.Auth;
+﻿using Firebase.Auth;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ public class SignupPanel : MonoBehaviour
         }
 
         // Firebase Duplication Check
-        FirebaseManager.Instance.DuplicationCheck(idInput.text, DuplicationConfirmed);
+        FirebaseManager.Instance.EmailDuplicationCheck(idInput.text, DuplicationConfirmed);
     }
 
     private void DuplicationConfirmed(bool isDuplicate)

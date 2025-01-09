@@ -19,18 +19,54 @@ public class CreateCharacterPanel : MonoBehaviour
     public Button createButton;
     public Button closeButton;
 
+    public GameObject characterInfoPrefab;
+    public Transform characterInfoListTransform;
+
+    public TextMeshProUGUI currentClassNameText;
+    public TextMeshProUGUI currentClassDescriptionText;
+    public TextMeshProUGUI currentClassPropertyText;
+
+
+    public Action<ClassType> UpdateInfo;
+
     private void Awake()
     {
-        foreach (var entry in classDataList)
+        foreach (var classdata in classDataList)
         {
-            if (!characterDataDic.ContainsKey(entry.classType))
+            if (!characterDataDic.ContainsKey(classdata.classType))
             {
-                characterDataDic.Add(entry.classType, entry.characterData);
+                characterDataDic.Add(classdata.classType, classdata.characterData);
+
+                GameObject characterInfo = Instantiate(characterInfoPrefab, characterInfoListTransform);
+                if (characterInfo.TryGetComponent(out CharacterInfoUI characterInfoUI))
+                {
+                    characterInfoUI.classType = classdata.classType;
+
+                    if (characterInfo.TryGetComponent(out Button button))
+                    {
+                        button.onClick.AddListener(() =>
+                        {
+                            currentClassType = characterInfoUI.classType;
+
+                            currentClassNameText.text = currentClassType.ToString();
+                        });
+                    }
+                }
             }
         }
+        currentClassType = ClassType.Warrior;
+        print(currentClassType.ToString());
+        currentClassNameText.text = currentClassType.ToString();
 
         createButton.onClick.AddListener(OnCreateButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
+        UpdateInfo += SwapInfoText;
+    }
+
+    private void SwapInfoText(ClassType classType)
+    {
+        characterDataDic.TryGetValue(classType, out CharacterData cd);
+
     }
 
     private void OnCloseButtonClick()
@@ -40,10 +76,15 @@ public class CreateCharacterPanel : MonoBehaviour
 
     private void OnCreateButtonClick()
     {
-        FirebaseManager.Instance.CreateCharacter(nickNameInputfield.text, currentClassType);
+        if (false == string.IsNullOrEmpty(nickNameInputfield.text))
+        {
+            FirebaseManager.Instance.CharacterDuplicationCheck(nickNameInputfield.text, (bool result) => FirebaseManager.Instance.CreateCharacter(nickNameInputfield.text, currentClassType));
+            return;
+
+        }
+        PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Please fill in nickname space.\n");
     }
 }
-
 
 public enum ClassType
 {
@@ -92,7 +133,7 @@ public class FireBaseCharacterData
     public ClassType classType;
     public int level;
     public int exp;
-    public int maxHp;
+    public float maxHp;
     public int moveSpeed;
 
     public FireBaseCharacterData() { }
@@ -102,7 +143,7 @@ public class FireBaseCharacterData
         this.nickName = nickName;
         level = 1;
         exp = 0;
-        maxHp = 0;
+        maxHp = 0f;
         moveSpeed = 0;
     }
 }

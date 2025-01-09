@@ -434,7 +434,7 @@ GameObject:
   - component: {fileID: 8070498383359408965}
   - component: {fileID: 135618744486749969}
   m_Layer: 5
-  m_Name: Character Select Button
+  m_Name: Select Character Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -556,9 +556,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 340ffcb30a08a9e4cb76c17c47d12da2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelText: {fileID: 0}
-  nickNameText: {fileID: 0}
-  characterImage: {fileID: 0}
+  levelText: {fileID: 8107200285814206689}
+  nickNameText: {fileID: 8410954543070935201}
+  characterImage: {fileID: 1979442160972128959}
 --- !u!1 &7145289390267580324
 GameObject:
   m_ObjectHideFlags: 0

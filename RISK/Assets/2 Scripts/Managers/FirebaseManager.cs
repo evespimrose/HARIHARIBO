@@ -85,7 +85,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
     }
 
-    public async void DuplicationCheck(string email, Action<bool> callback)
+    public async void EmailDuplicationCheck(string email, Action<bool> callback)
     {
         try
         {
@@ -102,25 +102,58 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
     }
 
+    public async void CharacterDuplicationCheck(string nickName, Action<bool> callback)
+    {
+        try
+        {
+            DatabaseReference charactersRef = DB.GetReference("characters");
+            DataSnapshot snapshot = await charactersRef.GetValueAsync();
+
+            bool isDuplicate = false;
+            if (snapshot.Exists)
+            {
+                foreach (var userSnapshot in snapshot.Children)
+                {
+                    foreach (var childSnapshot in userSnapshot.Children)
+                    {
+                        string characterNickName = childSnapshot.Child("nickName").GetValue(true).ToString();
+                        if (characterNickName.Equals(nickName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+                    if (isDuplicate) break;
+                }
+            }
+            print(isDuplicate);
+            callback?.Invoke(isDuplicate);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Character Duplication Check Failed: {e.Message}");
+            callback?.Invoke(false);
+        }
+    }
+
     public async void CreateCharacter(string nickName, ClassType classType)
     {
         try
         {
             FireBaseCharacterData characterData = new FireBaseCharacterData(nickName, classType);
-            
+
             string characterDataJson = JsonConvert.SerializeObject(characterData);
 
             DatabaseReference charactersRef = DB.GetReference($"characters/{Auth.CurrentUser.UserId}");
 
             await charactersRef.Child(nickName).SetRawJsonValueAsync(characterDataJson);
-            
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "character creation successed.");
-            
-            PanelManager.Instance.PanelOpen("SelectCharacter");
+
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "character creation successed.", () => PanelManager.Instance.PanelOpen("SelectCharacter"));
+
         }
         catch (Exception e)
         {
-            Debug.LogError($"캐릭터 생성 실패: {e.Message}");
+            Debug.LogError($"Character Creation Failed: {e.Message}");
             PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "character creation failed.\n" + e.Message);
         }
     }
@@ -131,9 +164,9 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         try
         {
             DatabaseReference charactersRef = DB.GetReference($"characters/{Auth.CurrentUser.UserId}");
-            
+
             DataSnapshot snapshot = await charactersRef.GetValueAsync();
-            
+
             if (snapshot.Exists)
             {
                 foreach (var childSnapshot in snapshot.Children)
@@ -146,10 +179,10 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"캐릭터 ��록 로드 실패: {e.Message}");
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "��릭터 목록을 불러오는데 실패했습니다.\n" + e.Message);
+            Debug.LogError($"캐릭??���?로드 ?�패: {e.Message}");
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "���?�� 목록??불러?�는???�패?�습?�다.\n" + e.Message);
         }
-        
+
         return result;
     }
 }

@@ -16,7 +16,7 @@ public class SelectCharacterPanel : MonoBehaviour
     public Image characterModelImage;
 
     public Transform characterListTransform;
-    
+
     public Dictionary<string, GameObject> characterSelectDic = new Dictionary<string, GameObject>();
 
     public FireBaseCharacterData currentCharacterData;
@@ -32,8 +32,8 @@ public class SelectCharacterPanel : MonoBehaviour
     private async void OnEnable()
     {
         List<FireBaseCharacterData> list = await FirebaseManager.Instance.LoadCharacterDataList();
-        
-        if(list != null)
+
+        if (list != null)
         {
             foreach (var data in list)
             {
@@ -44,11 +44,14 @@ public class SelectCharacterPanel : MonoBehaviour
                     {
                         characterSelectButton.nickNameText.text = data.nickName;
                         characterSelectButton.levelText.text = data.level.ToString();
-                        // 추후 클래스 타입에 따라서 캐릭터 이미지 업로드
+                        // 추후 ?�래???�?�에 ?�라??캐릭???��?지 ?�로??
                     }
                     if (characterData.TryGetComponent(out Button databutton))
                     {
-                        //databutton.onClick.AddListener();
+                        //databutton.onClick.AddListener(() =>
+                        //{
+                        //    currentClassType = characterInfoUI.classType;
+                        //});
                     }
                     characterSelectDic.Add(data.nickName, characterData);
                 }
@@ -56,7 +59,7 @@ public class SelectCharacterPanel : MonoBehaviour
         }
         GameObject createCharacterButton = Instantiate(createCharacterPrefab, characterListTransform);
 
-        if(createCharacterButton.TryGetComponent(out Button button))
+        if (createCharacterButton.TryGetComponent(out Button button))
         {
             button.onClick.AddListener(OnCreateCharacterButtonClick);
         }
@@ -78,17 +81,17 @@ public class SelectCharacterPanel : MonoBehaviour
 
     private void OnCloseButtonClick()
     {
-        
+
     }
 
     private void OnDeleteButtonClick()
     {
-        
+
     }
 
     private void OnSelectButtonClick()
     {
-        
+
 
     }
 
