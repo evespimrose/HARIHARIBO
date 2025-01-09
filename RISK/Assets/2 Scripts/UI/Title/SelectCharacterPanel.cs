@@ -73,7 +73,7 @@ public class SelectCharacterPanel : MonoBehaviour
         currentCharacterData = characterDatalist[0];
 
         levelText.text = currentCharacterData.level.ToString();
-        nickNameText.text = characterSelectButton.nickNameText.text;
+        nickNameText.text = currentCharacterData.nickName;
     }
 
     private void OnCreateCharacterButtonClick()
