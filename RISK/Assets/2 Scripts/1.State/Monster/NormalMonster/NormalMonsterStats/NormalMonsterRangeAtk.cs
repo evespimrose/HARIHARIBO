@@ -7,30 +7,33 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     public NormalMonsterRangeAtk(StateHandler<NormalMonster> handler) : base(handler) { }
 
     public float atkDuration = 1f;
-    public float atkDelay = 0.4f;
+    public float atkDelay = 0.6f;
     private float curTime = 0;
     private bool isAtk = false;
 
     public override void Enter(NormalMonster monster)
     {
-        //entity.animator.SetTrigger("Atk");
+        monster.animator.SetTrigger("Atk");
         curTime = 0;
         isAtk = false;
     }
 
     public override void Update(NormalMonster monster)
     {
-        if (curTime - atkDuration < 0.1f)
+        curTime += Time.deltaTime; // 경과 시간 누적
+
+        // 공격 시작 전 대기 시간
+        if (curTime >= atkDelay && !isAtk)
         {
-            //공격종료
+            Atk(monster); // atkDelay만큼 기다린 후 공격 발동
+            isAtk = true; // 공격이 발동했음을 표시
+        }
+
+        // 공격 지속 시간이 지나면 상태 변경
+        if (curTime >= atkDuration)
+        {
             monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
         }
-        if (curTime - atkDelay < 0.1f && isAtk == false)
-        {
-            Atk(monster);
-            monster.isAtk = true;
-        }
-        curTime += Time.deltaTime;
     }
 
     public override void Exit(NormalMonster monster)

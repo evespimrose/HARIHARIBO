@@ -14,7 +14,9 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         Melee,
         Range
     }
+    [Header("몬스터타입")]
     public MonsterType monsterType;
+    [Header("몬스터 타겟 및 모델")]
     [Tooltip("공격대상")]
     public Transform target;
     protected Collider col;
@@ -25,6 +27,8 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     public GameObject model;
     [Tooltip("모델링의 애니메이터")]
     public Animator animator;
+
+    [Header("몬스터 스텟")]
     [Tooltip("유닛스텟")]
     public MonsterScriptableObjects monsterState;
     [Tooltip("공격데미지")]
@@ -40,14 +44,19 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     [Tooltip("최대체력")]
     protected float maxHp;
 
+    [Header("무력화 상태이상 체크")]
     [Tooltip("에어본")]
-    public bool isAirborne = false;
-    protected bool isAirborneAction = false;
     protected bool isDie = false;
     protected bool isHit = false;
+    public bool isAirborne = false;
+    protected bool isAirborneAction = false;
     public bool isAtk = false;
-
+    [Tooltip("스턴")]
     public bool isStun = false;
+    public bool isStunAction = false;
+
+    [Header("디버프 상태이상 체크")]
+    public Debuff monsterDebuff;
     public bool isSlow = false;
     public bool isBleeding = false;
     public bool isPoison = false;
@@ -66,10 +75,15 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     private void Update()
     {
+        monsterDebuff.DebuffCheck(this);
         nMHandler.Update();
         if (isAirborne == true && isAirborneAction == false)
         {
             nMHandler.ChangeState(typeof(NormalMonsterAirborne));
+        }
+        else if (isAirborne == false && isStun == true && isStunAction == false)
+        {
+            nMHandler.ChangeState(typeof(NormalMonsterStun));
         }
     }
 
@@ -103,6 +117,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
                 break;
         }
         nMHandler.RegisterState(new NormalMonsterHit(nMHandler));
+        nMHandler.RegisterState(new NormalMonsterStun(nMHandler));
         nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
         nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
         // 초기 상태 설정
