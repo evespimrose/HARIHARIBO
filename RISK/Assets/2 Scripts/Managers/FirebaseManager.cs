@@ -60,8 +60,6 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Auth Failed", "" + e.Message);
         }
     }
-
-    //�α���
     public async void SignIn(string email, string passwd, Action<FirebaseUser> callback = null)
     {
         try
@@ -70,7 +68,6 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
 
             usersRef = DB.GetReference($"users/{result.User.UserId}");
 
-            // ������ �ҷ�����
             DataSnapshot userDataValues = await usersRef.GetValueAsync();
             FireBaseUserData userData = null;
             if (userDataValues.Exists)
@@ -195,8 +192,24 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             try
             {
                 DatabaseReference characterRef = FirebaseManager.Instance.DB.GetReference($"characters/{FirebaseManager.Instance.Auth.CurrentUser.UserId}/{currentCharacterData.nickName}");
-                await characterRef.Child(dataName).SetValueAsync(currentCharacterData.maxHp + 1);
-                currentCharacterData.maxHp += 1;
+
+                switch (dataName)
+                {
+                    case "maxHp":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.maxHp + 1);
+                        currentCharacterData.maxHp += 1;
+                        break;
+
+                    case "moveSpeed":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.moveSpeed + 1);
+                        currentCharacterData.moveSpeed += 1;
+                        break;
+
+                    default:
+                        Debug.LogWarning($"Unknown dataName: {dataName}");
+                        break;
+                }
+
                 PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
             }
             catch (Exception e)
@@ -206,5 +219,23 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             }
         }
     }
+    public void SignOut()
+    {
+        Auth.SignOut();
+    }
 
+    public async void DeleteCharacterData(string nickName, Action callback)
+    {
+        try
+        {
+            DatabaseReference characterRef = DB.GetReference($"characters/{Auth.CurrentUser.UserId}/{nickName}");
+            await characterRef.RemoveValueAsync();
+            callback?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Character Deletion Failed: {e.Message}");
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Character deletion failed.\n" + e.Message);
+        }
+    }
 }

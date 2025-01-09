@@ -33,14 +33,62 @@ public class SelectCharacterPanel : MonoBehaviour
         closeButton.onClick.AddListener(OnCloseButtonClick);
     }
 
-    private async void OnEnable()
+    private void OnEnable()
     {
-        GameObject createCharacterButton = Instantiate(createCharacterPrefab, characterListTransform);
+        ReLoadCharacterList();
 
-        if (createCharacterButton.TryGetComponent(out Button button))
+        currentCharacterData = characterDatalist[0];
+
+        levelText.text = currentCharacterData.level.ToString();
+        nickNameText.text = currentCharacterData.nickName;
+    }
+
+    private void OnCreateCharacterButtonClick()
+    {
+        PanelManager.Instance.PanelOpen("CreateCharacter");
+    }
+
+    private void OnDisable()
+    {
+        foreach (var character in characterSelectDic)
         {
-            button.onClick.AddListener(OnCreateCharacterButtonClick);
+            DestroyImmediate(character.Value);
         }
+        characterSelectDic.Clear();
+    }
+
+    private void OnCloseButtonClick()
+    {
+        PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("SignOut", "sign out?",
+            ok =>
+        {
+            if (ok)
+            {
+                FirebaseManager.Instance.SignOut();
+                PanelManager.Instance.PanelOpen("Login");
+            }
+            else
+                PanelManager.Instance.PopupClose();
+        });
+    }
+
+    private void OnDeleteButtonClick()
+    {
+        PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("DeleteCharacter", "Delete Character?",
+           ok =>
+           {
+               if (ok)
+               {
+                   FirebaseManager.Instance.DeleteCharacterData(currentCharacterData.nickName, ReLoadCharacterList);
+               }
+               else
+                   PanelManager.Instance.PopupClose();
+           });
+    }
+
+    public async void ReLoadCharacterList()
+    {
+        characterSelectDic.Clear();
 
         characterDatalist = await FirebaseManager.Instance.LoadCharacterDataList();
 
@@ -70,34 +118,15 @@ public class SelectCharacterPanel : MonoBehaviour
                 }
             }
         }
-        currentCharacterData = characterDatalist[0];
 
-        levelText.text = currentCharacterData.level.ToString();
-        nickNameText.text = characterSelectButton.nickNameText.text;
-    }
+        GameObject createCharacterButton = Instantiate(createCharacterPrefab, characterListTransform);
 
-    private void OnCreateCharacterButtonClick()
-    {
-        PanelManager.Instance.PanelOpen("CreateCharacter");
-    }
-
-    private void OnDisable()
-    {
-        foreach (var character in characterSelectDic)
+        if (createCharacterButton.TryGetComponent(out Button button))
         {
-            DestroyImmediate(character.Value);
+            button.onClick.AddListener(OnCreateCharacterButtonClick);
         }
-        characterSelectDic.Clear();
-    }
 
-    private void OnCloseButtonClick()
-    {
-
-    }
-
-    private void OnDeleteButtonClick()
-    {
-
+        characterSelectDic.Add("create", createCharacterButton);
     }
 
     private void OnSelectButtonClick()
