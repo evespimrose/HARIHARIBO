@@ -11,21 +11,26 @@ public class Player : MonoBehaviour, ITakedamage
 
     private StateHandler<Player> stateHandler;
     private bool isMobile;
-    private float moveSpeed = 2f;
+    private bool isSkillInProgress = false;
+    private Playerstats stats;
 
     public Animator Animator => animator;
-    //public Playerstats Stats => stats;
+    public Playerstats Stats => stats;
     public int ComboCount { get; set; } = 0;
 
 
     private void Awake()
     {
+        //UnitManager.Instance.players.Add(this.gameObject);
         InitializeComponents();
         InitializeStateHandler();
         SetPlatform();
-        UnitManager.Instance.players.Add(this.gameObject);
+        InitializeStats();
     }
-
+    private void InitializeStats()
+    {
+        stats = new Playerstats();
+    }
     private void InitializeComponents()
     {
         animator = GetComponent<Animator>();      
@@ -38,6 +43,9 @@ public class Player : MonoBehaviour, ITakedamage
         stateHandler.RegisterState(new PlayerIdleState(stateHandler));
         stateHandler.RegisterState(new PlayerMoveState(stateHandler));
         stateHandler.RegisterState(new PlayerAttackState(stateHandler));
+        stateHandler.RegisterState(new WSkillState(stateHandler));
+        stateHandler.RegisterState(new ESkillState(stateHandler));
+        stateHandler.RegisterState(new RSkillState(stateHandler));
 
         stateHandler.ChangeState(typeof(PlayerIdleState));
     }
@@ -53,11 +61,38 @@ public class Player : MonoBehaviour, ITakedamage
 
     private void Update()
     {
+        stats.UpadateHealthRegen(Time.deltaTime);
+
+        if (isSkillInProgress)
+        {
+            stateHandler.Update();
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(PlayerAttackState));
         }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            isSkillInProgress = true;
+            stateHandler.ChangeState(typeof(WSkillState));
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            isSkillInProgress = true;
+            stateHandler.ChangeState(typeof(ESkillState));
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            isSkillInProgress = true;
+            stateHandler.ChangeState(typeof(RSkillState));
+        }
+
         stateHandler.Update();
+    }
+    public void SetSkillInProgress(bool inProgress)
+    {
+        isSkillInProgress = inProgress;
     }
 
     public Vector3 GetMove()
@@ -77,7 +112,7 @@ public class Player : MonoBehaviour, ITakedamage
 
     public void Move(Vector3 direction)
     {
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        transform.position += direction * stats.moveSpeed * Time.deltaTime;
         if (direction != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(direction);
@@ -86,7 +121,8 @@ public class Player : MonoBehaviour, ITakedamage
 
     public void Takedamage(float damage)
     {
-        print("¾Æ¾ß");
+        float finalDamage = stats.CalculateDamage(damage);
+        stats.currentHealth -= Mathf.RoundToInt(finalDamage);
     }
 }
 

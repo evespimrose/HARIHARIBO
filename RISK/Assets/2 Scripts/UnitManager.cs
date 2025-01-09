@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    public static UnitManager Instance;
+    public static UnitManager Instance { get; private set; }
 
     public List<GameObject> players;
     public List<GameObject> monsters;
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

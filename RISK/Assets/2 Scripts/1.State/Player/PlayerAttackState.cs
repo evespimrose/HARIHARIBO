@@ -58,5 +58,6 @@ public class PlayerAttackState : BaseState<Player>
         {
             inputCount = 0;
         }
+        
     }
 }
