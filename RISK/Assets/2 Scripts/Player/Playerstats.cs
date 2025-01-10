@@ -24,7 +24,7 @@ public class Playerstats
     public float maxHealth = 100;
     private float _currentHealth;
     public float attackPower = 10;
-    public float moveSpeed = 2f;
+    public float moveSpeed;
     [Range(0f, 1f)]
     public float damageReduction = 0.1f;
 

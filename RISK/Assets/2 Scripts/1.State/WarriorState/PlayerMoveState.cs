@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveState : BaseState<Player>
+public class WarriorMoveState : BaseState<Player>
 {
-    public PlayerMoveState(StateHandler<Player> handler) : base(handler) { }
+    public WarriorMoveState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
@@ -17,7 +17,7 @@ public class PlayerMoveState : BaseState<Player>
 
         if (moveInput == Vector3.zero)
         {
-            handler.ChangeState(typeof(PlayerIdleState));
+            handler.ChangeState(typeof(WarriorIdleState));
             return;
         }
 

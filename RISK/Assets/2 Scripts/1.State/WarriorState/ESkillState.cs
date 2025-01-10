@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ESkillState : BaseState<Player>
+public class WarriorESkillState : BaseState<Player>
 {
     private float skillDuration = 2f;
     private float skillTimer;
-    private float moveSpeed = 1f;
-    private float maxDistance = 1f;
+    private float moveSpeed = 10f;
+    private float maxDistance = 7.5f;
     private float movedDistance = 0f;
-    public ESkillState(StateHandler<Player> handler) : base(handler) { }
+    public WarriorESkillState(StateHandler<Player> handler) : base(handler) { }
     public override void Enter(Player player)
     {
         skillTimer = skillDuration;
@@ -33,11 +33,11 @@ public class ESkillState : BaseState<Player>
             Vector3 moveInput = player.GetMove();
             if (moveInput != Vector3.zero)
             {
-                handler.ChangeState(typeof(PlayerMoveState));
+                handler.ChangeState(typeof(WarriorMoveState));
             }
             else
             {
-                handler.ChangeState(typeof(PlayerIdleState));
+                handler.ChangeState(typeof(WarriorIdleState));
             }
         }
     }

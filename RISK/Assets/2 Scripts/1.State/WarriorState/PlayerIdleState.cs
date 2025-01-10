@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdleState : BaseState<Player>
+public class WarriorIdleState : BaseState<Player>
 {
-    public PlayerIdleState(StateHandler<Player> handler) : base(handler) { }
+    public WarriorIdleState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
@@ -18,14 +18,14 @@ public class PlayerIdleState : BaseState<Player>
         // 이동 입력이 있으면 이동 상태로 전환
         if (moveInput != Vector3.zero)
         {
-            handler.ChangeState(typeof(PlayerMoveState));
+            handler.ChangeState(typeof(WarriorMoveState));
             return;
         }
 
         
         if (Input.GetKeyDown(KeyCode.A))
         {
-            handler.ChangeState(typeof(PlayerAttackState));
+            handler.ChangeState(typeof(WarriorAttackState));
         }
     }
 }

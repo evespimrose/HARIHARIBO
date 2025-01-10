@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WSkillState : BaseState<Player>
+public class WarriorWSkillState : BaseState<Player>
 {
     private float skillDuration = 1.2f;
     private float skillTimer;
-    public WSkillState(StateHandler<Player> handler) : base(handler) { }
+    public WarriorWSkillState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
@@ -22,11 +22,11 @@ public class WSkillState : BaseState<Player>
             Vector3 moveInput = player.GetMove();
             if (moveInput != Vector3.zero)
             {
-                handler.ChangeState(typeof(PlayerMoveState));
+                handler.ChangeState(typeof(WarriorMoveState));
             }
             else
             {
-                handler.ChangeState(typeof(PlayerIdleState));
+                handler.ChangeState(typeof(WarriorIdleState));
             }
         }
     }

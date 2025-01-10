@@ -91,7 +91,7 @@ public class GameManager : SingletonManager<GameManager>
 
         GameObject playerObj = Instantiate(Resources.Load<GameObject>("Player"), spawnPosition, Quaternion.identity);
         Player player = playerObj.GetComponent<Player>();
-        player.InitializeStats(playerStats);
+        //player.InitializeStats(playerStats);
         UnitManager.Instance?.RegisterPlayer(playerObj);
     }
     //    else
