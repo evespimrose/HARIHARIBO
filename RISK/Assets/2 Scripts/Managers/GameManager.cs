@@ -75,17 +75,14 @@ public class GameManager : SingletonManager<GameManager>
         //if (!PhotonNetwork.InRoom)
         //{
         //    RoomOptions roomOptions = new RoomOptions { MaxPlayers = 4 };
-        //    PhotonNetwork.CreateRoom(null, roomOptions); // ë°??ì„±
+        //    PhotonNetwork.CreateRoom(null, roomOptions);
         //}
 
         //if (PhotonNetwork.InRoom)
         //{
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Single);
 
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => asyncLoad.isDone);
 
         print("InstantiatePlayer");
 
