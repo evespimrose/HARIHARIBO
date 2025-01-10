@@ -96,7 +96,9 @@ public class PanelManager : MonoBehaviourPunCallbacks
     }
 
     public override void OnConnected()
-    { PanelOpen("Channel"); }
+    {
+        PanelOpen("Channel");
+    }
 
     public override void OnDisconnected(DisconnectCause cause)
     {

@@ -1,4 +1,6 @@
+using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
@@ -8,6 +10,7 @@ public class Player : MonoBehaviour, ITakedamage
 {
     [SerializeField] private bl_Joystick joystick;
     [SerializeField] private Animator animator;
+    private PhotonView photonView;
 
     private StateHandler<Player> stateHandler;
     private bool isMobile;
@@ -21,7 +24,7 @@ public class Player : MonoBehaviour, ITakedamage
 
     private void Awake()
     {
-        //UnitManager.Instance.players.Add(this.gameObject);
+        //photonView = GetComponent<PhotonView>();
         InitializeComponents();
         InitializeStateHandler();
         SetPlatform();
@@ -30,6 +33,10 @@ public class Player : MonoBehaviour, ITakedamage
     private void InitializeStats()
     {
         stats = new Playerstats();
+    }
+    public void InitializeStats(Playerstats stats)
+    {
+        this.stats = stats;
     }
     private void InitializeComponents()
     {

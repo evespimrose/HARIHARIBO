@@ -24,13 +24,15 @@ public class CreateCharacterPanel : MonoBehaviour
 
     public TextMeshProUGUI currentClassNameText;
     public TextMeshProUGUI currentClassDescriptionText;
-    public TextMeshProUGUI currentClassPropertyText;
+    public TextMeshProUGUI currentClassCharacteristicText;
 
 
     public Action<ClassType> UpdateInfo;
 
     private void Awake()
     {
+        UpdateInfo += SwapInfoText;
+
         foreach (var classdata in classDataList)
         {
             if (!characterDataDic.ContainsKey(classdata.classType))
@@ -48,7 +50,7 @@ public class CreateCharacterPanel : MonoBehaviour
                         {
                             currentClassType = characterInfoUI.classType;
 
-                            currentClassNameText.text = currentClassType.ToString();
+                            UpdateInfo?.Invoke(currentClassType);
                         });
                     }
                 }
@@ -60,13 +62,14 @@ public class CreateCharacterPanel : MonoBehaviour
 
         createButton.onClick.AddListener(OnCreateButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
-        UpdateInfo += SwapInfoText;
     }
 
     private void SwapInfoText(ClassType classType)
     {
         characterDataDic.TryGetValue(classType, out CharacterData cd);
-
+        currentClassDescriptionText.text = cd.description;
+        currentClassCharacteristicText.text = cd.characteristic;
+        currentClassNameText.text = classType.ToString();
     }
 
     private void OnCloseButtonClick()

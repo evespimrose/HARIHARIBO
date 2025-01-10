@@ -6,9 +6,12 @@ using UnityEngine;
 [Serializable]
 public class Playerstats
 {
-    public event Action<int> OnHealthChanged;
+    public event Action<float> OnHealthChanged;
     public event Action<int> OnLevelUp;
     public event Action<float> OnExpChanged;
+
+    [Header("닉네임")]
+    public string nickName = null;
 
     [Header("레벨")]
     public int level = 1;
@@ -18,8 +21,8 @@ public class Playerstats
     public float _currentExp = 0f;
 
     [Header("기본 스텟")]
-    public int maxHealth = 100;
-    private int _currentHealth;
+    public float maxHealth = 100;
+    private float _currentHealth;
     public float attackPower = 10;
     public float moveSpeed = 2f;
     [Range(0f, 1f)]
@@ -37,14 +40,20 @@ public class Playerstats
     [Range(0f, 1f)]
     public float cooldownReduction = 0f;
 
-    public int currentHealth { get => _currentHealth;
-        set {
+    public float currentHealth
+    {
+        get => _currentHealth;
+        set
+        {
             _currentHealth = Mathf.Clamp(value, 0, maxHealth);
             OnHealthChanged?.Invoke(_currentHealth);
         }
     }
-    public float currentExp { get => _currentExp;
-        set {
+    public float currentExp
+    {
+        get => _currentExp;
+        set
+        {
             _currentExp = value;
             OnExpChanged?.Invoke(_currentExp);
             if (_currentExp >= maxExp)

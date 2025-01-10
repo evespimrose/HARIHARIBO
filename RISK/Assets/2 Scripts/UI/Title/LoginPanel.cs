@@ -22,7 +22,20 @@ public class LoginPanel : MonoBehaviour
 
     private void OnQuitButtonClick()
     {
-
+        PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Quit Game", "Are you sure you want to quit?",
+           ok =>
+           {
+               if (ok)
+               {
+#if UNITY_EDITOR
+                   UnityEditor.EditorApplication.isPlaying = false;
+#else
+                       Application.Quit();
+#endif
+               }
+               else
+                   PanelManager.Instance.PopupClose();
+           });
     }
 
     private void OnSignupButtonClick()
@@ -41,7 +54,6 @@ public class LoginPanel : MonoBehaviour
             return;
         }
 
-        //�α��� ���� �� ���� �����ؼ� ĳ���� �� �ҷ�����, ĳ���� ����� â���� �Ѿ�ߵ�.
         FirebaseManager.Instance.SignIn(email, pwInput.text, (firebaseUser) => { PanelManager.Instance.PanelOpen("SelectCharacter"); });
     }
     private bool IsValidEmail(string email)
