@@ -16,6 +16,10 @@ public class NormalMonsterAirborne : BaseState<NormalMonster>
 
     public override void Update(NormalMonster monster)
     {
+        if (monster.isStun == true)
+        {
+            monster.isStun = false;
+        }
         if (monster.isAirborne == false)
         {
             monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
