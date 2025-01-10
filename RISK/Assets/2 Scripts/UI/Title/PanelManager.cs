@@ -95,11 +95,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
         base.OnEnable();
     }
 
-    public override void OnConnected()
-    {
-        PanelOpen("Channel");
-    }
-
     public override void OnDisconnected(DisconnectCause cause)
     {
         PanelOpen("Login");

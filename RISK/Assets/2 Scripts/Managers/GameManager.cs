@@ -65,38 +65,24 @@ public class GameManager : SingletonManager<GameManager>
     }
     public IEnumerator InstantiatePlayer(Playerstats playerStats)
     {
-        //PhotonNetwork.ConnectUsingSettings();
-        //if (!PhotonNetwork.IsConnected)
-        //{
-        //    Debug.LogError("Not connected to Photon. Attempting to connect...");
-        //    yield break;
-        //}
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
 
-        //if (!PhotonNetwork.InRoom)
-        //{
-        //    RoomOptions roomOptions = new RoomOptions { MaxPlayers = 4 };
-        //    PhotonNetwork.CreateRoom(null, roomOptions);
-        //}
+        yield return new WaitUntil(() => PhotonNetwork.IsConnected);
 
-        //if (PhotonNetwork.InRoom)
-        //{
+        yield return new WaitUntil(() => PhotonNetwork.InRoom);
+
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Single);
 
         yield return new WaitUntil(() => asyncLoad.isDone);
 
-        print("InstantiatePlayer");
-
         Vector3 spawnPosition = Vector3.zero;
-        //GameObject playerObj = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
+        GameObject playerObj = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
 
-        GameObject playerObj = Instantiate(Resources.Load<GameObject>("Player"), spawnPosition, Quaternion.identity);
-        Player player = playerObj.GetComponent<Player>();
-        player.InitializeStats(playerStats);
+        //GameObject playerObj = Instantiate(Resources.Load<GameObject>("Player"), spawnPosition, Quaternion.identity);
+
         UnitManager.Instance?.RegisterPlayer(playerObj);
     }
-    //    else
-    //    {
-    //        Debug.LogError("Failed to join or create a room.");
-    //    }
-    //}
 }

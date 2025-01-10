@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class Player : MonoBehaviour, ITakedamage
+public class Player : MonoBehaviourPun, ITakedamage//, IPunObservable
 {
     [SerializeField] private bl_Joystick joystick;
     [SerializeField] private Animator animator;
-    private PhotonView photonView;
+
+    private Vector3 networkPosition;
+    private Quaternion networkRotation;
 
     private StateHandler<Player> stateHandler;
     private bool isMobile;
@@ -24,7 +26,6 @@ public class Player : MonoBehaviour, ITakedamage
 
     private void Awake()
     {
-        //photonView = GetComponent<PhotonView>();
         InitializeComponents();
         InitializeStateHandler();
         SetPlatform();
@@ -40,7 +41,20 @@ public class Player : MonoBehaviour, ITakedamage
     }
     private void InitializeComponents()
     {
-        animator = GetComponent<Animator>();      
+        animator = GetComponent<Animator>();
+
+        if (photonView.IsMine)
+        {
+            if (GameObject.Find("Outline").TryGetComponent(out bl_Joystick joystick))
+            {
+                InitializeJoystick(joystick);
+            }
+        }
+        else
+        {
+            networkPosition = transform.position;
+            networkRotation = transform.rotation;
+        }
     }
 
     private void InitializeStateHandler()
@@ -119,11 +133,20 @@ public class Player : MonoBehaviour, ITakedamage
 
     public void Move(Vector3 direction)
     {
-        transform.position += direction * stats.moveSpeed * Time.deltaTime;
-        if (direction != Vector3.zero)
+        if (photonView.IsMine)
         {
-            transform.rotation = Quaternion.LookRotation(direction);
+            transform.position += direction * stats.moveSpeed * Time.deltaTime;
+            if (direction != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
         }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * 10f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, networkRotation, Time.deltaTime * 10f);
+        }
+
     }
 
     public void Takedamage(float damage)
@@ -131,5 +154,15 @@ public class Player : MonoBehaviour, ITakedamage
         float finalDamage = stats.CalculateDamage(damage);
         stats.currentHealth -= Mathf.RoundToInt(finalDamage);
     }
+
+    public void InitializeJoystick(bl_Joystick joystick)
+    {
+        this.joystick = joystick;
+    }
+
+    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+
+    //}
 }
 
