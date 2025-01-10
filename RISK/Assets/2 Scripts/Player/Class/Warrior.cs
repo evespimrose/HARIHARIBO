@@ -51,9 +51,9 @@ public class Warrior : Player
         stateHandler.RegisterState(new WarriorMoveState(stateHandler));
         stateHandler.RegisterState(new WarriorAttackState(stateHandler));
 
-        stateHandler.RegisterState(new WarriorWSkillState(stateHandler));
-        stateHandler.RegisterState(new WarriorESkillState(stateHandler));
-        stateHandler.RegisterState(new WarriorRSkillState(stateHandler));
+        stateHandler.RegisterState(new WarriorWSkill(stateHandler));
+        stateHandler.RegisterState(new WarriorESkill(stateHandler));
+        stateHandler.RegisterState(new WarriorRSkill(stateHandler));
 
         stateHandler.ChangeState(typeof(WarriorIdleState));
     }
@@ -74,17 +74,17 @@ public class Warrior : Player
         else if (Input.GetKeyDown(KeyCode.W))
         {
             isSkillInProgress = true;
-            stateHandler.ChangeState(typeof(WarriorWSkillState));
+            stateHandler.ChangeState(typeof(WarriorWSkill));
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             isSkillInProgress = true;
-            stateHandler.ChangeState(typeof(WarriorESkillState));
+            stateHandler.ChangeState(typeof(WarriorESkill));
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             isSkillInProgress = true;
-            stateHandler.ChangeState(typeof(WarriorRSkillState));
+            stateHandler.ChangeState(typeof(WarriorRSkill));
         }
 
         stateHandler.Update();

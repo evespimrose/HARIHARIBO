@@ -2,20 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarriorRSkillState : BaseState<Player>
+public class WarriorESkill : BaseState<Player>
 {
-    private float skillDuration = 1f;
+    private float skillDuration = 2f;
     private float skillTimer;
-    private float moveSpeed = 1f;
-    private float maxDistance = 0.8f;
+    private float moveSpeed = 4f;
+    private float maxDistance = 1.5f;
     private float movedDistance = 0f;
-    public WarriorRSkillState(StateHandler<Player> handler) : base(handler) { }
-
+    public WarriorESkill(StateHandler<Player> handler) : base(handler) { }
     public override void Enter(Player player)
     {
         skillTimer = skillDuration;
         movedDistance = 0f;
-        player.Animator?.SetTrigger("RSkill");
+        player.Animator?.SetTrigger("ESkill");
     }
     public override void Update(Player player)
     {
@@ -27,6 +26,7 @@ public class WarriorRSkillState : BaseState<Player>
             player.transform.position += player.transform.forward * movement;
             movedDistance += movement;
         }
+
 
         if (skillTimer <= 0)
         {
@@ -45,4 +45,5 @@ public class WarriorRSkillState : BaseState<Player>
     {
         player.SetSkillInProgress(false);
     }
+
 }
