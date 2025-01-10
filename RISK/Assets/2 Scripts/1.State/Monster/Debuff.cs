@@ -25,12 +25,21 @@ public class Debuff : MonoBehaviour
     [Tooltip("슬로우 감소 수치")]
     public float slowPower = 1f;
 
+    private bool isDie = false;
+
     public Coroutine bleeding;
     public Coroutine poison;
     public Coroutine slow;
 
+    public void DebuffAllOff()
+    {
+        StopAllCoroutines();
+        isDie = true;
+    }
+
     public void DebuffCheck(NormalMonster monster)
     {
+        if (isDie == true) { return; }
         if (monster.isBleeding == false)
         {
             bleeding = null;

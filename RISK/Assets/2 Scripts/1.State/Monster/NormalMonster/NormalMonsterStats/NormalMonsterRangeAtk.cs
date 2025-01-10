@@ -21,7 +21,7 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     public override void Update(NormalMonster monster)
     {
         curTime += Time.deltaTime; // 경과 시간 누적
-
+        if (isAtk == false) monster.transform.LookAt(monster.target);
         // 공격 시작 전 대기 시간
         if (curTime >= atkDelay && !isAtk)
         {
@@ -41,10 +41,10 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
          
     }
 
-    private void Atk(NormalMonster entity)
+    private void Atk(NormalMonster monster)
     {
-        GameObject bullet = entity.GetComponent<RangeShooter>().BulletSpwan();
-        bullet.GetComponent<RangeBullet>().Seting(entity.target.transform.position, entity.atkDamage);
-        entity.StartCoroutine(entity.AtkCoolTime());
+        GameObject bullet = monster.GetComponent<RangeShooter>().BulletSpwan();
+        bullet.GetComponent<RangeBullet>().Seting(monster.target.transform.position, monster.atkDamage);
+        monster.StartCoroutine(monster.AtkCoolTime());
     }
 }

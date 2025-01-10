@@ -9,8 +9,7 @@ public class RangeShooter : MonoBehaviour
     
     public GameObject BulletSpwan()
     {
-        GameObject monsterBullet = Instantiate(bulletPrefab);
-        monsterBullet.transform.position = shotPos.position;
+        GameObject monsterBullet = Instantiate(bulletPrefab, shotPos.transform.position, shotPos.rotation);
         return monsterBullet;
     }
 }

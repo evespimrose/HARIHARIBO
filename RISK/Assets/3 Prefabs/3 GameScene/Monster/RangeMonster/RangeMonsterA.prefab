@@ -4949,7 +4949,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5697299742454251040
 Transform:
   m_ObjectHideFlags: 0
@@ -5034,12 +5034,14 @@ MonoBehaviour:
   target: {fileID: 0}
   model: {fileID: 335118778449658959}
   animator: {fileID: 5807490071077000019}
+  dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
   monsterState: {fileID: 11400000, guid: 5de7aa03653524a4db36cc41c674e407, type: 2}
   atkDamage: 0
   moveSpeed: 0
   atkRange: 0
   atkDelay: 0
   curHp: 0
+  isDie: 0
   isAirborne: 0
   isAtk: 0
   isStun: 0
