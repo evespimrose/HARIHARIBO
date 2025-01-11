@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Destroyer : Player
 {
-    [Header("전사 스탯 설정")]
+    [Header("디스트로이어 스탯 설정")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
