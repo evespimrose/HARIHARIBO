@@ -51,6 +51,7 @@ public class Mage : Player
         stateHandler.RegisterState(new MageWSkill(stateHandler));
         stateHandler.RegisterState(new MageESkill(stateHandler));
         stateHandler.RegisterState(new MageRSkill(stateHandler));
+        stateHandler.RegisterState(new MageTSkill(stateHandler));
 
         stateHandler.ChangeState(typeof(MageIdleState));
     }
@@ -81,6 +82,11 @@ public class Mage : Player
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(MageRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            isSkillInProgress = true;
+            stateHandler.ChangeState(typeof(MageTSkill));
         }
 
         stateHandler.Update();

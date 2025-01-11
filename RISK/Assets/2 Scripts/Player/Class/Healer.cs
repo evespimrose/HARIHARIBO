@@ -53,6 +53,7 @@ public class Healer : Player
         stateHandler.RegisterState(new HealerWSkill(stateHandler));
         stateHandler.RegisterState(new HealerESkill(stateHandler));
         stateHandler.RegisterState(new HealerRSkill(stateHandler));
+        stateHandler.RegisterState(new HealerTSkill(stateHandler));
 
         stateHandler.ChangeState(typeof(HealerIdleState));
     }
@@ -84,6 +85,11 @@ public class Healer : Player
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(HealerRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            isSkillInProgress = true;
+            stateHandler.ChangeState(typeof(HealerTSkill));
         }
 
         stateHandler.Update();

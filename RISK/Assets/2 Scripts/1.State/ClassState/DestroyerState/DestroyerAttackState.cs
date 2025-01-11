@@ -6,7 +6,7 @@ public class DestroyerAttackState : BaseState<Player>
 {
     private float attackDuration = 1f;
     private float attackTimer;
-    private float comboWindow = 0.5f;
+    private float comboWindow = 1f;
     private float comboTimer;
     private float lastKeyPressTime;
     private int inputCount = 0;
@@ -26,7 +26,7 @@ public class DestroyerAttackState : BaseState<Player>
         inputCount++;
         lastKeyPressTime = Time.time;
 
-        int attackIndex = Mathf.Clamp(inputCount, 1, 3);
+        int attackIndex = Mathf.Clamp(inputCount, 1, 4);
         player.Animator?.SetTrigger($"Attack{attackIndex}");
     }
 

@@ -53,6 +53,7 @@ public class Destroyer : Player
         stateHandler.RegisterState(new DestroyerWSkill(stateHandler));
         stateHandler.RegisterState(new DestroyerESkill(stateHandler));
         stateHandler.RegisterState(new DestroyerRSkill(stateHandler));
+        stateHandler.RegisterState(new DestroyerTSkill(stateHandler));
 
         stateHandler.ChangeState(typeof(DestroyerIdleState));
     }
@@ -78,12 +79,17 @@ public class Destroyer : Player
         else if (Input.GetKeyDown(KeyCode.E))
         {
             isSkillInProgress = true;
-            stateHandler.ChangeState(typeof(DestroyerWSkill));
+            stateHandler.ChangeState(typeof(DestroyerESkill));
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(DestroyerRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            isSkillInProgress = true;
+            stateHandler.ChangeState(typeof(DestroyerTSkill));
         }
 
         stateHandler.Update();
