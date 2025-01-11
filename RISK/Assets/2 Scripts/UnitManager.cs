@@ -2,25 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class UnitManager : SingletonManager<UnitManager>
 {
-    public static UnitManager Instance { get; private set; }
 
     public List<GameObject> players = new List<GameObject>();
     public List<GameObject> monsters = new List<GameObject>();
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     public void RegisterPlayer(GameObject player)
     {

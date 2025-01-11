@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.GraphicsBuffer;
 
 public class NormalMonster : MonoBehaviour, ITakedamage
 {
@@ -14,48 +10,48 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         Melee,
         Range
     }
-    [Header("¸ó½ºÅÍÅ¸ÀÔ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½")]
     public MonsterType monsterType;
-    [Header("¸ó½ºÅÍ Å¸°Ù ¹× ¸ðµ¨")]
-    [Tooltip("°ø°Ý´ë»ó")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½")]
+    [Tooltip("ï¿½ï¿½ï¿½Ý´ï¿½ï¿½")]
     public Transform target;
     protected Collider col;
     protected Rigidbody rb;
     public StateHandler<NormalMonster> nMHandler;
 
-    [Tooltip("¸ðµ¨¸µ")]
+    [Tooltip("ï¿½ðµ¨¸ï¿½")]
     public GameObject model;
-    [Tooltip("¸ðµ¨¸µÀÇ ¾Ö´Ï¸ÞÀÌÅÍ")]
+    [Tooltip("ï¿½ðµ¨¸ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public Animator animator;
 
-    [Header("¸ó½ºÅÍ ½ºÅÝ")]
-    [Tooltip("À¯´Ö½ºÅÝ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½")]
     public MonsterScriptableObjects monsterState;
-    [Tooltip("°ø°Ýµ¥¹ÌÁö")]
+    [Tooltip("ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½ï¿½")]
     public float atkDamage;
-    [Tooltip("ÀÌµ¿¼Óµµ")]
+    [Tooltip("ï¿½Ìµï¿½ï¿½Óµï¿½")]
     public float moveSpeed;
-    [Tooltip("°ø°Ý¹üÀ§")]
+    [Tooltip("ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½")]
     public float atkRange;
-    [Tooltip("°ø°Ýµô·¹ÀÌ")]
+    [Tooltip("ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½")]
     public float atkDelay;
-    [Tooltip("ÇöÀçÃ¼·Â")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½")]
     public float curHp;
-    [Tooltip("ÃÖ´ëÃ¼·Â")]
+    [Tooltip("ï¿½Ö´ï¿½Ã¼ï¿½ï¿½")]
     protected float maxHp;
 
-    [Header("¹«·ÂÈ­ »óÅÂÀÌ»ó Ã¼Å©")]
-    [Tooltip("¿¡¾îº»")]
+    [Header("ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½Ì»ï¿½ Ã¼Å©")]
+    [Tooltip("ï¿½ï¿½ï¿½îº»")]
     protected bool isDie = false;
     protected bool isHit = false;
     public bool isAirborne = false;
     protected bool isAirborneAction = false;
     public bool isAtk = false;
-    [Tooltip("½ºÅÏ")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½")]
     public bool isStun = false;
     public bool isStunAction = false;
 
-    [Header("µð¹öÇÁ »óÅÂÀÌ»ó Ã¼Å©")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì»ï¿½ Ã¼Å©")]
     public Debuff monsterDebuff;
     public bool isSlow = false;
     public bool isBleeding = false;
@@ -104,7 +100,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     {
         nMHandler = new StateHandler<NormalMonster>(this);
 
-        // »óÅÂµé µî·Ï
+        // ï¿½ï¿½ï¿½Âµï¿½ ï¿½ï¿½ï¿½
         nMHandler.RegisterState(new NormalMonsterIdle(nMHandler));
         nMHandler.RegisterState(new NormalMonsterMove(nMHandler));
         switch (monsterType)
@@ -120,7 +116,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         nMHandler.RegisterState(new NormalMonsterStun(nMHandler));
         nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
         nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
-        // ÃÊ±â »óÅÂ ¼³Á¤
+        // ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         nMHandler.ChangeState(typeof(NormalMonsterIdle));
     }
 
@@ -158,42 +154,42 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     {
         this.isAirborneAction = true;
 
-        float airborneTime = 2f;//¿¡¾îº»Áö¼Ó½Ã°£
+        float airborneTime = 2f;//ï¿½ï¿½ï¿½îº»ï¿½ï¿½ï¿½Ó½Ã°ï¿½
         float airborneDelay = airborneTime / 2f;
-        float upDuration = airborneTime * 0.2f;//¿Ã¶ó°¡´Â½Ã°£
-        float downDuration = airborneTime * 0.3f;//³»·Á°¡´Â½Ã°£
-        float startY = this.model.transform.position.y;//µ¹¾Æ¿ÃÀ§Ä¡
-        float targetY = startY + 5f;//¿Ã¶ó°¥À§Ä¡
+        float upDuration = airborneTime * 0.2f;//ï¿½Ã¶ó°¡´Â½Ã°ï¿½
+        float downDuration = airborneTime * 0.3f;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½Ã°ï¿½
+        float startY = this.model.transform.position.y;//ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½Ä¡
+        float targetY = startY + 5f;//ï¿½Ã¶ï¿½ï¿½ï¿½Ä¡
         float timer = 0f;
 
-        // »ó½Â ´Ü°è (0.4ÃÊ µ¿¾È À§·Î ÀÌµ¿)
+        // ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ (0.4ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½)
         while (timer < upDuration)
         {
-            float newY = Mathf.Lerp(startY, targetY, timer / upDuration);  // »ó½Â ºñÀ²À» ½Ã°£¿¡ ¸Â°Ô °è»ê
+            float newY = Mathf.Lerp(startY, targetY, timer / upDuration);  // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Â°ï¿½ ï¿½ï¿½ï¿½
             this.model.transform.position = new Vector3(
                 this.model.transform.position.x,
                 newY,
                 this.model.transform.position.z
             );
-            timer += Time.deltaTime; // ½Ã°£ ´©Àû
-            yield return null; // ÇÁ·¹ÀÓ¸¶´Ù ¾÷µ¥ÀÌÆ®
+            timer += Time.deltaTime; // ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
+            yield return null; // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         }
 
-        // ÇÏ°­ ´Ü°è (0.6ÃÊ µ¿¾È ¿ø·¡ À§Ä¡·Î ³»·Á¿È)
+        // ï¿½Ï°ï¿½ ï¿½Ü°ï¿½ (0.6ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         while (timer < airborneTime)
         {
-            float newY = Mathf.Lerp(targetY, startY, (timer - upDuration) / downDuration);  // ÇÏ°­ ºñÀ²À» ½Ã°£¿¡ ¸Â°Ô °è»ê
+            float newY = Mathf.Lerp(targetY, startY, (timer - upDuration) / downDuration);  // ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Â°ï¿½ ï¿½ï¿½ï¿½
             this.model.transform.position = new Vector3(
                 this.model.transform.position.x,
                 newY,
                 this.model.transform.position.z
             );
-            timer += Time.deltaTime; // ½Ã°£ ´©Àû
-            yield return null; // ÇÁ·¹ÀÓ¸¶´Ù ¾÷µ¥ÀÌÆ®
+            timer += Time.deltaTime; // ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
+            yield return null; // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         }
 
         yield return new WaitForSeconds(airborneDelay);
-        //¿¡¾îº»ÈÄ ÀÏ¾î³ª´Â ½Ã°£
+        //ï¿½ï¿½ï¿½îº»ï¿½ï¿½ ï¿½Ï¾î³ªï¿½ï¿½ ï¿½Ã°ï¿½
         this.isAirborneAction = false;
         this.isAirborne = false;
     }
@@ -205,9 +201,9 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     public IEnumerator AtkCoolTime()
     {
-        Debug.Log("°ø°ÝÄðÅ¸ÀÓ ½ÃÀÛ");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("°ø°ÝÄðÅ¸ÀÓ Á¾·á");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         isAtk = false;
     }
 

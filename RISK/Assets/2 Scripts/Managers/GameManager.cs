@@ -16,20 +16,11 @@ public class GameManager : SingletonManager<GameManager>
         base.Awake();
     }
 
-    //Photon���� ��Ʈ�� ����ȭ �ϴ� ���?
-    //1. �����տ� PhotonView ������Ʈ�� ���̰�, PhotonNetwork.Instantiate�� ���� ���� Ŭ���̾�Ʈ�鿡�Ե�
-    //����ȭ�� ������Ʈ�� �����ϵ��� ��.
-    //2. PhotonView�� Observing �� �� �ֵ��� View ������Ʈ�� ����.
-    //3. �� View�� �������� ���� ������Ʈ�� ���� �������� �ʵ��� ����ó���� �ݵ��?�Ұ�.
-
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => isGameReady);
         yield return new WaitForSeconds(1f);
 
-        //GetPlayerNumber Ȯ���Լ� : ���� ��Ʈ��ũ�� �����?�ٸ� �÷��̾��?���̿��� ����ȭ �� �÷��̾� ��ȣ.
-        //Actor Number�� �ٸ�. (Scene���� ���������� 0~�÷��̾� �� ��ŭ �ο���)
-        //GetPlayerNumber Ȯ���Լ��� �����ϱ� ���ؼ��� ���� PlayerNumbering ������Ʈ�� �ʿ��ϴ�.
         int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
         GameObject playerObj = PhotonNetwork.Instantiate("Player", playerPos, Quaternion.identity);
@@ -40,7 +31,6 @@ public class GameManager : SingletonManager<GameManager>
         //PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity).name
         //    = PhotonNetwork.NickName;
 
-        // �� �ؿ����� ���� MasterClient�� �ƴϸ� �������� ����
         if (false == PhotonNetwork.IsMasterClient)
         {
             yield break;
@@ -77,6 +67,18 @@ public class GameManager : SingletonManager<GameManager>
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Single);
 
         yield return new WaitUntil(() => asyncLoad.isDone);
+
+        switch(FirebaseManager.Instance.currentCharacterData.classType)
+        {
+            case ClassType.Warrior:
+                break;
+            case ClassType.SpearMan:
+                break;
+            case ClassType.Archer: 
+                break;
+            case ClassType.Mage:
+                break;
+        }
 
         Vector3 spawnPosition = Vector3.zero;
         GameObject playerObj = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);

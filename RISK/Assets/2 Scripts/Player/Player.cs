@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class Player : MonoBehaviourPun, ITakedamage//, IPunObservable
+public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 {
     [SerializeField] private bl_Joystick joystick;
     [SerializeField] private Animator animator;
@@ -160,9 +160,18 @@ public class Player : MonoBehaviourPun, ITakedamage//, IPunObservable
         this.joystick = joystick;
     }
 
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-
-    //}
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+        }
+        else
+        {
+            networkPosition = (Vector3)stream.ReceiveNext();
+            networkRotation = (Quaternion)stream.ReceiveNext();
+        }
+    }
 }
 

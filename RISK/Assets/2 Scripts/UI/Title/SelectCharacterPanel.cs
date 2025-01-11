@@ -3,28 +3,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SelectCharacterPanel : MonoBehaviour
 {
-    public Button deleteButton;
-    public Button closeButton;
-
-    public Button selectButton;
-    public GameObject createCharacterPrefab;
-    public GameObject characterDataPrefab;
-
-    public Image characterModelImage;
-
-    public Transform characterListTransform;
-
     public Dictionary<string, GameObject> characterSelectDic = new Dictionary<string, GameObject>();
     List<FireBaseCharacterData> characterDatalist = new List<FireBaseCharacterData>();
 
     public FireBaseCharacterData currentCharacterData;
+
+    public GameObject createCharacterPrefab;
+    public GameObject characterDataPrefab;
+
+    public Transform characterListTransform;
+
+    public Button deleteButton;
+    public Button closeButton;
+    public Button selectButton;
+
+    public Image characterModelImage;
 
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI nickNameText;
@@ -39,8 +37,6 @@ public class SelectCharacterPanel : MonoBehaviour
     private void OnEnable()
     {
         ReLoadCharacterList();
-
-
     }
 
     private void OnCreateCharacterButtonClick()

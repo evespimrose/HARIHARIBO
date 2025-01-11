@@ -6,7 +6,6 @@ using UnityEngine;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 
-
 public class PanelManager : MonoBehaviourPunCallbacks
 {
     public static PanelManager Instance;

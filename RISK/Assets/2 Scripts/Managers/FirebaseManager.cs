@@ -178,8 +178,8 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"캐릭??���?로드 ?�패: {e.Message}");
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "���?�� 목록??불러?�는???�패?�습?�다.\n" + e.Message);
+            Debug.LogError($"캐릭??���?로드 ?�패: {e.Message}");
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "���?�� 목록??불러?�는???�패?�습?�다.\n" + e.Message);
         }
 
         return result;
