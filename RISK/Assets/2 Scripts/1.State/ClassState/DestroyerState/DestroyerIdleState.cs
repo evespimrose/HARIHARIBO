@@ -2,17 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyerIdleState : MonoBehaviour
+public class DestroyerIdleState : BaseState<Player>
 {
-    // Start is called before the first frame update
-    void Start()
+    public DestroyerIdleState(StateHandler<Player> handler) : base(handler) { }
+
+    public override void Enter(Player player)
     {
-        
+        player.Animator?.SetTrigger("Idle");
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Update(Player player)
     {
-        
+        Vector3 moveInput = player.GetMove();
+
+        if (moveInput != Vector3.zero)
+        {
+            handler.ChangeState(typeof(DestroyerMoveState));
+            return;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            handler.ChangeState(typeof(DestroyerAttackState));
+        }
     }
 }

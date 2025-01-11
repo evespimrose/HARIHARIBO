@@ -2,17 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealerIdleState : MonoBehaviour
+public class HealerIdleState : BaseState<Player>
 {
-    // Start is called before the first frame update
-    void Start()
+    public HealerIdleState(StateHandler<Player> handler) : base(handler) { }
+
+    public override void Enter(Player player)
     {
-        
+        player.Animator?.SetTrigger("Idle");
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Update(Player player)
     {
-        
+        Vector3 moveInput = player.GetMove();
+  
+        if (moveInput != Vector3.zero)
+        {
+            handler.ChangeState(typeof(HealerMoveState));
+            return;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            handler.ChangeState(typeof(HealerAttackState));
+        }
     }
+
+
 }

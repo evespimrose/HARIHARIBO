@@ -26,21 +26,21 @@ public class Warrior : Player
     {
         stats = new Playerstats();
 
-        stats.maxHealth = baseMaxHealth;            // 체력
-        stats.healthPerLevel = baseHealthPerLevel;         // 레벨당 체력 증가량
-        stats.attackPower = baseAttackPower;           // 기본 공격력
-        stats.attackPerLevel = baseAttackPerLevel;          // 레벨당 공격력 증가량
-        stats.moveSpeed = baseMoveSpeed;              // 기본 이동속도
-        stats.damageReduction = baseDamageReduction;      // 높은 피해감소 (20%)
-        stats.healthRegen = baseHealthRegen;            // 체력 회복량
-        stats.regenInterval = baseRegenInterval;          // 회복 주기
+        stats.maxHealth = baseMaxHealth;            
+        stats.healthPerLevel = baseHealthPerLevel;  
+        stats.attackPower = baseAttackPower;        
+        stats.attackPerLevel = baseAttackPerLevel;  
+        stats.moveSpeed = baseMoveSpeed;            
+        stats.damageReduction = baseDamageReduction;
+        stats.healthRegen = baseHealthRegen;        
+        stats.regenInterval = baseRegenInterval;    
 
         
-        stats.criticalChance = baseCriticalChance;       // 크리티컬 확률 10%
-        stats.criticalDamage = baseCriticalDamage;       // 크리티컬 데미지 150%
-        stats.cooldownReduction = baseCooldownReduction;    // 쿨타임 감소 10%
+        stats.criticalChance = baseCriticalChance;      
+        stats.criticalDamage = baseCriticalDamage;      
+        stats.cooldownReduction = baseCooldownReduction;
 
-        stats.InitializeStats();     // 현재 체력을 최대체력으로 설정
+        stats.InitializeStats();     
     }
 
     protected override void InitializeStateHandler()

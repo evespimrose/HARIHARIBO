@@ -15,7 +15,6 @@ public class WarriorIdleState : BaseState<Player>
     {
         Vector3 moveInput = player.GetMove();
 
-        // 이동 입력이 있으면 이동 상태로 전환
         if (moveInput != Vector3.zero)
         {
             handler.ChangeState(typeof(WarriorMoveState));
