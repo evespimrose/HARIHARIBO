@@ -7,147 +7,157 @@ public class BossMonsterAtk : BaseState<BossMonster>
 {
     public BossMonsterAtk(StateHandler<BossMonster> handler) : base(handler) { }
 
+    public enum CurAction
+    {
+        Strat,
+        AtkA,
+        AtkB,
+        AtkC,
+        End
+    }
+    private CurAction curAction = CurAction.Strat;
+
     public float atkRange = 20f;
 
-    public float atkADuration = 3f;
-    public float atkADamage = 1f;
-    private bool isAtkA = false;
+    public float attackDelay = 0.5f; // 공격 판정 전 딜레이
+    public float atkADuration = 2f;  // AtkA 애니메이션 지속 시간
+    public float atkBDuration = 2f;  // AtkB 애니메이션 지속 시간
+    public float atkCDuration = 2f;  // AtkC 애니메이션 지속 시간
 
-    public float atkBDuration = 3f;
-    public float atkBDamage = 1f;
-    private bool isAtkB = false;
-
-    public float atkCDuration = 3f;
-    public float atkCDamage = 1f;
-    private bool isAtkC = false;
-
-    public float outDuration = 3f;
-    private float curTime;
-    private bool isAction = false;
+    private float phaseStartTime;
+    private bool isActionEnd = false;
 
     public override void Enter(BossMonster monster)
     {
         Debug.Log("공격 시작");
-        curTime = 0f;
-        isAtkA = false;
-        isAtkB = false;
-        isAtkC = false;
+        curAction = CurAction.AtkA;
+        phaseStartTime = Time.time + 1f; // 1초 대기 후 AtkA 애니메이션 시작
+        isActionEnd = false;
     }
 
     public override void Update(BossMonster monster)
     {
-        if (isAction == false)
+        if (curAction == CurAction.End) return;
+
+        float elapsedTime = Time.time - phaseStartTime;
+
+        switch (curAction)
         {
-            if (curTime > atkADuration && !isAtkA && !isAtkB && !isAtkC)
-            {
-                AtkA(monster);
-            }
-            else if (curTime > atkBDuration && isAtkA && !isAtkB && !isAtkC)
-            {
-                AtkB(monster);
-            }
-            else if (curTime > atkCDuration && isAtkA && isAtkB && !isAtkC)
-            {
-                AtkC(monster);
-            }
-            else if (curTime > outDuration && isAtkA && isAtkB && isAtkC)
-            {
-                //공격종료
+            case CurAction.AtkA:
+                if (!isActionEnd && elapsedTime >= 0f)
+                {
+                    AttackAnimationPlay(monster, 1);
+                    isActionEnd = true;
+                }
+
+                if (elapsedTime >= attackDelay && isActionEnd)
+                {
+                    AttackHit(monster, 105f); // AtkA 공격 판정
+                }
+
+                if (elapsedTime >= atkADuration)
+                {
+                    ChangeAction(monster, CurAction.AtkB);
+                }
+                break;
+
+            case CurAction.AtkB:
+                if (!isActionEnd && elapsedTime >= 0f)
+                {
+                    AttackAnimationPlay(monster, 2);
+                    isActionEnd = true;
+                }
+
+                if (elapsedTime >= attackDelay && isActionEnd)
+                {
+                    AttackHit(monster, 45f); // AtkB 공격 판정
+                }
+
+                if (elapsedTime >= atkBDuration)
+                {
+                    ChangeAction(monster, CurAction.AtkC);
+                }
+                break;
+
+            case CurAction.AtkC:
+                if (!isActionEnd && elapsedTime >= 0f)
+                {
+                    AttackAnimationPlay(monster, 3);
+                    isActionEnd = true;
+                }
+
+                if (elapsedTime >= attackDelay && isActionEnd)
+                {
+                    AttackHit(monster, 180f); // AtkC 공격 판정
+                }
+
+                if (elapsedTime >= atkCDuration)
+                {
+                    ChangeAction(monster, CurAction.End);
+                }
+                break;
+
+            case CurAction.End:
                 monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-            }
-            curTime += Time.deltaTime;
+                break;
         }
     }
 
     public override void Exit(BossMonster monster)
     {
-
+        Debug.Log("공격 종료");
     }
 
-    public void AtkA(BossMonster monster)
+    private void AttackAnimationPlay(BossMonster monster, int animationnumber)
     {
-        isAction = true;
-        //애니메이션 재생
-        monster.animator.SetTrigger("Atk");
-        Debug.Log("AtkA공격");
-        isAtkA = true;
+        switch (animationnumber)
+        {
+            case 1:
+                monster.animator.SetTrigger("AtkA");
+                break;
+            case 2:
+                monster.animator.SetTrigger("AtkB");
+                break;
+            case 3:
+                monster.animator.SetTrigger("AtkC");
+                break;
+        }
+        Debug.Log($"{curAction} 애니메이션 재생");
+    }
+
+    private void AttackHit(BossMonster monster, float angleThreshold)
+    {
         Vector3 atkDir = monster.transform.forward;
-        //monster.transform.position = 공격판정범위 중심
-        //monster.atkRange = 공격판정의 범위(원형)
         Collider[] cols = Physics.OverlapSphere(monster.transform.position, atkRange);
+
         foreach (Collider col in cols)
         {
             if (col.gameObject.CompareTag("Player"))
             {
                 Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
-                //정면기준으로 반원범위내에 있는지 확인
                 float angle = Vector3.Angle(atkDir, dirToTarget);
-                if (angle <= 105f)
+
+                if (angle <= angleThreshold)
                 {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(monster.atkDamage);
+                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(monster.atkDamage);
+                    Debug.Log($"{curAction} 공격 성공");
                 }
                 else
                 {
-                    Debug.Log("공격판정 밖임");
+                    Debug.Log($"{curAction} 공격 실패 - 범위 밖");
                 }
             }
         }
-        curTime = 0f;
-        isAction = false;
     }
 
-    public void AtkB(BossMonster monster)
+    private void ChangeAction(BossMonster monster, CurAction nextPhase)
     {
-        isAction = true;
-        //애니메이션 재생
-        monster.animator.SetTrigger("Atk");
-        Debug.Log("AtkB공격");
-        isAtkB = true;
-        Vector3 atkDir = monster.transform.forward;
-        //monster.transform.position = 공격판정범위 중심
-        //monster.atkRange = 공격판정의 범위(원형)
-        Collider[] cols = Physics.OverlapSphere(monster.transform.position, atkRange);
-        foreach (Collider col in cols)
-        {
-            if (col.gameObject.CompareTag("Player"))
-            {
-                Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
-                //정면기준으로 반원범위내에 있는지 확인
-                float angle = Vector3.Angle(atkDir, dirToTarget);
-                if (angle <= 45f)
-                {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(monster.atkDamage);
-                }
-                else
-                {
-                    Debug.Log("공격판정 밖임");
-                }
-            }
-        }
-        curTime = 0f;
-        isAction = false;
-    }
+        curAction = nextPhase;
 
-    public void AtkC(BossMonster monster)
-    {
-        isAction = true;
-        //애니메이션 재생
-        monster.animator.SetTrigger("Atk");
-        Debug.Log("AtkC공격");
-        isAtkC = true;
-        //monster.transform.position = 공격판정범위 중심
-        //monster.atkRange = 공격판정의 범위(원형)
-        Collider[] cols = Physics.OverlapSphere(monster.transform.position, atkRange);
-        foreach (Collider col in cols)
+        if (nextPhase != CurAction.End)
         {
-            if (col.gameObject.CompareTag("Player"))
-            {
-                Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
-                //정면기준으로 반원범위내에 있는지 확인
-                col.gameObject.GetComponent<ITakedamage>().Takedamage(monster.atkDamage);
-            }
+            phaseStartTime = Time.time; // 다음 단계로 이동 시 시간 초기화
+            isActionEnd = false;   // 애니메이션 실행 준비
         }
-        curTime = 0f;
-        isAction = false;
     }
 }

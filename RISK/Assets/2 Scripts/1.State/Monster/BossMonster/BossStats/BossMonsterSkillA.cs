@@ -6,104 +6,147 @@ using UnityEngine;
 public class BossMonsterSkillA : BaseState<BossMonster>
 {
     public BossMonsterSkillA(StateHandler<BossMonster> handler) : base(handler) { }
+    //스킬1 강타
+    public enum CurAction
+    {
+        Strat,
+        SkillAtkA,
+        SkillAtkB,
+        End
+    }
+    private CurAction curAction = CurAction.Strat;
 
-    public float atkADuration = 1f;
-    public float atkADamage = 1f;
-    private bool isAtkA = false;
+    public float atkRange = 20f;
 
-    public float atkBDuration = 1f;
-    public float atkBDamage = 1f;
-    private bool isAtkB = false;
+    public float attackDelay = 0.5f; // 공격 판정 전 딜레이
+    public float atkADuration = 2f;  // AtkA 애니메이션 지속 시간
+    public float atkBDuration = 2f;  // AtkB 애니메이션 지속 시간
 
-    public float outDuration = 1f;
-    private float curTime = 0f;
+    private float phaseStartTime;
+    private bool isActionEnd = false;
 
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("스킬A 진입");
-        curTime = 0f;
-        isAtkA = false;
-        isAtkB = false;
+        Debug.Log("공격 시작");
+        curAction = CurAction.SkillAtkA;
+        phaseStartTime = Time.time + 1f; // 1초 대기 후 AtkA 애니메이션 시작
+        isActionEnd = false;
     }
 
     public override void Update(BossMonster monster)
     {
-        if (curTime > atkADuration)
+        if (curAction == CurAction.End) return;
+
+        float elapsedTime = Time.time - phaseStartTime;
+
+        switch (curAction)
         {
-            SkillAtkA(monster);
-        }
-        else if (curTime > atkBDuration && isAtkA)
-        {
-            SkillAtkB(monster);
-        }
-        else if (curTime > outDuration && isAtkA && isAtkB)
-        {
-            //상태 변환
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+            case CurAction.SkillAtkA:
+                if (!isActionEnd && elapsedTime >= 0f)
+                {
+                    AttackAnimationPlay(monster, 1);
+                    isActionEnd = true;
+                }
+
+                if (elapsedTime >= attackDelay && isActionEnd)
+                {
+                    AttackHit(monster, 1); // SkillAtkA 공격 판정
+                }
+
+                if (elapsedTime >= atkADuration)
+                {
+                    ChangeAction(monster, CurAction.SkillAtkB);
+                }
+                break;
+
+            case CurAction.SkillAtkB:
+                if (!isActionEnd && elapsedTime >= 0f)
+                {
+                    AttackAnimationPlay(monster, 2);
+                    isActionEnd = true;
+                }
+
+                if (elapsedTime >= attackDelay && isActionEnd)
+                {
+                    AttackHit(monster, 2); // SkillAtkB 공격 판정
+                }
+
+                if (elapsedTime >= atkBDuration)
+                {
+                    ChangeAction(monster, CurAction.End);
+                }
+                break;
+            case CurAction.End:
+                monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+                break;
         }
 
     }
 
     public override void Exit(BossMonster monster)
     {
-
+        Debug.Log("공격 종료");
     }
 
-    public void SkillAtkA(BossMonster monster)
+    private void AttackAnimationPlay(BossMonster monster, int animationnumber)
     {
-        //애니메이션 재생
-        Debug.Log("SkillAtkA공격");
-        isAtkA = true;
-        Vector3 atkDir = Quaternion.Euler(0, 45, 0) * monster.transform.forward;
-        //monster.transform.position = 공격판정범위 중심
-        //monster.atkRange = 공격판정의 범위(원형)
-        Collider[] cols = Physics.OverlapSphere(monster.transform.position, monster.atkRange);
+        switch (animationnumber)
+        {
+            case 1:
+                monster.animator.SetTrigger("SkillAtkA");
+                break;
+            case 2:
+                monster.animator.SetTrigger("SkillAtkB");
+                break;
+        }
+        Debug.Log($"{curAction} 애니메이션 재생");
+    }
+
+    private void AttackHit(BossMonster monster, int actionNumber)
+    {
+        Vector3 atkDir;
+        switch (actionNumber)
+        {
+            case 1:
+                atkDir = Quaternion.Euler(0, 45f, 0) * monster.transform.forward;
+                break;
+            case 2:
+                atkDir = Quaternion.Euler(0, -45f, 0) * monster.transform.forward;
+                break;
+            default:
+                atkDir = Quaternion.Euler(0, 45f, 0) * monster.transform.forward;
+                break;
+        }
+        Collider[] cols = Physics.OverlapSphere(monster.transform.position, atkRange);
+
         foreach (Collider col in cols)
         {
             if (col.gameObject.CompareTag("Player"))
             {
                 Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
-                //범위내에 있는지 확인
                 float angle = Vector3.Angle(atkDir, dirToTarget);
-                if (angle <= 90f)
+
+                if (angle <= 135f)
                 {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(monster.atkDamage);
+                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(monster.atkDamage);
+                    Debug.Log($"{curAction} 공격 성공");
                 }
                 else
                 {
-                    Debug.Log("공격판정 밖임");
+                    Debug.Log($"{curAction} 공격 실패 - 범위 밖");
                 }
             }
         }
-        curTime = 0f;
     }
 
-    public void SkillAtkB(BossMonster monster)
+    private void ChangeAction(BossMonster monster, CurAction nextPhase)
     {
-        //애니메이션 재생
-        Debug.Log("SkillAtkB공격");
-        isAtkB = true;
-        Vector3 atkDir = Quaternion.Euler(0, -45, 0) * monster.transform.forward;
-        //monster.transform.position = 공격판정범위 중심
-        //monster.atkRange = 공격판정의 범위(원형)
-        Collider[] cols = Physics.OverlapSphere(monster.transform.position, monster.atkRange);
-        foreach (Collider col in cols)
+        curAction = nextPhase;
+
+        if (nextPhase != CurAction.End)
         {
-            if (col.gameObject.CompareTag("Player"))
-            {
-                Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
-                //범위내에 있는지 확인
-                float angle = Vector3.Angle(atkDir, dirToTarget);
-                if (angle <= 90f)
-                {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(monster.atkDamage);
-                }
-                else
-                {
-                    Debug.Log("공격판정 밖임");
-                }
-            }
+            phaseStartTime = Time.time; // 다음 단계로 이동 시 시간 초기화
+            isActionEnd = false;   // 애니메이션 실행 준비
         }
-        curTime = 0f;
     }
 }

@@ -17,7 +17,8 @@ public class BossMonsterMove : BaseState<BossMonster>
         if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
             //공격으로 이동
-            monster.bMHandler.ChangeState(typeof(BossMonsterAtk));
+            //monster.bMHandler.ChangeState(typeof(BossMonsterAtk));
+            monster.bMHandler.ChangeState(typeof(BossMonsterSkillF));
         }
         else
         {

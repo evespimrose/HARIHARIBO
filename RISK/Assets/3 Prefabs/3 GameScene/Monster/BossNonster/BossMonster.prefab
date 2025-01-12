@@ -1991,7 +1991,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!136 &2532525478795084192
 CapsuleCollider:
@@ -2031,6 +2031,12 @@ MonoBehaviour:
   target: {fileID: 0}
   model: {fileID: 9067718204810012593}
   animator: {fileID: 5514934472971021088}
+  skillBPrefab: {fileID: 4590867028301244887, guid: d590346c19146d64cb897ebb0650627c, type: 3}
+  skillCPrefab: {fileID: 8026561472859799840, guid: aee27a3670b80d34bbe2ccf670e7285c, type: 3}
+  skillDPrefab: {fileID: 3333531521651989703, guid: 5fdd9157d09e2974ba4d403be0b6b5be, type: 3}
+  isMoving: 1
+  skillFknockback: 5
+  skillFDamage: 10
   monsterState: {fileID: 11400000, guid: 215fedc7b11462c41831b2a9bf79de7f, type: 2}
   atkDamage: 0
   moveSpeed: 0
@@ -2038,6 +2044,10 @@ MonoBehaviour:
   atkDelay: 0
   curHp: 0
   isAtk: 0
+  monsterDebuff: {fileID: 2820213965593361770}
+  isSlow: 0
+  isBleeding: 0
+  isPoison: 0
 --- !u!1 &6563487439654557525
 GameObject:
   m_ObjectHideFlags: 0
@@ -3357,6 +3367,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bede9326d09e7742a747606022912cd, type: 3}
+--- !u!114 &2820213965593361770 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 564192389389434857, guid: 2bede9326d09e7742a747606022912cd, type: 3}
+  m_PrefabInstance: {fileID: 2375367697614537347}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a388597da551194bbd9e5de34660e39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5636241194013493681 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7980646636103240498, guid: 2bede9326d09e7742a747606022912cd, type: 3}
