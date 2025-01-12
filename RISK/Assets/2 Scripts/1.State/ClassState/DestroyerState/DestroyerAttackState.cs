@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class DestroyerAttackState : BaseState<Player>
 {
+
     private float attackDuration = 1f;
     private float attackTimer;
-    private float comboWindow = 1f;
-    private float comboTimer;
+    private float comboWindow = 0.5f;
     private float lastKeyPressTime;
-    private int inputCount = 0;
+    private static int inputCount = 0;
 
     public DestroyerAttackState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
-        attackTimer = attackDuration;
 
+        attackTimer = attackDuration;
 
         if (Time.time - lastKeyPressTime > comboWindow)
         {
@@ -26,7 +26,8 @@ public class DestroyerAttackState : BaseState<Player>
         inputCount++;
         lastKeyPressTime = Time.time;
 
-        int attackIndex = Mathf.Clamp(inputCount, 1, 4);
+        int attackIndex = Mathf.Clamp(inputCount, 1, 4);  // Destroyer´Â 4´Ü ÄÞº¸
+        Debug.Log($"Attack {attackIndex}");
         player.Animator?.SetTrigger($"Attack{attackIndex}");
     }
 
@@ -58,8 +59,8 @@ public class DestroyerAttackState : BaseState<Player>
         {
             inputCount = 0;
         }
-
     }
-
-
 }
+
+
+
