@@ -10133,6 +10133,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0021128282, y: -0.012404174, z: -0.02265419}
     m_Extent: {x: 0.089275464, y: 0.086537026, z: 0.07510442}
   m_DirtyAABB: 0
+--- !u!1 &1254655182876048453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4547183216693469781}
+  m_Layer: 0
+  m_Name: TSkillPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4547183216693469781
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254655182876048453}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6564670447496280691}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1265385142580190437
 GameObject:
   m_ObjectHideFlags: 0
@@ -13466,13 +13497,14 @@ GameObject:
   - component: {fileID: 2312214638333276581}
   - component: {fileID: 8301058994620834014}
   - component: {fileID: 3241364709733397796}
+  - component: {fileID: 1151937864572898262}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8344871286798382002
 Transform:
   m_ObjectHideFlags: 0
@@ -13481,7 +13513,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730296034643879096}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.010999978, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
@@ -13586,6 +13618,35 @@ MonoBehaviour:
   baseCriticalChance: 0.1
   baseCriticalDamage: 1.5
   baseCooldownReduction: 0.1
+  effectsHandler: {fileID: 0}
+--- !u!114 &1151937864572898262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730296034643879096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ea1fcf1562a3164a93984742b089521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Effects:
+  - effectName: WWSkill
+    Effect: {fileID: 1543153927702632, guid: 638bf80b37fd48a458d61ac9d454265e, type: 3}
+    StartPositionRotation: {fileID: 5921010978991785609}
+    DestroyAfter: 1.2
+    UseLocalPosition: 1
+  - effectName: WESkill
+    Effect: {fileID: 1934977346563538, guid: 8c2a99d5d9b4d4a4d973ce3412f51745, type: 3}
+    StartPositionRotation: {fileID: 7801123111653011756}
+    DestroyAfter: 1.2
+    UseLocalPosition: 1
+  - effectName: WTSkill
+    Effect: {fileID: 1377753740826374, guid: d4b90f79c1890ee4a9580fdcffa3e2e0, type: 3}
+    StartPositionRotation: {fileID: 4547183216693469781}
+    DestroyAfter: 1.2
+    UseLocalPosition: 1
 --- !u!1 &1735228676988344598
 GameObject:
   m_ObjectHideFlags: 0
@@ -26717,6 +26778,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2141176844121391952}
+  - {fileID: 6564670447496280691}
   m_Father: {fileID: 8344871286798382002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3543667399327039357
@@ -39577,6 +39639,37 @@ Transform:
   - {fileID: 1739015974834662634}
   m_Father: {fileID: 5027941274978906025}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5261035592936263434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7801123111653011756}
+  m_Layer: 0
+  m_Name: ESkillPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7801123111653011756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5261035592936263434}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6564670447496280691}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5290888020052862004
 GameObject:
   m_ObjectHideFlags: 0
@@ -48662,6 +48755,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.46027464, y: 0.0015627444, z: 0.01182913}
     m_Extent: {x: 0.15257566, y: 0.07090205, z: 0.08216198}
   m_DirtyAABB: 0
+--- !u!1 &6501029154066928191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5921010978991785609}
+  m_Layer: 0
+  m_Name: WSkillPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5921010978991785609
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6501029154066928191}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6564670447496280691}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6568043014017629037
 GameObject:
   m_ObjectHideFlags: 0
@@ -68410,6 +68534,40 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.17933309, y: -0.011046454, z: 0}
     m_Extent: {x: 0.1979098, y: 0.17180759, z: 0.12299133}
   m_DirtyAABB: 0
+--- !u!1 &9151852757651948574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6564670447496280691}
+  m_Layer: 0
+  m_Name: EffectPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6564670447496280691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9151852757651948574}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5921010978991785609}
+  - {fileID: 7801123111653011756}
+  - {fileID: 4547183216693469781}
+  m_Father: {fileID: 8042567293811454305}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9156241009734711453
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,23 @@ public class Warrior : Player
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
+    [Header("이펙트")]
+    [SerializeField] private AnimationEventEffects effectsHandler;
+
+    protected override void Awake()
+    {
+        base.Awake();  // 부모 클래스의 초기화 먼저 실행
+
+        // 이펙트 핸들러 초기화
+        if (effectsHandler == null)
+        {
+            effectsHandler = GetComponent<AnimationEventEffects>();
+            if (effectsHandler == null)
+            {
+                Debug.LogError("AnimationEventEffects component is missing on Warrior!");
+            }
+        }
+    }
     protected override void InitializeStats()
     {
         stats = new Playerstats();
@@ -54,6 +71,7 @@ public class Warrior : Player
         stateHandler.RegisterState(new WarriorWSkill(stateHandler));
         stateHandler.RegisterState(new WarriorESkill(stateHandler));
         stateHandler.RegisterState(new WarriorRSkill(stateHandler));
+        stateHandler.RegisterState(new WarriorTSkill(stateHandler));
 
         stateHandler.ChangeState(typeof(WarriorIdleState));
     }
@@ -85,6 +103,11 @@ public class Warrior : Player
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(WarriorRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            isSkillInProgress = true;
+            stateHandler.ChangeState(typeof(WarriorTSkill));
         }
 
         stateHandler.Update();
