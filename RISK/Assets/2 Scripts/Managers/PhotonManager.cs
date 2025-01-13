@@ -174,24 +174,33 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
         }
 
-        foreach (var player in PhotonNetwork.PlayerList)
+        photonView.RPC("RequestExistingPlayers", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void RequestExistingPlayers()
+    {
+        if (UnitManager.Instance.LocalPlayer != null)
         {
-            if (player != PhotonNetwork.LocalPlayer)
-            {
-                print($"{player.NickName}");
-                //photonView.RPC("SyncPlayerJoin", player);
-            }
+            photonView.RPC("SyncPlayerInfo", RpcTarget.All, 
+                PhotonNetwork.LocalPlayer.ActorNumber,
+                UnitManager.Instance.LocalPlayer.transform.position,
+                UnitManager.Instance.LocalPlayer.transform.rotation);
         }
     }
 
-    //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
-    //{
-    //    photonView.RPC("SyncPlayerJoin", newPlayer, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.LocalPlayer.ActorNumber);
-    //}
+    [PunRPC]
+    private void SyncPlayerInfo(int actorNumber, Vector3 position, Quaternion rotation)
+    {
+        if (actorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+            return;
 
-    //[PunRPC]
-    //private void SyncPlayerJoin()
-    //{
+        if (!UnitManager.Instance.HasPlayer(actorNumber))
+        {
+            GameObject playerObj = PhotonNetwork.Instantiate("Player", position, rotation);
+            UnitManager.Instance.RegisterPlayer(playerObj, actorNumber);
+        }
+    }
 
-    //}
+    
 }

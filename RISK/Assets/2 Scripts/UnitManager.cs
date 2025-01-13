@@ -4,25 +4,42 @@ using UnityEngine;
 
 public class UnitManager : SingletonManager<UnitManager>
 {
-
-    public List<GameObject> players = new List<GameObject>();
+    private Dictionary<int, GameObject> players = new Dictionary<int, GameObject>();
+    public GameObject LocalPlayer { get; private set; }
     public List<GameObject> monsters = new List<GameObject>();
 
-    public void RegisterPlayer(GameObject player)
+    public void RegisterPlayer(GameObject player, int actorNumber)
     {
-        if (!players.Contains(player))
+        if (!players.ContainsKey(actorNumber))
         {
-            players.Add(player);
+            players.Add(actorNumber, player);
+            
+            if (player.GetComponent<PhotonView>().IsMine)
+            {
+                LocalPlayer = player;
+            }
         }
     }
 
-    public void UnregisterPlayer(GameObject player)
+    public void UnregisterPlayer(int actorNumber)
     {
-        if (players.Contains(player))
+        if (players.ContainsKey(actorNumber))
         {
-            players.Remove(player);
+            if (players[actorNumber] == LocalPlayer)
+            {
+                LocalPlayer = null;
+            }
+            players.Remove(actorNumber);
         }
     }
 
-    // 추가적인 관리 기능을 여기에 구현
+    public bool HasPlayer(int actorNumber)
+    {
+        return players.ContainsKey(actorNumber);
+    }
+
+    public GameObject GetPlayer(int actorNumber)
+    {
+        return players.ContainsKey(actorNumber) ? players[actorNumber] : null;
+    }
 }
