@@ -5,25 +5,61 @@ using UnityEngine;
 public class BossMonsterSkillD : BaseState<BossMonster>
 {
     public BossMonsterSkillD(StateHandler<BossMonster> handler) : base(handler) { }
-    //스킬4 원거리 공격 1
+
+    public float atkDelay = 0f; // 선딜레이
+    public float skillDDuration = 2.4f; // 애니메이션 지속 시간
+    public float skillFAtkTiem = 1f; // 애니메이션 시작 후 SkillDAtk 실행까지 기다릴 시간 (필드값)
+    private float startTime;
+    private bool isAction = false; // SkillDAtk가 한 번만 실행되도록 관리
+
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("SkillC 진입");
-        //애니메이션 실행
-        SkillDAtk(monster);//애니메이션과 동시실행 살짝텀줄거면 업데이트쪽으로옮겨서 curTime 체크해서 진행
+        Debug.Log("SkillD 진입");
+
+        // 선딜레이가 있을 경우 선딜레이 후 애니메이션 실행
+        startTime = Time.time + atkDelay; // 선딜레이를 고려한 시작 시간
+
+        // 선딜레이가 0일 때 즉시 애니메이션 실행
+        if (atkDelay <= 0f)
+        {
+            // 애니메이션이 이미 실행되고 있지 않은 경우에만 트리거 설정
+            if (!monster.animator.GetCurrentAnimatorStateInfo(0).IsName("SkillD"))
+            {
+                monster.animator.SetTrigger("SkillD");
+                Debug.Log("SkillD 애니메이션 시작");
+            }
+        }
     }
 
     public override void Update(BossMonster monster)
     {
+        // 선딜레이가 끝난 후 애니메이션 실행 (한 번만 실행되도록)
+        if (Time.time >= startTime && !monster.animator.GetCurrentAnimatorStateInfo(0).IsName("SkillD"))
+        {
+            monster.animator.SetTrigger("SkillD"); // 애니메이션 실행
+            Debug.Log("SkillD 애니메이션 시작");
+        }
 
+        // 애니메이션이 시작된 후 일정 시간이 지나면 SkillDAtk 실행
+        if (Time.time - startTime >= skillFAtkTiem && !isAction)
+        {
+            SkillDAtk(monster); // SkillDAtk 실행
+            isAction = true; // SkillDAtk는 한 번만 실행되도록 플래그 설정
+        }
+
+        // 애니메이션이 끝난 후 0.2초 여유를 두고 상태 전환
+        if (Time.time - startTime >= skillDDuration + 0.2f)
+        {
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle)); // 상태 전환
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-
+        Debug.Log("SkillD 종료");
     }
 
-    public void SkillDAtk(BossMonster monster)
+    private void SkillDAtk(BossMonster monster)
     {
         // 360도에서 8방향으로 나누기
         int atkCount = 8;

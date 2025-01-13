@@ -14,6 +14,7 @@ public class BossMonsterSkillF : BaseState<BossMonster>
     {
         //타겟 새로설정
         monster.Targeting();
+        monster.skillFTargetPos = monster.target.position;
         monster.SkillFReset();
         Debug.Log("SkillF 진입");
         //애니메이션 실행
@@ -36,6 +37,7 @@ public class BossMonsterSkillF : BaseState<BossMonster>
 
     public override void Exit(BossMonster monster)
     {
+        Debug.Log("SkillF 종료");
         monster.SkillFReset();
     }
 }

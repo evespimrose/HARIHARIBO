@@ -18,7 +18,7 @@ public class BossMonsterMove : BaseState<BossMonster>
         {
             //공격으로 이동
             //monster.bMHandler.ChangeState(typeof(BossMonsterAtk));
-            monster.bMHandler.ChangeState(typeof(BossMonsterSkillF));
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
         }
         else
         {

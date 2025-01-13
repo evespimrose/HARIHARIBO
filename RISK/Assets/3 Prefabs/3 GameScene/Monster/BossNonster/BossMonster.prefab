@@ -2034,9 +2034,10 @@ MonoBehaviour:
   skillBPrefab: {fileID: 4590867028301244887, guid: d590346c19146d64cb897ebb0650627c, type: 3}
   skillCPrefab: {fileID: 8026561472859799840, guid: aee27a3670b80d34bbe2ccf670e7285c, type: 3}
   skillDPrefab: {fileID: 3333531521651989703, guid: 5fdd9157d09e2974ba4d403be0b6b5be, type: 3}
-  isMoving: 1
+  isMoving: 0
   skillFknockback: 5
   skillFDamage: 10
+  skillFTargetPos: {x: 0, y: 0, z: 0}
   monsterState: {fileID: 11400000, guid: 215fedc7b11462c41831b2a9bf79de7f, type: 2}
   atkDamage: 0
   moveSpeed: 0

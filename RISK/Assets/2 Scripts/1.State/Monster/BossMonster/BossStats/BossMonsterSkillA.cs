@@ -6,72 +6,75 @@ using UnityEngine;
 public class BossMonsterSkillA : BaseState<BossMonster>
 {
     public BossMonsterSkillA(StateHandler<BossMonster> handler) : base(handler) { }
-    //스킬1 강타
+
     public enum CurAction
     {
-        Strat,
+        Start,
         SkillAtkA,
         SkillAtkB,
         End
     }
-    private CurAction curAction = CurAction.Strat;
-
+    private CurAction curAction = CurAction.Start;
     public float atkRange = 20f;
-
-    public float attackDelay = 0.5f; // 공격 판정 전 딜레이
-    public float atkADuration = 2f;  // AtkA 애니메이션 지속 시간
-    public float atkBDuration = 2f;  // AtkB 애니메이션 지속 시간
-
-    private float phaseStartTime;
-    private bool isActionEnd = false;
+    //공격 판정 딜레이
+    public float startDelay = 0f;
+    public float atkADelay = 0.38f;
+    public float atkBDelay = 0.38f;
+    //애니메이션 지속 시간
+    public float atkADuration = 1.34f; // 애니메이션 시간 1.34초
+    public float atkBDuration = 1.34f; // 애니메이션 시간 1.34초
+    //End로 일찍 들어갈시간
+    public float endTime = 0.2f;
+    private float startTime;
+    private bool isSkillAHit = false;
+    private bool isSkillBHit = false;
+    private bool isAction = false;
 
     public override void Enter(BossMonster monster)
     {
         Debug.Log("공격 시작");
         curAction = CurAction.SkillAtkA;
-        phaseStartTime = Time.time + 1f; // 1초 대기 후 AtkA 애니메이션 시작
-        isActionEnd = false;
+        startTime = Time.time + startDelay;
+        isSkillAHit = false;
+        isSkillBHit = false;
+        isAction = false;
     }
 
     public override void Update(BossMonster monster)
     {
-        if (curAction == CurAction.End) return;
-
-        float elapsedTime = Time.time - phaseStartTime;
-
+        float elapsedTime = Time.time - startTime;
         switch (curAction)
         {
             case CurAction.SkillAtkA:
-                if (!isActionEnd && elapsedTime >= 0f)
+                if (!isAction && elapsedTime >= 0f)
                 {
-                    AttackAnimationPlay(monster, 1);
-                    isActionEnd = true;
+                    AttackAnimationPlay(monster, 1);//SkillAtkA 애니메이션 실행
+                    isAction = true;
                 }
-
-                if (elapsedTime >= attackDelay && isActionEnd)
+                if (elapsedTime >= atkADelay && !isSkillAHit)
                 {
-                    AttackHit(monster, 1); // SkillAtkA 공격 판정
+                    AttackHit(monster, 1);//SkillAtkA 공격 판정
+                    isSkillAHit = true;
                 }
-
-                if (elapsedTime >= atkADuration)
+                // 1.2초 후 SkillAtkB로 전환
+                if (elapsedTime >= 1.2f) 
                 {
-                    ChangeAction(monster, CurAction.SkillAtkB);
+                    ChangeAction(monster, CurAction.SkillAtkB);//SkillAtkA 애니메이션이 끝나기 전에 SkillAtkB로 전환
                 }
                 break;
-
             case CurAction.SkillAtkB:
-                if (!isActionEnd && elapsedTime >= 0f)
+                if (!isAction && elapsedTime >= 0f)
                 {
-                    AttackAnimationPlay(monster, 2);
-                    isActionEnd = true;
+                    AttackAnimationPlay(monster, 2);//SkillAtkB 애니메이션 실행
+                    isAction = true;
                 }
-
-                if (elapsedTime >= attackDelay && isActionEnd)
+                if (elapsedTime >= atkBDelay && !isSkillBHit)
                 {
-                    AttackHit(monster, 2); // SkillAtkB 공격 판정
+                    AttackHit(monster, 2);//SkillAtkB 공격 판정
+                    isSkillBHit = true;
                 }
-
-                if (elapsedTime >= atkBDuration)
+                // endTime 후 Idle로 전환
+                if (elapsedTime >= atkBDuration + endTime)
                 {
                     ChangeAction(monster, CurAction.End);
                 }
@@ -80,7 +83,6 @@ public class BossMonsterSkillA : BaseState<BossMonster>
                 monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
                 break;
         }
-
     }
 
     public override void Exit(BossMonster monster)
@@ -88,15 +90,15 @@ public class BossMonsterSkillA : BaseState<BossMonster>
         Debug.Log("공격 종료");
     }
 
-    private void AttackAnimationPlay(BossMonster monster, int animationnumber)
+    private void AttackAnimationPlay(BossMonster monster, int animationNumber)
     {
-        switch (animationnumber)
+        switch (animationNumber)
         {
             case 1:
-                monster.animator.SetTrigger("SkillAtkA");
+                monster.animator.SetTrigger("SkillA1");
                 break;
             case 2:
-                monster.animator.SetTrigger("SkillAtkB");
+                monster.animator.SetTrigger("SkillA2");
                 break;
         }
         Debug.Log($"{curAction} 애니메이션 재생");
@@ -118,14 +120,12 @@ public class BossMonsterSkillA : BaseState<BossMonster>
                 break;
         }
         Collider[] cols = Physics.OverlapSphere(monster.transform.position, atkRange);
-
         foreach (Collider col in cols)
         {
             if (col.gameObject.CompareTag("Player"))
             {
                 Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
                 float angle = Vector3.Angle(atkDir, dirToTarget);
-
                 if (angle <= 135f)
                 {
                     col.gameObject.GetComponent<ITakedamage>()?.Takedamage(monster.atkDamage);
@@ -145,8 +145,8 @@ public class BossMonsterSkillA : BaseState<BossMonster>
 
         if (nextPhase != CurAction.End)
         {
-            phaseStartTime = Time.time; // 다음 단계로 이동 시 시간 초기화
-            isActionEnd = false;   // 애니메이션 실행 준비
+            startTime = Time.time; // 다음 단계로 이동 시 시간 초기화
+            isAction = false;   // 애니메이션 실행 준비
         }
     }
 }
