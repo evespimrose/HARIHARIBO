@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
@@ -23,7 +24,6 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     public Playerstats Stats => stats;
     public int ComboCount { get; set; } = 0;
 
-
     private void Awake()
     {
         InitializeComponents();
@@ -33,7 +33,10 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     }
     private void InitializeStats()
     {
-        stats = new Playerstats();
+        if (stats == null)
+        {
+            stats = new Playerstats();
+        }
     }
     public void InitializeStats(Playerstats stats)
     {
@@ -42,6 +45,8 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     private void InitializeComponents()
     {
         animator = GetComponent<Animator>();
+
+        tag = photonView.IsMine ? "LocalPlayer" : "RemotePlayer";
 
         if (photonView.IsMine)
         {
@@ -82,13 +87,23 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
     private void Update()
     {
-        stats.UpadateHealthRegen(Time.deltaTime);
-
-        if (isSkillInProgress)
+        if (photonView.IsMine)
         {
+            stats.UpadateHealthRegen(Time.deltaTime);
+
+            if (isSkillInProgress)
+                HandleInput();
+
             stateHandler.Update();
-            return;
         }
+        else
+        {
+            // ex: UpdateRemoteState();
+        }
+    }
+
+    private void HandleInput()
+    {
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(PlayerAttackState));
@@ -108,9 +123,8 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(RSkillState));
         }
-
-        stateHandler.Update();
     }
+
     public void SetSkillInProgress(bool inProgress)
     {
         isSkillInProgress = inProgress;
@@ -146,7 +160,6 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
             transform.position = Vector3.Lerp(transform.position, networkPosition, Time.deltaTime * 10f);
             transform.rotation = Quaternion.Lerp(transform.rotation, networkRotation, Time.deltaTime * 10f);
         }
-
     }
 
     public void Takedamage(float damage)
@@ -173,5 +186,14 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
             networkRotation = (Quaternion)stream.ReceiveNext();
         }
     }
-}
 
+    [PunRPC]
+    public void SyncStateChange(string stateName)
+    {
+        Type stateType = Type.GetType(stateName);
+        if (stateType != null)
+        {
+            stateHandler.ChangeState(stateType);
+        }
+    }
+}

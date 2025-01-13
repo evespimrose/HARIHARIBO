@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Bullet
   - Monster
+  - LocalPlayer
+  - RemotePlayer
   layers:
   - Default
   - TransparentFX

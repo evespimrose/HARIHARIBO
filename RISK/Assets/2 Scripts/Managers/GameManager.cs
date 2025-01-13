@@ -3,6 +3,7 @@ using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,14 +37,11 @@ public class GameManager : SingletonManager<GameManager>
             yield break;
         }
 
-        // MasterClient�� 5�ʸ��� Pill�� PhotonNetwork�� ���� Instantiate.
         while (true)
         {
             Vector3 spawnPos = Random.insideUnitSphere * 15f;
             spawnPos.y = 0;
             Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 180f), 0);
-
-            // �� Pill���� random color�� random healAmount�� �����ϰ� ������?
 
             Vector3 color = new Vector3(Random.value, Random.value, Random.value);
             float healAmount = Random.Range(10f, 30f);
@@ -68,13 +66,13 @@ public class GameManager : SingletonManager<GameManager>
 
         yield return new WaitUntil(() => asyncLoad.isDone);
 
-        switch(FirebaseManager.Instance.currentCharacterData.classType)
+        switch (FirebaseManager.Instance.currentCharacterData.classType)
         {
             case ClassType.Warrior:
                 break;
             case ClassType.SpearMan:
                 break;
-            case ClassType.Archer: 
+            case ClassType.Archer:
                 break;
             case ClassType.Mage:
                 break;
@@ -82,6 +80,11 @@ public class GameManager : SingletonManager<GameManager>
 
         Vector3 spawnPosition = Vector3.zero;
         GameObject playerObj = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
+
+        if (playerObj.TryGetComponent(out Player player))
+        {
+            player.InitializeStats(playerStats);
+        }
 
         //GameObject playerObj = Instantiate(Resources.Load<GameObject>("Player"), spawnPosition, Quaternion.identity);
 

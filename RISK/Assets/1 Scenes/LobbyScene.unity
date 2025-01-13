@@ -844,52 +844,6 @@ RectTransform:
   m_AnchoredPosition: {x: 85.47008, y: 85.47008}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &564613573
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 564613576}
-  - component: {fileID: 564613575}
-  m_Layer: 0
-  m_Name: RoomList
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &564613575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564613573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4ce6b5a40df9c44a4f90d7f338dee2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomInfoText: 
-  playerInfoText: 
---- !u!4 &564613576
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564613573}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.534169, y: -4.5806923, z: -7.4556513}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &600433428
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1357,6 +1311,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1438,6 +1393,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3148c72985b4c4648bb6a6a8a21b5c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  offset: {x: 10, y: 10, z: -10}
+  smoothSpeed: 5
+  viewTransitionDuration: 0.5
+  lookAtPosition: {x: 0, y: 0, z: 0}
+  lookAtOffset: 0
+  defaultLookAtOffset: 0
+  inventoryLookAtOffset: 4
+  currentOffset: {x: 0, y: 0, z: 0}
+  currentY: 0
+  isTransitioning: 0
 --- !u!1001 &1010627648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3470,4 +3448,3 @@ SceneRoots:
   - {fileID: 1716096114}
   - {fileID: 187591575}
   - {fileID: 1923975031}
-  - {fileID: 564613576}

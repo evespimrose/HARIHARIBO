@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
+using Photon.Realtime;
 
 public class PartyManager : PhotonSingletonManager<PartyManager>
 {
@@ -40,5 +41,10 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
     public List<PhotonRealtimePlayer> GetPartyMembers()
     {
         return partyMembers;
+    }
+
+    public PhotonRealtimePlayer GetPartyLeader()
+    {
+        return partyLeader;
     }
 }

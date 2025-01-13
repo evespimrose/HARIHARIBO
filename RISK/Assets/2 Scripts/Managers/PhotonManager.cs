@@ -10,11 +10,16 @@ using PhotonRealtimePlayer = Photon.Realtime.Player;
 
 public class PhotonManager : PhotonSingletonManager<PhotonManager>
 {
-    public Transform roomListContent;
-    public GameObject roomListItemPrefab;
+    //public Transform dungeonroomListContent;
+    //public GameObject dungeonroomListItemPrefab;
+    public Transform partyroomListContent;
+    public GameObject partyroomListItemPrefab;
 
     public string roomInfoText;
     public string playerInfoText;
+
+    //public List<RoomInfo> dungeonRoomInfoList = new List<RoomInfo>();
+    public List<RoomInfo> partyRoomInfoList = new List<RoomInfo>();
 
     private void Start()
     {
@@ -43,15 +48,15 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         Debug.LogError($"Join Room Failed: {message}");
     }
 
-    public void CreatePartyRoom(string dungeonName)
+    public void CreatePartyRoom(string dungeonName, int difficulty)
     {
         RoomOptions roomOptions = new RoomOptions
         {
             MaxPlayers = 4,
             IsVisible = true,
             IsOpen = true,
-            CustomRoomProperties = new HashTable { { "RoomType", "Party" }, { "DungeonLevel", 1 } },
-            CustomRoomPropertiesForLobby = new string[] { "RoomType", "DungeonLevel" }
+            CustomRoomProperties = new HashTable { { "RoomType", "Party" }, { "Difficulty", difficulty } },
+            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
         };
 
         PhotonNetwork.CreateRoom(dungeonName, roomOptions, TypedLobby.Default);
@@ -108,51 +113,85 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach (Transform child in roomListContent)
+        foreach (Transform child in partyroomListContent)
         {
             Destroy(child.gameObject);
         }
+        partyRoomInfoList.Clear();
 
         UpdateRoomInfo(roomList);
 
         foreach (RoomInfo roomInfo in roomList)
         {
-            GameObject roomItem = Instantiate(roomListItemPrefab, roomListContent);
-            roomItem.GetComponentInChildren<TMP_Text>().text = $"{roomInfo.Name} ({roomInfo.PlayerCount}/{roomInfo.MaxPlayers})";
-
-            if (roomInfo.CustomProperties.ContainsKey("RoomType") && roomInfo.CustomProperties["RoomType"].ToString() == "Dungeon")
+            if (roomInfo.CustomProperties.ContainsKey("RoomType") && roomInfo.CustomProperties["RoomType"].ToString() == "party")
             {
-                Debug.Log($"Dungeon Room Found: {roomInfo.Name}");
+                //GameObject roomItem = Instantiate(partyroomListItemPrefab, partyroomListContent);
+                //roomItem.GetComponentInChildren<TMP_Text>().text = $"{roomInfo.Name} ({roomInfo.PlayerCount}/{roomInfo.MaxPlayers})";
+                //Button joinButton = roomItem.GetComponentInChildren<Button>();
+                //joinButton.onClick.AddListener(() => PhotonNetwork.JoinRoom(roomInfo.Name));
+                partyRoomInfoList.Add(roomInfo);
             }
 
-            Button joinButton = roomItem.GetComponentInChildren<Button>();
-            joinButton.onClick.AddListener(() => PhotonNetwork.JoinRoom(roomInfo.Name));
         }
     }
     public override void OnCreatedRoom()
     {
-        Debug.Log("Dungeon room created successfully.");
-
-        if(PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType") 
-            && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon" 
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")
+            && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon"
             && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
         {
             foreach (PhotonRealtimePlayer member in PartyManager.Instance.GetPartyMembers())
             {
-                photonView.RPC("ForceJoinDungeon", member, PhotonNetwork.CurrentRoom.Name);
+                if (member != PhotonNetwork.LocalPlayer)
+                {
+                    photonView.RPC("ForceJoinDungeon", member, PhotonNetwork.CurrentRoom.Name);
+                }
             }
+            PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
         }
     }
 
     [PunRPC]
-    private void ForceJoinDungeon(string roomName)
+    private void ForceJoinDungeon(string roomName, PhotonMessageInfo info)
     {
+        if (!PartyManager.Instance.GetPartyMembers().Contains(info.Sender)) return;
         PhotonNetwork.JoinRoom(roomName);
     }
 
     public override void OnJoinedRoom()
     {
-        Debug.Log($"Joined dungeon room: {PhotonNetwork.CurrentRoom.Name}");
-        PhotonNetwork.LoadLevel("DungeonScene");
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object dungeonRoomType) && dungeonRoomType.ToString() == "Dungeon")
+        {
+            Debug.Log($"Joined dungeon room: {PhotonNetwork.CurrentRoom.Name}");
+            PhotonNetwork.LoadLevel("DungeonScene");
+        }
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object partyroomType) && partyroomType.ToString() == "Party")
+        {
+            PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer);
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                PartyManager.Instance.SetPartyLeader(PhotonNetwork.LocalPlayer);
+            }
+        }
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player != PhotonNetwork.LocalPlayer)
+            {
+                print($"{player.NickName}");
+                //photonView.RPC("SyncPlayerJoin", player);
+            }
+        }
     }
+
+    //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
+    //{
+    //    photonView.RPC("SyncPlayerJoin", newPlayer, PhotonNetwork.LocalPlayer.NickName, PhotonNetwork.LocalPlayer.ActorNumber);
+    //}
+
+    //[PunRPC]
+    //private void SyncPlayerJoin()
+    //{
+
+    //}
 }

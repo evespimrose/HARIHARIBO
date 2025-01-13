@@ -45,7 +45,6 @@ public class LoginPanel : MonoBehaviour
 
     private void OnLoginButtonClick()
     {
-        // �̸��� ���� �˻�
         string email = idInput.text;
         if (!IsValidEmail(email))
         {

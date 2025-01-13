@@ -71,7 +71,6 @@ public class SignupPanel : MonoBehaviour
 
     private bool isValidIDPW()
     {
-        // ���̵�â �����, ��й�ȣâ �����, ��й�ȣ!=��й�ȣȮ��, ��й�ȣȮ��â �����, ��� �����, ���̵� ��� �ȸ���, ��й�ȣ ��� �ȸ���, �ߺ� �õ��غþ���ߵ�, �ߺ� �ƴ� ���̵𿩾ߵ�
         if (string.IsNullOrEmpty(idInput.text))
         {
             var popup = PanelManager.Instance.PopupOpen<PopupPanel>();
