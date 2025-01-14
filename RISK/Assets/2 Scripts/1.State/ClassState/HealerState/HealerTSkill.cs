@@ -24,7 +24,7 @@ public class HealerTSkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(2); // T Ω∫≈≥ ¿Ã∆Â∆Æ
+                effectHandler.PlayEffect(3); // T Ω∫≈≥ ¿Ã∆Â∆Æ
             }
             effectPlayed = true;
         }

@@ -24,11 +24,20 @@ public class Healer : Player
     [Header("이펙트")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
+    [Header("공격 이펙트")]
+    [SerializeField] private GameObject ProjectilePrefab;
+    [SerializeField] private Transform attackPoint;
+
+    [Header("공격 설정")]
+    [SerializeField] private float normalSpeed = 3f; // 기본 투사체 속도
+    [SerializeField] private float finalSpeed = 3f;  // 마지막 콤보 투사체 속도
+    [SerializeField] private float finalScale = 2f;   // 마지막 콤보 투사체 크기
+    [SerializeField] private float LifeTime = 5f;
+
     protected override void Awake()
     {
-        base.Awake();  // 부모 클래스의 초기화 먼저 실행
+        base.Awake();  
 
-        // 이펙트 핸들러 초기화
         if (effectsHandler == null)
         {
             effectsHandler = GetComponent<AnimationEventEffects>();
@@ -111,5 +120,34 @@ public class Healer : Player
         }
 
         stateHandler.Update();
+    }
+    public void ShootBall(int comboIndex)
+    {
+        if (ProjectilePrefab != null && attackPoint != null)
+        {
+            Vector3 shootDirection = transform.forward;
+            GameObject card = Instantiate(ProjectilePrefab,
+                                     attackPoint.position,
+                                     Quaternion.identity);
+
+            var projectileMove = card.GetComponent<ProjectileMove>();
+            if (projectileMove != null)
+            {
+                projectileMove.Initialize(shootDirection); // 이동 방향 설정
+                projectileMove.SetLifeTime(LifeTime);
+
+                switch (comboIndex)
+                {
+                    case 1:
+                    case 2:
+                        projectileMove.speed = normalSpeed;
+                        break;
+                    case 3:
+                        card.transform.localScale *= finalScale;
+                        projectileMove.speed = finalSpeed;
+                        break;
+                }
+            }
+        }
     }
 }
