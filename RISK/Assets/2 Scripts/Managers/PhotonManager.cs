@@ -182,7 +182,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     {
         if (UnitManager.Instance.LocalPlayer != null)
         {
-            photonView.RPC("SyncPlayerInfo", RpcTarget.All, 
+            photonView.RPC("SyncPlayerInfo", RpcTarget.All,
                 PhotonNetwork.LocalPlayer.ActorNumber,
                 UnitManager.Instance.LocalPlayer.transform.position,
                 UnitManager.Instance.LocalPlayer.transform.rotation);
@@ -202,5 +202,31 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         }
     }
 
-    
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.Log($"Disconnected from Photon: {cause}");
+        UnitManager.Instance.UnregisterPlayer(PhotonNetwork.LocalPlayer.ActorNumber);
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        Debug.Log($"Player left room: {otherPlayer.NickName}");
+
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object roomType) && roomType.ToString() == "Party")
+        {
+            if (PartyManager.Instance.IsPartyLeader(otherPlayer))
+            {
+                foreach (var member in PartyManager.Instance.GetPartyMembers())
+                {
+                    PartyManager.Instance.LeaveParty(member);
+                }
+                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Party Disbanded", $"{otherPlayer.NickName} has disbanded the party.");
+            }
+            else
+            {
+                PartyManager.Instance.LeaveParty(otherPlayer);
+                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Party Disbanded", $"{otherPlayer.NickName} has left the party.");
+            }
+        }
+    }
 }
