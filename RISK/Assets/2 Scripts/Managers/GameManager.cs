@@ -88,6 +88,6 @@ public class GameManager : SingletonManager<GameManager>
 
         //GameObject playerObj = Instantiate(Resources.Load<GameObject>("Player"), spawnPosition, Quaternion.identity);
 
-        UnitManager.Instance?.RegisterPlayer(playerObj);
+        UnitManager.Instance?.RegisterPlayer(playerObj, PhotonNetwork.LocalPlayer.ActorNumber);
     }
 }
