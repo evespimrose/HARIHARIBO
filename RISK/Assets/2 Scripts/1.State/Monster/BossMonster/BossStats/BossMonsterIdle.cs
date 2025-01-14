@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BossMonsterIdle : BaseState<BossMonster>
@@ -15,15 +17,14 @@ public class BossMonsterIdle : BaseState<BossMonster>
     public override void Update(BossMonster monster)
     {
         if (monster.isAtk == true) return;
-        else if (monster.target == null)
+        if (monster.target == null)
         {
             monster.Targeting();
         }
         else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
             //공격으로 이동
-            //monster.bMHandler.ChangeState(typeof(BossMonsterAtk));
-            monster.bMHandler.ChangeState(typeof(BossMonsterSkillD));
+            monster.bMHandler.ChangeState(typeof(BossMonsterSkillE));
         }
         else
         {

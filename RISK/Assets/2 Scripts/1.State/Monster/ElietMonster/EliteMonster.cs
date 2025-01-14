@@ -87,7 +87,7 @@ public class EliteMonster : MonoBehaviour, ITakedamage
 
     public void Targeting()
     {
-        foreach (GameObject tr in UnitManager.Instance.players)
+        foreach (var tr in UnitManager.Instance.players)
         {
             if (target == null) target = tr.transform;
             else if (target != null &&

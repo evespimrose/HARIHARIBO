@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BossMonster : MonoBehaviour, ITakedamage
@@ -8,7 +9,7 @@ public class BossMonster : MonoBehaviour, ITakedamage
     [Tooltip("공격대상")]
     public Transform target;
     protected Collider col;
-    protected Rigidbody rb;
+    public Rigidbody rb;
     public StateHandler<BossMonster> bMHandler;
 
     [Tooltip("모델링")]
@@ -21,11 +22,13 @@ public class BossMonster : MonoBehaviour, ITakedamage
     public GameObject skillCPrefab;
     [Header("스킬4 관련")]
     public GameObject skillDPrefab;
-    [Header("스킬4 관련")]
+    [Header("스킬5 관련")]
+    public GameObject skillEPrefab;
+    [Header("스킬6 관련")]
     public bool isMoving = false;
-    public float skillFknockback = 5f; //skillF 넉백 거리
+    public bool isWall = false;
+    public float skillFknockback = 50f; //skillF 넉백 거리
     public float skillFDamage = 10f; //skillF 공격 데미지
-    public Vector3 skillFTargetPos;
     private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF 타격한 대상리스트
 
     [Header("몬스터 스텟")]
@@ -67,54 +70,49 @@ public class BossMonster : MonoBehaviour, ITakedamage
 
     private void Update()
     {
-        //monsterDebuff.DebuffCheck(this);
-        bMHandler.Update();
         if (isDie == true)
         {
-            //monsterDebuff.DebuffAllOff();
+            monsterDebuff.DebuffAllOff();
             bMHandler.ChangeState(typeof(NormalMonsterDie));
         }
-    }
-
-    void FixedUpdate()
-    {
-        if (isMoving && target != null)
-        {
-            //타겟 방향 계산
-            Vector3 direction = (skillFTargetPos - transform.position).normalized;
-
-            //리지드바디를 사용해 힘을 가해 이동
-            rb.MovePosition(transform.position + direction * moveSpeed  * 10f * Time.fixedDeltaTime);
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!isMoving) return;
-
-        if (other.CompareTag("Player") && !hitTargets.Contains(other.gameObject))//중복오브젝트인지 체크
-        {
-            Debug.Log("SkillF 공격");
-
-            //공격
-            other.GetComponent<ITakedamage>().Takedamage(atkDamage);
-            hitTargets.Add(other.gameObject);
-
-            //플레이어 넉백 처리
-            Vector3 knockbackDir = (other.transform.position - transform.position).normalized * -1;
-            Rigidbody otherRb = other.GetComponent<Rigidbody>();
-            if (otherRb != null)
-            {
-                otherRb.AddForce(knockbackDir * skillFknockback, ForceMode.Impulse);
-            }
-        }
+        monsterDebuff.DebuffCheck(this);
+        if (isAtk == true && isDie == false) return;
+        bMHandler.Update();
     }
 
     public void SkillFReset()
     {
-        rb.velocity = Vector3.zero;
-        hitTargets.Clear(); //리스트 내용 초기화
+        //rb.velocity = Vector3.zero;
+        hitTargets.Clear();
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("충돌 발생: " + other.gameObject.name);
+
+        if (isMoving == false) return;
+        if (other.gameObject.CompareTag("Wall")) isWall = true;
+        else isWall = false;
+
+        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // 중복 오브젝트 체크
+        {
+            Debug.Log("SkillF 공격");
+            other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
+            hitTargets.Add(other.gameObject);
+
+            // 넉백 적용
+            Vector3 knockbackDir = transform.position - other.transform.position;
+            knockbackDir.y = 0f;
+
+            // 넉백 힘 조정
+            Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
+            float adjustedKnockback = skillFknockback * 4f;  // 넉백 배율을 키워서 더 강하게 적용
+            playerRb.AddForce(-knockbackDir.normalized * adjustedKnockback, ForceMode.Impulse);
+
+            Debug.Log("넉백 방향: " + knockbackDir.normalized + " 힘: " + skillFknockback);
+        }
+    }
+
 
 
     private void InitializeComponents()
@@ -137,11 +135,9 @@ public class BossMonster : MonoBehaviour, ITakedamage
         //상태들 등록
         bMHandler.RegisterState(new BossMonsterIdle(bMHandler));
         bMHandler.RegisterState(new BossMonsterMove(bMHandler));
+        bMHandler.RegisterState(new BossMonsterDie(bMHandler));
         //공격 상태패턴
         bMHandler.RegisterState(new BossMonsterAtk(bMHandler));
-        //사망
-        bMHandler.RegisterState(new BossMonsterDie(bMHandler));
-        //스킬
         bMHandler.RegisterState(new BossMonsterSkillA(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillB(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillC(bMHandler));
@@ -153,9 +149,21 @@ public class BossMonster : MonoBehaviour, ITakedamage
         bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
+    public void StartSkillCoroutine(IEnumerator coroutine)
+    {
+        StartCoroutine(coroutine);
+    }
+
+    public GameObject ObjSpwan(GameObject obj, Vector3 pos)
+    {
+        GameObject gameObject = Instantiate(obj);
+        gameObject.transform.position = pos;
+        return gameObject;
+    }
+
     public void Targeting()
     {
-        foreach (GameObject tr in UnitManager.Instance.players)
+        foreach (var tr in UnitManager.Instance.players)
         {
             if (target == null) target = tr.transform;
             else if (target != null &&
@@ -167,16 +175,15 @@ public class BossMonster : MonoBehaviour, ITakedamage
         }
     }
 
-    public void TargetLook()
+    public void TargetLook(Vector3 targetPosition)
     {
-        //타겟과의 차이 벡터를 계산
-        Vector3 targetPosition = target.position;
-        targetPosition.y = transform.position.y;  //y 값 고정
-        //타겟 방향으로 회전
         Vector3 direction = targetPosition - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        //회전된 값을 적용
-        transform.rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            direction.y = 0;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+        }
     }
 
     public void Move()
@@ -204,11 +211,9 @@ public class BossMonster : MonoBehaviour, ITakedamage
         }
     }
 
-    public GameObject ObjSpwan(GameObject obj, Vector3 pos)
+    public void AtkEnd()
     {
-        GameObject gameObject = Instantiate(obj);
-        gameObject.transform.position = pos;
-        return gameObject;
+        StartCoroutine(AtkCoolTime());
     }
 
     public IEnumerator AtkCoolTime()

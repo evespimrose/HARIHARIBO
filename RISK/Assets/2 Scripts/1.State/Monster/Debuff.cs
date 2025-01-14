@@ -37,6 +37,7 @@ public class Debuff : MonoBehaviour
         isDie = true;
     }
 
+    //일반몬스터
     public void DebuffCheck(NormalMonster monster)
     {
         if (isDie == true) { return; }
@@ -117,6 +118,95 @@ public class Debuff : MonoBehaviour
 
 
     private IEnumerator SlowStart(NormalMonster monster)
+    {
+        print("슬로우 상태이상 시작");
+        yield return new WaitForSeconds(slowTime);
+        print("슬로우 상태이상 종료");
+        monster.moveSpeed += 1f;
+        monster.isSlow = false;
+    }
+
+    //보스
+    public void DebuffCheck(BossMonster monster)
+    {
+        if (isDie == true) { return; }
+        if (monster.isBleeding == false)
+        {
+            bleeding = null;
+        }
+        else
+        {
+            Bleeding(monster);
+        }
+        if (monster.isPoison == false)
+        {
+            poison = null;
+        }
+        else
+        {
+            Poison(monster);
+        }
+        if (monster.isSlow == false)
+        {
+            slow = null;
+        }
+        else
+        {
+            Slow(monster);
+        }
+    }
+
+    public void Bleeding(BossMonster monster)
+    {
+        if (bleeding != null) return;
+        bleeding = StartCoroutine(BleedingStart(monster));
+    }
+
+    public void Poison(BossMonster monster)
+    {
+        if (poison != null) return;
+        poison = StartCoroutine(PoisonStart(monster));
+    }
+
+    public void Slow(BossMonster monster)
+    {
+        if (slow != null) return;
+        slow = StartCoroutine(SlowStart(monster));
+        monster.moveSpeed -= slowPower;
+    }
+
+    private IEnumerator BleedingStart(BossMonster monster)
+    {
+        float curBleedingTime = 0f;
+        print("출혈 상태이상 시작");
+        while (curBleedingTime < bleedingTime)
+        {
+            monster.curHp -= bleedingDamage;
+            print($"출혈 상태이상 Hit {bleedingDamage}");
+            yield return new WaitForSeconds(bleedingDuration);
+            curBleedingTime += bleedingDuration;
+        }
+        print("출혈 상태이상 종료");
+        monster.isBleeding = false;
+    }
+
+    private IEnumerator PoisonStart(BossMonster monster)
+    {
+        float curPoisonTime = 0f;
+        print("독 상태이상 시작");
+        while (curPoisonTime < poisonTime)
+        {
+            monster.curHp -= poisonDamage;
+            print($"독 상태이상 Hit {poisonDamage}");
+            yield return new WaitForSeconds(poisonDuration);
+            curPoisonTime += poisonDuration;
+        }
+        print("독 상태이상 종료");
+        monster.isBleeding = false;
+    }
+
+
+    private IEnumerator SlowStart(BossMonster monster)
     {
         print("슬로우 상태이상 시작");
         yield return new WaitForSeconds(slowTime);
