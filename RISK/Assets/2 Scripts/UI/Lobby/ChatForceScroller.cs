@@ -12,13 +12,13 @@ public class ChatScrollController : SingletonManager<ChatScrollController>
     public Button hideButton;
     public TextMeshProUGUI hideText;
 
-
     protected override void Awake()
     {
         base.Awake();
         sendButton.onClick.AddListener(OnSendButtonClick);
         hideButton.onClick.AddListener(OnHideButtonClick);
 
+        chatInputField.onSubmit.AddListener(OnSendButtonClick);
     }
 
     private void OnHideButtonClick()
@@ -36,6 +36,11 @@ public class ChatScrollController : SingletonManager<ChatScrollController>
         AddMessage();
     }
 
+    private void OnSendButtonClick(string msg)
+    {
+        AddMessage();
+    }
+
     private void Start()
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
@@ -47,6 +52,7 @@ public class ChatScrollController : SingletonManager<ChatScrollController>
         GameObject message = Instantiate<GameObject>(Resources.Load<GameObject>("message"), layoutGroup.transform);
         message.TryGetComponent(out TextMeshProUGUI text);
         text.text = chatInputField.text;
+        chatInputField.text = "";
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
         ScrollToBottom();
