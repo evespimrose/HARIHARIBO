@@ -87,7 +87,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             MaxPlayers = (byte)PartyManager.Instance.GetPartyMembers().Count,
             IsVisible = false,
             IsOpen = true,
-            CustomRoomProperties = new HashTable { { "RoomType", "Party" }, { "Difficulty", difficulty } },
+            CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty } },
             CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
         };
 
