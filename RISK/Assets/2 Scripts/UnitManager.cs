@@ -1,10 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitManager : SingletonManager<UnitManager>
 {
-    private Dictionary<int, GameObject> players = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> players = new Dictionary<int, GameObject>();
     public GameObject LocalPlayer { get; private set; }
     public List<GameObject> monsters = new List<GameObject>();
 
@@ -13,7 +14,7 @@ public class UnitManager : SingletonManager<UnitManager>
         if (!players.ContainsKey(actorNumber))
         {
             players.Add(actorNumber, player);
-            
+
             if (player.GetComponent<PhotonView>().IsMine)
             {
                 LocalPlayer = player;

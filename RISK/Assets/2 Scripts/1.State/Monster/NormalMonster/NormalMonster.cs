@@ -122,14 +122,14 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     public void Targeting()
     {
-        foreach (GameObject tr in UnitManager.Instance.players)
+        foreach (var tr in UnitManager.Instance.players)
         {
-            if (target == null) target = tr.transform;
+            if (target == null) target = tr.Value.transform;
             else if (target != null &&
                 (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.transform.position, transform.position)))
+                < Vector3.Distance(tr.Value.transform.position, transform.position)))
             {
-                target = tr.transform;
+                target = tr.Value.transform;
             }
         }
     }
