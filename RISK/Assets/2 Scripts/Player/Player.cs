@@ -99,6 +99,8 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         {
             stats.UpadateHealthRegen(Time.deltaTime);
 
+            if (ChatScrollController.Instance.isFocused()) return;
+
             if (isSkillInProgress)
                 HandleInput();
 
@@ -112,6 +114,8 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
     private void HandleInput()
     {
+
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(PlayerAttackState));

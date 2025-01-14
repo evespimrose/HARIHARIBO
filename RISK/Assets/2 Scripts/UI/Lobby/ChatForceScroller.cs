@@ -64,4 +64,9 @@ public class ChatScrollController : SingletonManager<ChatScrollController>
         scrollRect.verticalNormalizedPosition = 0f;
         Canvas.ForceUpdateCanvases();
     }
+
+    public bool isFocused()
+    {
+        return chatInputField.isFocused;
+    }
 }
