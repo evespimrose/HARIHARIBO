@@ -18,9 +18,13 @@ public class QuaterViewCamera : MonoBehaviour
             }
         }
 
-        Vector3 newPosition = new Vector3(target.position.x, target.position.y, target.position.z) + offset;
+        if (target != null)
+        {
+            Vector3 newPosition = new Vector3(target.position.x, target.position.y, target.position.z) + offset;
 
-        transform.position = newPosition;
-        transform.LookAt(target.position);
+            transform.position = newPosition;
+            transform.LookAt(target.position);
+        }
+
     }
 }

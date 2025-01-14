@@ -1,4 +1,6 @@
 using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,17 +11,25 @@ public class UnitManager : SingletonManager<UnitManager>
     public GameObject LocalPlayer { get; private set; }
     public List<GameObject> monsters = new List<GameObject>();
 
-    public void RegisterPlayer(GameObject player, int actorNumber)
+    public void RegisterPlayer(GameObject player)
     {
-        if (!players.ContainsKey(actorNumber))
+        if (player.TryGetComponent(out PhotonView photonView))
         {
-            players.Add(actorNumber, player);
-
-            if (player.GetComponent<PhotonView>().IsMine)
+            int actorNumber = photonView.Owner.ActorNumber;
+            print($"RegisterPlayer : {actorNumber}, {player.GetComponent<PhotonView>().IsMine}");
+            if (!players.ContainsKey(actorNumber))
             {
-                LocalPlayer = player;
+                players.Add(actorNumber, player);
+
+                if (player.GetComponent<PhotonView>().IsMine)
+                {
+                    print($"RegisterPlayer - RegisterLocalPlayer : {actorNumber}");
+                    LocalPlayer = player;
+                }
             }
         }
+        else
+            print("GameObject don't has PhotonView!!");
     }
 
     public void UnregisterPlayer(int actorNumber)

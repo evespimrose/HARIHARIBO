@@ -29,6 +29,10 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     public override void OnConnectedToMaster()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
+
+        print("AutomaticallySyncScene = true");
+
         string roomName = "LobbyRoom";
 
         RoomOptions roomOptions = new RoomOptions
@@ -36,9 +40,10 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             MaxPlayers = 20,
             IsVisible = true,
             IsOpen = true,
-            CustomRoomProperties = new HashTable { { "Lobby", true } },
-            CustomRoomPropertiesForLobby = new string[] { "Lobby" }
+            CustomRoomProperties = new HashTable { { "RoomType", "Lobby" }, { "Difficulty", 0 } },
+            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
         };
+        print("JoinOrCreateRoom");
 
         PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
@@ -67,7 +72,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         PhotonNetwork.GetCustomRoomList(TypedLobby.Default, sqlLobbyFilter);
     }
 
-    public void CreateDungeonRoom()
+    public void CreateDungeonRoom(int difficulty)
     {
         if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
         {
@@ -81,7 +86,9 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         {
             MaxPlayers = (byte)PartyManager.Instance.GetPartyMembers().Count,
             IsVisible = false,
-            IsOpen = true
+            IsOpen = true,
+            CustomRoomProperties = new HashTable { { "RoomType", "Party" }, { "Difficulty", difficulty } },
+            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
         };
 
         PhotonNetwork.CreateRoom(roomName, roomOptions);
@@ -136,6 +143,8 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     }
     public override void OnCreatedRoom()
     {
+        print("OnCreatedRoom");
+
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")
             && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon"
             && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
@@ -160,6 +169,8 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     public override void OnJoinedRoom()
     {
+        print("OnJoinedRoom");
+
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object dungeonRoomType) && dungeonRoomType.ToString() == "Dungeon")
         {
             Debug.Log($"Joined dungeon room: {PhotonNetwork.CurrentRoom.Name}");
@@ -174,41 +185,28 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
         }
 
-        photonView.RPC("RequestExistingPlayers", RpcTarget.All);
-    }
-
-    [PunRPC]
-    private void RequestExistingPlayers()
-    {
-        if (UnitManager.Instance.LocalPlayer != null)
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object lobbyroomType) && partyroomType.ToString() == "Lobby")
         {
-            photonView.RPC("SyncPlayerInfo", RpcTarget.All,
-                PhotonNetwork.LocalPlayer.ActorNumber,
-                UnitManager.Instance.LocalPlayer.transform.position,
-                UnitManager.Instance.LocalPlayer.transform.rotation);
-        }
-    }
 
-    [PunRPC]
-    private void SyncPlayerInfo(int actorNumber, Vector3 position, Quaternion rotation)
-    {
-        if (actorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
-            return;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel("LobbyScene");
+                print("PhotonNetwork.LoadLevel(\"LobbyScene\");\n");
 
-        if (!UnitManager.Instance.HasPlayer(actorNumber))
-        {
-            GameObject playerObj = PhotonNetwork.Instantiate("Player", position, rotation);
-            UnitManager.Instance.RegisterPlayer(playerObj, actorNumber);
+            }
         }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log($"Disconnected from Photon: {cause}");
-        UnitManager.Instance.UnregisterPlayer(PhotonNetwork.LocalPlayer.ActorNumber);
+        //if (PhotonNetwork.LocalPlayer != null && UnitManager.Instance.LocalPlayer != null)
+        //{
+        //    UnitManager.Instance.UnregisterPlayer(UnitManager.Instance.LocalPlayer.GetComponent<PhotonView>().ViewID);
+        //}
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
     {
         Debug.Log($"Player left room: {otherPlayer.NickName}");
 
@@ -228,5 +226,21 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
                 PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Party Disbanded", $"{otherPlayer.NickName} has left the party.");
             }
         }
+
+        //UnitManager.Instance.UnregisterPlayer(otherPlayer.ActorNumber);
     }
+
+    //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
+    //{
+    //    Debug.Log($"Player entered room: {newPlayer.NickName}");
+
+    //    foreach (var player in PhotonNetwork.PlayerList)
+    //    {
+    //        if (player != newPlayer)
+    //        {
+    //            Debug.Log($"player != newPlayer : {newPlayer.ActorNumber} != {newPlayer.ActorNumber}");
+    //        }
+    //    }
+    //}
+
 }

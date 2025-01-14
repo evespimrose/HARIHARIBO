@@ -55974,7 +55974,9 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 229743775386254951}
   - {fileID: -742441376975030753}
+  - {fileID: -1335393998402773992}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -56008,8 +56010,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsMoving
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack1
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack2
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack3
+  - Type: 9
+    SynchronizeType: 0
+    Name: WSkill
+  - Type: 9
+    SynchronizeType: 0
+    Name: ESkill
+  - Type: 9
+    SynchronizeType: 0
+    Name: RSkill
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &7359329383714966738
 GameObject:
   m_ObjectHideFlags: 0

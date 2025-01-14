@@ -18,10 +18,10 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     private StateHandler<Player> stateHandler;
     private bool isMobile;
     private bool isSkillInProgress = false;
-    private Playerstats stats;
+    private PlayerStats stats;
 
     public Animator Animator => animator;
-    public Playerstats Stats => stats;
+    public PlayerStats Stats => stats;
     public int ComboCount { get; set; } = 0;
 
     private void Awake()
@@ -35,10 +35,10 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     {
         if (stats == null)
         {
-            stats = new Playerstats();
+            stats = new PlayerStats();
         }
     }
-    public void InitializeStats(Playerstats stats)
+    public void InitializeStats(PlayerStats stats)
     {
         this.stats = stats;
     }
@@ -79,10 +79,18 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     private void SetPlatform()
     {
 #if UNITY_ANDROID || UNITY_IOS
-            isMobile = true;
+        isMobile = true;
 #else
         isMobile = false;
 #endif
+    }
+
+    private void Start()
+    {
+        //if (photonView.IsMine)
+        //    UnitManager.Instance.RegisterPlayer(gameObject);
+        //else
+        //    UnitManager.Instance.RegisterPlayer(gameObject);
     }
 
     private void Update()
@@ -98,7 +106,7 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         }
         else
         {
-            // ex: UpdateRemoteState();
+
         }
     }
 
@@ -122,6 +130,10 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(RSkillState));
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+
         }
     }
 
@@ -179,16 +191,18 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         {
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
+            stream.SendNext(stats.currentHealth);
         }
         else
         {
             networkPosition = (Vector3)stream.ReceiveNext();
             networkRotation = (Quaternion)stream.ReceiveNext();
+            stats.currentHealth = (float)stream.ReceiveNext();
         }
     }
 
     [PunRPC]
-    public void SyncStateChange(string stateName)
+    public void SyncStateChange(string stateName, PhotonMessageInfo info)
     {
         Type stateType = Type.GetType(stateName);
         if (stateType != null)

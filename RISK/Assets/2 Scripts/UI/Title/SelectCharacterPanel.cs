@@ -137,7 +137,7 @@ public class SelectCharacterPanel : MonoBehaviour
     {
         FirebaseManager.Instance.currentCharacterData = currentCharacterData;
 
-        Playerstats playerStats = new Playerstats
+        PlayerStats playerStats = new PlayerStats
         {
             nickName = FirebaseManager.Instance.currentCharacterData.nickName,
             level = FirebaseManager.Instance.currentCharacterData.level,
