@@ -234,7 +234,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     public void Takedamage(float damage)
     {
-        curHp -= damage;
+        curHp -= Mathf.RoundToInt(damage);
         if (curHp <= 0)
         {
             isDie = true;

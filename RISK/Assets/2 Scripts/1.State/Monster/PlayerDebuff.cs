@@ -4,38 +4,67 @@ using UnityEngine;
 
 public class PlayerDebuff : MonoBehaviour
 {
-    public float health = 100f; // 플레이어 체력
-    private float dotTimer = 0f; // 도트 타이머
-    private bool inFireField = false; // 불 장판에 있는지 여부
+    public float fireDamage = 1f;
+    public float fireInterval = 1f;
+    public float fireDuration = 5f;
 
+    private float fireTimer = 0f;
+    private float damageTimer = 0f;
+    private bool isFire = false;
     private Player player;
 
-    public void Fire(float damage)
+    private void Start()
     {
-        player.GetComponent<ITakedamage>().Takedamage(damage);
-    }
-
-    public void EnterFireField()
-    {
-        inFireField = true;
-        dotTimer = 5f; // 도트 지속 시간 갱신
-    }
-
-    public void ExitFireField()
-    {
-        inFireField = false;
+        player = GetComponent<Player>();
     }
 
     private void Update()
     {
-        if (inFireField)
+        if (isFire)
         {
-            // 도트 데미지 처리: 도트 지속 시간 갱신
-            dotTimer -= Time.deltaTime;
-            if (dotTimer <= 0)
+            fireTimer -= Time.deltaTime;
+            damageTimer -= Time.deltaTime;
+            if (damageTimer <= 0f)
             {
-                inFireField = false;
+                FireDamage();
+                damageTimer = fireInterval; // 화상 데미지 주기
+            }
+            if (fireTimer <= 0)
+            {
+                EndFire();
             }
         }
+    }
+
+    private void FireDamage()
+    {
+        player.Stats.currentHealth -= Mathf.RoundToInt(fireDamage); // 화상 데미지 적용
+    }
+
+    public void StartFire()
+    {
+        if (isFire == false)
+        {
+            isFire = true;
+            fireTimer = fireDuration;
+            damageTimer = 0f;
+        }
+        else
+        {
+            fireTimer = fireDuration;
+        }
+    }
+
+    public void EndFire()
+    {
+        isFire = false;
+    }
+
+    public void Fire(float damage, float interval, float duration)
+    {
+        fireDamage = damage;
+        fireInterval = interval;
+        fireDuration = duration;
+        StartFire();
     }
 }

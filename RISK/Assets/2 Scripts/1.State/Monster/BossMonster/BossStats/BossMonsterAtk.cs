@@ -65,8 +65,13 @@ public class BossMonsterAtk : BaseState<BossMonster>
         yield return new WaitForSeconds(atkDelayC); // 공격 판정 딜레이
         AttackHit(monster, 180f); // 공격 판정
 
-        // AtkC 애니메이션이 끝난 후 End로 전환
-        yield return new WaitForSeconds(nextEndTime); // 애니메이션 전환 시점
+        // AtkC 애니메이션이 끝날 때까지 대기
+        yield return new WaitUntil(() =>
+        {
+            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
+            // "AtkC" 애니메이션이 끝난 후 다른 상태로 전환되었을 때, "AtkC"가 끝났다고 판단
+            return !stateInfo.IsName("AtkC") || stateInfo.normalizedTime >= 1f;
+        });
 
         // 공격 종료 후 상태 전환
         monster.bMHandler.ChangeState(typeof(BossMonsterIdle));

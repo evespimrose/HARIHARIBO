@@ -9,7 +9,7 @@ public class BossMonster : MonoBehaviour, ITakedamage
     [Tooltip("공격대상")]
     public Transform target;
     protected Collider col;
-    public Rigidbody rb;
+    private Rigidbody rb;
     public StateHandler<BossMonster> bMHandler;
 
     [Tooltip("모델링")]
@@ -17,7 +17,8 @@ public class BossMonster : MonoBehaviour, ITakedamage
     [Tooltip("모델링의 애니메이터")]
     public Animator animator;
     [Header("스킬2 관련")]
-    public GameObject skillBPrefab;
+    public GameObject[] skillBParticle;
+    public GameObject[] skillBFieldParticle;
     [Header("스킬3 관련")]
     public GameObject skillCPrefab;
     [Header("스킬4 관련")]
@@ -126,6 +127,16 @@ public class BossMonster : MonoBehaviour, ITakedamage
         this.moveSpeed = monsterState.moveSpeed;
         this.curHp = monsterState.curHp;
         this.maxHp = curHp;
+        foreach (GameObject particle in skillBParticle)
+        {
+            particle.SetActive(false);
+        }
+
+        foreach (GameObject fieldParticle in skillBFieldParticle)
+        {
+            fieldParticle.SetActive(false);
+        }
+
     }
 
     protected void InitializeStateHandler()
@@ -189,10 +200,13 @@ public class BossMonster : MonoBehaviour, ITakedamage
     public void Move()
     {
         transform.LookAt(target);
+        Vector3 currentRotation = transform.eulerAngles;
+        transform.eulerAngles = new Vector3(0f, currentRotation.y, 0f);
         Vector3 dir = (target.position - transform.position).normalized;
         Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(moveDir);
     }
+
 
     public void DieParticle()
     {
@@ -226,7 +240,7 @@ public class BossMonster : MonoBehaviour, ITakedamage
 
     public void Takedamage(float damage)
     {
-        curHp -= damage;
+        curHp -= Mathf.RoundToInt(damage);
         if (curHp <= 0)
         {
             isDie = true;

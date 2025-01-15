@@ -9,6 +9,7 @@ public class BossMonsterSkillD : BaseState<BossMonster>
     public float atkDelay = 0f; // 선딜레이
     public float skillDDuration = 2.4f; // 애니메이션 지속 시간
     public float skillFAtkTime = 1f; // 애니메이션 시작 후 SkillDAtk 실행까지 기다릴 시간
+    public float additionalWaitTime = 0.2f; // 애니메이션 종료 후 추가 대기 시간
 
     public override void Enter(BossMonster monster)
     {
@@ -26,6 +27,7 @@ public class BossMonsterSkillD : BaseState<BossMonster>
     {
         // 선딜레이 후 애니메이션 실행
         yield return new WaitForSeconds(atkDelay);
+        monster.TargetLook(monster.target.position);
         monster.animator.SetTrigger("SkillD");
         Debug.Log("SkillD 애니메이션 시작");
 
@@ -33,31 +35,39 @@ public class BossMonsterSkillD : BaseState<BossMonster>
         yield return new WaitForSeconds(skillFAtkTime);
         SkillDAtk(monster);
 
-        // 애니메이션 지속 시간 후 0.2초 여유를 두고 상태 전환
-        yield return new WaitForSeconds(skillDDuration + 0.2f);
+        // 애니메이션이 끝날 때까지 대기
+        yield return new WaitUntil(() =>
+        {
+            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
+            return !stateInfo.IsName("SkillD") || stateInfo.normalizedTime >= 1f;
+        });
+
+        // 애니메이션 종료 후 추가 대기 시간
+        yield return new WaitForSeconds(additionalWaitTime);
+
+        // 상태 전환
         monster.bMHandler.ChangeState(typeof(BossMonsterIdle)); // 상태 전환
         Debug.Log("SkillD 종료 후 Idle 상태로 전환");
     }
 
     private void SkillDAtk(BossMonster monster)
     {
-        // 360도에서 8방향으로 나누기
         int atkCount = 8;
         float angleStep = 360f / atkCount;
         for (int i = 0; i < atkCount; i++)
         {
-            // 각 방향의 회전각 계산
             float angle = i * angleStep;
-            // 월드 좌표계에서 회전각도를 구하고 회전 방향 벡터 계산
             Vector3 rotDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-            // Y축 방향 제거하여 가로로 제한
             rotDir = new Vector3(rotDir.x, 0f, rotDir.z).normalized;
-
-            // 스킬 객체 생성
-            GameObject skillDObj = monster.ObjSpwan(monster.skillDPrefab, monster.transform.position);
-            // 소환된 오브젝트의 전방이 회전 방향을 가리키도록 설정
+            GameObject skillDObj = monster.ObjSpwan(monster.skillDPrefab, new Vector3(monster.transform.position.x, 1f, monster.transform.position.z));
             skillDObj.transform.rotation = Quaternion.LookRotation(rotDir, Vector3.up);
             skillDObj.GetComponent<BossSkillDObject>().Seting(monster.atkDamage);
+            Rigidbody skillRigidbody = skillDObj.GetComponent<Rigidbody>();
+            if (skillRigidbody != null)
+            {
+                skillRigidbody.velocity = rotDir * 10f; 
+            }
         }
     }
+
 }

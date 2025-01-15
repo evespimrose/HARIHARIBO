@@ -6,15 +6,16 @@ using UnityEngine;
 public class BossMonsterSkillA : BaseState<BossMonster>
 {
     public BossMonsterSkillA(StateHandler<BossMonster> handler) : base(handler) { }
-
+    //스킬1 3연속 공격
     // 공격 판정 딜레이
     public float startDelay = 0f;
     public float atkADelay = 0.38f;
     public float atkBDelay = 0.38f;
 
     // 애니메이션 지속 시간
-    public float atkADuration = 1.34f; // 애니메이션 시간 1.34초
-    public float atkBDuration = 1.34f; // 애니메이션 시간 1.34초
+    public float atkBStartTime = 1.04f;
+    public float atkADuration = 1.34f;
+    public float atkBDuration = 1.34f;
 
     // End로 일찍 들어갈 시간
     public float endTime = 0.2f;
@@ -38,25 +39,24 @@ public class BossMonsterSkillA : BaseState<BossMonster>
         // 선딜레이
         yield return new WaitForSeconds(startDelay);
 
-        // 첫 번째 공격 - SkillAtkA
         monster.animator.SetTrigger("SkillA1");
-        yield return new WaitForSeconds(atkADelay); // 공격 판정 딜레이
-        AttackHit(monster, 1); // 공격 판정
+        yield return new WaitForSeconds(atkADelay); 
+        AttackHit(monster, 1); 
+        yield return new WaitForSeconds((startDelay + atkADelay) - atkBStartTime); // 애니메이션 전환 시점
 
-        // 1.2초 후 SkillAtkB로 전환
-        yield return new WaitForSeconds(0.7f); // 애니메이션 전환 시점
-
-        // 두 번째 공격 - SkillAtkB
         monster.animator.SetTrigger("SkillA2");
-        yield return new WaitForSeconds(atkBDelay); // 공격 판정 딜레이
-        AttackHit(monster, 2); // 공격 판정
+        yield return new WaitForSeconds(atkBDelay);
 
-        // SkillAtkB 애니메이션이 끝난 후 End로 전환
-        yield return new WaitForSeconds(atkBDuration + endTime); // 애니메이션 전환 시점
-
-        // 공격 종료 후 상태 전환
+        AttackHit(monster, 2); 
+        yield return new WaitUntil(() =>
+        {
+            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
+            // "SkillA2" 애니메이션이 끝날 때까지 대기
+            return !stateInfo.IsName("SkillA2") || stateInfo.normalizedTime >= 1f;
+        });
         monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
+
 
     private void AttackHit(BossMonster monster, int actionNumber)
     {
