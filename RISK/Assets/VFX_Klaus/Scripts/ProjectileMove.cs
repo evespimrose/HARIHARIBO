@@ -87,4 +87,12 @@ public class ProjectileMove : MonoBehaviour
         lifeTime = time;
         currentLifeTime = time;
     }
+    public void OnHit(Vector3 hitPosition)
+    {
+        if (hitPrefab != null)
+        {
+            Instantiate(hitPrefab, hitPosition, Quaternion.identity);
+        }
+        Destroy(gameObject);
+    }
 }

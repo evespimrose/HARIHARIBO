@@ -6,28 +6,29 @@ public class WarriorRSkill : BaseState<Player>
 {
     private float skillDuration = 1f;
     private float skillTimer;
-    private float moveSpeed = 1f;
-    private float maxDistance = 0.8f;
-    private float movedDistance = 0f;
+    private bool effectPlayed = false;
+
     public WarriorRSkill(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
         skillTimer = skillDuration;
-        movedDistance = 0f;
+        effectPlayed = false;
         player.Animator?.SetTrigger("RSkill");
     }
     public override void Update(Player player)
     {
         skillTimer -= Time.deltaTime;
 
-        if (movedDistance < maxDistance)
+        if (!effectPlayed && skillTimer <= skillDuration * 0.5f)
         {
-            float movement = moveSpeed * Time.deltaTime;
-            player.transform.position += player.transform.forward * movement;
-            movedDistance += movement;
+            var effectHandler = player.GetComponent<AnimationEventEffects>();
+            if (effectHandler != null)
+            {
+                effectHandler.PlayEffect(2); // W Ω∫≈≥ ¿Ã∆Â∆Æ
+            }
+            effectPlayed = true;
         }
-
         if (skillTimer <= 0)
         {
             Vector3 moveInput = player.GetMove();

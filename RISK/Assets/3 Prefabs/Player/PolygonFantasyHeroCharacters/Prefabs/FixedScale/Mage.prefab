@@ -17068,7 +17068,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8967269593550522082}
   m_Layer: 7
-  m_Name: tSkillAttackPoint
+  m_Name: TSkillAttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23490,6 +23490,7 @@ GameObject:
   - component: {fileID: 676656845087210307}
   - component: {fileID: 1295805719403106403}
   - component: {fileID: 4427513070072850994}
+  - component: {fileID: 266705742501340079}
   m_Layer: 7
   m_Name: Mage
   m_TagString: Untagged
@@ -23514,6 +23515,8 @@ Transform:
   - {fileID: 9127475370212605753}
   - {fileID: 514478243037659256}
   - {fileID: 8967269593550522082}
+  - {fileID: 6275637346296254396}
+  - {fileID: 805415050342261072}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &3189845364172686300
@@ -23583,7 +23586,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.35
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1.1, z: 0}
@@ -23612,6 +23615,7 @@ MonoBehaviour:
   baseCriticalChance: 0.1
   baseCriticalDamage: 1.5
   baseCooldownReduction: 0.1
+  effectsHandler: {fileID: 0}
   ProjectilePrefab: {fileID: 5938167112633497377, guid: 0426fe0b8d4dee2438f63d4b51fc8130, type: 3}
   attackPoint: {fileID: 514478243037659256}
   tSkillAttackPoint: {fileID: 8967269593550522082}
@@ -23645,14 +23649,29 @@ MonoBehaviour:
   Effects:
   - effectName: ESkill
     Effect: {fileID: 1024448355500536, guid: 06ecdd40143cad141b791ad42091c3c0, type: 3}
-    StartPositionRotation: {fileID: 0}
-    DestroyAfter: 1.2
+    StartPositionRotation: {fileID: 415694156095769503}
+    DestroyAfter: 3
     UseLocalPosition: 1
   - effectName: RSkill
     Effect: {fileID: 1515678706149418, guid: 646a8faadb4803b4eb490eb7985cba43, type: 3}
-    StartPositionRotation: {fileID: 0}
-    DestroyAfter: 1.2
+    StartPositionRotation: {fileID: 8936068378475622772}
+    DestroyAfter: 3
     UseLocalPosition: 1
+--- !u!114 &266705742501340079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2871036966586066559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6aa703eabd57c479c6c461551196f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillInfos:
+  - {fileID: 470685613696179536}
+  - {fileID: 9075235098616603954}
 --- !u!1 &2893899571063168237
 GameObject:
   m_ObjectHideFlags: 0
@@ -30514,6 +30533,74 @@ SkinnedMeshRenderer:
     m_Center: {x: -17.86436, y: 0.04281521, z: 0}
     m_Extent: {x: 18.130306, y: 15.082178, z: 13.306488}
   m_DirtyAABB: 0
+--- !u!1 &3866209454462612640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6275637346296254396}
+  - component: {fileID: 2616490829419884950}
+  - component: {fileID: 470685613696179536}
+  m_Layer: 7
+  m_Name: ESkillAttackCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6275637346296254396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866209454462612640}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005767379, z: -0.00000008236515, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5470352560626607532}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2616490829419884950
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866209454462612640}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2, z: 3}
+  m_Center: {x: 0, y: 1.5, z: 2.2}
+--- !u!114 &470685613696179536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866209454462612640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a60a5c720e6344596f8148bfdff88f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: MageESkillAttack
+  damage: 0
 --- !u!1 &3873282485824874073
 GameObject:
   m_ObjectHideFlags: 0
@@ -34443,6 +34530,52 @@ SkinnedMeshRenderer:
     m_Center: {x: -23.628319, y: -11.83639, z: -6.41605}
     m_Extent: {x: 7.978981, y: 22.29296, z: 13.124283}
   m_DirtyAABB: 0
+--- !u!1 &4327333073467404182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 805415050342261072}
+  - component: {fileID: 9075235098616603954}
+  m_Layer: 7
+  m_Name: RSkillAttackCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &805415050342261072
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4327333073467404182}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000005767379, z: -0.00000008236515, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5470352560626607532}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9075235098616603954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4327333073467404182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a60a5c720e6344596f8148bfdff88f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: MageRSkillAttack
+  damage: 0
 --- !u!1 &4359241618270242742
 GameObject:
   m_ObjectHideFlags: 0
