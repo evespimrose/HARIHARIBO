@@ -9,8 +9,8 @@ using Photon.Pun;
 
 public class PartyManager : PhotonSingletonManager<PartyManager>
 {
-    private List<PhotonRealtimePlayer> partyMembers = new List<PhotonRealtimePlayer>();
-    private PhotonRealtimePlayer partyLeader;
+    [SerializeField] private List<PhotonRealtimePlayer> partyMembers = new List<PhotonRealtimePlayer>();
+    [SerializeField] private PhotonRealtimePlayer partyLeader;
 
     public PartyInfo currentPartyInfo;
 

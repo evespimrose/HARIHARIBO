@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class DestroyerIdleState : BaseState<Player>
@@ -25,6 +26,30 @@ public class DestroyerIdleState : BaseState<Player>
         if (Input.GetKeyDown(KeyCode.A))
         {
             handler.ChangeState(typeof(DestroyerAttackState));
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            Debug.Log("GetKeyDown : W");
+
+            handler.ChangeState(typeof(DestroyerWSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("GetKeyDown : E");
+
+            handler.ChangeState(typeof(DestroyerESkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("GetKeyDown : R");
+
+            handler.ChangeState(typeof(DestroyerRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            Debug.Log("GetKeyDown : T");
+
+            handler.ChangeState(typeof(DestroyerTSkill));
         }
     }
 }

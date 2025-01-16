@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,8 @@ public class DestroyerAttackState : BaseState<Player>
 
         Debug.Log($"Attack {inputCount} Duration: {attackTimer}");
         player.Animator?.SetTrigger($"Attack{inputCount}");
+
+        player.photonView?.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
 
         lastKeyPressTime = Time.time;
         canReceiveInput = true;
@@ -102,6 +105,12 @@ public class DestroyerAttackState : BaseState<Player>
         {
             inputCount = 0;
         }
+    }
+
+    [PunRPC]
+    public void SyncAttackState(Player player, int attackIndex)
+    {
+        player.Animator?.SetTrigger($"Attack{attackIndex}");
     }
 }
 

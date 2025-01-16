@@ -15,7 +15,7 @@ public class MageIdleState : BaseState<Player>
     {
         Vector3 moveInput = player.GetMove();
 
-        // ÀÌµ¿ ÀÔ·ÂÀÌ ÀÖÀ¸¸é ÀÌµ¿ »óÅÂ·Î ÀüÈ¯
+        // ì´ë™ ì…ë ¥ì´ ìˆìœ¼ë©´ ì´ë™ ìƒíƒœë¡œ ì „í™˜
         if (moveInput != Vector3.zero)
         {
             handler.ChangeState(typeof(MageMoveState));
@@ -26,6 +26,22 @@ public class MageIdleState : BaseState<Player>
         if (Input.GetKeyDown(KeyCode.A))
         {
             handler.ChangeState(typeof(MageAttackState));
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            handler.ChangeState(typeof(MageWSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            handler.ChangeState(typeof(MageESkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            handler.ChangeState(typeof(MageRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            handler.ChangeState(typeof(MageTSkill));
         }
     }
 }

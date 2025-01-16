@@ -14,7 +14,7 @@ public class HealerIdleState : BaseState<Player>
     public override void Update(Player player)
     {
         Vector3 moveInput = player.GetMove();
-  
+
         if (moveInput != Vector3.zero)
         {
             handler.ChangeState(typeof(HealerMoveState));
@@ -25,6 +25,23 @@ public class HealerIdleState : BaseState<Player>
         if (Input.GetKeyDown(KeyCode.A))
         {
             handler.ChangeState(typeof(HealerAttackState));
+        }
+
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            handler.ChangeState(typeof(HealerWSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            handler.ChangeState(typeof(HealerESkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            handler.ChangeState(typeof(HealerRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            handler.ChangeState(typeof(HealerTSkill));
         }
     }
 

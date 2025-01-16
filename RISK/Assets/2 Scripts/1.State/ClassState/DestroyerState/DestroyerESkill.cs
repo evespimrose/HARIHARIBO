@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,5 +45,11 @@ public class DestroyerESkill : BaseState<Player>
     public override void Exit(Player player)
     {
         player.SetSkillInProgress(false);
+    }
+
+    [PunRPC]
+    public void SyncAttackState(Player player)
+    {
+        player.Animator?.SetTrigger($"ESkill");
     }
 }

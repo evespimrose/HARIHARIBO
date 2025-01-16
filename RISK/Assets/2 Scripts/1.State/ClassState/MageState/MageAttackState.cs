@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Realtime;
+using Photon.Pun;
 
 public class MageAttackState : BaseState<Player>
 {
@@ -15,7 +17,6 @@ public class MageAttackState : BaseState<Player>
 
     public override void Enter(Player player)
     {
-
         if (Time.time - lastKeyPressTime > comboWindow)
         {
             inputCount = 0;
@@ -30,6 +31,7 @@ public class MageAttackState : BaseState<Player>
 
         Debug.Log($"Attack {inputCount} Duration: {attackTimer}");
         player.Animator?.SetTrigger($"Attack{inputCount}");
+        player.photonView.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
     }
 
     public override void Update(Player player)
@@ -84,5 +86,9 @@ public class MageAttackState : BaseState<Player>
 
     }
 
-
+    [PunRPC]
+    public void SyncAttackState(Player player, int attackIndex)
+    {
+        player.Animator?.SetTrigger($"Attack{attackIndex}");
+    }
 }

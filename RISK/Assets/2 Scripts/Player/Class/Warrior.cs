@@ -1,35 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Warrior : Player
 {
-    [Header("전사 스탯 설정")]
+    [Header("?꾩궗 ?ㅽ꺈 ?ㅼ젙")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
     [SerializeField] private int baseAttackPerLevel = 3;
     [SerializeField] private float baseMoveSpeed = 1f;
 
-    [Header("방어 & 회복")]
+    [Header("諛⑹뼱 & ?뚮났")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
     [SerializeField] private float baseHealthRegen = 2f;
     [SerializeField] private float baseRegenInterval = 1f;
 
-    [Header("추가 스탯")]
+    [Header("異붽? ?ㅽ꺈")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
-    [Header("이펙트")]
+    [Header("?댄럺??")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
     protected override void Awake()
     {
-        base.Awake();  // 부모 클래스의 초기화 먼저 실행
+        base.Awake();  // 遺紐??대옒?ㅼ쓽 珥덇린??癒쇱? ?ㅽ뻾
 
-        // 이펙트 핸들러 초기화
+        // ?댄럺???몃뱾??珥덇린??
         if (effectsHandler == null)
         {
             effectsHandler = GetComponent<AnimationEventEffects>();

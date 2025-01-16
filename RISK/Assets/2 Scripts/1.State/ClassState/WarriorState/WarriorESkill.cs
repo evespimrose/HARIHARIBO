@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,7 @@ public class WarriorESkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(1); // E 스킬 이펙트
+                effectHandler.PlayEffect(1); // E ?ㅽ궗 ?댄럺??
             }
             effectPlayed = true;
         }
@@ -57,4 +58,9 @@ public class WarriorESkill : BaseState<Player>
         player.SetSkillInProgress(false);
     }
 
+    [PunRPC]
+    public void SyncAttackState(Player player)
+    {
+        player.Animator?.SetTrigger($"ESkill");
+    }
 }

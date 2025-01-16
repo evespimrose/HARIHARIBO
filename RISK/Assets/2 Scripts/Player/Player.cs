@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon;
+using Newtonsoft.Json;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
@@ -33,7 +35,60 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         InitializeStateHandler();
         SetPlatform();
         InitializeStats();
+        PhotonPeer.RegisterType(typeof(Destroyer), 100, SerializeDestroyer, DeserializeDestroyer);
+        PhotonPeer.RegisterType(typeof(Healer), 101, SerializeHealer, DeserializeHealer);
+        PhotonPeer.RegisterType(typeof(Mage), 102, SerializeMage, DeserializeMage);
+        PhotonPeer.RegisterType(typeof(Warrior), 103, SerializeWarrior, DeserializeWarrior);
     }
+
+    private static byte[] SerializeDestroyer(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+
+    private static object DeserializeDestroyer(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Destroyer>(json);
+    }
+    private static byte[] SerializeHealer(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+
+    private static object DeserializeHealer(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Destroyer>(json);
+    }
+
+    private static byte[] SerializeMage(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+
+    private static object DeserializeMage(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Destroyer>(json);
+    }
+
+    private static byte[] SerializeWarrior(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+
+    private static object DeserializeWarrior(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Destroyer>(json);
+    }
+
+
     //public void InitializeStats(PlayerStats stats)
     //{
     //    this.stats = stats;

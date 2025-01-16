@@ -1,10 +1,11 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HealerAttackState : BaseState<Player>
 {
-    private float[] attackDurations = new float[] { 1f, 0.9f, 0.8f};
+    private float[] attackDurations = new float[] { 1f, 0.9f, 0.8f };
     private float attackTimer;
     private float comboWindow = 0.8f;
     private float lastKeyPressTime;
@@ -29,6 +30,7 @@ public class HealerAttackState : BaseState<Player>
 
         Debug.Log($"Attack {inputCount} Duration: {attackTimer}");
         player.Animator?.SetTrigger($"Attack{inputCount}");
+        player.photonView.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
     }
 
     public override void Update(Player player)
@@ -83,4 +85,9 @@ public class HealerAttackState : BaseState<Player>
 
     }
 
+    [PunRPC]
+    public void SyncAttackState(Player player, int attackIndex)
+    {
+        player.Animator?.SetTrigger($"Attack{attackIndex}");
+    }
 }
