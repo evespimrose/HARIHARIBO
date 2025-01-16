@@ -24,7 +24,7 @@ public class PartyInfoDisplay : MonoBehaviour
 
     private void Update()
     {
-        partyJoinButton.interactable = PartyManager.Instance.currentPartyInfo == null;
+        partyJoinButton.interactable = PartyManager.Instance.currentPartyInfo != null;
     }
 
     private void OnPartyJoinButtonClick()
@@ -46,7 +46,7 @@ public class PartyInfoDisplay : MonoBehaviour
     {
         partyName.text = partyInfo.name;
         currentPartyMember.text = partyInfo.currentMemberCount.ToString();
-        partyGoal.text = partyInfo.goal.ToString();
+        partyGoal.text = (partyInfo.goal + 1).ToString();
         minPartyLevel.text = partyInfo.minPartyLevel.ToString();
         maxPartyLevel.text = partyInfo.maxPartyLevel.ToString();
         maxPartyMember.text = partyInfo.maxPartyMemberCount.ToString();

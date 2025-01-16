@@ -45,7 +45,7 @@ public class CreatePartyUI : MonoBehaviour
         {
             Button button = Instantiate(Resources.Load<Button>("DifficultySettingButton"), difficultyButtonTransform);
             button.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = (i + 1).ToString();
-            button.onClick.AddListener(() => { goal = i + 1; });
+            button.onClick.AddListener(() => { goal = i; });
         }
 
         createButton.onClick.AddListener(CreatePartyRoom);
