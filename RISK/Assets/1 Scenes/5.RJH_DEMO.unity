@@ -263,32 +263,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &612111595 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4327333073467404182, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
-  m_PrefabInstance: {fileID: 1609922711}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &612111598
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 612111595}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 1, z: 3}
 --- !u!1001 &622722186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -300,14 +274,6 @@ PrefabInstance:
     - target: {fileID: 1730296034643879096, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
       propertyPath: m_Name
       value: Warrior
-      objectReference: {fileID: 0}
-    - target: {fileID: 1730296034643879096, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1843461772881505784, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
-      propertyPath: m_Radius
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3241364709733397796, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
       propertyPath: joystick
@@ -410,10 +376,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Healer
       objectReference: {fileID: 0}
-    - target: {fileID: 6354180697800532788, guid: 2d11ea611578d71408e60d889c238980, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -448,7 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5d4b5da27954624b917566c748eefa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players: []
   monsters: []
 --- !u!4 &733401507
 Transform:
@@ -991,10 +952,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mage
       objectReference: {fileID: 0}
-    - target: {fileID: 2871036966586066559, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5470352560626607532, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1038,10 +995,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4327333073467404182, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 612111598}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
 --- !u!1 &1938866237
 GameObject:
@@ -1220,21 +1174,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 178258685238384635, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
-      propertyPath: m_Constraints
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 337390130451494341, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
-      propertyPath: m_Radius
-      value: 0.35
-      objectReference: {fileID: 0}
     - target: {fileID: 3060835569387709482, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
       propertyPath: m_Name
       value: Destroyer
-      objectReference: {fileID: 0}
-    - target: {fileID: 3060835569387709482, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7691162183741784425, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1277,8 +1219,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 2451481626574580472, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}

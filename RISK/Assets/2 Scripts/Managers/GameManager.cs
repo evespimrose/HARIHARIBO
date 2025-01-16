@@ -73,8 +73,8 @@ public class GameManager : SingletonManager<GameManager>
         }
 
         Vector3 spawnPosition = Vector3.zero;
-        GameObject playerObj = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
-        playerObj.name = $"Player {playerStats.nickName}";
+        GameObject playerObj = PhotonNetwork.Instantiate("Warrior", spawnPosition, Quaternion.identity);
+        playerObj.name = $"Warrior {playerStats.nickName}";
 
         if (playerObj.TryGetComponent(out Player player))
         {
