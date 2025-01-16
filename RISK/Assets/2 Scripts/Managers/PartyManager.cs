@@ -34,6 +34,21 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
         }
     }
 
+    public void JoinParty(PhotonRealtimePlayer player, PartyInfo info)
+    {
+        UpdateInfo(info);
+
+        if (!partyMembers.Contains(player))
+        {
+            if (partyMembers.Count == 0)
+                SetPartyLeader(player);
+            partyMembers.Add(player);
+            currentPartyInfo.currentMemberCount = partyMembers.Count;
+            UpdatePartyInfo();
+            Debug.Log($"{player.NickName} joined the party!");
+        }
+    }
+
     public void LeaveParty(PhotonRealtimePlayer player)
     {
         if (PhotonNetwork.LocalPlayer == player)
@@ -76,6 +91,26 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
     public PhotonRealtimePlayer GetPartyLeader()
     {
         return partyLeader;
+    }
+
+    public void UpdateInfo(PartyInfo info)
+    {
+        currentPartyInfo = info;
+        partyMembers.Clear();
+        
+        foreach (int actorNumber in info.currentMemberActorNumber)
+        {
+            PhotonRealtimePlayer player = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber);
+            if (player != null)
+            {
+                partyMembers.Add(player);
+                
+                if (actorNumber == info.currentLeaderActorNumber)
+                {
+                    partyLeader = player;
+                }
+            }
+        }
     }
 
 }

@@ -9,6 +9,7 @@ using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 [System.Serializable]
 public class PartyInfo
@@ -319,8 +320,18 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
                 string partyList = propertiesThatChanged[PARTY_LIST_KEY].ToString();
                 print(partyList);
                 partyRoomInfoList = JsonConvert.DeserializeObject<List<PartyInfo>>(partyList);
+                
+                if (PartyManager.Instance.currentPartyInfo != null)
+                {
+                    var updatedPartyInfo = partyRoomInfoList.FirstOrDefault(p => p.partyId == PartyManager.Instance.currentPartyInfo.partyId);
+                    if (updatedPartyInfo != null)
+                    {
+                        PartyManager.Instance.UpdateInfo(updatedPartyInfo);
+                    }
+                }
+                
+                LobbyUI.Instance.board.UpdatePartyList();
             }
-            LobbyUI.Instance.board.UpdatePartyList();
         }
     }
 

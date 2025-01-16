@@ -17,6 +17,8 @@ public class PartyInfoDisplay : MonoBehaviour
 
     public Button partyJoinButton;
 
+    private PartyInfo partyInfo;
+
     public void Awake()
     {
         partyJoinButton.onClick.AddListener(OnPartyJoinButtonClick);
@@ -29,7 +31,7 @@ public class PartyInfoDisplay : MonoBehaviour
 
     private void OnPartyJoinButtonClick()
     {
-        PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer);
+        PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer, partyInfo);
     }
 
     public void Initialize(string Name, int currentMember, int maxMember, int goal, int minLevel, int maxLevel)
@@ -44,6 +46,7 @@ public class PartyInfoDisplay : MonoBehaviour
 
     public void Initialize(PartyInfo partyInfo)
     {
+        this.partyInfo = partyInfo;
         partyName.text = partyInfo.name;
         currentPartyMember.text = partyInfo.currentMemberCount.ToString();
         partyGoal.text = (partyInfo.goal + 1).ToString();

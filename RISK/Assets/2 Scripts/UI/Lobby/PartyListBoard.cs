@@ -22,9 +22,16 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
         closeButton.onClick.AddListener(OnCloseButtonClick);
     }
 
+    private void Update()
+    {
+        createButton.interactable = PartyManager.Instance.currentPartyInfo == null;
+    }
+
     private void OnRefreshButtonClick()
     {
-
+        PhotonManager.Instance.partyRoomInfoList = PhotonManager.Instance.GetPartyList();
+        
+        UpdatePartyList();
     }
 
     private void OnCreateButtonClick()
@@ -56,11 +63,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
                 GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
                 if (partyItem.TryGetComponent(out PartyInfoDisplay component))
                     component.Initialize(party);
-                //Button joinButton = partyItem.GetComponentInChildren<Button>();
-                //joinButton.onClick.AddListener(() => PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer));
             }
         }
-
     }
-
 }
