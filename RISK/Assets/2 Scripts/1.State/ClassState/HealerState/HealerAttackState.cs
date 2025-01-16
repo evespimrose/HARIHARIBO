@@ -4,34 +4,49 @@ using UnityEngine;
 
 public class HealerAttackState : BaseState<Player>
 {
-    private float attackDuration = 1.2f;
+    private float[] attackDurations = new float[] { 1f, 0.9f, 0.8f};
     private float attackTimer;
-    private float comboWindow = 0.5f;
-    private float comboTimer;
+    private float comboWindow = 0.8f;
     private float lastKeyPressTime;
-    private int inputCount = 0;
+    private static int inputCount = 0;
+    private bool canReceiveInput = true;
     public HealerAttackState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
-        attackTimer = attackDuration;
-
 
         if (Time.time - lastKeyPressTime > comboWindow)
         {
             inputCount = 0;
         }
 
-        inputCount++;
-        lastKeyPressTime = Time.time;
+        inputCount = Mathf.Min(inputCount + 1, 3);
 
-        int attackIndex = Mathf.Clamp(inputCount, 1, 3);
-        player.Animator?.SetTrigger($"Attack{attackIndex}");
+        attackTimer = attackDurations[inputCount - 1];
+
+        lastKeyPressTime = Time.time;
+        canReceiveInput = true;
+
+        Debug.Log($"Attack {inputCount} Duration: {attackTimer}");
+        player.Animator?.SetTrigger($"Attack{inputCount}");
     }
 
     public override void Update(Player player)
     {
         attackTimer -= Time.deltaTime;
+
+        float currentAttackDuration = attackDurations[inputCount - 1];
+        if (canReceiveInput && attackTimer <= currentAttackDuration * 0.7f)
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                if (Time.time - lastKeyPressTime <= comboWindow && inputCount < 3)
+                {
+                    handler.ChangeState(typeof(HealerAttackState));
+                    return;
+                }
+            }
+        }
 
         if (attackTimer <= 0)
         {
@@ -53,6 +68,14 @@ public class HealerAttackState : BaseState<Player>
     }
     public override void Exit(Player player)
     {
+        if (player.Animator != null)
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                player.Animator.ResetTrigger($"Attack{i}");
+            }
+        }
+
         if (Time.time - lastKeyPressTime > comboWindow)
         {
             inputCount = 0;

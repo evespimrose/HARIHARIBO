@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DestroyerESkill : BaseState<Player>
 {
-    private float skillDuration = 2.4f;
+    private float skillDuration = 2.2f;
     private float skillTimer;
     private bool effectPlayed = false;
     public DestroyerESkill(StateHandler<Player> handler) : base(handler) { }

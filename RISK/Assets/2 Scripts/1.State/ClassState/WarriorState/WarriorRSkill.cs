@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WarriorRSkill : BaseState<Player>
 {
-    private float skillDuration = 1f;
+    private float skillDuration = 0.8f;
     private float skillTimer;
     private bool effectPlayed = false;
 
@@ -25,7 +25,7 @@ public class WarriorRSkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(2); // W Ω∫≈≥ ¿Ã∆Â∆Æ
+                effectHandler.PlayEffect(2); // W Ïä§ÌÇ¨ Ïù¥ÌéôÌä∏
             }
             effectPlayed = true;
         }

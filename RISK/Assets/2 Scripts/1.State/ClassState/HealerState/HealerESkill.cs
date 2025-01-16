@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealerESkill : BaseState<Player>
 {
-    private float skillDuration = 2.5f;
+    private float skillDuration = 2.3f;
     private float skillTimer;
     private bool effectPlayed = false;
     public HealerESkill(StateHandler<Player> handler) : base(handler) { }

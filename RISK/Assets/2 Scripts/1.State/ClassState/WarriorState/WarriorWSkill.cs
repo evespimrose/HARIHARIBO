@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WarriorWSkill : BaseState<Player>
 {
-    private float skillDuration = 1.6f;
+    private float skillDuration = 1.4f;
     private float skillTimer;
     private bool effectPlayed = false;
     public WarriorWSkill(StateHandler<Player> handler) : base(handler) { }
