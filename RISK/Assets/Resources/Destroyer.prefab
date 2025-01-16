@@ -23540,31 +23540,31 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: IsMoving
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Attack1
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Attack2
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Attack3
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Attack4
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: WSkill
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: ESkill
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: RSkill
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: TSkill
   m_SynchronizeLayers:
   - SynchronizeType: 2
@@ -26135,7 +26135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerTSkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!65 &3873938769181911330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47540,7 +47541,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerWSkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!135 &2926593614426059
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -65692,7 +65694,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerBasicAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!1 &8597035709166758581
 GameObject:
   m_ObjectHideFlags: 0
@@ -66555,7 +66558,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerRSkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!135 &3015738624982876707
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -69153,7 +69157,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerESkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!65 &3155658883443766104
 BoxCollider:
   m_ObjectHideFlags: 0
