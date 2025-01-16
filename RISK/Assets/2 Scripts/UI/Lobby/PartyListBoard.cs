@@ -29,7 +29,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnCreateButtonClick()
     {
-
+        LobbyUI.Instance.PanelOpen("CreateParty");
     }
 
     private void OnCloseButtonClick()
@@ -49,13 +49,17 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
             Destroy(child.gameObject);
         }
 
-        foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
+        if (PhotonManager.Instance.partyRoomInfoList != null)
         {
-            GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
-            partyItem.GetComponentInChildren<TextMeshProUGUI>().text = party.name;
-            //Button joinButton = partyItem.GetComponentInChildren<Button>();
-            //joinButton.onClick.AddListener(() => PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer));
+            foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
+            {
+                GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
+                partyItem.GetComponentInChildren<TextMeshProUGUI>().text = party.name;
+                //Button joinButton = partyItem.GetComponentInChildren<Button>();
+                //joinButton.onClick.AddListener(() => PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer));
+            }
         }
+
     }
 
 }

@@ -38,4 +38,14 @@ public class PartyInfoDisplay : MonoBehaviour
         maxPartyLevel.text = maxLevel.ToString();
         maxPartyMember.text = maxMember.ToString();
     }
+
+    PartyInfoDisplay(PartyInfo partyInfo)
+    {
+        partyName.text = partyInfo.name;
+        currentPartyMember.text = partyInfo.currentMemberCount.ToString();
+        partyGoal.text = "goal.ToString()";
+        minPartyLevel.text = "minLevel.ToString()";
+        maxPartyLevel.text = "maxLevel.ToString()";
+        maxPartyMember.text = partyInfo.maxPartyMemberCount.ToString();
+    }
 }

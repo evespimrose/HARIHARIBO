@@ -19,6 +19,7 @@ public class PartyInfo
     public int[] currentMemberActorNumber;
     public int currentLeaderActorNumber;
     public int maxPartyMemberCount;
+    //public int goal;
 
     public PartyInfo() { name = ""; partyId = -1; currentMemberCount = -1; currentMemberActorNumber = new int[] { }; maxPartyMemberCount = 4; }
 
