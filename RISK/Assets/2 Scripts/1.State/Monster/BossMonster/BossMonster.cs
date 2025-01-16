@@ -189,6 +189,7 @@ public class BossMonster : MonoBehaviour, ITakedamage
                 target = tr.Value.transform;
             }
         }
+        if (target == null) bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
     public void TargetLook(Vector3 targetPosition)

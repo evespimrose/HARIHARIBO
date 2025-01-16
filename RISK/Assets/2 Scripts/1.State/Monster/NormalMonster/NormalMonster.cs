@@ -142,6 +142,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
                 target = tr.Value.transform;
             }
         }
+        if (target == null) nMHandler.ChangeState(typeof(NormalMonsterIdle));
     }
 
     public void Move()
@@ -217,6 +218,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     {
         if (isDie == true)
         {
+            UnitManager.Instance.monsters.Remove(this.gameObject);
             Destroy(this.gameObject);
         }
     }
