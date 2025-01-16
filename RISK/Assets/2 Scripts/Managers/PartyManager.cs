@@ -51,18 +51,58 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
     public void LeaveParty(PhotonRealtimePlayer player)
     {
+        if (currentPartyInfo == null) return;
+
         if (PhotonNetwork.LocalPlayer == player)
         {
+            if (IsPartyLeader(player) && partyMembers.Count > 1)
+            {
+                var nextLeader = partyMembers.Find(m => m != player);
+                currentPartyInfo.currentLeaderActorNumber = nextLeader.ActorNumber;
+            }
+
             partyLeader = null;
             partyMembers = null;
+            
+            if (currentPartyInfo.currentMemberCount <= 1)
+            {
+                PhotonManager.Instance.RemovePartyInfo(currentPartyInfo.partyId);
+            }
+            else
+            {
+                // 파티 멤버 목록에서 자신 제거
+                var memberList = new List<int>(currentPartyInfo.currentMemberActorNumber);
+                memberList.Remove(player.ActorNumber);
+                currentPartyInfo.currentMemberActorNumber = memberList.ToArray();
+                currentPartyInfo.currentMemberCount--;
+                
+                // 파티 정보 업데이트
+                PhotonManager.Instance.UpdatePartyInfo(currentPartyInfo);
+            }
+            
             currentPartyInfo = null;
         }
         else if (partyMembers.Contains(player))
         {
-            // have to Test
+            // 다른 멤버가 나가는 경우
             partyMembers.Remove(player);
+            
+            // 파티 멤버 목록 업데이트
+            var memberList = new List<int>(currentPartyInfo.currentMemberActorNumber);
+            memberList.Remove(player.ActorNumber);
+            currentPartyInfo.currentMemberActorNumber = memberList.ToArray();
             currentPartyInfo.currentMemberCount = partyMembers.Count;
-            UpdatePartyInfo();
+            
+            // 나간 멤버가 파티장이었다면 다음 멤버를 파티장으로 설정
+            if (IsPartyLeader(player) && partyMembers.Count > 0)
+            {
+                var nextLeader = partyMembers[0];
+                SetPartyLeader(nextLeader);
+                currentPartyInfo.currentLeaderActorNumber = nextLeader.ActorNumber;
+            }
+            
+            // 파티 정보 업데이트
+            PhotonManager.Instance.UpdatePartyInfo(currentPartyInfo);
             Debug.Log($"{player.NickName} left the party!");
         }
     }
