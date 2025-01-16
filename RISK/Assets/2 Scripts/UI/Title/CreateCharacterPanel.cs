@@ -92,8 +92,8 @@ public enum ClassType
 {
     None,
     Warrior,
-    SpearMan,
-    Archer,
+    Destroyer,
+    Healer,
     Mage,
 }
 [Serializable]

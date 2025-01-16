@@ -59,27 +59,54 @@ public class GameManager : SingletonManager<GameManager>
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "LobbyScene");
 
         //yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
+        Vector3 spawnPosition = Vector3.zero;
 
         switch (FirebaseManager.Instance.currentCharacterData.classType)
         {
             case ClassType.Warrior:
+                {
+                    GameObject warriorObj = PhotonNetwork.Instantiate("Warrior", spawnPosition, Quaternion.identity);
+                    warriorObj.name = $"Warrior {playerStats.nickName}";
+
+                    if (warriorObj.TryGetComponent(out Warrior warrior))
+                    {
+                        warrior.InitializeStatsPhoton(playerStats);
+                    }
+                }
                 break;
-            case ClassType.SpearMan:
+            case ClassType.Destroyer:
+                {
+                    GameObject destroyerObj = PhotonNetwork.Instantiate("Destroyer", spawnPosition, Quaternion.identity);
+                    destroyerObj.name = $"Destroyer {playerStats.nickName}";
+
+                    if (destroyerObj.TryGetComponent(out Destroyer destroyer))
+                    {
+                        destroyer.InitializeStatsPhoton(playerStats);
+                    }
+                }
                 break;
-            case ClassType.Archer:
+            case ClassType.Healer:
+                {
+                    GameObject healerObj = PhotonNetwork.Instantiate("Healer", spawnPosition, Quaternion.identity);
+                    healerObj.name = $"Healer {playerStats.nickName}";
+
+                    if (healerObj.TryGetComponent(out Healer healer))
+                    {
+                        healer.InitializeStatsPhoton(playerStats);
+                    }
+                }
                 break;
             case ClassType.Mage:
+                {
+                    GameObject mageObj = PhotonNetwork.Instantiate("Mage", spawnPosition, Quaternion.identity);
+                    mageObj.name = $"Mage {playerStats.nickName}";
+
+                    if (mageObj.TryGetComponent(out Mage mage))
+                    {
+                        mage.InitializeStatsPhoton(playerStats);
+                    }
+                }
                 break;
         }
-
-        Vector3 spawnPosition = Vector3.zero;
-        GameObject playerObj = PhotonNetwork.Instantiate("Warrior", spawnPosition, Quaternion.identity);
-        playerObj.name = $"Warrior {playerStats.nickName}";
-
-        if (playerObj.TryGetComponent(out Player player))
-        {
-            //player.InitializeStats(playerStats);
-        }
-
     }
 }
