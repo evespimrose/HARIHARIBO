@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SkillDamageController : MonoBehaviour
 {
-    [Header("Ω∫≈≥ µ•πÃ¡ˆ ¡§∫∏")]
-    [SerializeField] private SkillDamageInfo[] skillInfos;  // Inspectorø°º≠ º≥¡§
+    [Header("Ïä§ÌÇ¨ Îç∞ÎØ∏ÏßÄ Ï†ïÎ≥¥")]
+    [SerializeField] private SkillDamageInfo[] skillInfos;  // InspectorÏóêÏÑú ÏÑ§Ï†ï
     private Dictionary<string, SkillDamageInfo> skillDamageMap;
 
     private void Awake()
@@ -23,6 +23,14 @@ public class SkillDamageController : MonoBehaviour
                 skillDamageMap[info.skillName] = info;
             }
         }
+    }
+    public float GetSkillDamage(string skillName)
+    {
+        if (skillDamageMap.TryGetValue(skillName, out SkillDamageInfo info))
+        {
+            return info.GetDamage();
+        }
+        return 0f;
     }
     public void EnableDamage(string skillName)
     {

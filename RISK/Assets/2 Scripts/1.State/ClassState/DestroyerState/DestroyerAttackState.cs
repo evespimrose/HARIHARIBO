@@ -5,7 +5,7 @@ using UnityEngine;
 public class DestroyerAttackState : BaseState<Player>
 {
 
-    private float attackDuration = 1f;
+    private float attackDuration = 2.3f;
     private float attackTimer;
     private float comboWindow = 0.5f;
     private float lastKeyPressTime;
@@ -26,7 +26,7 @@ public class DestroyerAttackState : BaseState<Player>
         inputCount++;
         lastKeyPressTime = Time.time;
 
-        int attackIndex = Mathf.Clamp(inputCount, 1, 4);  // Destroyer´Â 4´Ü ÄÞº¸
+        int attackIndex = Mathf.Clamp(inputCount, 1, 4);  // DestroyerëŠ” 4ë‹¨ ì½¤ë³´
         Debug.Log($"Attack {attackIndex}");
         player.Animator?.SetTrigger($"Attack{attackIndex}");
     }

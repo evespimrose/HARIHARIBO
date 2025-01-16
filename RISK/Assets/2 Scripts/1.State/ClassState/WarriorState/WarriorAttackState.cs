@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class WarriorAttackState : BaseState<Player>
 {
-    private float attackDuration = 1f;
+    private float attackDuration = 1.7f;
     private float attackTimer;
     private float comboWindow = 0.5f;
     private float comboTimer;

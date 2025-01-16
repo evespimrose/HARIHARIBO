@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DestroyerWSkill : BaseState<Player>
 {
-    private float skillDuration = 1.2f;
+    private float skillDuration = 1.8f;
     private float skillTimer;
     private bool effectPlayed = false;
     public DestroyerWSkill(StateHandler<Player> handler) : base(handler) { }
@@ -24,7 +24,7 @@ public class DestroyerWSkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(0); // W ½ºÅ³ ÀÌÆåÆ®
+                effectHandler.PlayEffect(0); // W ìŠ¤í‚¬ ì´í™íŠ¸
             }
             effectPlayed = true;
         }
