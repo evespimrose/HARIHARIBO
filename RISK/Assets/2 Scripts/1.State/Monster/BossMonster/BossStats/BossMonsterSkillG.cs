@@ -7,7 +7,7 @@ public class BossMonsterSkillG : BaseState<BossMonster>
     public BossMonsterSkillG(StateHandler<BossMonster> handler) : base(handler) { }
 
     // 스킬7 대쉬 + 공격
-    public float atkDelay = 1f; // 텔레포트 전 대기 시간
+    public float atkDelay = 2.24f; // 텔레포트 전 대기 시간
     private float endTime = 0.5f; // 텔레포트 후 대기 시간
     private bool isAction = false; // 텔레포트 여부를 추적
 
@@ -24,14 +24,20 @@ public class BossMonsterSkillG : BaseState<BossMonster>
 
     private IEnumerator SkillGCoroutine(BossMonster monster)
     {
+        monster.skillGPrefab.SetActive(true);
+        monster.animator.SetTrigger("SkillG");
+        monster.TargetLook(monster.target.position);
         // 첫 번째 대기 시간 후 텔레포트
         yield return new WaitForSeconds(atkDelay);
-
+        monster.skillGPrefab.SetActive(false);
         // 텔레포트 수행
         SkillGAtk(monster);
-
-        // 텔레포트 후 대기
-        yield return new WaitForSeconds(endTime);
+        yield return new WaitUntil(() =>
+        {
+            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
+            return !stateInfo.IsName("SkillG") || stateInfo.normalizedTime >= 1f;
+        });
+        yield return null;
 
         // 스킬이 끝난 후 다음 상태로 전환
         monster.bMHandler.ChangeState(typeof(BossMonsterSkillB)); // 상태 전환

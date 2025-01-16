@@ -40,6 +40,7 @@ public class BossMonsterSkillF : BaseState<BossMonster>
     {
         // 애니메이션 실행 (대쉬 시작)
         monster.animator.SetBool("SkillF", true);
+        monster.skillFPrefab.SetActive(true);
 
         // 대쉬 시작
         monster.isMoving = true;
@@ -72,6 +73,7 @@ public class BossMonsterSkillF : BaseState<BossMonster>
         }
 
         // 대쉬 종료
+        monster.skillFPrefab.SetActive(true);
         monster.isMoving = false;
         monster.SkillFReset();
         Debug.Log("돌진 종료");

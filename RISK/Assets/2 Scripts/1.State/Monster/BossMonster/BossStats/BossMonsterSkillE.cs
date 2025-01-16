@@ -33,6 +33,8 @@ public class BossMonsterSkillE : BaseState<BossMonster>
 
     private IEnumerator SkillECoroutine(BossMonster monster)
     {
+        monster.TargetLook(monster.target.position);
+
         yield return new WaitForSeconds(atkDuration); // 선딜레이
 
         // 애니메이션 실행

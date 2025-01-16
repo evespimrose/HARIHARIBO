@@ -43,6 +43,7 @@ public class BossMonsterAtk : BaseState<BossMonster>
     {
         // 선딜레이
         yield return new WaitForSeconds(startDelay);
+        monster.TargetLook(monster.target.position);
 
         // 첫 번째 공격 - AtkA
         monster.animator.SetTrigger("AtkA");

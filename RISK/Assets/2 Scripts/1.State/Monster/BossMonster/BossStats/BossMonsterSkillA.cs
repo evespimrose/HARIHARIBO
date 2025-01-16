@@ -38,6 +38,7 @@ public class BossMonsterSkillA : BaseState<BossMonster>
     {
         // º±µÙ∑π¿Ã
         yield return new WaitForSeconds(startDelay);
+        monster.TargetLook(monster.target.position);
 
         monster.animator.SetTrigger("SkillA1");
         yield return new WaitForSeconds(atkADelay); 

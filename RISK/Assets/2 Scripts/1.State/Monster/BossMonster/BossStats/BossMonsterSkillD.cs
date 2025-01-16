@@ -42,7 +42,7 @@ public class BossMonsterSkillD : BaseState<BossMonster>
             return !stateInfo.IsName("SkillD") || stateInfo.normalizedTime >= 1f;
         });
 
-        // 애니메이션 종료 후 추가 대기 시간
+        monster.animator.SetTrigger("Idle");
         yield return new WaitForSeconds(additionalWaitTime);
 
         // 상태 전환

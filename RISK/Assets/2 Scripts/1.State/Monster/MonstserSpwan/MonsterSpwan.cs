@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MonsterSpwan : MonoBehaviour
 {
+    public int wave = 1;
+    public int inWave = 1;
     public float SpwanTiem = 5f;
     [Header("근접 몬스터")]
     [Tooltip("근접 몬스터 스폰될 갯수")]
@@ -41,6 +44,7 @@ public class MonsterSpwan : MonoBehaviour
     {
         int lastQuadrant = 0;
         int quadrant = 0;
+        float curTime = 0f;
         while (true)
         {
             //스폰구역 선택
@@ -69,7 +73,11 @@ public class MonsterSpwan : MonoBehaviour
                 spwanPos = GetRangeSpwanPos(quadrant);
                 RangeMonster.transform.position = spwanPos;
             }
-            yield return new WaitForSeconds(SpwanTiem);
+            while (curTime > SpwanTiem || UnitManager.Instance.monsters.Count == 0)
+            {
+                curTime += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 

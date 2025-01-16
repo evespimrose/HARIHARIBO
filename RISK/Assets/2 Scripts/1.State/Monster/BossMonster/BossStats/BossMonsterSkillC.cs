@@ -38,6 +38,8 @@ public class BossMonsterSkillC : BaseState<BossMonster>
             AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
             return !stateInfo.IsName("SkillC") || stateInfo.normalizedTime >= 1f;
         });
+
+        monster.animator.SetTrigger("Idle");
         yield return new WaitForSeconds(additionalWaitTime);
 
         monster.bMHandler.ChangeState(typeof(BossMonsterIdle));

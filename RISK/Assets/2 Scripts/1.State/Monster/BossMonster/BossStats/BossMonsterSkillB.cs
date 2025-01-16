@@ -41,6 +41,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
     private IEnumerator SkillBAtk(BossMonster monster)
     {
         yield return new WaitForSeconds(atkDelay);
+        monster.TargetLook(monster.target.position);
 
         ActivateSkillBParticle(monster);
         //선딜레이
@@ -61,7 +62,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
             AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
             return !stateInfo.IsName("SkillB") || stateInfo.normalizedTime >= 1f;
         });
-        // 애니메이션이 끝난 후 추가 대기 시간
+
+        monster.animator.SetTrigger("Idle");
         yield return new WaitForSeconds(additionalWaitTime);
 
         monster.bMHandler.ChangeState(typeof(BossMonsterIdle));

@@ -26,6 +26,9 @@ public class BossMonster : MonoBehaviour, ITakedamage
     [Header("스킬5 관련")]
     public GameObject skillEPrefab;
     [Header("스킬6 관련")]
+    public GameObject skillFPrefab;
+    [Header("스킬7 관련")]
+    public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;
     public float skillFknockback = 50f; //skillF 넉백 거리
@@ -136,7 +139,8 @@ public class BossMonster : MonoBehaviour, ITakedamage
         {
             fieldParticle.SetActive(false);
         }
-
+        skillFPrefab.SetActive(false);
+        skillGPrefab.SetActive(false);
     }
 
     protected void InitializeStateHandler()
