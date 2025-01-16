@@ -5,9 +5,8 @@ using PhotonRealtimePlayer = Photon.Realtime.Player;
 
 public class PartyMemberUI : MonoBehaviour
 {
-    public Text partyLeaderText;
-    public Transform partyMemberContainer;
-    public GameObject partyMemberItemPrefab;
+    [SerializeField] private Transform partyMemberContainer;
+    [SerializeField] private GameObject partyMemberInfoPrefab;
 
     private void OnEnable()
     {
@@ -16,21 +15,18 @@ public class PartyMemberUI : MonoBehaviour
 
     public void UpdatePartyMembers()
     {
-        PhotonRealtimePlayer partyLeader = PartyManager.Instance.GetPartyLeader();
-        if (partyLeader != null)
-        {
-            partyLeaderText.text = $"Party Leader: {partyLeader.NickName} (Level: {partyLeader.CustomProperties["Level"]})";
-        }
-
         foreach (Transform child in partyMemberContainer)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (PhotonRealtimePlayer member in PartyManager.Instance.GetPartyMembers())
+        foreach (var member in PartyManager.Instance.GetPartyMembers())
         {
-            GameObject memberItem = Instantiate(partyMemberItemPrefab, partyMemberContainer);
-            memberItem.GetComponentInChildren<Text>().text = $"{member.NickName} (Level: {member.CustomProperties["Level"]})";
+            GameObject memberInfoObj = Instantiate(partyMemberInfoPrefab, partyMemberContainer);
+            if (memberInfoObj.TryGetComponent(out PartyMemberInfoUI memberInfoUI))
+            {
+                memberInfoUI.Initialize(member);
+            }
         }
     }
 }
