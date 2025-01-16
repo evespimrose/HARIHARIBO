@@ -4,46 +4,46 @@ using UnityEngine;
 
 public class Mage : Player
 {
-    [Header("마법사 스탯 설정")]
+    [Header("留덈쾿???ㅽ꺈 ?ㅼ젙")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
     [SerializeField] private int baseAttackPerLevel = 3;
     [SerializeField] private float baseMoveSpeed = 1f;
 
-    [Header("방어 & 회복")]
+    [Header("諛⑹뼱 & ?뚮났")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
     [SerializeField] private float baseHealthRegen = 2f;
     [SerializeField] private float baseRegenInterval = 1f;
 
-    [Header("추가 스탯")]
+    [Header("異붽? ?ㅽ꺈")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
-    [Header("이펙트")]
+    [Header("?댄럺??")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
-    [Header("공격 이펙트")]
+    [Header("怨듦꺽 ?댄럺??")]
     [SerializeField] private GameObject ProjectilePrefab;
 
-    [Header("공격 포인트")]
+    [Header("怨듦꺽 ?ъ씤??")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform tSkillAttackPoint;
 
-    [Header("공격 설정")]
-    [SerializeField] private float normalSpeed = 3f; // 기본 투사체 속도
-    [SerializeField] private float finalSpeed = 3f;  // 마지막 콤보 투사체 속도
+    [Header("怨듦꺽 ?ㅼ젙")]
+    [SerializeField] private float normalSpeed = 3f; // 湲곕낯 ?ъ궗泥??띾룄
+    [SerializeField] private float finalSpeed = 3f;  // 留덉?留?肄ㅻ낫 ?ъ궗泥??띾룄
     [SerializeField] private float finalScale = 2f;
     [SerializeField] private float LifeTime = 5f;
 
-    [Header("W스킬 설정")]
+    [Header("W?ㅽ궗 ?ㅼ젙")]
     [SerializeField] private GameObject wSkillProjectilePrefab;
     [SerializeField] private float wSkillSpeed = 3f;
     [SerializeField] private float wSkillLifeTime = 3f;
     [SerializeField] private float wSkillScale = 2.5f;
 
-    [Header("T 스킬 설정")]
+    [Header("T ?ㅽ궗 ?ㅼ젙")]
     [SerializeField] private GameObject tSkillProjectilePrefab;
     [SerializeField] private float tSkillSpeed = 3f;
     [SerializeField] private float tSkillLifeTime = 3f;
@@ -170,7 +170,7 @@ public class Mage : Player
             var projectileMove = Energyball.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection); // 이동 방향 설정
+                projectileMove.Initialize(shootDirection); // ?대룞 諛⑺뼢 ?ㅼ젙
                 projectileMove.SetLifeTime(LifeTime);
 
                 switch (comboIndex)
