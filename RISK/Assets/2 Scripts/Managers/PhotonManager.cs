@@ -7,31 +7,48 @@ using UnityEngine;
 using UnityEngine.UI;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
+using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
+
+[System.Serializable]
+public class PartyInfo
+{
+    public string name;
+    public int partyId;
+    public int currentMemberCount;
+    public int[] currentMemberActorNumber;
+    public int currentLeaderActorNumber;
+    public int maxPartyMemberCount;
+
+    public PartyInfo() { name = ""; partyId = -1; currentMemberCount = -1; currentMemberActorNumber = new int[] { }; maxPartyMemberCount = 4; }
+
+    public PartyInfo(string name, int partyId, int currentMember = 1, int[] currentMemberActorNumber = null, int maxPartyMemberCount = 4)
+    {
+        this.name = name;
+        this.partyId = partyId;
+        this.currentMemberCount = currentMember;
+        this.currentMemberActorNumber = currentMemberActorNumber;
+        this.maxPartyMemberCount = maxPartyMemberCount;
+    }
+}
 
 public class PhotonManager : PhotonSingletonManager<PhotonManager>
 {
-    //public Transform dungeonroomListContent;
-    //public GameObject dungeonroomListItemPrefab;
-    public Transform partyroomListContent;
-    public GameObject partyroomListItemPrefab;
+    private const string PARTY_LIST_KEY = "PartyList";
 
     public string roomInfoText;
     public string playerInfoText;
-
-    //public List<RoomInfo> dungeonRoomInfoList = new List<RoomInfo>();
-    public List<RoomInfo> partyRoomInfoList = new List<RoomInfo>();
+    public List<PartyInfo> partyRoomInfoList = new List<PartyInfo>();
 
     private void Start()
     {
-        //Active at GameScene
-        //GameManager.isGameReady = true;
     }
 
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        print("AutomaticallySyncScene = true");
+        //print("AutomaticallySyncScene = true");
 
         string roomName = "LobbyRoom";
 
@@ -40,10 +57,20 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             MaxPlayers = 20,
             IsVisible = true,
             IsOpen = true,
-            CustomRoomProperties = new HashTable { { "RoomType", "Lobby" }, { "Difficulty", 0 } },
-            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
+            CustomRoomProperties = new HashTable { { "RoomType", "Lobby" }, { "Difficulty", 0 }, { "PartyList", new string[] { " " } } },
+            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty", "PartyList" }
         };
-        print("JoinOrCreateRoom");
+
+        //string roomName = "DungeonRoom";
+
+        //RoomOptions roomOptions = new RoomOptions
+        //{
+        //    MaxPlayers = 20,
+        //    IsVisible = true,
+        //    IsOpen = true,
+        //    CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", 1 } },
+        //    CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
+        //};
 
         PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
@@ -53,46 +80,140 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         Debug.LogError($"Join Room Failed: {message}");
     }
 
-    public void CreatePartyRoom(string dungeonName, int difficulty)
+    public void SetNewPartyInfo(PartyInfo newPartyInfo)
     {
-        RoomOptions roomOptions = new RoomOptions
+        List<PartyInfo> partyList = GetPartyList();
+
+        partyList.Add(newPartyInfo);
+
+        string jsonPartyList = JsonConvert.SerializeObject(partyList);
+
+        HashTable fixedcustomProperties = new HashTable
         {
-            MaxPlayers = 4,
-            IsVisible = true,
-            IsOpen = true,
-            CustomRoomProperties = new HashTable { { "RoomType", "Party" }, { "Difficulty", difficulty } },
-            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
+            { PARTY_LIST_KEY, jsonPartyList }
         };
 
-        PhotonNetwork.CreateRoom(dungeonName, roomOptions, TypedLobby.Default);
-    }
-    public void GetPartyRoomList()
-    {
-        string sqlLobbyFilter = "RoomType = 'Party'";
-        PhotonNetwork.GetCustomRoomList(TypedLobby.Default, sqlLobbyFilter);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(fixedcustomProperties);
     }
 
-    public void CreateDungeonRoom(int difficulty)
+    public void UpdatePartyInfo(PartyInfo partyInfo)
     {
-        if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+        bool partyExists = false;
+
+        for (int i = 0; i < partyRoomInfoList.Count; ++i)
         {
-            Debug.LogError("Only the party leader can create a dungeon room.");
-            return;
+            if (partyRoomInfoList[i].partyId == partyInfo.partyId)
+            {
+                partyRoomInfoList[i] = partyInfo;
+                partyExists = true;
+                break;
+            }
         }
 
-        string roomName = "Dungeon_" + Random.Range(1000, 9999);
-
-        RoomOptions roomOptions = new RoomOptions
+        if (!partyExists)
         {
-            MaxPlayers = (byte)PartyManager.Instance.GetPartyMembers().Count,
-            IsVisible = false,
-            IsOpen = true,
-            CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty } },
-            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
+            partyRoomInfoList.Add(partyInfo);
+        }
+
+        string jsonPartyList = JsonConvert.SerializeObject(partyRoomInfoList);
+
+        HashTable fixedcustomProperties = new HashTable
+        {
+            { PARTY_LIST_KEY, jsonPartyList }
         };
 
-        PhotonNetwork.CreateRoom(roomName, roomOptions);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(fixedcustomProperties);
     }
+
+    public void UpdatePartyInfo<T>(string key, T value)
+    {
+
+        string json = JsonConvert.SerializeObject(value);
+
+        HashTable fixedcustomProperties = new HashTable
+        {
+            { key, json }
+        };
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(fixedcustomProperties);
+    }
+
+    public List<PartyInfo> GetPartyList()
+    {
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(PARTY_LIST_KEY, out object partyListJson))
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<List<PartyInfo>>(partyListJson.ToString());
+            }
+            catch (JsonException e)
+            {
+                Debug.LogError($"Failed to parse party list JSON: {e.Message}");
+            }
+        }
+
+        return new List<PartyInfo>();
+    }
+
+    public void RemovePartyInfo(int partyId)
+    {
+        List<PartyInfo> partyList = GetPartyList();
+
+        partyList.RemoveAll(party => party.partyId == partyId);
+
+        string jsonPartyList = JsonConvert.SerializeObject(partyList);
+
+        HashTable fixedcustomProperties = new HashTable
+        {
+            { PARTY_LIST_KEY, jsonPartyList }
+        };
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(fixedcustomProperties);
+    }
+
+    //public void CreateDungeonRoom(int difficulty)
+    //{
+    //    if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+    //    {
+    //        Debug.LogError("Only the party leader can create a dungeon room.");
+    //        return;
+    //    }
+
+    //    string roomName = "Dungeon_" + Random.Range(1000, 9999);
+
+    //    RoomOptions roomOptions = new RoomOptions
+    //    {
+    //        MaxPlayers = (byte)PartyManager.Instance.GetPartyMembers().Count,
+    //        IsVisible = false,
+    //        IsOpen = true,
+    //        CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty } },
+    //        CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
+    //    };
+
+    //    PhotonNetwork.CreateRoom(roomName, roomOptions);
+    //}
+
+    //public void CreateDungeonRoom(string name, int maxMember, int difficulty, int minLevel, int maxLevel)
+    //{
+    //    if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+    //    {
+    //        Debug.LogError("Only the party leader can create a dungeon room.");
+    //        return;
+    //    }
+
+    //    string roomName = name;
+
+    //    RoomOptions roomOptions = new RoomOptions
+    //    {
+    //        MaxPlayers = (byte)maxMember,
+    //        IsVisible = false,
+    //        IsOpen = true,
+    //        CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty }, { "MinLevel", minLevel }, { "MaxLevel", maxLevel } },
+    //        CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty", "MinLevel", "MaxLevel" }
+    //    };
+
+    //    PhotonNetwork.CreateRoom(roomName, roomOptions);
+    //}
 
     private void UpdateRoomInfo(List<RoomInfo> roomList)
     {
@@ -118,29 +239,13 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         }
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        foreach (Transform child in partyroomListContent)
-        {
-            Destroy(child.gameObject);
-        }
-        partyRoomInfoList.Clear();
 
-        UpdateRoomInfo(roomList);
 
-        foreach (RoomInfo roomInfo in roomList)
-        {
-            if (roomInfo.CustomProperties.ContainsKey("RoomType") && roomInfo.CustomProperties["RoomType"].ToString() == "party")
-            {
-                //GameObject roomItem = Instantiate(partyroomListItemPrefab, partyroomListContent);
-                //roomItem.GetComponentInChildren<TMP_Text>().text = $"{roomInfo.Name} ({roomInfo.PlayerCount}/{roomInfo.MaxPlayers})";
-                //Button joinButton = roomItem.GetComponentInChildren<Button>();
-                //joinButton.onClick.AddListener(() => PhotonNetwork.JoinRoom(roomInfo.Name));
-                partyRoomInfoList.Add(roomInfo);
-            }
+    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    //{
 
-        }
-    }
+    //}
+
     public override void OnCreatedRoom()
     {
         print("OnCreatedRoom");
@@ -149,13 +254,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon"
             && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
         {
-            foreach (PhotonRealtimePlayer member in PartyManager.Instance.GetPartyMembers())
-            {
-                if (member != PhotonNetwork.LocalPlayer)
-                {
-                    photonView.RPC("ForceJoinDungeon", member, PhotonNetwork.CurrentRoom.Name);
-                }
-            }
+
             PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
         }
     }
@@ -176,16 +275,8 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             Debug.Log($"Joined dungeon room: {PhotonNetwork.CurrentRoom.Name}");
             PhotonNetwork.LoadLevel("DungeonScene");
         }
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object partyroomType) && partyroomType.ToString() == "Party")
-        {
-            PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer);
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-            {
-                PartyManager.Instance.SetPartyLeader(PhotonNetwork.LocalPlayer);
-            }
-        }
 
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object lobbyroomType) && partyroomType.ToString() == "Lobby")
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object lobbyroomType) && lobbyroomType.ToString() == "Lobby")
         {
 
             if (PhotonNetwork.IsMasterClient)
@@ -204,30 +295,22 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         //{
         //    UnitManager.Instance.UnregisterPlayer(UnitManager.Instance.LocalPlayer.GetComponent<PhotonView>().ViewID);
         //}
+        var loadComplete = SceneManager.LoadSceneAsync("TitleScene");
+
     }
 
     public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
     {
         Debug.Log($"Player left room: {otherPlayer.NickName}");
 
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object roomType) && roomType.ToString() == "Party")
-        {
-            if (PartyManager.Instance.IsPartyLeader(otherPlayer))
-            {
-                foreach (var member in PartyManager.Instance.GetPartyMembers())
-                {
-                    PartyManager.Instance.LeaveParty(member);
-                }
-                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Party Disbanded", $"{otherPlayer.NickName} has disbanded the party.");
-            }
-            else
-            {
-                PartyManager.Instance.LeaveParty(otherPlayer);
-                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Party Disbanded", $"{otherPlayer.NickName} has left the party.");
-            }
-        }
+    }
 
-        //UnitManager.Instance.UnregisterPlayer(otherPlayer.ActorNumber);
+    public override void OnRoomPropertiesUpdate(HashTable propertiesThatChanged)
+    {
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object dungeonRoomType) && dungeonRoomType.ToString() == "Lobby")
+        {
+            partyRoomInfoList = GetPartyList();
+        }
     }
 
     //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)

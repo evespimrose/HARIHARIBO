@@ -58,6 +58,8 @@ public class GameManager : SingletonManager<GameManager>
 
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "LobbyScene");
 
+        //yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
+
         switch (FirebaseManager.Instance.currentCharacterData.classType)
         {
             case ClassType.Warrior:
@@ -76,7 +78,6 @@ public class GameManager : SingletonManager<GameManager>
 
         if (playerObj.TryGetComponent(out Player player))
         {
-
             player.InitializeStats(playerStats);
         }
 
