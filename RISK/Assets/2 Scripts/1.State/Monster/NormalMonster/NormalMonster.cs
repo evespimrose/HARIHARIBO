@@ -74,6 +74,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     private void Update()
     {
+        if (target == null) Targeting();
         monsterDebuff.DebuffCheck(this);
         nMHandler.Update();
         if (isDie == true && isDieAction == false)

@@ -1,14 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
-public class TrapSaw : MonoBehaviour
+public class TrapSaw : MonoBehaviour, ITakedamage
 {
+    public float damage;
+    public float curHp;
+    private float maxHp;
+    public float atkDelay = 1f;
     public GameObject model;
     public Transform target;
     private Vector3 movePos;
     private bool isAtk = false;
     private SphereCollider col;
+    private Rigidbody rb;
+    public MonsterScriptableObjects monsterState;
+    public StateHandler<TrapSaw> sMHandler;
 
     public float atkDamage;
     public float moveSpeed;
@@ -16,16 +24,20 @@ public class TrapSaw : MonoBehaviour
 
     private void Awake()
     {
-        col = GetComponent<SphereCollider>();
+        InitializeComponents();
+        InitializeStateHandler();
     }
 
     void Start()
     {
         movePos = (target.position - transform.position).normalized;
+        UnitManager.Instance.monsters.Add(this.gameObject);
+        Targeting();
     }
 
     void Update()
     {
+        if (target == null) Targeting();    
         Vector3 targetDirection = (target.position - transform.position).normalized;
 
         targetDirection.y = 0;
@@ -33,6 +45,62 @@ public class TrapSaw : MonoBehaviour
 
         model.transform.Rotate(-10, 0, 0);
     }
+
+    private void InitializeComponents()
+    {
+        rb = GetComponent<Rigidbody>();
+        col = GetComponent<SphereCollider>();
+        this.atkDamage = monsterState.atkDamage;
+        this.atkDelay = monsterState.atkDelay;
+        this.moveSpeed = monsterState.moveSpeed;
+        this.curHp = monsterState.curHp;
+        this.maxHp = curHp;
+    }
+
+    protected void InitializeStateHandler()
+    {
+        sMHandler = new StateHandler<TrapSaw>(this);
+
+        //// ï¿½ï¿½ï¿½Âµï¿½ ï¿½ï¿½ï¿½
+        //nMHandler.RegisterState(new NormalMonsterIdle(nMHandler));
+        //nMHandler.RegisterState(new NormalMonsterMove(nMHandler));
+        //switch (monsterType)
+        //{
+        //    case MonsterType.Melee:
+        //        nMHandler.RegisterState(new NormalMonsterMeleeAtk(nMHandler));
+        //        break;
+        //    case MonsterType.Range:
+        //        nMHandler.RegisterState(new NormalMonsterRangeAtk(nMHandler));
+        //        break;
+        //}
+        //nMHandler.RegisterState(new NormalMonsterHit(nMHandler));
+        //nMHandler.RegisterState(new NormalMonsterStun(nMHandler));
+        //nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
+        //nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
+        //// ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //nMHandler.ChangeState(typeof(NormalMonsterIdle));
+    }
+
+    public void Targeting()
+    {
+        foreach (var tr in UnitManager.Instance.players)
+        {
+            if (target == null) target = tr.Value.transform;
+            else if (target != null &&
+                (Vector3.Distance(target.position, transform.position)
+                < Vector3.Distance(tr.Value.transform.position, transform.position)))
+            {
+                target = tr.Value.transform;
+            }
+        }
+    }
+
+    public IEnumerator AtkCoolTime()
+    {
+        yield return new WaitForSeconds(atkDelay);
+        isAtk = false;
+    }
+
 
     private void OnTriggerStay(Collider other)
     {
@@ -50,16 +118,26 @@ public class TrapSaw : MonoBehaviour
         {
             if (hitCollider.CompareTag("Player"))
             {
-                print("¾Æ¾ß");
-                //µ¥¹ÌÁö
+                print("ì•„ì•¼");
+                //ë°ë¯¸ì§€
             }
         }
         isAtk = true;
-        Invoke("AtkCollTime", atkDuration);
+        StartCoroutine(AtkCoolTime());
     }
 
-    private void AtkCollTime()
+    public void Takedamage(float damage)
     {
-        isAtk = false;
+        curHp -= Mathf.RoundToInt(damage);
+        if (curHp <= 0)
+        {
+            //isDie = true;
+            //this.nMHandler.ChangeState(typeof(NormalMonsterDie));
+        }
+        else
+        {
+            //isHit = true;
+            //this.nMHandler.ChangeState(typeof(NormalMonsterHit));
+        }
     }
 }

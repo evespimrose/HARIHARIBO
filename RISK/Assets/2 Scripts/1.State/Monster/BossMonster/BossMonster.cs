@@ -74,6 +74,7 @@ public class BossMonster : MonoBehaviour, ITakedamage
 
     private void Update()
     {
+        if (target == null) Targeting();
         if (isDie == true)
         {
             monsterDebuff.DebuffAllOff();

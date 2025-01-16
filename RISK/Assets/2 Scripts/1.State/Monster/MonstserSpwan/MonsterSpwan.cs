@@ -9,37 +9,37 @@ public class MonsterSpwan : MonoBehaviour
     public int inWave = 1;
     public float SpwanTiem = 10f;
 
-    // ±ÙÁ¢ ¸ó½ºÅÍ °ü·Ã º¯¼ö
-    [Header("±ÙÁ¢ ¸ó½ºÅÍ")]
-    [Tooltip("±ÙÁ¢ ¸ó½ºÅÍ ½ºÆùµÉ °¹¼ö")]
-    public int meleeMonsterSpwanCount = 5;
-    [Tooltip("±Ù°Å¸® ¸ó½ºÅÍ ÇÁ¸®ÆÕ")]
+    // ê·¼ì ‘ ëª¬ìŠ¤í„° ê´€ë ¨ ë³€ìˆ˜
+    [Header("ê·¼ì ‘ ëª¬ìŠ¤í„°")]
+    [Tooltip("ê·¼ì ‘ ëª¬ìŠ¤í„° ìŠ¤í°ë  ê°¯ìˆ˜")]
+    private int meleeMonsterSpwanCount = 5;
+    [Tooltip("ê·¼ê±°ë¦¬ ëª¬ìŠ¤í„° í”„ë¦¬íŒ¹")]
     public List<GameObject> meleeMonsterPrefab;
 
-    // ¿ø°Å¸® ¸ó½ºÅÍ °ü·Ã º¯¼ö
-    [Header("¿ø°Å¸® ¸ó½ºÅÍ")]
-    [Tooltip("¿ø°Å¸® ¸ó½ºÅÍ ½ºÆùµÉ °¹¼ö")]
-    public int rangeMonsterSpwanCount = 2;
-    [Tooltip("¿ø°Å¸® ¸ó½ºÅÍ ÇÁ¸®ÆÕ")]
+    // ì›ê±°ë¦¬ ëª¬ìŠ¤í„° ê´€ë ¨ ë³€ìˆ˜
+    [Header("ì›ê±°ë¦¬ ëª¬ìŠ¤í„°")]
+    [Tooltip("ì›ê±°ë¦¬ ëª¬ìŠ¤í„° ìŠ¤í°ë  ê°¯ìˆ˜")]
+    private int rangeMonsterSpwanCount = 2;
+    [Tooltip("ì›ê±°ë¦¬ ëª¬ìŠ¤í„° í”„ë¦¬íŒ¹")]
     public List<GameObject> rangeMonsterPrefab;
 
-    // Ãß°¡µÈ ¸ó½ºÅÍ °ü·Ã º¯¼ö
-    [Header("¿¤¸®Æ® ¸ó½ºÅÍ")]
-    [Tooltip("¿¤¸®Æ® ¸ó½ºÅÍ ½ºÆùµÉ °¹¼ö")]
-    public int eliteMonsterSpwanCount = 1;
-    [Tooltip("¿¤¸®Æ® ¸ó½ºÅÍ ÇÁ¸®ÆÕ")]
-    public List<GameObject> eliteMonsterPrefab;
-
-    [Header("±¸Á¶¹° ¸ó½ºÅÍ")]
-    [Tooltip("±¸Á¶¹° ¸ó½ºÅÍ ½ºÆùµÉ °¹¼ö")]
-    public int structureMonsterSpwanCount = 1;
-    [Tooltip("±¸Á¶¹° ¸ó½ºÅÍ ÇÁ¸®ÆÕ")]
+    // ì¶”ê°€ëœ ëª¬ìŠ¤í„° ê´€ë ¨ ë³€ìˆ˜
+    [Header("êµ¬ì¡°ë¬¼ ëª¬ìŠ¤í„°")]
+    [Tooltip("êµ¬ì¡°ë¬¼ ëª¬ìŠ¤í„° ìŠ¤í°ë  ê°¯ìˆ˜")]
+    private int structureMonsterSpwanCount = 1;
+    [Tooltip("êµ¬ì¡°ë¬¼ ëª¬ìŠ¤í„° í”„ë¦¬íŒ¹")]
     public List<GameObject> structureMonsterPrefab;
 
-    [Header("º¸½º ¸ó½ºÅÍ")]
-    [Tooltip("º¸½º ¸ó½ºÅÍ ½ºÆùµÉ °¹¼ö")]
-    public int bossMonsterSpwanCount = 1;
-    [Tooltip("º¸½º ¸ó½ºÅÍ ÇÁ¸®ÆÕ")]
+    [Header("ì—˜ë¦¬íŠ¸ ëª¬ìŠ¤í„°")]
+    [Tooltip("ì—˜ë¦¬íŠ¸ ëª¬ìŠ¤í„° ìŠ¤í°ë  ê°¯ìˆ˜")]
+    private int eliteMonsterSpwanCount = 1;
+    [Tooltip("ì—˜ë¦¬íŠ¸ ëª¬ìŠ¤í„° í”„ë¦¬íŒ¹")]
+    public List<GameObject> eliteMonsterPrefab;
+
+    [Header("ë³´ìŠ¤ ëª¬ìŠ¤í„°")]
+    [Tooltip("ë³´ìŠ¤ ëª¬ìŠ¤í„° ìŠ¤í°ë  ê°¯ìˆ˜")]
+    private int bossMonsterSpwanCount = 1;
+    [Tooltip("ë³´ìŠ¤ ëª¬ìŠ¤í„° í”„ë¦¬íŒ¹")]
     public GameObject bossMonsterPrefab;
 
     public float meleeMinRadius = 5f;
@@ -48,48 +48,48 @@ public class MonsterSpwan : MonoBehaviour
     public float rangeMaxRadius = 15f;
     public Vector3 center;
 
-    private Vector3 bossSpawnPoint = Vector3.zero; // º¸½º ¸ó½ºÅÍ ½ºÆù À§Ä¡
+    private Vector3 bossSpawnPoint = Vector3.zero; // ë³´ìŠ¤ ëª¬ìŠ¤í„° ìŠ¤í° ìœ„ì¹˜
 
-    // µñ¼Å³Ê¸®·Î °¢ ¿şÀÌºê ¹× ½ºÆù¿¡ ´ëÇÑ ¼³Á¤À» ÀúÀå
+    // ë”•ì…”ë„ˆë¦¬ë¡œ ê° ì›¨ì´ë¸Œ ë° ìŠ¤í°ì— ëŒ€í•œ ì„¤ì •ì„ ì €ì¥
     private Dictionary<(int wave, int inWave), (int meleeCount, int rangeCount, int eliteCount, int bossCount, int structureCount)> spawnSettings = new Dictionary<(int wave, int inWave), (int, int, int, int, int)>
     {
-        // ¿şÀÌºê 1
+        // ì›¨ì´ë¸Œ 1
         {(1, 1), (8, 0, 0, 0, 0)},
         {(1, 2), (8, 0, 0, 0, 0)},
         {(1, 3), (8, 0, 0, 0, 0)},
         {(1, 4), (8, 0, 0, 0, 0)},
         
-        // ¿şÀÌºê 2
+        // ì›¨ì´ë¸Œ 2
         {(2, 1), (6, 2, 0, 0, 0)},
         {(2, 2), (6, 2, 0, 0, 0)},
         {(2, 3), (6, 2, 0, 0, 0)},
         {(2, 4), (6, 2, 0, 0, 0)},
         
-        // ¿şÀÌºê 3
-        {(3, 1), (4, 2, 0, 0, 10)}, // ±¸Á¶¹° 10¸¶¸®
+        // ì›¨ì´ë¸Œ 3
+        {(3, 1), (4, 2, 0, 0, 10)}, // êµ¬ì¡°ë¬¼ 10ë§ˆë¦¬
         {(3, 2), (6, 2, 0, 0, 10)},
-        {(3, 3), (0, 0, 0, 0, 0)}, // 3¹ø ¿şÀÌºê Á¾·á
+        {(3, 3), (0, 0, 0, 0, 0)}, // 3ë²ˆ ì›¨ì´ë¸Œ ì¢…ë£Œ
         
-        // ¿şÀÌºê 4
+        // ì›¨ì´ë¸Œ 4
         {(4, 1), (4, 2, 0, 0, 10)},
         {(4, 2), (6, 2, 0, 0, 10)},
-        {(4, 3), (10, 0, 1, 0, 0)}, // ¿¤¸®Æ® 1¸¶¸®
+        {(4, 3), (10, 0, 1, 0, 0)}, // ì—˜ë¦¬íŠ¸ 1ë§ˆë¦¬
         {(4, 4), (5, 2, 0, 0, 10)},
         
-        // ¿şÀÌºê 5
+        // ì›¨ì´ë¸Œ 5
         {(5, 1), (6, 2, 0, 0, 0)},
-        {(5, 2), (5, 2, 2, 0, 0)}, // ¿¤¸®Æ® 2¸¶¸®
+        {(5, 2), (5, 2, 2, 0, 0)}, // ì—˜ë¦¬íŠ¸ 2ë§ˆë¦¬
         {(5, 3), (4, 2, 0, 0, 10)},
         {(5, 4), (5, 2, 0, 0, 0)},
         
-        // ¿şÀÌºê 6
-        {(6, 1), (0, 0, 0, 1, 0)}  // º¸½º 1¸¶¸®
+        // ì›¨ì´ë¸Œ 6
+        {(6, 1), (0, 0, 0, 1, 0)}  // ë³´ìŠ¤ 1ë§ˆë¦¬
     };
 
     private void Awake()
     {
         center = transform.position;
-        // º¸½º ¸ó½ºÅÍ ½ºÆù À§Ä¡¸¦ ÃÊ±âÈ­ (ÇÊ¿ä¿¡ µû¶ó Á¶Á¤)
+        // ë³´ìŠ¤ ëª¬ìŠ¤í„° ìŠ¤í° ìœ„ì¹˜ë¥¼ ì´ˆê¸°í™” (í•„ìš”ì— ë”°ë¼ ì¡°ì •)
         bossSpawnPoint = new Vector3(0f, 0f, 20f);
     }
 
@@ -108,13 +108,13 @@ public class MonsterSpwan : MonoBehaviour
         int quadrant = 0;
         float curTime = 0f;
 
-        // ¿şÀÌºê ¹× ½ºÆù ¹İº¹
+        // ì›¨ì´ë¸Œ ë° ìŠ¤í° ë°˜ë³µ
         while (true)
         {
-            // ½ºÆù ±¸¿ª ¼±ÅÃ
+            // ìŠ¤í° êµ¬ì—­ ì„ íƒ
             while (true)
             {
-                quadrant = Random.Range(1, 5); // ·£´ı ±¸¿ª ¼±ÅÃ (1, 2, 3, 4 »çºĞ¸é)
+                quadrant = Random.Range(1, 5); // ëœë¤ êµ¬ì—­ ì„ íƒ (1, 2, 3, 4 ì‚¬ë¶„ë©´)
                 if (lastQuadrant != quadrant || lastQuadrant == 0)
                 {
                     lastQuadrant = quadrant;
@@ -124,11 +124,11 @@ public class MonsterSpwan : MonoBehaviour
 
             Vector3 spwanPos;
 
-            // µñ¼Å³Ê¸®¿¡¼­ ÇöÀç ¿şÀÌºê¿Í ½ºÆù¿¡ ÇØ´çÇÏ´Â ¸ó½ºÅÍ ¼ö °¡Á®¿À±â
+            // ë”•ì…”ë„ˆë¦¬ì—ì„œ í˜„ì¬ ì›¨ì´ë¸Œì™€ ìŠ¤í°ì— í•´ë‹¹í•˜ëŠ” ëª¬ìŠ¤í„° ìˆ˜ ê°€ì ¸ì˜¤ê¸°
             var currentSpawnSetting = spawnSettings[(wave, inWave)];
             Debug.Log($"Wave {wave}, InWave {inWave}: {currentSpawnSetting.meleeCount}, {currentSpawnSetting.rangeCount}, {currentSpawnSetting.eliteCount}, {currentSpawnSetting.bossCount}, {currentSpawnSetting.structureCount}");
 
-            // ±ÙÁ¢ ¸ó½ºÅÍ ½ºÆù
+            // ê·¼ì ‘ ëª¬ìŠ¤í„° ìŠ¤í°
             for (int i = 0; i < currentSpawnSetting.meleeCount; i++)
             {
                 GameObject MeleeMonster = MeleeMonsterCreate();
@@ -136,7 +136,7 @@ public class MonsterSpwan : MonoBehaviour
                 MeleeMonster.transform.position = spwanPos;
             }
 
-            // ¿ø°Å¸® ¸ó½ºÅÍ ½ºÆù
+            // ì›ê±°ë¦¬ ëª¬ìŠ¤í„° ìŠ¤í°
             for (int i = 0; i < currentSpawnSetting.rangeCount; i++)
             {
                 GameObject RangeMonster = RangeMonsterCreate();
@@ -144,36 +144,36 @@ public class MonsterSpwan : MonoBehaviour
                 RangeMonster.transform.position = spwanPos;
             }
 
-            // ¿¤¸®Æ® ¸ó½ºÅÍ ½ºÆù
+            // ì—˜ë¦¬íŠ¸ ëª¬ìŠ¤í„° ìŠ¤í°
             for (int i = 0; i < currentSpawnSetting.eliteCount; i++)
             {
                 GameObject EliteMonster = EliteMonsterCreate();
-                spwanPos = GetRangeSpwanPos(quadrant); // ¿¤¸®Æ® ¸ó½ºÅÍ´Â ¿ø°Å¸® ¸ó½ºÅÍ¿Í °°Àº À§Ä¡·Î ½ºÆù
+                spwanPos = GetRangeSpwanPos(quadrant); // ì—˜ë¦¬íŠ¸ ëª¬ìŠ¤í„°ëŠ” ì›ê±°ë¦¬ ëª¬ìŠ¤í„°ì™€ ê°™ì€ ìœ„ì¹˜ë¡œ ìŠ¤í°
                 EliteMonster.transform.position = spwanPos;
             }
 
-            // ±¸Á¶¹° ¸ó½ºÅÍ ½ºÆù (±ÙÁ¢ ¸ó½ºÅÍ¿Í °°Àº À§Ä¡)
+            // êµ¬ì¡°ë¬¼ ëª¬ìŠ¤í„° ìŠ¤í° (ê·¼ì ‘ ëª¬ìŠ¤í„°ì™€ ê°™ì€ ìœ„ì¹˜)
             for (int i = 0; i < currentSpawnSetting.structureCount; i++)
             {
                 GameObject StructureMonster = StructureMonsterCreate();
-                spwanPos = GetMeleeSpwanPos(quadrant); // ±ÙÁ¢ ¸ó½ºÅÍ¿Í µ¿ÀÏ À§Ä¡
+                spwanPos = GetMeleeSpwanPos(quadrant); // ê·¼ì ‘ ëª¬ìŠ¤í„°ì™€ ë™ì¼ ìœ„ì¹˜
                 StructureMonster.transform.position = spwanPos;
             }
 
-            // º¸½º ¸ó½ºÅÍ ½ºÆù
+            // ë³´ìŠ¤ ëª¬ìŠ¤í„° ìŠ¤í°
             for (int i = 0; i < currentSpawnSetting.bossCount; i++)
             {
                 GameObject BossMonster = BossMonsterCreate();
-                BossMonster.transform.position = bossSpawnPoint;  // º¸½º ¸ó½ºÅÍ´Â º°µµÀÇ À§Ä¡¿¡ ½ºÆù
+                BossMonster.transform.position = bossSpawnPoint;  // ë³´ìŠ¤ ëª¬ìŠ¤í„°ëŠ” ë³„ë„ì˜ ìœ„ì¹˜ì— ìŠ¤í°
             }
             yield return null;
-            // ½ºÆù ÈÄ ±â´Ù¸®´Â ºÎºĞ
+            // ìŠ¤í° í›„ ê¸°ë‹¤ë¦¬ëŠ” ë¶€ë¶„
             curTime = 0f;
 
-            // ½ºÆù Å¸ÀÓ µ¿¾È ±â´Ù¸®µÇ, ÇÊµå¿¡ ¸ó½ºÅÍ°¡ ¸ğµÎ Á×¾úÀ» °æ¿ì Áï½Ã ½ºÆùÀ» ´Ù½Ã ½ÃÀÛ
+            // ìŠ¤í° íƒ€ì„ ë™ì•ˆ ê¸°ë‹¤ë¦¬ë˜, í•„ë“œì— ëª¬ìŠ¤í„°ê°€ ëª¨ë‘ ì£½ì—ˆì„ ê²½ìš° ì¦‰ì‹œ ìŠ¤í°ì„ ë‹¤ì‹œ ì‹œì‘
             while (curTime < SpwanTiem)
             {
-                // ÇÊµå¿¡ ¸ó½ºÅÍ°¡ ¸ğµÎ Á×¾úÀ» °æ¿ì, Áï½Ã ½ºÆùÀ» ´Ù½Ã ½ÃÀÛ
+                // í•„ë“œì— ëª¬ìŠ¤í„°ê°€ ëª¨ë‘ ì£½ì—ˆì„ ê²½ìš°, ì¦‰ì‹œ ìŠ¤í°ì„ ë‹¤ì‹œ ì‹œì‘
                 if (UnitManager.Instance.monsters.Count == 0)
                 {
                     Debug.Log("All monsters are dead, respawning...");
@@ -184,15 +184,15 @@ public class MonsterSpwan : MonoBehaviour
                 yield return null;
             }
 
-            // ½ºÆùÀÌ ³¡³ª¸é inWave Áõ°¡
+            // ìŠ¤í°ì´ ëë‚˜ë©´ inWave ì¦ê°€
             inWave++;
 
-            // ¸ğµç ½ºÆùÀÌ ³¡³ª¸é ¿şÀÌºê¸¦ ³Ñ¾î°¨ (¿şÀÌºê 6±îÁö)
+            // ëª¨ë“  ìŠ¤í°ì´ ëë‚˜ë©´ ì›¨ì´ë¸Œë¥¼ ë„˜ì–´ê° (ì›¨ì´ë¸Œ 6ê¹Œì§€)
             if (inWave > 4)
             {
                 inWave = 1;
                 wave++;
-                if (wave > 6) // ¿şÀÌºê 6±îÁö ¼³Á¤
+                if (wave > 6) // ì›¨ì´ë¸Œ 6ê¹Œì§€ ì„¤ì •
                 {
                     wave = 1;
                 }
@@ -200,13 +200,13 @@ public class MonsterSpwan : MonoBehaviour
         }
     }
 
-    // ±ÙÁ¢ ¸ó½ºÅÍÀÇ ½ºÆù À§Ä¡ °è»ê
+    // ê·¼ì ‘ ëª¬ìŠ¤í„°ì˜ ìŠ¤í° ìœ„ì¹˜ ê³„ì‚°
     public Vector3 GetMeleeSpwanPos(int quadrant)
     {
         float angle = 0f;
-        float radius = Random.Range(meleeMinRadius, meleeMaxRadius); // 5 ~ 10 »çÀÌÀÇ ·£´ı °Å¸®
+        float radius = Random.Range(meleeMinRadius, meleeMaxRadius); // 5 ~ 10 ì‚¬ì´ì˜ ëœë¤ ê±°ë¦¬
 
-        // °¢ ±¸¿ª¿¡ ¸Â´Â °¢µµ ¹üÀ§ ÁöÁ¤
+        // ê° êµ¬ì—­ì— ë§ëŠ” ê°ë„ ë²”ìœ„ ì§€ì •
         switch (quadrant)
         {
             case 1:
@@ -223,21 +223,21 @@ public class MonsterSpwan : MonoBehaviour
                 break;
         }
 
-        // polar ÁÂÇ¥°è¿¡¼­ Cartesian ÁÂÇ¥·Î º¯È¯
+        // polar ì¢Œí‘œê³„ì—ì„œ Cartesian ì¢Œí‘œë¡œ ë³€í™˜
         float x = center.x + radius * Mathf.Cos(angle);
         float z = center.z + radius * Mathf.Sin(angle);
-        float y = 0.1f; // y´Â 0.1·Î °íÁ¤
+        float y = 0.1f; // yëŠ” 0.1ë¡œ ê³ ì •
 
         return new Vector3(x, y, z);
     }
 
-    // ¿ø°Å¸® ¸ó½ºÅÍÀÇ ½ºÆù À§Ä¡ °è»ê
+    // ì›ê±°ë¦¬ ëª¬ìŠ¤í„°ì˜ ìŠ¤í° ìœ„ì¹˜ ê³„ì‚°
     public Vector3 GetRangeSpwanPos(int quadrant)
     {
         float angle = 0f;
-        float radius = Random.Range(rnageMinRadius, rangeMaxRadius); // 10 ~ 15 »çÀÌÀÇ ·£´ı °Å¸®
+        float radius = Random.Range(rnageMinRadius, rangeMaxRadius); // 10 ~ 15 ì‚¬ì´ì˜ ëœë¤ ê±°ë¦¬
 
-        // °¢ ±¸¿ª¿¡ ¸Â´Â °¢µµ ¹üÀ§ ÁöÁ¤
+        // ê° êµ¬ì—­ì— ë§ëŠ” ê°ë„ ë²”ìœ„ ì§€ì •
         switch (quadrant)
         {
             case 1:
@@ -254,15 +254,15 @@ public class MonsterSpwan : MonoBehaviour
                 break;
         }
 
-        // polar ÁÂÇ¥°è¿¡¼­ Cartesian ÁÂÇ¥·Î º¯È¯
+        // polar ì¢Œí‘œê³„ì—ì„œ Cartesian ì¢Œí‘œë¡œ ë³€í™˜
         float x = center.x + radius * Mathf.Cos(angle);
         float z = center.z + radius * Mathf.Sin(angle);
-        float y = 0.1f; // y´Â 0.1·Î °íÁ¤
+        float y = 0.1f; // yëŠ” 0.1ë¡œ ê³ ì •
 
         return new Vector3(x, y, z);
     }
 
-    // ¸ó½ºÅÍ »ı¼º ÇÔ¼öµé (ÇÁ¸®ÆÕ »ı¼º ¸Ş¼Òµå)
+    // ëª¬ìŠ¤í„° ìƒì„± í•¨ìˆ˜ë“¤ (í”„ë¦¬íŒ¹ ìƒì„± ë©”ì†Œë“œ)
     public GameObject MeleeMonsterCreate() => Instantiate(meleeMonsterPrefab[Random.Range(0, meleeMonsterPrefab.Count)]);
     public GameObject RangeMonsterCreate() => Instantiate(rangeMonsterPrefab[Random.Range(0, rangeMonsterPrefab.Count)]);
     public GameObject EliteMonsterCreate() => Instantiate(eliteMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)]);

@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7229919873533714608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5274220360071274989}
+  - component: {fileID: 9160253216166541495}
+  m_Layer: 0
+  m_Name: MonsterSpwan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5274220360071274989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7229919873533714608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9160253216166541495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7229919873533714608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51781b5e8b23e534bae7555892c674da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wave: 1
+  inWave: 1
+  SpwanTiem: 5
+  meleeMonsterPrefab:
+  - {fileID: 8229234357716727883, guid: d3c82ddd5efd1e340b34438b948ead87, type: 3}
+  - {fileID: 4894020099640737284, guid: 476c7fe3454834d429cc3269490d8ddc, type: 3}
+  - {fileID: 5384737203170549770, guid: 6b7d054db23d0a04ab5af3f676315b95, type: 3}
+  rangeMonsterPrefab:
+  - {fileID: 9108671620079741143, guid: f0b5dd53922e8804c8b0786e40045333, type: 3}
+  - {fileID: 8324181148020645269, guid: b829f3af327176e4abb0c5f013e01ff0, type: 3}
+  structureMonsterPrefab:
+  - {fileID: 4722915129341960502, guid: 5e443a1855554384088022b601b6df58, type: 3}
+  eliteMonsterPrefab: []
+  bossMonsterPrefab: {fileID: 6534145392595676464, guid: 963f1bd073720044c9785f3a28cda39d, type: 3}
+  meleeMinRadius: 5
+  meleeMaxRadius: 10
+  rnageMinRadius: 10
+  rangeMaxRadius: 15
+  center: {x: 0, y: 0, z: 0}
