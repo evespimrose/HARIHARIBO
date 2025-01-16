@@ -23567,7 +23567,7 @@ MonoBehaviour:
     SynchronizeType: 0
     Name: TSkill
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 2
     LayerIndex: 0
 --- !u!1 &3079254675644821715
 GameObject:

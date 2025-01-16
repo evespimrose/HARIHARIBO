@@ -31,7 +31,7 @@ public class StateHandler<T> where T : class
     {
         if (!states.ContainsKey(stateType))
         {
-            Debug.LogError($"?곹깭 {stateType.Name}???깅줉?섏? ?딆븯?듬땲??");
+            Debug.LogError($"?怨밴묶 {stateType.Name}???源낆쨯??? ??녿릭??щ빍??");
             return;
         }
 
@@ -42,7 +42,8 @@ public class StateHandler<T> where T : class
 
         if (owner is Player player)
         {
-            player.photonView.RPC("SyncStateChange", RpcTarget.Others, stateType.Name);
+            if (player.photonView.IsMine)
+                player.photonView.RPC("SyncStateChange", RpcTarget.Others, stateType.ToString());
         }
     }
 

@@ -57,7 +57,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
             networkRotation = transform.rotation;
         }
     }
-
+    public void InitializeStatsPhoton(PlayerStats stat) { stats = stat; stats.InitializeStats(); }
     protected virtual void SetPlatform()
     {
 #if UNITY_ANDROID || UNITY_IOS
@@ -93,35 +93,6 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
         }
     }
-
-    //private void HandleInput()
-    //{
-
-
-    //    if (Input.GetKeyDown(KeyCode.A))
-    //    {
-    //        stateHandler.ChangeState(typeof(PlayerAttackState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.W))
-    //    {
-    //        isSkillInProgress = true;
-    //        stateHandler.ChangeState(typeof(WSkillState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.E))
-    //    {
-    //        isSkillInProgress = true;
-    //        stateHandler.ChangeState(typeof(ESkillState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.R))
-    //    {
-    //        isSkillInProgress = true;
-    //        stateHandler.ChangeState(typeof(RSkillState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.P))
-    //    {
-
-    //    }
-    //}
 
     public void SetSkillInProgress(bool inProgress)
     {

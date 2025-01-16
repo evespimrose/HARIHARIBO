@@ -2,25 +2,62 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SkillDamageInfo : MonoBehaviour
 {
-    [Header("½ºÅ³ ±âº» Á¤º¸")]
-    public string skillName;    // ½ºÅ³ ½Äº°ÀÚ (¿¹: "BasicAttack", "ESkill")
-    public float damage;        // ½ºÅ³ µ¥¹ÌÁö
+    [Header("ìŠ¤í‚¬ ê¸°ë³¸ ì •ë³´")]
+    public string skillName;    
+    [Range(0f, 500f)]
+    public float damagePercent;  // ê³µê²©ë ¥ ê³„ìˆ˜
 
     private Collider damageCollider;
+    private Player ownerPlayer;
     private bool isActive = false;
+    bool isCritical = false;
+
+    [Header("ê³µê²© íƒ€ì…")]
+    public bool isBasicAttack = false;
 
     private void Awake()
     {
         damageCollider = GetComponent<Collider>();
         if (damageCollider != null)
         {
-            damageCollider.isTrigger = true;  // Æ®¸®°Å·Î ¼³Á¤
-            damageCollider.enabled = false;    // ½ÃÀÛ½Ã ºñÈ°¼ºÈ­
+            damageCollider.isTrigger = true;  // íŠ¸ë¦¬ê±°ë¡œ ì„¤ì •
+            damageCollider.enabled = false;    // ì‹œì‘ì‹œ ë¹„í™œì„±í™”
         }
+        ownerPlayer = GetComponentInParent<Player>();
     }
+    public float GetDamage()
+    {
+        if (ownerPlayer == null) return 0f;
+
+        PlayerStats stats = ownerPlayer.Stats;
+        float damage;
+
+        if (isBasicAttack)
+        {
+            damage = stats.attackPower;
+            Debug.Log($"[{skillName}] ê¸°ë³¸ê³µê²© ë°ë¯¸ì§€: {damage}");
+        }
+        else
+        {
+            damage = stats.attackPower * (damagePercent / 100f);
+            Debug.Log($"[{skillName}] ìŠ¤í‚¬ ê¸°ë³¸ ë°ë¯¸ì§€: {damage} (ê³µê²©ë ¥: {stats.attackPower} * ê³„ìˆ˜: {damagePercent}%)");
+        }
+        if (Random.value <= stats.criticalChance)
+        {
+            isCritical = true;
+            float beforeCrit = damage;
+            damage *= (1f + stats.criticalDamage);
+            Debug.Log($"[{skillName}] í¬ë¦¬í‹°ì»¬! {beforeCrit} -> {damage} (í¬ë¦¬í‹°ì»¬ ë°ë¯¸ì§€: {stats.criticalDamage})");
+        }
+        Debug.Log($"[{skillName}] ìµœì¢… ë°ë¯¸ì§€: {damage} {(isCritical ? "(í¬ë¦¬í‹°ì»¬!)" : "")}");
+        return damage;
+      
+    }
+
     public void EnableCollider()
     {
         if (damageCollider != null)
@@ -39,6 +76,6 @@ public class SkillDamageInfo : MonoBehaviour
         }
     }
 
-    // ÇöÀç Äİ¶óÀÌ´õ È°¼ºÈ­ »óÅÂ È®ÀÎ
+    // í˜„ì¬ ì½œë¼ì´ë” í™œì„±í™” ìƒíƒœ í™•ì¸
     public bool IsActive() => isActive;
 }

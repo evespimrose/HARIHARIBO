@@ -5,56 +5,56 @@ using UnityEngine;
 
 public class BossMonster : MonoBehaviour, ITakedamage
 {
-    [Header("몬스터 타겟 및 모델")]
-    [Tooltip("공격대상")]
+    [Header("紐ъ뒪???寃?諛?紐⑤뜽")]
+    [Tooltip("怨듦꺽???")]
     public Transform target;
     protected Collider col;
     private Rigidbody rb;
     public StateHandler<BossMonster> bMHandler;
 
-    [Tooltip("모델링")]
+    [Tooltip("紐⑤뜽留?")]
     public GameObject model;
-    [Tooltip("모델링의 애니메이터")]
+    [Tooltip("紐⑤뜽留곸쓽 ?좊땲硫붿씠??")]
     public Animator animator;
-    [Header("스킬2 관련")]
+    [Header("?ㅽ궗2 愿??")]
     public GameObject[] skillBParticle;
     public GameObject[] skillBFieldParticle;
-    [Header("스킬3 관련")]
+    [Header("?ㅽ궗3 愿??")]
     public GameObject skillCPrefab;
-    [Header("스킬4 관련")]
+    [Header("?ㅽ궗4 愿??")]
     public GameObject skillDPrefab;
-    [Header("스킬5 관련")]
+    [Header("?ㅽ궗5 愿??")]
     public GameObject skillEPrefab;
-    [Header("스킬6 관련")]
+    [Header("?ㅽ궗6 愿??")]
     public GameObject skillFPrefab;
-    [Header("스킬7 관련")]
+    [Header("?ㅽ궗7 愿??")]
     public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;
-    public float skillFknockback = 50f; //skillF 넉백 거리
-    public float skillFDamage = 10f; //skillF 공격 데미지
-    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF 타격한 대상리스트
+    public float skillFknockback = 50f; //skillF ?됰갚 嫄곕━
+    public float skillFDamage = 10f; //skillF 怨듦꺽 ?곕?吏
+    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF ?寃⑺븳 ??곷━?ㅽ듃
 
-    [Header("몬스터 스텟")]
-    [Tooltip("유닛스텟")]
+    [Header("紐ъ뒪???ㅽ뀩")]
+    [Tooltip("?좊떅?ㅽ뀩")]
     public MonsterScriptableObjects monsterState;
-    [Tooltip("공격데미지")]
+    [Tooltip("怨듦꺽?곕?吏")]
     public float atkDamage;
-    [Tooltip("이동속도")]
+    [Tooltip("?대룞?띾룄")]
     public float moveSpeed;
-    [Tooltip("공격범위")]
+    [Tooltip("怨듦꺽踰붿쐞")]
     public float atkRange;
-    [Tooltip("공격딜레이")]
+    [Tooltip("怨듦꺽?쒕젅??")]
     public float atkDelay;
-    [Tooltip("현재체력")]
+    [Tooltip("?꾩옱泥대젰")]
     public float curHp;
-    [Tooltip("최대체력")]
+    [Tooltip("理쒕?泥대젰")]
     protected float maxHp;
 
     protected bool isDie = false;
     public bool isAtk = false;
 
-    [Header("디버프 상태이상 체크")]
+    [Header("?붾쾭???곹깭?댁긽 泥댄겕")]
     public Debuff monsterDebuff;
     public bool isSlow = false;
     public bool isBleeding = false;
@@ -93,28 +93,28 @@ public class BossMonster : MonoBehaviour, ITakedamage
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("충돌 발생: " + other.gameObject.name);
+        Debug.Log("異⑸룎 諛쒖깮: " + other.gameObject.name);
 
         if (isMoving == false) return;
         if (other.gameObject.CompareTag("Wall")) isWall = true;
         else isWall = false;
 
-        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // 중복 오브젝트 체크
+        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // 以묐났 ?ㅻ툕?앺듃 泥댄겕
         {
-            Debug.Log("SkillF 공격");
+            Debug.Log("SkillF 怨듦꺽");
             other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
             hitTargets.Add(other.gameObject);
 
-            // 넉백 적용
+            // ?됰갚 ?곸슜
             Vector3 knockbackDir = transform.position - other.transform.position;
             knockbackDir.y = 0f;
 
-            // 넉백 힘 조정
+            // ?됰갚 ??議곗젙
             Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
-            float adjustedKnockback = skillFknockback * 4f;  // 넉백 배율을 키워서 더 강하게 적용
+            float adjustedKnockback = skillFknockback * 4f;  // ?됰갚 諛곗쑉???ㅼ썙????媛뺥븯寃??곸슜
             playerRb.AddForce(-knockbackDir.normalized * adjustedKnockback, ForceMode.Impulse);
 
-            Debug.Log("넉백 방향: " + knockbackDir.normalized + " 힘: " + skillFknockback);
+            Debug.Log("?됰갚 諛⑺뼢: " + knockbackDir.normalized + " ?? " + skillFknockback);
         }
     }
 
@@ -148,11 +148,11 @@ public class BossMonster : MonoBehaviour, ITakedamage
     {
         bMHandler = new StateHandler<BossMonster>(this);
 
-        //상태들 등록
+        //?곹깭???깅줉
         bMHandler.RegisterState(new BossMonsterIdle(bMHandler));
         bMHandler.RegisterState(new BossMonsterMove(bMHandler));
         bMHandler.RegisterState(new BossMonsterDie(bMHandler));
-        //공격 상태패턴
+        //怨듦꺽 ?곹깭?⑦꽩
         bMHandler.RegisterState(new BossMonsterAtk(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillA(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillB(bMHandler));
@@ -161,7 +161,7 @@ public class BossMonster : MonoBehaviour, ITakedamage
         bMHandler.RegisterState(new BossMonsterSkillE(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillF(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillG(bMHandler));
-        //초기 상태 설정
+        //珥덇린 ?곹깭 ?ㅼ젙
         bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
@@ -237,9 +237,9 @@ public class BossMonster : MonoBehaviour, ITakedamage
 
     public IEnumerator AtkCoolTime()
     {
-        Debug.Log("공격쿨타임 시작");
+        Debug.Log("怨듦꺽荑⑦????쒖옉");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("공격쿨타임 종료");
+        Debug.Log("怨듦꺽荑⑦???醫낅즺");
         isAtk = false;
     }
 

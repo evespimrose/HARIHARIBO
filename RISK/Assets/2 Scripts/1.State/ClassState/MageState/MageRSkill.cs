@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MageRSkill : BaseState<Player>
 {
-    private float skillDuration = 1.2f;
+    private float skillDuration = 2f;
     private float skillTimer;
     private bool effectPlayed = false;
     public MageRSkill(StateHandler<Player> handler) : base(handler) { }
@@ -24,7 +24,7 @@ public class MageRSkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(1); // R ½ºÅ³ ÀÌÆåÆ®
+                effectHandler.PlayEffect(1); // R ìŠ¤í‚¬ ì´í™íŠ¸
             }
             effectPlayed = true;
         }
