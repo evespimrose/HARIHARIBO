@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealerTSkill : BaseState<Player>
 {
-    private float skillDuration = 1.2f;
+    private float skillDuration = 2.8f;
     private float skillTimer;
     private bool effectPlayed = false;
     public HealerTSkill(StateHandler<Player> handler) : base(handler) { }
@@ -24,7 +24,7 @@ public class HealerTSkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(3); // T ½ºÅ³ ÀÌÆåÆ®
+                effectHandler.PlayEffect(3); // T ìŠ¤í‚¬ ì´í™íŠ¸
             }
             effectPlayed = true;
         }

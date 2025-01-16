@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealerAttackState : BaseState<Player>
 {
-    private float attackDuration = 1f;
+    private float attackDuration = 1.2f;
     private float attackTimer;
     private float comboWindow = 0.5f;
     private float comboTimer;

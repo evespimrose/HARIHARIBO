@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MageAttackState : BaseState<Player>
 {
-    private float attackDuration = 1f;
+    private float attackDuration = 1.3f;
     private float attackTimer;
     private float comboWindow = 0.5f;
     private float comboTimer;
