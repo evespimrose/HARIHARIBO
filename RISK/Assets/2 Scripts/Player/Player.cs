@@ -57,7 +57,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
             networkRotation = transform.rotation;
         }
     }
-
+    public void InitializeStatsPhoton(PlayerStats stat) { stats = stat; stats.InitializeStats(); }
     protected virtual void SetPlatform()
     {
 #if UNITY_ANDROID || UNITY_IOS
