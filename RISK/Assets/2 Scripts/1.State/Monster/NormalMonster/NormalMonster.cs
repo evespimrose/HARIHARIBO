@@ -44,15 +44,15 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     [Header("����ȭ �����̻� üũ")]
     [Tooltip("���")]
-    public bool isDie = false;
-    protected bool isDieAction = false;
-    protected bool isHit = false;
     public bool isAirborne = false;
     protected bool isAirborneAction = false;
-    public bool isAtk = false;
-    [Tooltip("����")]
     public bool isStun = false;
     public bool isStunAction = false;
+    protected bool isDie = false;
+    protected bool isDieAction = false;
+    public bool isHit = false;
+    public bool isHitAction = false;
+    public bool isAtk = false;
 
     [Header("����� �����̻� üũ")]
     public Debuff monsterDebuff;
@@ -76,7 +76,6 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     {
         if (target == null) Targeting();
         monsterDebuff.DebuffCheck(this);
-        nMHandler.Update();
         if (isDie == true && isDieAction == false)
         {
             monsterDebuff.DebuffAllOff();
@@ -89,8 +88,15 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         }
         else if (isAirborne == false && isStun == true && isStunAction == false)
         {
+            isStunAction = true;
             nMHandler.ChangeState(typeof(NormalMonsterStun));
         }
+        else if (!isAirborne && !isAirborneAction && !isStun && !isStunAction && isHit && !isHitAction)
+        {
+            isHitAction = true;
+            nMHandler.ChangeState(typeof(NormalMonsterHit));
+        }
+        nMHandler.Update();
     }
 
     private void InitializeComponents()

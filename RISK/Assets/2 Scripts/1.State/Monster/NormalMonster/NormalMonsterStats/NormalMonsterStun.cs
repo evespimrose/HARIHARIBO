@@ -12,9 +12,8 @@ public class NormalMonsterStun : BaseState<NormalMonster>
 
     public override void Enter(NormalMonster monster)
     {
-        Debug.Log("Ω∫≈œ¡¯¿‘");
-        monster.isStunAction = true;
-        //monster.animator.SetBool("Stun", true);
+        Debug.Log("Ïä§ÌÑ¥ÏßÑÏûÖ");
+        monster.animator.SetBool("Stun", true);
         curTime = 0;
     }
 
@@ -22,7 +21,7 @@ public class NormalMonsterStun : BaseState<NormalMonster>
     {
         if (monster.isAirborne == true)
         {
-            Debug.Log("Ω∫≈œµµ¡ﬂø° ø°æÓ∫ªµÈæÓøÕº≠ Ω∫≈œƒµΩΩ");
+            Debug.Log("Ïä§ÌÑ¥ÎèÑÏ§ëÏóê ÏóêÏñ¥Î≥∏Îì§Ïñ¥ÏôÄÏÑú Ïä§ÌÑ¥Ï∫îÏä¨");
             monster.nMHandler.ChangeState(typeof(NormalMonsterAirborne));
         }
         if (curTime >= stunTime - 0.1f)
@@ -36,7 +35,7 @@ public class NormalMonsterStun : BaseState<NormalMonster>
     {
         monster.isStunAction = false;
         monster.isStun = false;
-        Debug.Log("Ω∫≈œ¡æ∑·");
-        //monster.animator.SetBool("Stun", false);
+        Debug.Log("Ïä§ÌÑ¥Ï¢ÖÎ£å");
+        monster.animator.SetBool("Stun", false);
     }
 }

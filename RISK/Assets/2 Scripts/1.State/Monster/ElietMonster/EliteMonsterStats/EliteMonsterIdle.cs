@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static NormalMonster;
 
 public class EliteMonsterIdle : BaseState<EliteMonster>
 {
@@ -9,7 +8,7 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
 
     public override void Enter(EliteMonster monster)
     {
-        Debug.Log("IdleÁøÀÔ");
+        Debug.Log("Idleì§„ìž…");
         monster.animator?.SetTrigger("Idle");
     }
 
@@ -22,7 +21,7 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
         }
         else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            //°ø°ÝÀ¸·Î ÀÌµ¿
+            //ê³µê²©ìœ¼ë¡œ ì´ë™
         }
         else
         {
@@ -32,6 +31,6 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
 
     public override void Exit(EliteMonster monster)
     {
-
+        Debug.Log("Idleí‡´ìž¥");
     }
 }

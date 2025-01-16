@@ -5,24 +5,24 @@ using UnityEngine;
 
 public class Debuff : MonoBehaviour
 {
-    [Header("ÃâÇ÷")]
-    [Tooltip("ÃâÇ÷ µ¥¹ÌÁö °£°İ")]
+    [Header("ì¶œí˜ˆ")]
+    [Tooltip("ì¶œí˜ˆ ë°ë¯¸ì§€ ê°„ê²©")]
     public float bleedingDuration = 1f;
-    [Tooltip("ÃâÇ÷ Áö¼Ó½Ã°£")]
+    [Tooltip("ì¶œí˜ˆ ì§€ì†ì‹œê°„")]
     public float bleedingTime = 5f;
-    [Tooltip("ÃâÇ÷ µ¥¹ÌÁö")]
+    [Tooltip("ì¶œí˜ˆ ë°ë¯¸ì§€")]
     public float bleedingDamage = 1f;
-    [Header("µ¶")]
-    [Tooltip("µ¶ µ¥¹ÌÁö °£°İ")]
+    [Header("ë…")]
+    [Tooltip("ë… ë°ë¯¸ì§€ ê°„ê²©")]
     public float poisonDuration = 1f;
-    [Tooltip("µ¶ Áö¼Ó½Ã°£")]
+    [Tooltip("ë… ì§€ì†ì‹œê°„")]
     public float poisonTime = 5f;
-    [Tooltip("µ¶ µ¥¹ÌÁö")]
+    [Tooltip("ë… ë°ë¯¸ì§€")]
     public float poisonDamage = 1f;
-    [Header("½½·Î¿ì")]
-    [Tooltip("½½·Î¿ì Áö¼Ó½Ã°£")]
+    [Header("ìŠ¬ë¡œìš°")]
+    [Tooltip("ìŠ¬ë¡œìš° ì§€ì†ì‹œê°„")]
     public float slowTime = 5f;
-    [Tooltip("½½·Î¿ì °¨¼Ò ¼öÄ¡")]
+    [Tooltip("ìŠ¬ë¡œìš° ê°ì†Œ ìˆ˜ì¹˜")]
     public float slowPower = 1f;
 
     private bool isDie = false;
@@ -37,7 +37,7 @@ public class Debuff : MonoBehaviour
         isDie = true;
     }
 
-    //ÀÏ¹İ¸ó½ºÅÍ
+    //ì¼ë°˜ëª¬ìŠ¤í„°
     public void DebuffCheck(NormalMonster monster)
     {
         if (isDie == true) { return; }
@@ -89,44 +89,44 @@ public class Debuff : MonoBehaviour
     private IEnumerator BleedingStart(NormalMonster monster)
     {
         float curBleedingTime = 0f;
-        print("ÃâÇ÷ »óÅÂÀÌ»ó ½ÃÀÛ");
+        print("ì¶œí˜ˆ ìƒíƒœì´ìƒ ì‹œì‘");
         while (curBleedingTime < bleedingTime)
         {
             monster.curHp -= bleedingDamage;
-            print($"ÃâÇ÷ »óÅÂÀÌ»ó Hit {bleedingDamage}");
+            print($"ì¶œí˜ˆ ìƒíƒœì´ìƒ Hit {bleedingDamage}");
             yield return new WaitForSeconds(bleedingDuration);
             curBleedingTime += bleedingDuration;
         }
-        print("ÃâÇ÷ »óÅÂÀÌ»ó Á¾·á");
+        print("ì¶œí˜ˆ ìƒíƒœì´ìƒ ì¢…ë£Œ");
         monster.isBleeding = false;
     }
 
     private IEnumerator PoisonStart(NormalMonster monster)
     {
         float curPoisonTime = 0f;
-        print("µ¶ »óÅÂÀÌ»ó ½ÃÀÛ");
+        print("ë… ìƒíƒœì´ìƒ ì‹œì‘");
         while (curPoisonTime < poisonTime)
         {
             monster.curHp -= poisonDamage;
-            print($"µ¶ »óÅÂÀÌ»ó Hit {poisonDamage}");
+            print($"ë… ìƒíƒœì´ìƒ Hit {poisonDamage}");
             yield return new WaitForSeconds(poisonDuration);
             curPoisonTime += poisonDuration;
         }
-        print("µ¶ »óÅÂÀÌ»ó Á¾·á");
+        print("ë… ìƒíƒœì´ìƒ ì¢…ë£Œ");
         monster.isBleeding = false;
     }
 
 
     private IEnumerator SlowStart(NormalMonster monster)
     {
-        print("½½·Î¿ì »óÅÂÀÌ»ó ½ÃÀÛ");
+        print("ìŠ¬ë¡œìš° ìƒíƒœì´ìƒ ì‹œì‘");
         yield return new WaitForSeconds(slowTime);
-        print("½½·Î¿ì »óÅÂÀÌ»ó Á¾·á");
+        print("ìŠ¬ë¡œìš° ìƒíƒœì´ìƒ ì¢…ë£Œ");
         monster.moveSpeed += 1f;
         monster.isSlow = false;
     }
 
-    //º¸½º
+    //ë³´ìŠ¤
     public void DebuffCheck(BossMonster monster)
     {
         if (isDie == true) { return; }
@@ -178,39 +178,128 @@ public class Debuff : MonoBehaviour
     private IEnumerator BleedingStart(BossMonster monster)
     {
         float curBleedingTime = 0f;
-        print("ÃâÇ÷ »óÅÂÀÌ»ó ½ÃÀÛ");
+        print("ì¶œí˜ˆ ìƒíƒœì´ìƒ ì‹œì‘");
         while (curBleedingTime < bleedingTime)
         {
             monster.curHp -= bleedingDamage;
-            print($"ÃâÇ÷ »óÅÂÀÌ»ó Hit {bleedingDamage}");
+            print($"ì¶œí˜ˆ ìƒíƒœì´ìƒ Hit {bleedingDamage}");
             yield return new WaitForSeconds(bleedingDuration);
             curBleedingTime += bleedingDuration;
         }
-        print("ÃâÇ÷ »óÅÂÀÌ»ó Á¾·á");
+        print("ì¶œí˜ˆ ìƒíƒœì´ìƒ ì¢…ë£Œ");
         monster.isBleeding = false;
     }
 
     private IEnumerator PoisonStart(BossMonster monster)
     {
         float curPoisonTime = 0f;
-        print("µ¶ »óÅÂÀÌ»ó ½ÃÀÛ");
+        print("ë… ìƒíƒœì´ìƒ ì‹œì‘");
         while (curPoisonTime < poisonTime)
         {
             monster.curHp -= poisonDamage;
-            print($"µ¶ »óÅÂÀÌ»ó Hit {poisonDamage}");
+            print($"ë… ìƒíƒœì´ìƒ Hit {poisonDamage}");
             yield return new WaitForSeconds(poisonDuration);
             curPoisonTime += poisonDuration;
         }
-        print("µ¶ »óÅÂÀÌ»ó Á¾·á");
+        print("ë… ìƒíƒœì´ìƒ ì¢…ë£Œ");
         monster.isBleeding = false;
     }
 
 
     private IEnumerator SlowStart(BossMonster monster)
     {
-        print("½½·Î¿ì »óÅÂÀÌ»ó ½ÃÀÛ");
+        print("ìŠ¬ë¡œìš° ìƒíƒœì´ìƒ ì‹œì‘");
         yield return new WaitForSeconds(slowTime);
-        print("½½·Î¿ì »óÅÂÀÌ»ó Á¾·á");
+        print("ìŠ¬ë¡œìš° ìƒíƒœì´ìƒ ì¢…ë£Œ");
+        monster.moveSpeed += 1f;
+        monster.isSlow = false;
+    }
+
+    //ì—˜ë¦¬íŠ¸
+    public void DebuffCheck(EliteMonster monster)
+    {
+        if (isDie == true) { return; }
+        if (monster.isBleeding == false)
+        {
+            bleeding = null;
+        }
+        else
+        {
+            Bleeding(monster);
+        }
+        if (monster.isPoison == false)
+        {
+            poison = null;
+        }
+        else
+        {
+            Poison(monster);
+        }
+        if (monster.isSlow == false)
+        {
+            slow = null;
+        }
+        else
+        {
+            Slow(monster);
+        }
+    }
+
+    public void Bleeding(EliteMonster monster)
+    {
+        if (bleeding != null) return;
+        bleeding = StartCoroutine(BleedingStart(monster));
+    }
+
+    public void Poison(EliteMonster monster)
+    {
+        if (poison != null) return;
+        poison = StartCoroutine(PoisonStart(monster));
+    }
+
+    public void Slow(EliteMonster monster)
+    {
+        if (slow != null) return;
+        slow = StartCoroutine(SlowStart(monster));
+        monster.moveSpeed -= slowPower;
+    }
+
+    private IEnumerator BleedingStart(EliteMonster monster)
+    {
+        float curBleedingTime = 0f;
+        print("ì¶œí˜ˆ ìƒíƒœì´ìƒ ì‹œì‘");
+        while (curBleedingTime < bleedingTime)
+        {
+            monster.curHp -= bleedingDamage;
+            print($"ì¶œí˜ˆ ìƒíƒœì´ìƒ Hit {bleedingDamage}");
+            yield return new WaitForSeconds(bleedingDuration);
+            curBleedingTime += bleedingDuration;
+        }
+        print("ì¶œí˜ˆ ìƒíƒœì´ìƒ ì¢…ë£Œ");
+        monster.isBleeding = false;
+    }
+
+    private IEnumerator PoisonStart(EliteMonster monster)
+    {
+        float curPoisonTime = 0f;
+        print("ë… ìƒíƒœì´ìƒ ì‹œì‘");
+        while (curPoisonTime < poisonTime)
+        {
+            monster.curHp -= poisonDamage;
+            print($"ë… ìƒíƒœì´ìƒ Hit {poisonDamage}");
+            yield return new WaitForSeconds(poisonDuration);
+            curPoisonTime += poisonDuration;
+        }
+        print("ë… ìƒíƒœì´ìƒ ì¢…ë£Œ");
+        monster.isBleeding = false;
+    }
+
+
+    private IEnumerator SlowStart(EliteMonster monster)
+    {
+        print("ìŠ¬ë¡œìš° ìƒíƒœì´ìƒ ì‹œì‘");
+        yield return new WaitForSeconds(slowTime);
+        print("ìŠ¬ë¡œìš° ìƒíƒœì´ìƒ ì¢…ë£Œ");
         monster.moveSpeed += 1f;
         monster.isSlow = false;
     }

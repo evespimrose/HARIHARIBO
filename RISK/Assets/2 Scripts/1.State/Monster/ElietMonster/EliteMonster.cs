@@ -20,6 +20,11 @@ public class EliteMonster : MonoBehaviour, ITakedamage
     [Tooltip("사망시 파티클")]
     public ParticleSystem dieParticle;
 
+    [Header("스킬2 관련")]
+    public GameObject skillBPrefab;
+    [Header("스킬3 관련")]
+    public GameObject skillCPrefab;
+
     [Header("몬스터 스텟")]
     [Tooltip("유닛스텟")]
     public MonsterScriptableObjects monsterState;
@@ -37,13 +42,22 @@ public class EliteMonster : MonoBehaviour, ITakedamage
     protected float maxHp;
 
     protected bool isDie = false;
+    protected bool isDieAction = false;
     public bool isAtk = false;
+    public bool isStun = false;
+    public bool isStunAction = false;
 
     [Header("디버프 상태이상 체크")]
     public Debuff monsterDebuff;
     public bool isSlow = false;
     public bool isBleeding = false;
     public bool isPoison = false;
+
+    protected void Awake()
+    {
+        InitializeComponents();
+        InitializeStateHandler();
+    }
 
     protected virtual void Start()
     {
@@ -53,7 +67,20 @@ public class EliteMonster : MonoBehaviour, ITakedamage
 
     void Update()
     {
-
+        if (target == null) Targeting();
+        monsterDebuff.DebuffCheck(this);
+        if (isDie == true && isDieAction == false)
+        {
+            monsterDebuff.DebuffAllOff();
+            eMHandler.ChangeState(typeof(EliteMonsterDie));
+            isDieAction = true;
+        }
+        else if (isStun == true && isStunAction == false)
+        {
+            isStunAction = true;
+            eMHandler.ChangeState(typeof(EliteMonsterStun));
+        }
+        eMHandler.Update();
     }
 
     private void InitializeComponents()
@@ -72,15 +99,15 @@ public class EliteMonster : MonoBehaviour, ITakedamage
     protected void InitializeStateHandler()
     {
         eMHandler = new StateHandler<EliteMonster>(this);
-
         // 상태들 등록
         eMHandler.RegisterState(new EliteMonsterIdle(eMHandler));
         eMHandler.RegisterState(new EliteMonsterMove(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterDie(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterStun(eMHandler));
         //공격 상태패턴
-        //nMHandler.RegisterState(new NormalMonsterHit(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterStun(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
+        eMHandler.RegisterState(new EliteMonsterSkillA(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterSkillB(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterSkillC(eMHandler));
         //// 초기 상태 설정
         eMHandler.ChangeState(typeof(EliteMonsterIdle));
     }
@@ -96,6 +123,24 @@ public class EliteMonster : MonoBehaviour, ITakedamage
             {
                 target = tr.Value.transform;
             }
+        }
+    }
+
+    public GameObject ObjSpwan(GameObject obj, Vector3 pos)
+    {
+        GameObject gameObject = Instantiate(obj);
+        gameObject.transform.position = pos;
+        return gameObject;
+    }
+
+    public void TargetLook(Vector3 targetPosition)
+    {
+        Vector3 direction = targetPosition - transform.position;
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            direction.y = 0;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
         }
     }
 
@@ -124,6 +169,11 @@ public class EliteMonster : MonoBehaviour, ITakedamage
         }
     }
 
+    public void AtkEnd()
+    {
+        StartCoroutine(AtkCoolTime());
+    }
+
     public IEnumerator AtkCoolTime()
     {
         Debug.Log("공격쿨타임 시작");
@@ -139,11 +189,6 @@ public class EliteMonster : MonoBehaviour, ITakedamage
         {
             isDie = true;
             this.eMHandler.ChangeState(typeof(EliteMonsterDie));
-        }
-        else
-        {
-            //isHit = true;
-            //this.nMHandler.ChangeState(typeof(NormalMonsterHit));
         }
     }
 }

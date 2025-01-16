@@ -118,8 +118,6 @@ public class BossMonster : MonoBehaviour, ITakedamage
         }
     }
 
-
-
     private void InitializeComponents()
     {
         rb = GetComponent<Rigidbody>();

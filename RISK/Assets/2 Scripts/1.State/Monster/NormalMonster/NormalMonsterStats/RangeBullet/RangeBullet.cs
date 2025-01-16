@@ -53,5 +53,9 @@ public class RangeBullet : MonoBehaviour
             other.GetComponent<ITakedamage>().Takedamage(atkDamage);
             Destroy(this.gameObject);
         }
+        else if (other.CompareTag("Wall"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

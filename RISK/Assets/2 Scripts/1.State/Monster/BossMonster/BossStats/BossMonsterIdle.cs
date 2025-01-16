@@ -10,7 +10,7 @@ public class BossMonsterIdle : BaseState<BossMonster>
 
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("IdleÁøÀÔ");
+        Debug.Log("Idleì§„ìž…");
         monster.animator?.SetTrigger("Idle");
     }
 
@@ -23,8 +23,8 @@ public class BossMonsterIdle : BaseState<BossMonster>
         }
         else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            //°ø°ÝÀ¸·Î ÀÌµ¿
-            monster.bMHandler.ChangeState(typeof(BossMonsterSkillG));
+            //ê³µê²©ìœ¼ë¡œ ì´ë™
+            monster.bMHandler.ChangeState(typeof(BossMonsterSkillE));
         }
         else
         {

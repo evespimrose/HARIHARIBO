@@ -6,10 +6,10 @@ using UnityEngine;
 public class BossMonsterSkillE : BaseState<BossMonster>
 {
     public BossMonsterSkillE(StateHandler<BossMonster> handler) : base(handler) { }
-    // ½ºÅ³ 5: ¿ø°Å¸® °ø°İ 2
+    // ìŠ¤í‚¬ 5: ì›ê±°ë¦¬ ê³µê²© 2
     public GameObject projectilePrefabA;
 
-    public float skillETime = 2.08f; //¾Ö´Ï¸ŞÀÌ¼Ç ÃÑ ½Ã°£
+    public float skillETime = 2.08f; //ì• ë‹ˆë©”ì´ì…˜ ì´ ì‹œê°„
     public float atkDuration = 1f;
     public float skillEDuration = 0.8f;
 
@@ -21,51 +21,49 @@ public class BossMonsterSkillE : BaseState<BossMonster>
     public override void Enter(BossMonster monster)
     {
         projectilePrefabA = monster.skillEPrefab;
-        Debug.Log("SkillE ÁøÀÔ");
+        Debug.Log("SkillE ì§„ì…");
         monster.StartSkillCoroutine(SkillECoroutine(monster));
     }
 
     public override void Exit(BossMonster monster)
     {
         monster.AtkEnd();
-        Debug.Log("SkillE Á¾·á");
+        Debug.Log("SkillE ì¢…ë£Œ");
     }
 
     private IEnumerator SkillECoroutine(BossMonster monster)
     {
-        monster.TargetLook(monster.target.position);
+        monster.TargetLook(Vector3.zero);
 
-        yield return new WaitForSeconds(atkDuration); // ¼±µô·¹ÀÌ
+        yield return new WaitForSeconds(atkDuration); // ì„ ë”œë ˆì´
 
-        // ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà
+        // ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
         monster.animator.SetTrigger("SkillE");
 
-        // °ø°İ Å¸ÀÌ¹Ö ´ë±â
+        // ê³µê²© íƒ€ì´ë° ëŒ€ê¸°
         yield return new WaitForSeconds(skillEDuration);
 
-        // ¹Ì»çÀÏ ¹ß»ç
+        // ë¯¸ì‚¬ì¼ ë°œì‚¬
         SpawnProjectile1(monster);
 
-        // ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³¯ ¶§±îÁö ´ë±â (¾Ö´Ï¸ŞÀÌ¼ÇÀÌ 'SkillE'ÀÏ ¶§ ¿Ï·áµÈ »óÅÂ È®ÀÎ)
+        // ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚  ë•Œê¹Œì§€ ëŒ€ê¸° (ì• ë‹ˆë©”ì´ì…˜ì´ 'SkillE'ì¼ ë•Œ ì™„ë£Œëœ ìƒíƒœ í™•ì¸)
         yield return new WaitUntil(() =>
         {
             AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
-            // "SkillE" ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³­ »óÅÂÀÎÁö È®ÀÎ
+            // "SkillE" ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚œ ìƒíƒœì¸ì§€ í™•ì¸
             return !stateInfo.IsName("SkillE") || stateInfo.normalizedTime >= 1f;
         });
 
-        // »óÅÂ º¯°æ
+        // ìƒíƒœ ë³€ê²½
         monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
-
-
 
     private void SpawnProjectile1(BossMonster monster)
     {
         Vector3 spawnPos = monster.transform.position + monster.transform.forward * 0.2f;
-        spawnPos.y = 0.5f;
+        spawnPos.y = 1f;
         GameObject skillEBullet = monster.ObjSpwan(projectilePrefabA, spawnPos);
-        BossSkillEObjectA missileScript = skillEBullet.GetComponent<BossSkillEObjectA>();
+        BossSkillEObject missileScript = skillEBullet.GetComponent<BossSkillEObject>();
         missileScript.SetMissileProperties(bulletDamage, fireDamage, fireInterval, fireDuration);
         missileScript.SetMissileType(1);
     }

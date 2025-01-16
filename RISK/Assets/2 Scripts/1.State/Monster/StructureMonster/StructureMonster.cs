@@ -17,22 +17,24 @@ public class StructureMonster : MonoBehaviour, ITakedamage
     public MonsterScriptableObjects monsterState;
     public StateHandler<StructureMonster> sMHandler;
 
-    [Header("몬스터 디버프")]
-    public Debuff monsterDebuff;
-    public bool isSlow = false;
-    public bool isBleeding = false;
-    public bool isPoison = false;
-
     protected Vector3 movePos;
     protected bool isAtk = false;
     protected SphereCollider col;
     protected Rigidbody rb;
 
-    public bool isDie = false;
     public bool isAirborne = false;
     protected bool isAirborneAction = false;
     public bool isStun = false;
     public bool isStunAction = false;
+    protected bool isDie = false;
+    private bool isHit = false;
+    private Coroutine hit = null;
+
+    [Header("몬스터 디버프")]
+    public Debuff monsterDebuff;
+    public bool isSlow = false;
+    public bool isBleeding = false;
+    public bool isPoison = false;
 
     private void Awake()
     {
@@ -60,6 +62,7 @@ public class StructureMonster : MonoBehaviour, ITakedamage
         {
             sMHandler.ChangeState(typeof(StructureStun));
         }
+        if (isHit == false) hit = null;
         sMHandler.Update();
     }
 
@@ -154,9 +157,19 @@ public class StructureMonster : MonoBehaviour, ITakedamage
         }
         else
         {
-            //isHit = true;
-            //this.nMHandler.ChangeState(typeof(NormalMonsterHit));
+            if (hit != null)
+            {
+                StopCoroutine(hit);
+            }
+            hit = StartCoroutine(Hit());
         }
+    }
+
+    private IEnumerator Hit()
+    {
+        isHit = true;
+        yield return new WaitForSeconds(0.2f);
+        isHit = false;
     }
 
     public void StartAirborne()
