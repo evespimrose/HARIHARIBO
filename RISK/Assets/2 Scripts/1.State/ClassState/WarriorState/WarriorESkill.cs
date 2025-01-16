@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WarriorESkill : BaseState<Player>
 {
-    private float skillDuration = 2.2f;
+    private float skillDuration = 2f;
     private float skillTimer;
     private float moveSpeed = 4f;
     private float maxDistance = 1.5f;

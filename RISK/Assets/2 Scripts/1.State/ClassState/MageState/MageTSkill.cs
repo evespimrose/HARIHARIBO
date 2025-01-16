@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MageTSkill : BaseState<Player>
 {
-    private float skillDuration = 4.7f;
+    private float skillDuration = 4.5f;
     private float skillTimer;
     public MageTSkill(StateHandler<Player> handler) : base(handler) { }
 
