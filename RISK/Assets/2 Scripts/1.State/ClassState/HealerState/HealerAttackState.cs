@@ -42,7 +42,7 @@ public class HealerAttackState : BaseState<Player>
             {
                 if (Time.time - lastKeyPressTime <= comboWindow && inputCount < 3)
                 {
-                    handler.ChangeState(typeof(DestroyerAttackState));
+                    handler.ChangeState(typeof(HealerAttackState));
                     return;
                 }
             }
