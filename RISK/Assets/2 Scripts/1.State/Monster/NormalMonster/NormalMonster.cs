@@ -27,6 +27,8 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     public GameObject model;
     [Tooltip("모델링의 애니메이터")]
     public Animator animator;
+    [Tooltip("사망시 파티클")]
+    public ParticleSystem dieParticle;
 
     [Header("몬스터 스텟")]
     [Tooltip("유닛스텟")]
@@ -46,7 +48,8 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     [Header("무력화 상태이상 체크")]
     [Tooltip("에어본")]
-    protected bool isDie = false;
+    public bool isDie = false;
+    protected bool isDieAction = false;
     protected bool isHit = false;
     public bool isAirborne = false;
     protected bool isAirborneAction = false;
@@ -77,7 +80,13 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     {
         monsterDebuff.DebuffCheck(this);
         nMHandler.Update();
-        if (isAirborne == true && isAirborneAction == false)
+        if (isDie == true && isDieAction == false)
+        {
+            monsterDebuff.DebuffAllOff();
+            nMHandler.ChangeState(typeof(NormalMonsterDie));
+            isDieAction = true;
+        }
+        else if (isAirborne == true && isAirborneAction == false)
         {
             nMHandler.ChangeState(typeof(NormalMonsterAirborne));
         }
@@ -126,7 +135,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     public void Targeting()
     {
-        foreach (GameObject tr in UnitManager.Instance.players)
+        foreach (var tr in UnitManager.Instance.players)
         {
             if (target == null) target = tr.transform;
             else if (target != null &&
@@ -198,9 +207,21 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         this.isAirborne = false;
     }
 
-    protected void Die()
+    public void DieParticle()
     {
-        Destroy(this.gameObject);
+        if (isDie == true)
+        {
+            ParticleSystem die = Instantiate(dieParticle, transform);
+            die.Play();
+        }
+    }
+
+    public void Die()
+    {
+        if (isDie == true)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public IEnumerator AtkCoolTime()
@@ -213,7 +234,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     public void Takedamage(float damage)
     {
-        curHp -= damage;
+        curHp -= Mathf.RoundToInt(damage);
         if (curHp <= 0)
         {
             isDie = true;

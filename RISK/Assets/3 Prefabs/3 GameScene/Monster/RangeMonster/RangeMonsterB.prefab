@@ -1967,6 +1967,37 @@ Transform:
   - {fileID: 5462614434988301877}
   m_Father: {fileID: 890697621858621101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6003188128464836024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6865204081557276062}
+  m_Layer: 6
+  m_Name: ShotPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6865204081557276062
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6003188128464836024}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.25, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5492732329704550571}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6050754074042188497
 GameObject:
   m_ObjectHideFlags: 0
@@ -2054,7 +2085,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 56e44ef90d28d514dbe7772930be9155, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -2597,7 +2628,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5492732329704550571
 Transform:
   m_ObjectHideFlags: 0
@@ -2613,6 +2644,7 @@ Transform:
   m_Children:
   - {fileID: 3506046264452460387}
   - {fileID: 150252215422829075}
+  - {fileID: 6865204081557276062}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &7421731633540156006
@@ -2677,16 +2709,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba51ad72c1573a408285a0f58218cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterType: 0
+  monsterType: 1
   target: {fileID: 0}
   model: {fileID: 6134794828554017606}
   animator: {fileID: 2482136319149795703}
-  monsterState: {fileID: 11400000, guid: 759aff86e13ba02409ee049caec3bbde, type: 2}
+  dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
+  monsterState: {fileID: 11400000, guid: 5de7aa03653524a4db36cc41c674e407, type: 2}
   atkDamage: 0
   moveSpeed: 0
   atkRange: 0
   atkDelay: 0
   curHp: 0
+  isDie: 0
   isAirborne: 0
   isAtk: 0
   isStun: 0
@@ -2707,8 +2741,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9752ebd4e938e864d8a43fdd47337188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 0}
-  shotPos: {fileID: 0}
+  bulletPrefab: {fileID: 4035082772637316073, guid: fdd665fd64df05f43834a00612af3337, type: 3}
+  shotPos: {fileID: 6865204081557276062}
 --- !u!1 &8327437602648755599
 GameObject:
   m_ObjectHideFlags: 0
