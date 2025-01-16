@@ -1,26 +1,27 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Playerstats
+public class PlayerStats
 {
     public event Action<float> OnHealthChanged;
     public event Action<int> OnLevelUp;
     public event Action<float> OnExpChanged;
 
-    [Header("´Ð³×ÀÓ")]
+    [Header("ë‹‰ë„¤ìž„")]
     public string nickName = null;
 
-    [Header("·¹º§")]
+    [Header("ë ˆë²¨")]
     public int level = 1;
     public int healthPerLevel = 10;
     public int attackPerLevel = 2;
     public float maxExp = 100f;
     public float _currentExp = 0f;
 
-    [Header("±âº» ½ºÅÝ")]
+    [Header("ê¸°ë³¸ ìŠ¤í…Ÿ")]
     public float maxHealth = 100;
     private float _currentHealth;
     public float attackPower = 10;
@@ -28,12 +29,12 @@ public class Playerstats
     [Range(0f, 1f)]
     public float damageReduction = 0.1f;
 
-    [Header("È¸º¹")]
+    [Header("íšŒë³µ")]
     public float healthRegen = 1f;
     public float regenInterval = 1f;
     private float regenTimer = 0f;
 
-    [Header("Ãß°¡ ½ºÅÝ")]
+    [Header("ì¶”ê°€ ìŠ¤í…Ÿ")]
     [Range(0f, 1f)]
     public float criticalChance = 0.05f;
     public float criticalDamage = 1.5f;
@@ -64,7 +65,7 @@ public class Playerstats
         }
     }
 
-    public Playerstats()
+    public PlayerStats()
     {
         InitializeStats();
     }
@@ -91,6 +92,7 @@ public class Playerstats
 
     public void UpadateHealthRegen(float deltaTime)
     {
+
         regenTimer += deltaTime;
         if (regenTimer >= regenInterval)
         {

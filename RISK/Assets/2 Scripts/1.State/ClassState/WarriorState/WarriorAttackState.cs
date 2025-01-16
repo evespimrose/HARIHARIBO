@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class WarriorAttackState : BaseState<Player>
 {
@@ -8,15 +9,14 @@ public class WarriorAttackState : BaseState<Player>
     private float attackTimer;
     private float comboWindow = 0.5f;
     private float comboTimer;
-    private float lastKeyPressTime;         
-    private int inputCount = 0;             
+    private float lastKeyPressTime;
+    private int inputCount = 0;
 
     public WarriorAttackState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
         attackTimer = attackDuration;
-
 
         if (Time.time - lastKeyPressTime > comboWindow)
         {
@@ -28,6 +28,8 @@ public class WarriorAttackState : BaseState<Player>
 
         int attackIndex = Mathf.Clamp(inputCount, 1, 3);
         player.Animator?.SetTrigger($"Attack{attackIndex}");
+
+        player.photonView.RPC("SyncAttackState", RpcTarget.Others, player.photonView.ViewID);
     }
 
     public override void Update(Player player)
@@ -58,6 +60,13 @@ public class WarriorAttackState : BaseState<Player>
         {
             inputCount = 0;
         }
-        
+    }
+
+    [PunRPC]
+    public void SyncAttackState(int playerId)
+    {
+        Player player = PhotonView.Find(playerId).GetComponent<Player>();
+        int attackIndex = Mathf.Clamp(inputCount, 1, 3);
+        player.Animator?.SetTrigger($"Attack{attackIndex}");
     }
 }

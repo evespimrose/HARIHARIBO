@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,11 +28,10 @@ public class StateHandler<T> where T : class
     }
 
     public void ChangeState(Type stateType)
-    {      
-
+    {
         if (!states.ContainsKey(stateType))
         {
-            Debug.LogError($"»óÅÂ {stateType.Name}°¡ µî·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogError($"?ê³¹ê¹­ {stateType.Name}???ê¹…ì¤‰?ì„? ?ë”†ë¸¯?ë“¬ë•²??");
             return;
         }
 
@@ -39,6 +39,11 @@ public class StateHandler<T> where T : class
         currentState?.Exit(owner);
         currentState = states[stateType];
         currentState.Enter(owner);
+
+        if (owner is Player player)
+        {
+            player.photonView.RPC("SyncStateChange", RpcTarget.Others, stateType.Name);
+        }
     }
 
     public void RevertToPreviousState()

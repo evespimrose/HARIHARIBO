@@ -1,42 +1,56 @@
+using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class UnitManager : SingletonManager<UnitManager>
 {
-    public static UnitManager Instance { get; private set; }
-
-    public List<GameObject> players = new List<GameObject>();
+    public Dictionary<int, GameObject> players = new Dictionary<int, GameObject>();
+    public GameObject LocalPlayer { get; private set; }
     public List<GameObject> monsters = new List<GameObject>();
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     public void RegisterPlayer(GameObject player)
     {
-        if (!players.Contains(player))
+        if (player.TryGetComponent(out PhotonView photonView))
         {
-            players.Add(player);
+            int actorNumber = photonView.Owner.ActorNumber;
+            print($"RegisterPlayer : {actorNumber}, {player.GetComponent<PhotonView>().IsMine}");
+            if (!players.ContainsKey(actorNumber))
+            {
+                players.Add(actorNumber, player);
+
+                if (player.GetComponent<PhotonView>().IsMine)
+                {
+                    print($"RegisterPlayer - RegisterLocalPlayer : {actorNumber}");
+                    LocalPlayer = player;
+                }
+            }
         }
+        else
+            print("GameObject don't has PhotonView!!");
     }
 
-    public void UnregisterPlayer(GameObject player)
+    public void UnregisterPlayer(int actorNumber)
     {
-        if (players.Contains(player))
+        if (players.ContainsKey(actorNumber))
         {
-            players.Remove(player);
+            if (players[actorNumber] == LocalPlayer)
+            {
+                LocalPlayer = null;
+            }
+            players.Remove(actorNumber);
         }
     }
 
-    // 추가적인 관리 기능을 여기에 구현
+    public bool HasPlayer(int actorNumber)
+    {
+        return players.ContainsKey(actorNumber);
+    }
+
+    public GameObject GetPlayer(int actorNumber)
+    {
+        return players.ContainsKey(actorNumber) ? players[actorNumber] : null;
+    }
 }

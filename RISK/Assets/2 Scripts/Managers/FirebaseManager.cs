@@ -7,9 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using Photon.Pun;
 using System.Linq;
-using static UnityEngine.GraphicsBuffer;
 
 public class FirebaseManager : SingletonManager<FirebaseManager>
 {
@@ -34,7 +32,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         else
         {
-            Debug.LogWarning($"���̾�̽� �ʱ�ȭ ���� : {status}");
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "DependencyStatus.UnAvailable.\n");
         }
 
     }
@@ -80,7 +78,17 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (FirebaseException e)
         {
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Auth Failed", "ID or PW is Wrong.\n" + e.Message);
+            PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Auth Failed", "ID or PW is Wrong.\n" + e.Message,
+                ok =>
+                {
+                    if (ok)
+                    {
+                        CopyToClipboard(e.Message);
+                    }
+                    else
+                        PanelManager.Instance.PopupClose();
+                }
+                );
         }
     }
 
@@ -95,8 +103,17 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (FirebaseException e)
         {
-            Debug.LogError($"Duplication Check Failed: {e.Message}");
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Failed to check duplication.\n" + e.Message);
+            PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Failed to check duplication.\n" + e.Message,
+                ok =>
+                {
+                    if (ok)
+                    {
+                        CopyToClipboard(e.Message);
+                    }
+                    else
+                        PanelManager.Instance.PopupClose();
+                }
+                );
             callback?.Invoke(false);
         }
     }
@@ -130,7 +147,17 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"Character Duplication Check Failed: {e.Message}");
+            PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Character Duplication Check Failed.\n" + e.Message,
+                ok =>
+                {
+                    if (ok)
+                    {
+                        CopyToClipboard(e.Message);
+                    }
+                    else
+                        PanelManager.Instance.PopupClose();
+                }
+                );
             callback?.Invoke(false);
         }
     }
@@ -152,8 +179,15 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"Character Creation Failed: {e.Message}");
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "character creation failed.\n" + e.Message);
+            PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "character creation failed.\n" + e.Message,
+               ok =>
+               {
+                   if (ok)
+                       CopyToClipboard(e.Message);
+                   else
+                       PanelManager.Instance.PopupClose();
+               }
+               );
         }
     }
 
@@ -178,8 +212,15 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"캐릭??���?로드 ?�패: {e.Message}");
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "���?�� 목록??불러?�는???�패?�습?�다.\n" + e.Message);
+            PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "LoadCharacterDataList failed.\n" + e.Message,
+                ok =>
+                {
+                    if (ok)
+                        CopyToClipboard(e.Message);
+                    else
+                        PanelManager.Instance.PopupClose();
+                }
+                );
         }
 
         return result;
@@ -212,8 +253,15 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             }
             catch (Exception e)
             {
-                Debug.LogError($"Character Upgrade Failed: {e.Message}");
-                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Character upgrade failed.\n" + e.Message);
+                PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Character upgrade failed.\n" + e.Message,
+               ok =>
+               {
+                   if (ok)
+                       CopyToClipboard(e.Message);
+                   else
+                       PanelManager.Instance.PopupClose();
+               }
+               );
             }
         }
     }
@@ -232,9 +280,21 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"Character Deletion Failed: {e.Message}");
-            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Character deletion failed.\n" + e.Message);
+            PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Character deletion failed.\n" + e.Message,
+              ok =>
+              {
+                  if (ok)
+                      CopyToClipboard(e.Message);
+                  else
+                      PanelManager.Instance.PopupClose();
+              }
+              );
+
         }
     }
 
+    public void CopyToClipboard(string textToCopy)
+    {
+        GUIUtility.systemCopyBuffer = textToCopy;
+    }
 }

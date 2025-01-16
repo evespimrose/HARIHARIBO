@@ -8,7 +8,7 @@ public class TestPlayer : MonoBehaviour, ITakedamage
     // Start is called before the first frame update
     void Start()
     {
-        UnitManager.Instance.players.Add(this.gameObject);
+        UnitManager.Instance.players.Add(0, this.gameObject);
     }
 
     // Update is called once per frame

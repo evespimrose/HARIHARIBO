@@ -6,7 +6,6 @@ using UnityEngine;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 
-
 public class PanelManager : MonoBehaviourPunCallbacks
 {
     public static PanelManager Instance;
@@ -93,11 +92,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public override void OnEnable()
     {
         base.OnEnable();
-    }
-
-    public override void OnConnected()
-    {
-        PanelOpen("Channel");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
