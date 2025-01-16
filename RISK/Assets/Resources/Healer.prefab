@@ -20789,7 +20789,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerESkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!135 &8637931621210447297
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -49287,6 +49288,7 @@ GameObject:
   - component: {fileID: 7663387445653369954}
   - component: {fileID: 4010414853434740814}
   - component: {fileID: -8328244261113844376}
+  - component: {fileID: 3385839744400906751}
   m_Layer: 7
   m_Name: Healer
   m_TagString: Untagged
@@ -49489,6 +49491,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2939762341057263714}
+  - {fileID: -8328244261113844376}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -49506,8 +49509,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsMoving
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack1
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack2
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack3
+  - Type: 9
+    SynchronizeType: 0
+    Name: WSkill
+  - Type: 9
+    SynchronizeType: 0
+    Name: ESkill
+  - Type: 9
+    SynchronizeType: 0
+    Name: RSkill
+  - Type: 9
+    SynchronizeType: 0
+    Name: TSkill
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
+--- !u!114 &3385839744400906751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6354180697800532788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &6388144496818696443
 GameObject:
   m_ObjectHideFlags: 0
@@ -56007,7 +56052,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerWSkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!135 &6197382340286119964
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -59181,7 +59227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerRSkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!135 &1956614651484434264
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -61585,7 +61632,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerTSkillAttack
-  damage: 0
+  damagePercent: 0
+  isBasicAttack: 0
 --- !u!135 &660730842317730909
 SphereCollider:
   m_ObjectHideFlags: 0

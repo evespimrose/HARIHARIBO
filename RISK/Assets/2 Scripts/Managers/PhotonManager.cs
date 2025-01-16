@@ -153,7 +153,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
             catch (JsonException e)
             {
-                Debug.LogWarning($"★★★★★★★Failed to parse party list JSON: {e.Message}");
+                Debug.LogWarning($"?끸쁾?끸쁾?끸쁾?꿅ailed to parse party list JSON: {e.Message}");
             }
         }
 
@@ -317,8 +317,10 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             if (propertiesThatChanged.ContainsKey(PARTY_LIST_KEY))
             {
                 string partyList = propertiesThatChanged[PARTY_LIST_KEY].ToString();
-
+                print(partyList);
+                partyRoomInfoList = JsonConvert.DeserializeObject<List<PartyInfo>>(partyList);
             }
+            LobbyUI.Instance.board.UpdatePartyList();
         }
     }
 
