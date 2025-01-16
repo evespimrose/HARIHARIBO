@@ -7628,7 +7628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2963d5f11e65d1458669a3ea573f87d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPosition: {fileID: 0}
 --- !u!4 &961574175
 Transform:
   m_ObjectHideFlags: 0
@@ -11104,10 +11103,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fbfba1dc60b7a44a8f60a9677c45e3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partyroomListContent: {fileID: 0}
-  partyroomListItemPrefab: {fileID: 0}
   roomInfoText: 
   playerInfoText: 
+  partyRoomInfoList: []
 --- !u!4 &1213233581
 Transform:
   m_ObjectHideFlags: 0

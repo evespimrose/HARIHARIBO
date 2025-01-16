@@ -18,6 +18,7 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
     {
         currentPartyInfo = newPartyInfo;
         PhotonManager.Instance.SetNewPartyInfo(currentPartyInfo);
+        JoinParty(PhotonNetwork.LocalPlayer);
     }
 
     public void JoinParty(PhotonRealtimePlayer player)

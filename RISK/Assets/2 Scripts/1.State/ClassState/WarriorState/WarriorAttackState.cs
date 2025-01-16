@@ -29,7 +29,7 @@ public class WarriorAttackState : BaseState<Player>
         int attackIndex = Mathf.Clamp(inputCount, 1, 3);
         player.Animator?.SetTrigger($"Attack{attackIndex}");
 
-        player.photonView.RPC("SyncAttackState", RpcTarget.Others, player.photonView.ViewID);
+        //player.photonView.RPC("SyncAttackState", RpcTarget.Others, player.photonView.ViewID);
     }
 
     public override void Update(Player player)

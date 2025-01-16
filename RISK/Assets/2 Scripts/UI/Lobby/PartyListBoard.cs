@@ -34,7 +34,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnCloseButtonClick()
     {
-
+        gameObject.SetActive(false);
     }
 
     private void Start()
@@ -54,7 +54,8 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
             foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
             {
                 GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
-                partyItem.GetComponentInChildren<TextMeshProUGUI>().text = party.name;
+                if (partyItem.TryGetComponent(out PartyInfoDisplay component))
+                    component.Initialize(party);
                 //Button joinButton = partyItem.GetComponentInChildren<Button>();
                 //joinButton.onClick.AddListener(() => PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer));
             }

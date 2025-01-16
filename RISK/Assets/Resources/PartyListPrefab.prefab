@@ -889,7 +889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPartyMember: {fileID: 7470364393020491470}
-  maxPartyMember: {fileID: 6642891260797836185}
+  maxPartyMember: {fileID: 628282167478141809}
   partyName: {fileID: 6581845019063828973}
   partyGoal: {fileID: 7941268821801583335}
   minPartyLevel: {fileID: 6117190180747887178}
