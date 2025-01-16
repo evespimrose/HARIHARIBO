@@ -5,56 +5,56 @@ using UnityEngine;
 
 public class BossMonster : MonoBehaviour, ITakedamage
 {
-    [Header("¸ó½ºÅÍ Å¸°Ù ¹× ¸ğµ¨")]
-    [Tooltip("°ø°İ´ë»ó")]
+    [Header("ëª¬ìŠ¤í„° íƒ€ê²Ÿ ë° ëª¨ë¸")]
+    [Tooltip("ê³µê²©ëŒ€ìƒ")]
     public Transform target;
     protected Collider col;
     private Rigidbody rb;
     public StateHandler<BossMonster> bMHandler;
 
-    [Tooltip("¸ğµ¨¸µ")]
+    [Tooltip("ëª¨ë¸ë§")]
     public GameObject model;
-    [Tooltip("¸ğµ¨¸µÀÇ ¾Ö´Ï¸ŞÀÌÅÍ")]
+    [Tooltip("ëª¨ë¸ë§ì˜ ì• ë‹ˆë©”ì´í„°")]
     public Animator animator;
-    [Header("½ºÅ³2 °ü·Ã")]
+    [Header("ìŠ¤í‚¬2 ê´€ë ¨")]
     public GameObject[] skillBParticle;
     public GameObject[] skillBFieldParticle;
-    [Header("½ºÅ³3 °ü·Ã")]
+    [Header("ìŠ¤í‚¬3 ê´€ë ¨")]
     public GameObject skillCPrefab;
-    [Header("½ºÅ³4 °ü·Ã")]
+    [Header("ìŠ¤í‚¬4 ê´€ë ¨")]
     public GameObject skillDPrefab;
-    [Header("½ºÅ³5 °ü·Ã")]
+    [Header("ìŠ¤í‚¬5 ê´€ë ¨")]
     public GameObject skillEPrefab;
-    [Header("½ºÅ³6 °ü·Ã")]
+    [Header("ìŠ¤í‚¬6 ê´€ë ¨")]
     public GameObject skillFPrefab;
-    [Header("½ºÅ³7 °ü·Ã")]
+    [Header("ìŠ¤í‚¬7 ê´€ë ¨")]
     public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;
-    public float skillFknockback = 50f; //skillF ³Ë¹é °Å¸®
-    public float skillFDamage = 10f; //skillF °ø°İ µ¥¹ÌÁö
-    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF Å¸°İÇÑ ´ë»ó¸®½ºÆ®
+    public float skillFknockback = 50f; //skillF ë„‰ë°± ê±°ë¦¬
+    public float skillFDamage = 10f; //skillF ê³µê²© ë°ë¯¸ì§€
+    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF íƒ€ê²©í•œ ëŒ€ìƒë¦¬ìŠ¤íŠ¸
 
-    [Header("¸ó½ºÅÍ ½ºÅİ")]
-    [Tooltip("À¯´Ö½ºÅİ")]
+    [Header("ëª¬ìŠ¤í„° ìŠ¤í…Ÿ")]
+    [Tooltip("ìœ ë‹›ìŠ¤í…Ÿ")]
     public MonsterScriptableObjects monsterState;
-    [Tooltip("°ø°İµ¥¹ÌÁö")]
+    [Tooltip("ê³µê²©ë°ë¯¸ì§€")]
     public float atkDamage;
-    [Tooltip("ÀÌµ¿¼Óµµ")]
+    [Tooltip("ì´ë™ì†ë„")]
     public float moveSpeed;
-    [Tooltip("°ø°İ¹üÀ§")]
+    [Tooltip("ê³µê²©ë²”ìœ„")]
     public float atkRange;
-    [Tooltip("°ø°İµô·¹ÀÌ")]
+    [Tooltip("ê³µê²©ë”œë ˆì´")]
     public float atkDelay;
-    [Tooltip("ÇöÀçÃ¼·Â")]
+    [Tooltip("í˜„ì¬ì²´ë ¥")]
     public float curHp;
-    [Tooltip("ÃÖ´ëÃ¼·Â")]
+    [Tooltip("ìµœëŒ€ì²´ë ¥")]
     protected float maxHp;
 
     protected bool isDie = false;
     public bool isAtk = false;
 
-    [Header("µğ¹öÇÁ »óÅÂÀÌ»ó Ã¼Å©")]
+    [Header("ë””ë²„í”„ ìƒíƒœì´ìƒ ì²´í¬")]
     public Debuff monsterDebuff;
     public bool isSlow = false;
     public bool isBleeding = false;
@@ -92,28 +92,28 @@ public class BossMonster : MonoBehaviour, ITakedamage
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Ãæµ¹ ¹ß»ı: " + other.gameObject.name);
+        Debug.Log("ì¶©ëŒ ë°œìƒ: " + other.gameObject.name);
 
         if (isMoving == false) return;
         if (other.gameObject.CompareTag("Wall")) isWall = true;
         else isWall = false;
 
-        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // Áßº¹ ¿ÀºêÁ§Æ® Ã¼Å©
+        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // ì¤‘ë³µ ì˜¤ë¸Œì íŠ¸ ì²´í¬
         {
-            Debug.Log("SkillF °ø°İ");
+            Debug.Log("SkillF ê³µê²©");
             other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
             hitTargets.Add(other.gameObject);
 
-            // ³Ë¹é Àû¿ë
+            // ë„‰ë°± ì ìš©
             Vector3 knockbackDir = transform.position - other.transform.position;
             knockbackDir.y = 0f;
 
-            // ³Ë¹é Èû Á¶Á¤
+            // ë„‰ë°± í˜ ì¡°ì •
             Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
-            float adjustedKnockback = skillFknockback * 4f;  // ³Ë¹é ¹èÀ²À» Å°¿ö¼­ ´õ °­ÇÏ°Ô Àû¿ë
+            float adjustedKnockback = skillFknockback * 4f;  // ë„‰ë°± ë°°ìœ¨ì„ í‚¤ì›Œì„œ ë” ê°•í•˜ê²Œ ì ìš©
             playerRb.AddForce(-knockbackDir.normalized * adjustedKnockback, ForceMode.Impulse);
 
-            Debug.Log("³Ë¹é ¹æÇâ: " + knockbackDir.normalized + " Èû: " + skillFknockback);
+            Debug.Log("ë„‰ë°± ë°©í–¥: " + knockbackDir.normalized + " í˜: " + skillFknockback);
         }
     }
 
@@ -147,11 +147,11 @@ public class BossMonster : MonoBehaviour, ITakedamage
     {
         bMHandler = new StateHandler<BossMonster>(this);
 
-        //»óÅÂµé µî·Ï
+        //ìƒíƒœë“¤ ë“±ë¡
         bMHandler.RegisterState(new BossMonsterIdle(bMHandler));
         bMHandler.RegisterState(new BossMonsterMove(bMHandler));
         bMHandler.RegisterState(new BossMonsterDie(bMHandler));
-        //°ø°İ »óÅÂÆĞÅÏ
+        //ê³µê²© ìƒíƒœíŒ¨í„´
         bMHandler.RegisterState(new BossMonsterAtk(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillA(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillB(bMHandler));
@@ -160,7 +160,7 @@ public class BossMonster : MonoBehaviour, ITakedamage
         bMHandler.RegisterState(new BossMonsterSkillE(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillF(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillG(bMHandler));
-        //ÃÊ±â »óÅÂ ¼³Á¤
+        //ì´ˆê¸° ìƒíƒœ ì„¤ì •
         bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
@@ -180,12 +180,12 @@ public class BossMonster : MonoBehaviour, ITakedamage
     {
         foreach (var tr in UnitManager.Instance.players)
         {
-            if (target == null) target = tr.transform;
+            if (target == null) target = tr.Value.transform;
             else if (target != null &&
                 (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.transform.position, transform.position)))
+                < Vector3.Distance(tr.Value.transform.position, transform.position)))
             {
-                target = tr.transform;
+                target = tr.Value.transform;
             }
         }
     }
@@ -236,9 +236,9 @@ public class BossMonster : MonoBehaviour, ITakedamage
 
     public IEnumerator AtkCoolTime()
     {
-        Debug.Log("°ø°İÄğÅ¸ÀÓ ½ÃÀÛ");
+        Debug.Log("ê³µê²©ì¿¨íƒ€ì„ ì‹œì‘");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("°ø°İÄğÅ¸ÀÓ Á¾·á");
+        Debug.Log("ê³µê²©ì¿¨íƒ€ì„ ì¢…ë£Œ");
         isAtk = false;
     }
 

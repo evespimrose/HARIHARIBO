@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
+public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 {
     [SerializeField] private bl_Joystick joystick;
     [SerializeField] private Animator animator;
@@ -15,10 +15,10 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     private Vector3 networkPosition;
     private Quaternion networkRotation;
 
-    private StateHandler<Player> stateHandler;
-    private bool isMobile;
-    private bool isSkillInProgress = false;
-    private PlayerStats stats;
+    protected StateHandler<Player> stateHandler;
+    protected bool isMobile;
+    protected bool isSkillInProgress = false;
+    protected PlayerStats stats;
 
     public Animator Animator => animator;
     public PlayerStats Stats => stats;
@@ -34,18 +34,10 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         SetPlatform();
         InitializeStats();
     }
-
-        private void InitializeStats()
-    {
-        if (stats == null)
-        {
-            stats = new PlayerStats();
-        }
-    }
-    public void InitializeStats(PlayerStats stats)
-    {
-        this.stats = stats;
-    }
+    //public void InitializeStats(PlayerStats stats)
+    //{
+    //    this.stats = stats;
+    //}
     private void InitializeComponents()
     {
         animator = GetComponent<Animator>();
@@ -91,8 +83,8 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
             if (ChatScrollController.Instance.isFocused()) return;
 
-            if (isSkillInProgress)
-                HandleInput();
+            //if (isSkillInProgress)
+            //    HandleInput();
 
             stateHandler.Update();
         }
@@ -102,34 +94,34 @@ public class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         }
     }
 
-    private void HandleInput()
-    {
+    //private void HandleInput()
+    //{
 
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            stateHandler.ChangeState(typeof(PlayerAttackState));
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            isSkillInProgress = true;
-            stateHandler.ChangeState(typeof(WSkillState));
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            isSkillInProgress = true;
-            stateHandler.ChangeState(typeof(ESkillState));
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            isSkillInProgress = true;
-            stateHandler.ChangeState(typeof(RSkillState));
-        }
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        stateHandler.ChangeState(typeof(PlayerAttackState));
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.W))
+    //    {
+    //        isSkillInProgress = true;
+    //        stateHandler.ChangeState(typeof(WSkillState));
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.E))
+    //    {
+    //        isSkillInProgress = true;
+    //        stateHandler.ChangeState(typeof(ESkillState));
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.R))
+    //    {
+    //        isSkillInProgress = true;
+    //        stateHandler.ChangeState(typeof(RSkillState));
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.P))
+    //    {
 
-        }
-    }
+    //    }
+    //}
 
     public void SetSkillInProgress(bool inProgress)
     {

@@ -4,39 +4,39 @@ using UnityEngine;
 
 public class Healer : Player
 {
-    [Header("Èú·¯ ½ºÅÈ ¼³Á¤")]
+    [Header("íëŸ¬ ìŠ¤íƒ¯ ì„¤ì •")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
     [SerializeField] private int baseAttackPerLevel = 3;
     [SerializeField] private float baseMoveSpeed = 1f;
 
-    [Header("¹æ¾î & È¸º¹")]
+    [Header("ë°©ì–´ & íšŒë³µ")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
     [SerializeField] private float baseHealthRegen = 2f;
     [SerializeField] private float baseRegenInterval = 1f;
 
-    [Header("Ãß°¡ ½ºÅÈ")]
+    [Header("ì¶”ê°€ ìŠ¤íƒ¯")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
-    [Header("ÀÌÆåÆ®")]
+    [Header("ì´í™íŠ¸")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
-    [Header("°ø°İ ÀÌÆåÆ®")]
+    [Header("ê³µê²© ì´í™íŠ¸")]
     [SerializeField] private GameObject ProjectilePrefab;
     [SerializeField] private Transform attackPoint;
 
-    [Header("°ø°İ ¼³Á¤")]
-    [SerializeField] private float normalSpeed = 3f; // ±âº» Åõ»çÃ¼ ¼Óµµ
-    [SerializeField] private float finalSpeed = 3f;  // ¸¶Áö¸· ÄŞº¸ Åõ»çÃ¼ ¼Óµµ
-    [SerializeField] private float finalScale = 2f;   // ¸¶Áö¸· ÄŞº¸ Åõ»çÃ¼ Å©±â
+    [Header("ê³µê²© ì„¤ì •")]
+    [SerializeField] private float normalSpeed = 3f; // ê¸°ë³¸ íˆ¬ì‚¬ì²´ ì†ë„
+    [SerializeField] private float finalSpeed = 3f;  // ë§ˆì§€ë§‰ ì½¤ë³´ íˆ¬ì‚¬ì²´ ì†ë„
+    [SerializeField] private float finalScale = 2f;   // ë§ˆì§€ë§‰ ì½¤ë³´ íˆ¬ì‚¬ì²´ í¬ê¸°
     [SerializeField] private float LifeTime = 5f;
 
     protected override void Awake()
     {
-        base.Awake();  
+        base.Awake();
 
         if (effectsHandler == null)
         {
@@ -50,7 +50,7 @@ public class Healer : Player
 
     protected override void InitializeStats()
     {
-        stats = new Playerstats();
+        stats = new PlayerStats();
 
         stats.maxHealth = baseMaxHealth;
         stats.healthPerLevel = baseHealthPerLevel;
@@ -133,7 +133,7 @@ public class Healer : Player
             var projectileMove = card.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection); // ÀÌµ¿ ¹æÇâ ¼³Á¤
+                projectileMove.Initialize(shootDirection); // ì´ë™ ë°©í–¥ ì„¤ì •
                 projectileMove.SetLifeTime(LifeTime);
 
                 switch (comboIndex)

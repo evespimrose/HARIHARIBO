@@ -11,17 +11,17 @@ public class PlayerStats
     public event Action<int> OnLevelUp;
     public event Action<float> OnExpChanged;
 
-    [Header("닉네임")]
+    [Header("nickname")]
     public string nickName = null;
 
-    [Header("레벨")]
+    [Header("level")]
     public int level = 1;
     public int healthPerLevel = 10;
     public int attackPerLevel = 2;
     public float maxExp = 100f;
     public float _currentExp = 0f;
 
-    [Header("기본 스텟")]
+    [Header("default")]
     public float maxHealth = 100;
     private float _currentHealth;
     public float attackPower = 10;
@@ -29,12 +29,12 @@ public class PlayerStats
     [Range(0f, 1f)]
     public float damageReduction = 0.1f;
 
-    [Header("회복")]
+    [Header("regen")]
     public float healthRegen = 1f;
     public float regenInterval = 1f;
     private float regenTimer = 0f;
 
-    [Header("추가 스텟")]
+    [Header("critical")]
     [Range(0f, 1f)]
     public float criticalChance = 0.05f;
     public float criticalDamage = 1.5f;

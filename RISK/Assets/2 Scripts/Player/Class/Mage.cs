@@ -4,46 +4,46 @@ using UnityEngine;
 
 public class Mage : Player
 {
-    [Header("¸¶¹ı»ç ½ºÅÈ ¼³Á¤")]
+    [Header("ë§ˆë²•ì‚¬ ìŠ¤íƒ¯ ì„¤ì •")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
     [SerializeField] private int baseAttackPerLevel = 3;
     [SerializeField] private float baseMoveSpeed = 1f;
 
-    [Header("¹æ¾î & È¸º¹")]
+    [Header("ë°©ì–´ & íšŒë³µ")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
     [SerializeField] private float baseHealthRegen = 2f;
     [SerializeField] private float baseRegenInterval = 1f;
 
-    [Header("Ãß°¡ ½ºÅÈ")]
+    [Header("ì¶”ê°€ ìŠ¤íƒ¯")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
-    [Header("ÀÌÆåÆ®")]
+    [Header("ì´í™íŠ¸")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
-    [Header("°ø°İ ÀÌÆåÆ®")]
+    [Header("ê³µê²© ì´í™íŠ¸")]
     [SerializeField] private GameObject ProjectilePrefab;
 
-    [Header("°ø°İ Æ÷ÀÎÆ®")]
+    [Header("ê³µê²© í¬ì¸íŠ¸")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform tSkillAttackPoint;
 
-    [Header("°ø°İ ¼³Á¤")]
-    [SerializeField] private float normalSpeed = 3f; // ±âº» Åõ»çÃ¼ ¼Óµµ
-    [SerializeField] private float finalSpeed = 3f;  // ¸¶Áö¸· ÄŞº¸ Åõ»çÃ¼ ¼Óµµ
+    [Header("ê³µê²© ì„¤ì •")]
+    [SerializeField] private float normalSpeed = 3f; // ê¸°ë³¸ íˆ¬ì‚¬ì²´ ì†ë„
+    [SerializeField] private float finalSpeed = 3f;  // ë§ˆì§€ë§‰ ì½¤ë³´ íˆ¬ì‚¬ì²´ ì†ë„
     [SerializeField] private float finalScale = 2f;
     [SerializeField] private float LifeTime = 5f;
 
-    [Header("W½ºÅ³ ¼³Á¤")]
+    [Header("WìŠ¤í‚¬ ì„¤ì •")]
     [SerializeField] private GameObject wSkillProjectilePrefab;
     [SerializeField] private float wSkillSpeed = 3f;
     [SerializeField] private float wSkillLifeTime = 3f;
     [SerializeField] private float wSkillScale = 2.5f;
 
-    [Header("T ½ºÅ³ ¼³Á¤")]
+    [Header("T ìŠ¤í‚¬ ì„¤ì •")]
     [SerializeField] private GameObject tSkillProjectilePrefab;
     [SerializeField] private float tSkillSpeed = 3f;
     [SerializeField] private float tSkillLifeTime = 3f;
@@ -54,7 +54,7 @@ public class Mage : Player
 
     protected override void Awake()
     {
-        base.Awake();  
+        base.Awake();
 
         if (effectsHandler == null)
         {
@@ -69,7 +69,7 @@ public class Mage : Player
 
     protected override void InitializeStats()
     {
-        stats = new Playerstats();
+        stats = new PlayerStats();
 
         stats.maxHealth = baseMaxHealth;
         stats.healthPerLevel = baseHealthPerLevel;
@@ -170,7 +170,7 @@ public class Mage : Player
             var projectileMove = Energyball.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection); // ÀÌµ¿ ¹æÇâ ¼³Á¤
+                projectileMove.Initialize(shootDirection); // ì´ë™ ë°©í–¥ ì„¤ì •
                 projectileMove.SetLifeTime(LifeTime);
 
                 switch (comboIndex)

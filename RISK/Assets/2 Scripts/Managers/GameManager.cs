@@ -78,7 +78,7 @@ public class GameManager : SingletonManager<GameManager>
 
         if (playerObj.TryGetComponent(out Player player))
         {
-            player.InitializeStats(playerStats);
+            //player.InitializeStats(playerStats);
         }
 
     }

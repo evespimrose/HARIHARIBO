@@ -6,40 +6,40 @@ using static NormalMonster;
 
 public class EliteMonster : MonoBehaviour, ITakedamage
 {
-    [Header("¸ó½ºÅÍ Å¸°Ù ¹× ¸ğµ¨")]
-    [Tooltip("°ø°İ´ë»ó")]
+    [Header("ëª¬ìŠ¤í„° íƒ€ê²Ÿ ë° ëª¨ë¸")]
+    [Tooltip("ê³µê²©ëŒ€ìƒ")]
     public Transform target;
     protected Collider col;
     protected Rigidbody rb;
     public StateHandler<EliteMonster> eMHandler;
 
-    [Tooltip("¸ğµ¨¸µ")]
+    [Tooltip("ëª¨ë¸ë§")]
     public GameObject model;
-    [Tooltip("¸ğµ¨¸µÀÇ ¾Ö´Ï¸ŞÀÌÅÍ")]
-    public Animator animator; 
-    [Tooltip("»ç¸Á½Ã ÆÄÆ¼Å¬")]
+    [Tooltip("ëª¨ë¸ë§ì˜ ì• ë‹ˆë©”ì´í„°")]
+    public Animator animator;
+    [Tooltip("ì‚¬ë§ì‹œ íŒŒí‹°í´")]
     public ParticleSystem dieParticle;
 
-    [Header("¸ó½ºÅÍ ½ºÅİ")]
-    [Tooltip("À¯´Ö½ºÅİ")]
+    [Header("ëª¬ìŠ¤í„° ìŠ¤í…Ÿ")]
+    [Tooltip("ìœ ë‹›ìŠ¤í…Ÿ")]
     public MonsterScriptableObjects monsterState;
-    [Tooltip("°ø°İµ¥¹ÌÁö")]
+    [Tooltip("ê³µê²©ë°ë¯¸ì§€")]
     public float atkDamage;
-    [Tooltip("ÀÌµ¿¼Óµµ")]
+    [Tooltip("ì´ë™ì†ë„")]
     public float moveSpeed;
-    [Tooltip("°ø°İ¹üÀ§")]
+    [Tooltip("ê³µê²©ë²”ìœ„")]
     public float atkRange;
-    [Tooltip("°ø°İµô·¹ÀÌ")]
+    [Tooltip("ê³µê²©ë”œë ˆì´")]
     public float atkDelay;
-    [Tooltip("ÇöÀçÃ¼·Â")]
+    [Tooltip("í˜„ì¬ì²´ë ¥")]
     public float curHp;
-    [Tooltip("ÃÖ´ëÃ¼·Â")]
+    [Tooltip("ìµœëŒ€ì²´ë ¥")]
     protected float maxHp;
 
     protected bool isDie = false;
     public bool isAtk = false;
 
-    [Header("µğ¹öÇÁ »óÅÂÀÌ»ó Ã¼Å©")]
+    [Header("ë””ë²„í”„ ìƒíƒœì´ìƒ ì²´í¬")]
     public Debuff monsterDebuff;
     public bool isSlow = false;
     public bool isBleeding = false;
@@ -53,7 +53,7 @@ public class EliteMonster : MonoBehaviour, ITakedamage
 
     void Update()
     {
-        
+
     }
 
     private void InitializeComponents()
@@ -73,15 +73,15 @@ public class EliteMonster : MonoBehaviour, ITakedamage
     {
         eMHandler = new StateHandler<EliteMonster>(this);
 
-        // »óÅÂµé µî·Ï
+        // ìƒíƒœë“¤ ë“±ë¡
         eMHandler.RegisterState(new EliteMonsterIdle(eMHandler));
         eMHandler.RegisterState(new EliteMonsterMove(eMHandler));
-        //°ø°İ »óÅÂÆĞÅÏ
+        //ê³µê²© ìƒíƒœíŒ¨í„´
         //nMHandler.RegisterState(new NormalMonsterHit(nMHandler));
         //nMHandler.RegisterState(new NormalMonsterStun(nMHandler));
         //nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
         //nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
-        //// ÃÊ±â »óÅÂ ¼³Á¤
+        //// ì´ˆê¸° ìƒíƒœ ì„¤ì •
         eMHandler.ChangeState(typeof(EliteMonsterIdle));
     }
 
@@ -89,12 +89,12 @@ public class EliteMonster : MonoBehaviour, ITakedamage
     {
         foreach (var tr in UnitManager.Instance.players)
         {
-            if (target == null) target = tr.transform;
+            if (target == null) target = tr.Value.transform;
             else if (target != null &&
                 (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.transform.position, transform.position)))
+                < Vector3.Distance(tr.Value.transform.position, transform.position)))
             {
-                target = tr.transform;
+                target = tr.Value.transform;
             }
         }
     }
@@ -126,9 +126,9 @@ public class EliteMonster : MonoBehaviour, ITakedamage
 
     public IEnumerator AtkCoolTime()
     {
-        Debug.Log("°ø°İÄğÅ¸ÀÓ ½ÃÀÛ");
+        Debug.Log("ê³µê²©ì¿¨íƒ€ì„ ì‹œì‘");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("°ø°İÄğÅ¸ÀÓ Á¾·á");
+        Debug.Log("ê³µê²©ì¿¨íƒ€ì„ ì¢…ë£Œ");
         isAtk = false;
     }
 

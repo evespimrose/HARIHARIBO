@@ -4,31 +4,31 @@ using UnityEngine;
 
 public class Destroyer : Player
 {
-    [Header("µğ½ºÆ®·ÎÀÌ¾î ½ºÅÈ ¼³Á¤")]
+    [Header("ë””ìŠ¤íŠ¸ë¡œì´ì–´ ìŠ¤íƒ¯ ì„¤ì •")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
     [SerializeField] private int baseAttackPerLevel = 3;
     [SerializeField] private float baseMoveSpeed = 1f;
 
-    [Header("¹æ¾î & È¸º¹")]
+    [Header("ë°©ì–´ & íšŒë³µ")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
     [SerializeField] private float baseHealthRegen = 2f;
     [SerializeField] private float baseRegenInterval = 1f;
 
-    [Header("Ãß°¡ ½ºÅÈ")]
+    [Header("ì¶”ê°€ ìŠ¤íƒ¯")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
-    [Header("ÀÌÆåÆ®")]
+    [Header("ì´í™íŠ¸")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
     protected override void Awake()
     {
-        base.Awake();  // ºÎ¸ğ Å¬·¡½ºÀÇ ÃÊ±âÈ­ ¸ÕÀú ½ÇÇà
+        base.Awake();  // ë¶€ëª¨ í´ë˜ìŠ¤ì˜ ì´ˆê¸°í™” ë¨¼ì € ì‹¤í–‰
 
-        // ÀÌÆåÆ® ÇÚµé·¯ ÃÊ±âÈ­
+        // ì´í™íŠ¸ í•¸ë“¤ëŸ¬ ì´ˆê¸°í™”
         if (effectsHandler == null)
         {
             effectsHandler = GetComponent<AnimationEventEffects>();
@@ -41,7 +41,7 @@ public class Destroyer : Player
 
     protected override void InitializeStats()
     {
-        stats = new Playerstats();
+        stats = new PlayerStats();
 
         stats.maxHealth = baseMaxHealth;
         stats.healthPerLevel = baseHealthPerLevel;
