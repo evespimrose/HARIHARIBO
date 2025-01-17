@@ -25,7 +25,7 @@ public class HealerRSkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(2); // R 스킬 이펙트
+                effectHandler.PlayEffect(2); // R ?ㅽ궗 ?댄럺??
             }
             effectPlayed = true;
         }

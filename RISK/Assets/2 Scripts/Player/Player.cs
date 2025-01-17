@@ -46,22 +46,10 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         string json = JsonUtility.ToJson(customType);
         return System.Text.Encoding.UTF8.GetBytes(json);
     }
-
-    private static object DeserializeDestroyer(byte[] data)
-    {
-        string json = System.Text.Encoding.UTF8.GetString(data);
-        return JsonUtility.FromJson<Destroyer>(json);
-    }
     private static byte[] SerializeHealer(object customType)
     {
         string json = JsonUtility.ToJson(customType);
         return System.Text.Encoding.UTF8.GetBytes(json);
-    }
-
-    private static object DeserializeHealer(byte[] data)
-    {
-        string json = System.Text.Encoding.UTF8.GetString(data);
-        return JsonUtility.FromJson<Destroyer>(json);
     }
 
     private static byte[] SerializeMage(object customType)
@@ -70,23 +58,36 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         return System.Text.Encoding.UTF8.GetBytes(json);
     }
 
-    private static object DeserializeMage(byte[] data)
-    {
-        string json = System.Text.Encoding.UTF8.GetString(data);
-        return JsonUtility.FromJson<Destroyer>(json);
-    }
-
     private static byte[] SerializeWarrior(object customType)
     {
         string json = JsonUtility.ToJson(customType);
         return System.Text.Encoding.UTF8.GetBytes(json);
     }
 
-    private static object DeserializeWarrior(byte[] data)
+    private static object DeserializeDestroyer(byte[] data)
     {
         string json = System.Text.Encoding.UTF8.GetString(data);
         return JsonUtility.FromJson<Destroyer>(json);
     }
+
+    private static object DeserializeWarrior(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Warrior>(json);
+    }
+
+    private static object DeserializeHealer(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Healer>(json);
+    }
+
+    private static object DeserializeMage(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Mage>(json);
+    }
+
 
 
     //public void InitializeStats(PlayerStats stats)

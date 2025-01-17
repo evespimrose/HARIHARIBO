@@ -6,12 +6,13 @@ using UnityEngine;
 public class DestroyerAttackState : BaseState<Player>
 {
 
-    private float[] attackDurations = new float[] { 1.1f, 1.3f, 1.4f, 2f };  // 예시 시간
+    private float[] attackDurations = new float[] { 1.1f, 1.3f, 1.4f, 2f };  // ?덉떆 ?쒓컙
     private float attackTimer;
     private float comboWindow = 0.8f;
     private float lastKeyPressTime;
     private static int inputCount = 0;
     private bool canReceiveInput = true;
+    private bool hasNextInput;
 
     public DestroyerAttackState(StateHandler<Player> handler) : base(handler) { }
 
@@ -25,14 +26,14 @@ public class DestroyerAttackState : BaseState<Player>
 
         inputCount = Mathf.Min(inputCount + 1, 4);
 
-        // 현재 콤보 단계에 맞는 지속시간 설정
+        // ?꾩옱 肄ㅻ낫 ?④퀎??留욌뒗 吏?띿떆媛??ㅼ젙
         attackTimer = attackDurations[inputCount - 1];
         hasNextInput = false;
 
         Debug.Log($"Attack {inputCount} Duration: {attackTimer}");
         player.Animator?.SetTrigger($"Attack{inputCount}");
 
-        player.photonView?.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
+        //player.photonView?.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
 
         lastKeyPressTime = Time.time;
         canReceiveInput = true;
@@ -94,11 +95,11 @@ public class DestroyerAttackState : BaseState<Player>
         }
     }
 
-    [PunRPC]
-    public void SyncAttackState(Player player, int attackIndex)
-    {
-        player.Animator?.SetTrigger($"Attack{attackIndex}");
-    }
+    //[PunRPC]
+    //public void SyncAttackState(Player player, int attackIndex)
+    //{
+    //    player.Animator?.SetTrigger($"Attack{attackIndex}");
+    //}
 }
 
 

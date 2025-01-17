@@ -27,7 +27,7 @@ public class WarriorESkill : BaseState<Player>
             var effectHandler = player.GetComponent<AnimationEventEffects>();
             if (effectHandler != null)
             {
-                effectHandler.PlayEffect(1); // E ?ㅽ궗 ?댄럺??
+                effectHandler.PlayEffect(1); // E ???꾪뀬 ??袁⑥쓢??
             }
             effectPlayed = true;
         }
@@ -56,11 +56,5 @@ public class WarriorESkill : BaseState<Player>
     public override void Exit(Player player)
     {
         player.SetSkillInProgress(false);
-    }
-
-    [PunRPC]
-    public void SyncAttackState(Player player)
-    {
-        player.Animator?.SetTrigger($"ESkill");
     }
 }
