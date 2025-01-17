@@ -64,6 +64,11 @@ public class LobbyUI : MonoBehaviour
                     }
                 );
         }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            PanelOpen("CharacterUpgrade");
+        }
     }
 
     public void PanelOpen(string panelName)
