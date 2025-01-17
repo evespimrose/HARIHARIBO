@@ -60,13 +60,14 @@ public class GameManager : SingletonManager<GameManager>
 
         //yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
         Vector3 spawnPosition = Vector3.zero;
+        PhotonNetwork.LocalPlayer.NickName = playerStats.nickName;
 
         switch (FirebaseManager.Instance.currentCharacterData.classType)
         {
             case ClassType.Warrior:
                 {
                     GameObject warriorObj = PhotonNetwork.Instantiate("Warrior", spawnPosition, Quaternion.identity);
-                    warriorObj.name = $"Warrior {playerStats.nickName}";
+                    warriorObj.name = playerStats.nickName;
 
                     if (warriorObj.TryGetComponent(out Warrior warrior))
                     {
@@ -77,7 +78,7 @@ public class GameManager : SingletonManager<GameManager>
             case ClassType.Destroyer:
                 {
                     GameObject destroyerObj = PhotonNetwork.Instantiate("Destroyer", spawnPosition, Quaternion.identity);
-                    destroyerObj.name = $"Destroyer {playerStats.nickName}";
+                    destroyerObj.name = playerStats.nickName;
 
                     if (destroyerObj.TryGetComponent(out Destroyer destroyer))
                     {
@@ -88,7 +89,7 @@ public class GameManager : SingletonManager<GameManager>
             case ClassType.Healer:
                 {
                     GameObject healerObj = PhotonNetwork.Instantiate("Healer", spawnPosition, Quaternion.identity);
-                    healerObj.name = $"Healer {playerStats.nickName}";
+                    healerObj.name = playerStats.nickName;
 
                     if (healerObj.TryGetComponent(out Healer healer))
                     {
@@ -99,7 +100,7 @@ public class GameManager : SingletonManager<GameManager>
             case ClassType.Mage:
                 {
                     GameObject mageObj = PhotonNetwork.Instantiate("Mage", spawnPosition, Quaternion.identity);
-                    mageObj.name = $"Mage {playerStats.nickName}";
+                    mageObj.name = playerStats.nickName;
 
                     if (mageObj.TryGetComponent(out Mage mage))
                     {
