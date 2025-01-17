@@ -27,6 +27,14 @@ public class SkillDamageInfo : MonoBehaviour
             damageCollider.isTrigger = true;  // 트리거로 설정
             damageCollider.enabled = false;    // 시작시 비활성화
         }
+        if (ownerPlayer == null)
+        {
+            ownerPlayer = GetComponentInParent<Player>();
+            if (ownerPlayer != null)
+            {
+                Debug.Log($"[{skillName}] Player를 부모에서 찾음: {ownerPlayer.name}");
+            }
+        }
 
     }
 
