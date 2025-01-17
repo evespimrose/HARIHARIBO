@@ -66,7 +66,7 @@ public class LobbyUI : MonoBehaviour
 
     public void PanelOpen(string panelName)
     {
-        if (openPanel == panelName) return;
+        //if (openPanel == panelName) return;
 
         if (openPanel != null && panelDic.TryGetValue(openPanel, out var previousPanel))
         {
