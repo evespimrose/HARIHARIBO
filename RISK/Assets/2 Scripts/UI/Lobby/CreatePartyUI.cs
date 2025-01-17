@@ -93,7 +93,9 @@ public class CreatePartyUI : MonoBehaviour
                 currentMemberCount = 1,
                 currentMemberActorNumber = new int[] { PhotonNetwork.LocalPlayer.ActorNumber },
                 currentLeaderActorNumber = PhotonNetwork.LocalPlayer.ActorNumber,
-                goal = goal
+                goal = goal,
+                minPartyLevel = minLevel,
+                maxPartyLevel = maxLevel
             };
 
             PartyManager.Instance.CreateParty(newPartyInfo);

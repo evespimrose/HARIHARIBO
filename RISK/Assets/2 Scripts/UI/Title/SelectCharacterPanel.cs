@@ -139,13 +139,25 @@ public class SelectCharacterPanel : MonoBehaviour
 
         PlayerStats playerStats = new PlayerStats
         {
-            nickName = FirebaseManager.Instance.currentCharacterData.nickName,
-            level = FirebaseManager.Instance.currentCharacterData.level,
-            maxHealth = 200f,
-            currentHealth = 200f,
-            moveSpeed = 2f
+            nickName = currentCharacterData.nickName,
+            level = currentCharacterData.level,
+            maxExp = currentCharacterData.maxExp,
+            currentExp = currentCharacterData.currExp,
+            maxHealth = currentCharacterData.maxHp,
+            currentHealth = currentCharacterData.maxHp,
+            moveSpeed = currentCharacterData.moveSpeed,
+            attackPower = currentCharacterData.atk,
+            damageReduction = currentCharacterData.dmgRed,
+            healthRegen = currentCharacterData.hpReg,
+            regenInterval = currentCharacterData.regInt,
+            criticalChance = currentCharacterData.cri,
+            criticalDamage = currentCharacterData.criDmg,
+            cooldownReduction = currentCharacterData.coolRed,
+            healthPerLevel = currentCharacterData.hPperLv,
+            attackPerLevel = currentCharacterData.atkperLv,
         };
 
         GameManager.Instance.StartCoroutine(GameManager.Instance.InstantiatePlayer(playerStats));
     }
+
 }

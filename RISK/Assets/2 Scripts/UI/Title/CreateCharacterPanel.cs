@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -134,18 +135,79 @@ public class FireBaseCharacterData
     public string nickName = null;
     public ClassType classType;
     public int level;
-    public int exp;
+    public int hPperLv;
+    public int atkperLv;
+    public float maxExp;
+    public float currExp;
     public float maxHp;
-    public int moveSpeed;
+    public float moveSpeed;
+    public float atk;
+    public float dmgRed;
+    public float hpReg;
+    public float regInt;
+    public float cri;
+    public float criDmg;
+    public float coolRed;
+
 
     public FireBaseCharacterData() { }
     public FireBaseCharacterData(string nickName, ClassType classType)
     {
         this.classType = classType;
         this.nickName = nickName;
+        switch (classType)
+        {
+            case ClassType.Warrior:
+                {
+                    hPperLv = 0;
+                    atkperLv = 0;
+                    moveSpeed = 0;
+                    atk = 10f;
+                    dmgRed = 0;
+                    hpReg = 0;
+                    regInt = 0;
+                    break;
+                }
+            case ClassType.Destroyer:
+                {
+                    hPperLv = 0;
+                    atkperLv = 0;
+                    moveSpeed = 0;
+                    atk = 10f;
+                    dmgRed = 0;
+                    hpReg = 0;
+                    regInt = 0;
+                    break;
+                }
+            case ClassType.Healer:
+                {
+                    hPperLv = 0;
+                    atkperLv = 0;
+                    moveSpeed = 0;
+                    atk = 10f;
+                    dmgRed = 0;
+                    hpReg = 0;
+                    regInt = 0;
+                    break;
+                }
+            case ClassType.Mage:
+                {
+                    hPperLv = 0;
+                    atkperLv = 0;
+                    moveSpeed = 0;
+                    atk = 10f;
+                    dmgRed = 0;
+                    hpReg = 0;
+                    regInt = 0;
+                    break;
+                }
+        }
         level = 1;
-        exp = 0;
+        maxExp = 100f;
+        currExp = 0f;
         maxHp = 0f;
-        moveSpeed = 0;
+        cri = 0f;
+        criDmg = 0f;
+        coolRed = 0f;
     }
 }
