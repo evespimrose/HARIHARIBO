@@ -46,7 +46,7 @@ public class WarriorAttackState : BaseState<Player>
             {
                 if (Time.time - lastKeyPressTime <= comboWindow && inputCount < 3)
                 {
-                    handler.ChangeState(typeof(WarriorAttackState));
+                    handler.ChangeState(typeof(DestroyerAttackState));
                     return;
                 }
             }

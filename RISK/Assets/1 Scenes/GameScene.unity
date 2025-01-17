@@ -1718,6 +1718,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831960920}
   m_CullTransparentMesh: 1
+--- !u!1 &839785928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 839785929}
+  - component: {fileID: 839785930}
+  m_Layer: 5
+  m_Name: UIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &839785929
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839785928}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 934838279}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &839785930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839785928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e4e68c258f41d40a3aaafac1f6d33a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  riskCardPrefab: {fileID: 4410840156325137377, guid: f707cbe253ffad84e93d9154b09d312d, type: 3}
+  playerSlotPrefab: {fileID: 1836092375571409371, guid: f35d4e2e3a58daf42a55cd9abf7abd2f, type: 3}
+  waveInfoText: {fileID: 916156462}
+  goldText: {fileID: 568531276}
+  riskListText: {fileID: 280283126}
+  selectTimeText: {fileID: 776106792}
+  cardContainer: {fileID: 1232810796}
+  playerContainer: {fileID: 749168427}
+  surrenderButton: {fileID: 622552418}
+  voteCountText: {fileID: 659918386}
 --- !u!1 &916156460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,6 +2004,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 839785929}
   - {fileID: 1551094305}
   - {fileID: 1232810796}
   - {fileID: 1464016009}
