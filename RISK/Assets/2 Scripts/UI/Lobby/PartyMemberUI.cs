@@ -25,6 +25,7 @@ public class PartyMemberUI : MonoBehaviour
     private void OnQuitButtonClick()
     {
         PartyManager.Instance.LeaveParty(PhotonNetwork.LocalPlayer);
+        LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Party Quit", "SuccessFully Left Party.", () => { OnCloseButtonClick(); LobbyUI.Instance.PopupClose(); });
     }
 
     private void OnCloseButtonClick()
