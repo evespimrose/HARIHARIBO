@@ -34,6 +34,10 @@ public class Healer : Player
     [SerializeField] private float finalScale = 2f;   // 마지막 콤보 투사체 크기
     [SerializeField] private float LifeTime = 5f;
 
+    [Header("기본 공격 데미지 계수")]
+    [SerializeField] private float normalAttackDamagePercent = 100f;
+    [SerializeField] private float finalAttackDamagePercent = 150f;
+
     protected override void Awake()
     {
         base.Awake();
@@ -130,10 +134,24 @@ public class Healer : Player
                                      attackPoint.position,
                                      Quaternion.identity);
 
+            var skillDamage = card.GetComponent<SkillDamageInfo>();
+            if (skillDamage != null)
+            {
+                skillDamage.skillName = "HealerProjectile";
+                if (comboIndex == 3)
+                {
+                    skillDamage.damagePercent = finalAttackDamagePercent;  // 마지막 콤보는 더 높은 데미지
+                }
+                else
+                {
+                    skillDamage.damagePercent = normalAttackDamagePercent;  // 기본 데미지
+                }
+            }
+
             var projectileMove = card.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection); // 이동 방향 설정
+                projectileMove.Initialize(shootDirection, this); // 이동 방향 설정
                 projectileMove.SetLifeTime(LifeTime);
 
                 switch (comboIndex)

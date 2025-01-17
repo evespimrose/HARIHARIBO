@@ -161,7 +161,7 @@ public class FireBaseCharacterData
                 {
                     hPperLv = 0;
                     atkperLv = 0;
-                    moveSpeed = 0;
+                    moveSpeed = 2f;
                     atk = 10f;
                     dmgRed = 0;
                     hpReg = 0;
@@ -172,7 +172,7 @@ public class FireBaseCharacterData
                 {
                     hPperLv = 0;
                     atkperLv = 0;
-                    moveSpeed = 0;
+                    moveSpeed = 2f;
                     atk = 10f;
                     dmgRed = 0;
                     hpReg = 0;
@@ -183,7 +183,7 @@ public class FireBaseCharacterData
                 {
                     hPperLv = 0;
                     atkperLv = 0;
-                    moveSpeed = 0;
+                    moveSpeed = 2f;
                     atk = 10f;
                     dmgRed = 0;
                     hpReg = 0;
@@ -194,7 +194,7 @@ public class FireBaseCharacterData
                 {
                     hPperLv = 0;
                     atkperLv = 0;
-                    moveSpeed = 0;
+                    moveSpeed = 2f;
                     atk = 10f;
                     dmgRed = 0;
                     hpReg = 0;

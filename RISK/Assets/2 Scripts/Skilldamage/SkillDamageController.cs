@@ -24,14 +24,6 @@ public class SkillDamageController : MonoBehaviour
             }
         }
     }
-    public float GetSkillDamage(string skillName)
-    {
-        if (skillDamageMap.TryGetValue(skillName, out SkillDamageInfo info))
-        {
-            return info.GetDamage();
-        }
-        return 0f;
-    }
     public void EnableDamage(string skillName)
     {
         if (skillDamageMap.TryGetValue(skillName, out SkillDamageInfo info))
