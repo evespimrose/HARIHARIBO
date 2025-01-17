@@ -13,6 +13,7 @@ public class LobbyUI : MonoBehaviour
     public PartyListBoard board;
     public CreatePartyUI createPartyInUI;
     public PartyMemberUI partyMemberUI;
+    public CharacterUpgradeUI characterUpgradeUI;
 
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
@@ -27,6 +28,7 @@ public class LobbyUI : MonoBehaviour
             { "PartyListBoard", board.gameObject },
             { "CreateParty", createPartyInUI.gameObject },
             { "PartyMember", partyMemberUI.gameObject },
+            { "CharacterUpgrade" , characterUpgradeUI.gameObject }
         };
 
         popupDic = new Dictionary<string, GameObject>()
@@ -40,7 +42,7 @@ public class LobbyUI : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (openPopups.Count > 0)
                 PopupClose();
@@ -48,11 +50,11 @@ public class LobbyUI : MonoBehaviour
                 if (panelDic.TryGetValue(openPanel, out var previousPanel))
                     previousPanel.SetActive(false);
         }
-        if (Input.GetKeyUp(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             PanelOpen("PartyListBoard");
         }
-        if (Input.GetKeyUp(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L))
         {
             if (PartyManager.Instance.isInParty && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
                 PopupOpen<TwoButtonPopupPanel>().SetPopup("Dungeon Enter", $"Sure to Enter the Dungeon? Level : {PartyManager.Instance.currentPartyInfo?.goal}",
@@ -82,6 +84,16 @@ public class LobbyUI : MonoBehaviour
         {
             Debug.LogWarning($"Panel '{panelName}' not found in panelDic.");
         }
+    }
+
+    public void PanelClose()
+    {
+        if (openPanel != null && panelDic.TryGetValue(openPanel, out var previousPanel))
+        {
+            previousPanel.SetActive(false);
+        }
+
+        openPanel = null;
     }
 
     public T PopupOpen<T>() where T : UIPopup
