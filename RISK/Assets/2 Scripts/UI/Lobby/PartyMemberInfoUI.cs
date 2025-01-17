@@ -11,8 +11,6 @@ public class PartyMemberInfoUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerNameText;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI classText;
-    [SerializeField] private Slider healthSlider;
-    [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private Image partyLeaderIcon;
 
     private PhotonRealtimePlayer player;
@@ -22,7 +20,7 @@ public class PartyMemberInfoUI : MonoBehaviour
     {
         player = partyMember;
         UpdateUI();
-        
+
         partyLeaderIcon.gameObject.SetActive(PartyManager.Instance.IsPartyLeader(player));
     }
 
@@ -34,12 +32,8 @@ public class PartyMemberInfoUI : MonoBehaviour
         if (playerStats != null)
         {
             playerNameText.text = playerStats.nickName;
-            levelText.text = $"Lv.{playerStats.level}";
+            levelText.text = playerStats.level.ToString();
             classText.text = PartyManager.Instance.GetPartyMemberClass(player);
-            
-            healthSlider.maxValue = playerStats.maxHealth;
-            healthSlider.value = playerStats.currentHealth;
-            healthText.text = $"{Mathf.Round(playerStats.currentHealth)}/{playerStats.maxHealth}";
         }
     }
 
@@ -47,4 +41,4 @@ public class PartyMemberInfoUI : MonoBehaviour
     {
         UpdateUI();
     }
-} 
+}
