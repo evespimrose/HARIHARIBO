@@ -49,6 +49,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     private void Start()
     {
+
     }
 
     public override void OnConnectedToMaster()
@@ -154,7 +155,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
             catch (JsonException e)
             {
-                Debug.LogWarning($"?끸쁾?끸쁾?끸쁾?꿅ailed to parse party list JSON: {e.Message}");
+                Debug.LogWarning($"??몄겲??몄겲??몄겲?轅꿢iled to parse party list JSON: {e.Message}");
             }
         }
 
@@ -320,7 +321,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
                 string partyList = propertiesThatChanged[PARTY_LIST_KEY].ToString();
                 print(partyList);
                 partyRoomInfoList = JsonConvert.DeserializeObject<List<PartyInfo>>(partyList);
-                
+
                 if (PartyManager.Instance.currentPartyInfo != null)
                 {
                     var updatedPartyInfo = partyRoomInfoList.FirstOrDefault(p => p.partyId == PartyManager.Instance.currentPartyInfo.partyId);
@@ -329,7 +330,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
                         PartyManager.Instance.UpdateInfo(updatedPartyInfo);
                     }
                 }
-                
+
                 LobbyUI.Instance.board.UpdatePartyList();
             }
         }

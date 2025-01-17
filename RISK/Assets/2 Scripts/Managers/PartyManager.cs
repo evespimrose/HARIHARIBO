@@ -14,6 +14,8 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
     public PartyInfo currentPartyInfo;
 
+    public bool isInParty = false;
+
     public void CreateParty(PartyInfo newPartyInfo)
     {
         currentPartyInfo = newPartyInfo;
@@ -28,6 +30,7 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
             if (partyMembers.Count == 0)
                 SetPartyLeader(player);
             partyMembers.Add(player);
+            isInParty = true;
             currentPartyInfo.currentMemberCount = partyMembers.Count;
             UpdatePartyInfo();
             Debug.Log($"{player.NickName} joined the party!");
@@ -43,6 +46,8 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
             if (partyMembers.Count == 0)
                 SetPartyLeader(player);
             partyMembers.Add(player);
+            isInParty = true;
+
             currentPartyInfo.currentMemberCount = partyMembers.Count;
             UpdatePartyInfo();
             Debug.Log($"{player.NickName} joined the party!");
@@ -63,7 +68,7 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
             partyLeader = null;
             partyMembers = null;
-            
+
             if (currentPartyInfo.currentMemberCount <= 1)
             {
                 PhotonManager.Instance.RemovePartyInfo(currentPartyInfo.partyId);
@@ -74,29 +79,33 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
                 memberList.Remove(player.ActorNumber);
                 currentPartyInfo.currentMemberActorNumber = memberList.ToArray();
                 currentPartyInfo.currentMemberCount--;
-                
+
                 PhotonManager.Instance.UpdatePartyInfo(currentPartyInfo);
             }
-            
+
             currentPartyInfo = null;
+            isInParty = false;
+
         }
         else if (partyMembers.Contains(player))
         {
             partyMembers.Remove(player);
-            
+
             var memberList = new List<int>(currentPartyInfo.currentMemberActorNumber);
             memberList.Remove(player.ActorNumber);
             currentPartyInfo.currentMemberActorNumber = memberList.ToArray();
             currentPartyInfo.currentMemberCount = partyMembers.Count;
-            
+
             if (IsPartyLeader(player) && partyMembers.Count > 0)
             {
                 var nextLeader = partyMembers[0];
                 SetPartyLeader(nextLeader);
                 currentPartyInfo.currentLeaderActorNumber = nextLeader.ActorNumber;
             }
-            
+
             PhotonManager.Instance.UpdatePartyInfo(currentPartyInfo);
+            isInParty = false;
+
             Debug.Log($"{player.NickName} left the party!");
         }
     }
@@ -109,6 +118,7 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
     private void UpdatePartyInfo()
     {
+        Debug.Log($"UpdatePartyInfo! : {currentPartyInfo}");
         PhotonManager.Instance.UpdatePartyInfo(currentPartyInfo);
     }
 
@@ -131,14 +141,14 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
     {
         currentPartyInfo = info;
         partyMembers.Clear();
-        
+
         foreach (int actorNumber in info.currentMemberActorNumber)
         {
             PhotonRealtimePlayer player = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber);
             if (player != null)
             {
                 partyMembers.Add(player);
-                
+
                 if (actorNumber == info.currentLeaderActorNumber)
                 {
                     partyLeader = player;

@@ -31,7 +31,7 @@ public class MageAttackState : BaseState<Player>
 
         Debug.Log($"Attack {inputCount} Duration: {attackTimer}");
         player.Animator?.SetTrigger($"Attack{inputCount}");
-        player.photonView.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
+        //player.photonView.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
     }
 
     public override void Update(Player player)
@@ -45,7 +45,7 @@ public class MageAttackState : BaseState<Player>
             {
                 if (Time.time - lastKeyPressTime <= comboWindow && inputCount < 3)
                 {
-                    handler.ChangeState(typeof(DestroyerAttackState));
+                    handler.ChangeState(typeof(MageAttackState));
                     return;
                 }
             }
@@ -86,9 +86,9 @@ public class MageAttackState : BaseState<Player>
 
     }
 
-    [PunRPC]
-    public void SyncAttackState(Player player, int attackIndex)
-    {
-        player.Animator?.SetTrigger($"Attack{attackIndex}");
-    }
+    //[PunRPC]
+    //public void SyncAttackState(Player player, int attackIndex)
+    //{
+    //    player.Animator?.SetTrigger($"Attack{attackIndex}");
+    //}
 }
