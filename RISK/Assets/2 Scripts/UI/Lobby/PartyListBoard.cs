@@ -31,7 +31,8 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        createButton.interactable = PartyManager.Instance.currentPartyInfo == null;
+        createButton.interactable = !PartyManager.Instance.isInParty;
+        partyMemberUIOpenButton.interactable = PartyManager.Instance.isInParty;
     }
 
     private void OnRefreshButtonClick()
