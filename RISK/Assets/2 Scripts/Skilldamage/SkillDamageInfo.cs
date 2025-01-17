@@ -27,12 +27,6 @@ public class SkillDamageInfo : MonoBehaviour
             damageCollider.isTrigger = true;  // 트리거로 설정
             damageCollider.enabled = false;    // 시작시 비활성화
         }
-        ownerPlayer = GetComponentInParent<Player>();
-
-        if (ownerPlayer == null)
-        {
-            Debug.LogError($"[{skillName}] Player를 찾을 수 없습니다!");
-        }
 
     }
 
@@ -45,6 +39,10 @@ public class SkillDamageInfo : MonoBehaviour
             float damage = GetDamage();
             damageable.Takedamage(damage);
         }
+    }
+    public void SetOwnerPlayer(Player player)
+    {
+        ownerPlayer = player;     
     }
     public float GetDamage()
     {

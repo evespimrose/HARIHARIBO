@@ -37,6 +37,10 @@ public class Mage : Player
     [SerializeField] private float finalScale = 2f;
     [SerializeField] private float LifeTime = 5f;
 
+    [Header("기본 공격 데미지 계수")]
+    [SerializeField] private float normalAttackDamagePercent = 100f;
+    [SerializeField] private float finalAttackDamagePercent = 150f;
+
     [Header("W??쎄텢 ??쇱젟")]
     [SerializeField] private GameObject wSkillProjectilePrefab;
     [SerializeField] private float wSkillSpeed = 3f;
@@ -167,10 +171,24 @@ public class Mage : Player
 
             Energyball.layer = LayerMask.NameToLayer("PlayerProjectile");
 
+            var skillDamage = Energyball.GetComponent<SkillDamageInfo>();
+            if (skillDamage != null)
+            {
+                skillDamage.skillName = "MageProjectile";
+                if (comboIndex == 3)
+                {
+                    skillDamage.damagePercent = finalAttackDamagePercent;  // 마지막 콤보는 더 높은 데미지
+                }
+                else
+                {
+                    skillDamage.damagePercent = normalAttackDamagePercent;  // 기본 데미지
+                }
+            }
+
             var projectileMove = Energyball.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection); // ??猷?獄쎻뫚堉???쇱젟
+                projectileMove.Initialize(shootDirection, this); // ??猷?獄쎻뫚堉???쇱젟
                 projectileMove.SetLifeTime(LifeTime);
 
                 switch (comboIndex)
@@ -198,11 +216,16 @@ public class Mage : Player
 
             projectile.layer = LayerMask.NameToLayer("PlayerProjectile");
 
+            var skillDamage = projectile.GetComponent<SkillDamageInfo>();
+            if (skillDamage != null)
+            {
+                skillDamage.skillName = "MageWSkill";
+            }
 
             var projectileMove = projectile.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection);
+                projectileMove.Initialize(shootDirection,this);
                 projectileMove.speed = wSkillSpeed;
                 projectileMove.SetLifeTime(wSkillLifeTime);
             }
@@ -222,10 +245,16 @@ public class Mage : Player
 
             projectile.layer = LayerMask.NameToLayer("PlayerProjectile");
 
+            var skillDamage = projectile.GetComponent<SkillDamageInfo>();
+            if (skillDamage != null)
+            {
+                skillDamage.skillName = "MageTSkill";
+            }
+
             var projectileMove = projectile.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection);
+                projectileMove.Initialize(shootDirection,this);
                 projectileMove.speed = tSkillSpeed;
                 projectileMove.SetLifeTime(tSkillLifeTime);
             }

@@ -23626,6 +23626,8 @@ MonoBehaviour:
   finalSpeed: 3
   finalScale: 2
   LifeTime: 5
+  normalAttackDamagePercent: 100
+  finalAttackDamagePercent: 150
   wSkillProjectilePrefab: {fileID: 5938167112633497377, guid: e3523cd1c41598847b9c801e7033f590, type: 3}
   wSkillSpeed: 7
   wSkillLifeTime: 3
@@ -23696,6 +23698,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 1295805719403106403}
   - {fileID: -8108350381106507482}
+  - {fileID: -4830462955973551265}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -23729,8 +23732,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsMoving
+  - Type: 9
+    SynchronizeType: 2
+    Name: Attack1
+  - Type: 9
+    SynchronizeType: 2
+    Name: Attack2
+  - Type: 9
+    SynchronizeType: 2
+    Name: Attack3
+  - Type: 9
+    SynchronizeType: 2
+    Name: WSkill
+  - Type: 9
+    SynchronizeType: 2
+    Name: ESkill
+  - Type: 9
+    SynchronizeType: 2
+    Name: RSkill
+  - Type: 9
+    SynchronizeType: 2
+    Name: TSkill
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
 --- !u!1 &2893899571063168237
 GameObject:
   m_ObjectHideFlags: 0
@@ -30659,7 +30688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: MageESkillAttack
-  damagePercent: 0
+  damagePercent: 200
   isBasicAttack: 0
 --- !u!1 &3873282485824874073
 GameObject:
@@ -34636,7 +34665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: MageRSkillAttack
-  damagePercent: 0
+  damagePercent: 300
   isBasicAttack: 0
 --- !u!135 &8729376416233466223
 SphereCollider:

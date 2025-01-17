@@ -20789,7 +20789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerESkillAttack
-  damagePercent: 0
+  damagePercent: 150
   isBasicAttack: 0
 --- !u!135 &8637931621210447297
 SphereCollider:
@@ -56053,7 +56053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerWSkillAttack
-  damagePercent: 0
+  damagePercent: 150
   isBasicAttack: 0
 --- !u!135 &6197382340286119964
 SphereCollider:
@@ -59228,7 +59228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerRSkillAttack
-  damagePercent: 0
+  damagePercent: 150
   isBasicAttack: 0
 --- !u!135 &1956614651484434264
 SphereCollider:
@@ -61633,7 +61633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerTSkillAttack
-  damagePercent: 0
+  damagePercent: 500
   isBasicAttack: 0
 --- !u!135 &660730842317730909
 SphereCollider:
