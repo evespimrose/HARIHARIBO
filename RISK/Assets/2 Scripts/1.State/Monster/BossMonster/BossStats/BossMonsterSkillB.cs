@@ -5,36 +5,50 @@ using UnityEngine;
 public class BossMonsterSkillB : BaseState<BossMonster>
 {
     public BossMonsterSkillB(StateHandler<BossMonster> handler) : base(handler) { }
-    // ½ºÅ³2 ¹üÀ§±â 1
+    // ìŠ¤í‚¬2 ë²”ìœ„ê¸° 1
     public enum AtkType
     {
         Melee, 
         Range  
     }
+    public float damage = 1f;
     public float skillBDuration = 2.09f; 
-    public float atkDelay = 1f;//¼±µô·¹ÀÌ
-    public float atkTime = 1f;//¹ø°³ ½ÃÀÛ
+    public float atkDelay = 1f;//ì„ ë”œë ˆì´
+    public float atkTime = 1f;//ë¬¼ì²´ ë–¨ì–´ì§€ëŠ”ì‹œê°„
+    public float hitTime = 1.2f;//íƒ€ê²©íƒ€ì´ë°
+    public float endTime = 0.5f;//íƒ€ê²©í›„ ë”œë ˆì´ì‹œê°„
     public float additionalWaitTime = 1f;
 
     public float atkRange = 15f;         
     public float rangeAtkMinRange = 15f; 
     public float rangeAtkMaxRange = 25f; 
 
-    private AtkType atkType; 
+    private AtkType atkType;
+
+    private bool Action = false;
 
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("SkillB ÁøÀÔ");
+        damage = monster.atkDamage * 3f;
+        Action = true;
         monster.isAtk = true;
+        Debug.Log("SkillB ì§„ì…");
         atkType = (AtkType)Random.Range(0, 2); 
-        monster.StartSkillCoroutine(SkillBAtk(monster));
+        monster.StartCoroutine(SkillBAtk(monster));
+    }
+
+    public override void Update(BossMonster monster)
+    {
+        if (Action == false)
+        {
+            monster.isAtk = false;
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-        monster.AtkEnd();
-        Debug.Log("SkillB Á¾·á");
-        monster.isAtk = false;
+        Debug.Log("SkillB ì¢…ë£Œ");
         DeactivateSkillBFieldParticle(monster);
     }
 
@@ -44,30 +58,23 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         monster.TargetLook(monster.target.position);
 
         ActivateSkillBParticle(monster);
-        //¼±µô·¹ÀÌ
+        //ì„ ë”œë ˆì´
         yield return new WaitForSeconds(atkDelay);
 
         monster.animator.SetTrigger("SkillB");
         yield return new WaitForSeconds(atkTime);
 
-        // skillBParticle ºñÈ°¼ºÈ­
+        // skillBParticle ë¹„í™œì„±í™”
         DeactivateSkillBParticle(monster);
         ActivateSkillBFieldParticle(monster);
-        yield return new WaitForSeconds(atkTime);
+        yield return new WaitForSeconds(hitTime);
 
         Atk(monster);
         DeactivateSkillBFieldParticle(monster);
-        yield return new WaitUntil(() =>
-        {
-            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
-            return !stateInfo.IsName("SkillB") || stateInfo.normalizedTime >= 1f;
-        });
+        yield return new WaitForSeconds(endTime);
 
-        monster.animator.SetTrigger("Idle");
-        yield return new WaitForSeconds(additionalWaitTime);
-
-        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        Debug.Log("SkillB Á¾·á ÈÄ Idle »óÅÂ·Î ÀüÈ¯");
+        Action = false;
+        Debug.Log("SkillB ì¢…ë£Œ í›„ Idle ìƒíƒœë¡œ ì „í™˜");
     }
 
     public void Atk(BossMonster monster)
@@ -87,13 +94,13 @@ public class BossMonsterSkillB : BaseState<BossMonster>
     {
         Vector3 atkCenter = monster.transform.position; 
         Collider[] cols = Physics.OverlapSphere(atkCenter, atkRange); 
-        Debug.Log("±ÙÁ¢ °ø°İ ÁøÀÔ");
+        Debug.Log("ê·¼ì ‘ ê³µê²© ì§„ì…");
         foreach (Collider col in cols)
         {
             if (col.gameObject.CompareTag("Player"))
             {
-                col.gameObject.GetComponent<ITakedamage>()?.Takedamage(monster.atkDamage);
-                Debug.Log("±ÙÁ¢ °ø°İ ¼º°ø");
+                col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                Debug.Log("ê·¼ì ‘ ê³µê²© ì„±ê³µ");
             }
         }
     }
@@ -102,7 +109,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
     {
         Vector3 atkCenter = monster.transform.position;
         Collider[] cols = Physics.OverlapSphere(atkCenter, rangeAtkMaxRange);
-        Debug.Log("¿ø°Å¸® °ø°İ ÁøÀÔ");
+        Debug.Log("ì›ê±°ë¦¬ ê³µê²© ì§„ì…");
         foreach (Collider col in cols)
         {
             if (col.gameObject.CompareTag("Player"))
@@ -111,14 +118,14 @@ public class BossMonsterSkillB : BaseState<BossMonster>
                 float dirTarget = Vector3.Distance(atkCenter, col.transform.position);
                 if (dirTarget >= rangeAtkMinRange && dirTarget <= rangeAtkMaxRange) 
                 {
-                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(monster.atkDamage);
-                    Debug.Log("¿ø°Å¸® °ø°İ ¼º°ø");
+                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                    Debug.Log("ì›ê±°ë¦¬ ê³µê²© ì„±ê³µ");
                 }
             }
         }
     }
 
-    // skillBParticle È°¼ºÈ­
+    // skillBParticle í™œì„±í™”
     private void ActivateSkillBParticle(BossMonster monster)
     {
         if (atkType == AtkType.Melee)

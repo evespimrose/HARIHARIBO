@@ -10,7 +10,7 @@ public class NormalMonsterAirborne : BaseState<NormalMonster>
     public override void Enter(NormalMonster monster)
     {
         monster.animator?.SetTrigger("Airborne");
-        Debug.Log("¿¡¾îº» ½ÃÀÛ");
+        Debug.Log("ì—ì–´ë³¸ ì‹œì‘");
         monster.StartAirborne();
     }
 
@@ -20,7 +20,7 @@ public class NormalMonsterAirborne : BaseState<NormalMonster>
         {
             monster.isStun = false;
         }
-        if (monster.isAirborne == false)
+        if (!monster.isAirborne)
         {
             monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
         }
@@ -28,7 +28,7 @@ public class NormalMonsterAirborne : BaseState<NormalMonster>
 
     public override void Exit(NormalMonster monster)
     {
-        Debug.Log("¿¡¾îº» Á¾·á");
+        Debug.Log("ì—ì–´ë³¸ ì¢…ë£Œ");
     }
 }
 

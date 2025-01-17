@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossSkillEObjectA : MonoBehaviour
+public class BossSkillEObject : MonoBehaviour
 {
     public enum SkillType
     {
@@ -49,8 +49,8 @@ public class BossSkillEObjectA : MonoBehaviour
         else
         {
             Vector3 direction = targetPos - transform.position;
-            direction.y = 0;
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, missileSpeed * Time.deltaTime);
+            direction.y = 1;
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, missileSpeed * Time.deltaTime * 1.5f);
             transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         }
     }
@@ -62,8 +62,8 @@ public class BossSkillEObjectA : MonoBehaviour
             float angle = i * 45f;
             Vector3 direction = Quaternion.Euler(0, angle, 0) * transform.forward;
             GameObject missile = Instantiate(gameObject, transform.position, Quaternion.LookRotation(direction));
-            missile.GetComponent<BossSkillEObjectA>().SetMissileType(2);
-            missile.GetComponent<BossSkillEObjectA>().InitMissile(direction, missileDistance);
+            missile.GetComponent<BossSkillEObject>().SetMissileType(2);
+            missile.GetComponent<BossSkillEObject>().InitMissile(direction, missileDistance);
         }
     }
 
@@ -96,11 +96,19 @@ public class BossSkillEObjectA : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<ITakedamage>().Takedamage(bulletDamage);
+            if (skillType == SkillType.First)
+            {
+                FireMissiles();
+            }
             if (skillType == SkillType.Second)
             {
-                other.gameObject.GetComponent<PlayerDebuff>().Fire(bulletDamage, fireInterval, fireDuration); // »≠ªÛ µ•πÃ¡ˆ
+                other.gameObject.GetComponent<PlayerDebuff>().Fire(bulletDamage, fireInterval, fireDuration); // ÌôîÏÉÅ Îç∞ÎØ∏ÏßÄ
             }
             Destroy(gameObject);
+        }
+        else if (other.CompareTag("Wall"))
+        {
+            Destroy(this.gameObject);
         }
     }
 }

@@ -3,62 +3,37 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class BossMonster : MonoBehaviour, ITakedamage
+public class BossMonster : Monster
 {
-    [Header("紐ъ뒪???寃?諛?紐⑤뜽")]
-    [Tooltip("怨듦꺽???")]
-    public Transform target;
+    [Header("몬스터 타겟 및 모델")]
     protected Collider col;
-    private Rigidbody rb;
     public StateHandler<BossMonster> bMHandler;
 
-    [Tooltip("紐⑤뜽留?")]
-    public GameObject model;
-    [Tooltip("紐⑤뜽留곸쓽 ?좊땲硫붿씠??")]
+    [Tooltip("모델링의 애니메이터")]
     public Animator animator;
-    [Header("?ㅽ궗2 愿??")]
+    [Header("스킬2 관련")]
     public GameObject[] skillBParticle;
     public GameObject[] skillBFieldParticle;
-    [Header("?ㅽ궗3 愿??")]
+    [Header("스킬3 관련")]
     public GameObject skillCPrefab;
-    [Header("?ㅽ궗4 愿??")]
+    [Header("스킬4 관련")]
     public GameObject skillDPrefab;
-    [Header("?ㅽ궗5 愿??")]
+    [Header("스킬5 관련")]
     public GameObject skillEPrefab;
-    [Header("?ㅽ궗6 愿??")]
-    public GameObject skillFPrefab;
-    [Header("?ㅽ궗7 愿??")]
+    [Header("스킬6 관련")]
+    public GameObject skillFPrefabA;
+    public GameObject skillFPrefabB;
+    [Header("스킬7 관련")]
     public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;
-    public float skillFknockback = 50f; //skillF ?됰갚 嫄곕━
-    public float skillFDamage = 10f; //skillF 怨듦꺽 ?곕?吏
-    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF ?寃⑺븳 ??곷━?ㅽ듃
+    public float skillFknockback = 50f; //skillF 넉백 거리
+    public float skillFDamage = 10f; //skillF 공격 데미지
+    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF 타격한 대상리스트
 
-    [Header("紐ъ뒪???ㅽ뀩")]
-    [Tooltip("?좊떅?ㅽ뀩")]
-    public MonsterScriptableObjects monsterState;
-    [Tooltip("怨듦꺽?곕?吏")]
-    public float atkDamage;
-    [Tooltip("?대룞?띾룄")]
-    public float moveSpeed;
-    [Tooltip("怨듦꺽踰붿쐞")]
-    public float atkRange;
-    [Tooltip("怨듦꺽?쒕젅??")]
-    public float atkDelay;
-    [Tooltip("?꾩옱泥대젰")]
-    public float curHp;
-    [Tooltip("理쒕?泥대젰")]
-    protected float maxHp;
-
-    protected bool isDie = false;
-    public bool isAtk = false;
-
-    [Header("?붾쾭???곹깭?댁긽 泥댄겕")]
-    public Debuff monsterDebuff;
-    public bool isSlow = false;
-    public bool isBleeding = false;
-    public bool isPoison = false;
+    public float chaseTime = 1f;
+    public bool isChase = false;
+    public bool isAction = false;
 
     protected void Awake()
     {
@@ -72,55 +47,61 @@ public class BossMonster : MonoBehaviour, ITakedamage
         Targeting();
     }
 
-    private void Update()
+    protected void Update()
     {
+        RemoveBodyAtkHit();
         if (target == null) Targeting();
-        if (isDie == true)
-        {
-            monsterDebuff.DebuffAllOff();
-            bMHandler.ChangeState(typeof(NormalMonsterDie));
-        }
-        monsterDebuff.DebuffCheck(this);
-        if (isAtk == true && isDie == false) return;
         bMHandler.Update();
     }
 
     public void SkillFReset()
     {
-        //rb.velocity = Vector3.zero;
         hitTargets.Clear();
     }
 
-    private void OnCollisionEnter(Collision other)
+    public void RBStop()
     {
-        Debug.Log("異⑸룎 諛쒖깮: " + other.gameObject.name);
+        rb.velocity = Vector3.zero;
+    }
 
+    // 벽과의 충돌이 시작되었을 때
+    protected void OnCollisionEnter(Collision other)
+    {
         if (isMoving == false) return;
-        if (other.gameObject.CompareTag("Wall")) isWall = true;
-        else isWall = false;
-
-        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // 以묐났 ?ㅻ툕?앺듃 泥댄겕
+        if (other.gameObject.CompareTag("Wall"))
         {
-            Debug.Log("SkillF 怨듦꺽");
+            isWall = true;
+        }
+        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // 중복 오브젝트 체크
+        {
+            Debug.Log("SkillF 공격");
             other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
             hitTargets.Add(other.gameObject);
 
-            // ?됰갚 ?곸슜
+            // 넉백 적용
             Vector3 knockbackDir = transform.position - other.transform.position;
             knockbackDir.y = 0f;
 
-            // ?됰갚 ??議곗젙
+            // 넉백 힘 조정
             Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
-            float adjustedKnockback = skillFknockback * 4f;  // ?됰갚 諛곗쑉???ㅼ썙????媛뺥븯寃??곸슜
+            float adjustedKnockback = skillFknockback * 4f;  // 넉백 배율을 키워서 더 강하게 적용
             playerRb.AddForce(-knockbackDir.normalized * adjustedKnockback, ForceMode.Impulse);
 
-            Debug.Log("?됰갚 諛⑺뼢: " + knockbackDir.normalized + " ?? " + skillFknockback);
+            Debug.Log("넉백 방향: " + knockbackDir.normalized + " 힘: " + skillFknockback);
+        }
+    }
+
+    // 벽과의 충돌이 종료되었을 때
+    protected void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            isWall = false; // 벽과의 충돌이 종료되었으므로 isWall을 false로 설정
         }
     }
 
 
-
-    private void InitializeComponents()
+    protected void InitializeComponents()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
@@ -140,7 +121,8 @@ public class BossMonster : MonoBehaviour, ITakedamage
         {
             fieldParticle.SetActive(false);
         }
-        skillFPrefab.SetActive(false);
+        skillFPrefabA.SetActive(false);
+        skillFPrefabB.SetActive(false);
         skillGPrefab.SetActive(false);
     }
 
@@ -148,11 +130,11 @@ public class BossMonster : MonoBehaviour, ITakedamage
     {
         bMHandler = new StateHandler<BossMonster>(this);
 
-        //?곹깭???깅줉
+        //상태들 등록
         bMHandler.RegisterState(new BossMonsterIdle(bMHandler));
         bMHandler.RegisterState(new BossMonsterMove(bMHandler));
         bMHandler.RegisterState(new BossMonsterDie(bMHandler));
-        //怨듦꺽 ?곹깭?⑦꽩
+        //공격 상태패턴
         bMHandler.RegisterState(new BossMonsterAtk(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillA(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillB(bMHandler));
@@ -161,57 +143,9 @@ public class BossMonster : MonoBehaviour, ITakedamage
         bMHandler.RegisterState(new BossMonsterSkillE(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillF(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillG(bMHandler));
-        //珥덇린 ?곹깭 ?ㅼ젙
+        //초기 상태 설정
         bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
-
-    public void StartSkillCoroutine(IEnumerator coroutine)
-    {
-        StartCoroutine(coroutine);
-    }
-
-    public GameObject ObjSpwan(GameObject obj, Vector3 pos)
-    {
-        GameObject gameObject = Instantiate(obj);
-        gameObject.transform.position = pos;
-        return gameObject;
-    }
-
-    public void Targeting()
-    {
-        foreach (var tr in UnitManager.Instance.players)
-        {
-            if (target == null) target = tr.Value.transform;
-            else if (target != null &&
-                (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.Value.transform.position, transform.position)))
-            {
-                target = tr.Value.transform;
-            }
-        }
-    }
-
-    public void TargetLook(Vector3 targetPosition)
-    {
-        Vector3 direction = targetPosition - transform.position;
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            direction.y = 0;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
-        }
-    }
-
-    public void Move()
-    {
-        transform.LookAt(target);
-        Vector3 currentRotation = transform.eulerAngles;
-        transform.eulerAngles = new Vector3(0f, currentRotation.y, 0f);
-        Vector3 dir = (target.position - transform.position).normalized;
-        Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(moveDir);
-    }
-
 
     public void DieParticle()
     {
@@ -230,26 +164,122 @@ public class BossMonster : MonoBehaviour, ITakedamage
         }
     }
 
-    public void AtkEnd()
+    public override void DieStatChange()
     {
-        StartCoroutine(AtkCoolTime());
+        isDie = true;
+        this.bMHandler.ChangeState(typeof(BossMonsterDie));
     }
 
-    public IEnumerator AtkCoolTime()
+    public void AtkOff()
     {
-        Debug.Log("怨듦꺽荑⑦????쒖옉");
-        yield return new WaitForSeconds(atkDelay);
-        Debug.Log("怨듦꺽荑⑦???醫낅즺");
         isAtk = false;
     }
 
-    public void Takedamage(float damage)
+    public IEnumerator Chase()
     {
-        curHp -= Mathf.RoundToInt(damage);
-        if (curHp <= 0)
+        isChase = true;
+        yield return new WaitForSeconds(chaseTime);
+        isChase = false;
+    }
+
+    public IEnumerator AtkSet()
+    {
+        isAction = true;
+        yield return null;
+
+        //공격분류1 중에하나스테이트로 변환
+        AtkA();
+
+        yield return null;
+        yield return new WaitUntil(() =>  isAtk == false);
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        //공격분류2 중에하나 스테이트로 변환
+        AtkB();
+        yield return null;
+        yield return new WaitUntil(() => isAtk == false);
+        yield return null;
+
+        Targeting();
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        bMHandler.ChangeState(typeof(BossMonsterAtk));
+        yield return null;
+        yield return new WaitUntil(() => isAtk == false);
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        //이동기 중에하나 스테이트로 변환
+        AtkC();
+        yield return null;
+        yield return new WaitUntil(() => isAtk == false);
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        isAction = false;
+        yield return null;
+    }
+
+    protected void AtkA()
+    {
+        int a = Random.Range(0, 3);
+        switch (a)
         {
-            isDie = true;
-            this.bMHandler.ChangeState(typeof(BossMonsterDie));
+            case 0:
+                bMHandler.ChangeState(typeof(BossMonsterSkillA));
+                break;
+            case 1:
+                bMHandler.ChangeState(typeof(BossMonsterSkillD));
+                break;
+            case 2:
+                bMHandler.ChangeState(typeof(BossMonsterSkillE));
+                break;
+        }
+    }
+
+    protected void AtkB()
+    {
+        int b = Random.Range(0, 2);
+        switch (b)
+        {
+            case 0:
+                bMHandler.ChangeState(typeof(BossMonsterSkillB));
+                break;
+            case 1:
+                bMHandler.ChangeState(typeof(BossMonsterSkillC));
+                break;
+        }
+    }
+
+    protected void AtkC()
+    {
+        int c = Random.Range(0, 2);
+        switch (c)
+        {
+            case 0:
+                bMHandler.ChangeState(typeof(BossMonsterSkillF));
+                break;
+            case 1:
+                bMHandler.ChangeState(typeof(BossMonsterSkillG));
+                break;
         }
     }
 }

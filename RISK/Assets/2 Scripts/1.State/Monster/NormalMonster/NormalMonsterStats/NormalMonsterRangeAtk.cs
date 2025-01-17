@@ -6,39 +6,35 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
 {
     public NormalMonsterRangeAtk(StateHandler<NormalMonster> handler) : base(handler) { }
 
-    public float atkDuration = 1f;
-    public float atkDelay = 0.6f;
-    private float curTime = 0;
-    private bool isAtk = false;
+    public float atkHitTime = 0.6f;
 
     public override void Enter(NormalMonster monster)
     {
+        Debug.Log("RangeAtkê³µê²© ì‹œìž‘");
         monster.animator.SetTrigger("Atk");
-        curTime = 0;
-        isAtk = false;
+        monster.StartCoroutine(StartAtk(monster));
     }
 
     public override void Update(NormalMonster monster)
     {
-        curTime += Time.deltaTime; // °æ°ú ½Ã°£ ´©Àû
-        if (isAtk == false) monster.transform.LookAt(monster.target);
-        // °ø°Ý ½ÃÀÛ Àü ´ë±â ½Ã°£
-        if (curTime >= atkDelay && !isAtk)
-        {
-            Atk(monster); // atkDelay¸¸Å­ ±â´Ù¸° ÈÄ °ø°Ý ¹ßµ¿
-            isAtk = true; // °ø°ÝÀÌ ¹ßµ¿ÇßÀ½À» Ç¥½Ã
-        }
 
-        // °ø°Ý Áö¼Ó ½Ã°£ÀÌ Áö³ª¸é »óÅÂ º¯°æ
-        if (curTime >= atkDuration)
-        {
-            monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
-        }
     }
 
     public override void Exit(NormalMonster monster)
     {
-         
+        Debug.Log("RangeAtkê³µê²© ì¢…ë£Œ");
+    }
+    private IEnumerator StartAtk(NormalMonster monster)
+    {
+        yield return new WaitForSeconds(atkHitTime);
+        Atk(monster);
+        yield return new WaitUntil(() =>
+        {
+            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
+            return !stateInfo.IsName("Atk") || stateInfo.normalizedTime >= 1f;
+        });
+        yield return null;
+        monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
     }
 
     private void Atk(NormalMonster monster)

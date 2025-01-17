@@ -2,48 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using static NormalMonster;
 
-public class EliteMonster : MonoBehaviour, ITakedamage
+public class EliteMonster : Monster
 {
     [Header("몬스터 타겟 및 모델")]
-    [Tooltip("공격대상")]
-    public Transform target;
     protected Collider col;
-    protected Rigidbody rb;
     public StateHandler<EliteMonster> eMHandler;
 
-    [Tooltip("모델링")]
-    public GameObject model;
     [Tooltip("모델링의 애니메이터")]
     public Animator animator;
     [Tooltip("사망시 파티클")]
     public ParticleSystem dieParticle;
 
-    [Header("몬스터 스텟")]
-    [Tooltip("유닛스텟")]
-    public MonsterScriptableObjects monsterState;
-    [Tooltip("공격데미지")]
-    public float atkDamage;
-    [Tooltip("이동속도")]
-    public float moveSpeed;
-    [Tooltip("공격범위")]
-    public float atkRange;
-    [Tooltip("공격딜레이")]
-    public float atkDelay;
-    [Tooltip("현재체력")]
-    public float curHp;
-    [Tooltip("최대체력")]
-    protected float maxHp;
+    [Header("스킬2 관련")]
+    public GameObject skillBPrefab;
+    [Header("스킬3 관련")]
+    public GameObject skillCPrefab;
 
-    protected bool isDie = false;
-    public bool isAtk = false;
-
-    [Header("디버프 상태이상 체크")]
-    public Debuff monsterDebuff;
-    public bool isSlow = false;
-    public bool isBleeding = false;
-    public bool isPoison = false;
+    protected void Awake()
+    {
+        InitializeComponents();
+        InitializeStateHandler();
+    }
 
     protected virtual void Start()
     {
@@ -51,9 +31,17 @@ public class EliteMonster : MonoBehaviour, ITakedamage
         Targeting();
     }
 
-    void Update()
+    private void Update()
     {
-
+        RemoveBodyAtkHit();
+        if (target == null) Targeting();
+        monsterDebuff.DebuffCheck(this);
+        if (!isDie && isStun && isStunAction == false)
+        {
+            isStunAction = true;
+            eMHandler.ChangeState(typeof(EliteMonsterStun));
+        }
+        eMHandler.Update();
     }
 
     private void InitializeComponents()
@@ -72,39 +60,17 @@ public class EliteMonster : MonoBehaviour, ITakedamage
     protected void InitializeStateHandler()
     {
         eMHandler = new StateHandler<EliteMonster>(this);
-
         // 상태들 등록
         eMHandler.RegisterState(new EliteMonsterIdle(eMHandler));
         eMHandler.RegisterState(new EliteMonsterMove(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterDie(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterStun(eMHandler));
         //공격 상태패턴
-        //nMHandler.RegisterState(new NormalMonsterHit(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterStun(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
-        //nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
+        eMHandler.RegisterState(new EliteMonsterSkillA(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterSkillB(eMHandler));
+        eMHandler.RegisterState(new EliteMonsterSkillC(eMHandler));
         //// 초기 상태 설정
         eMHandler.ChangeState(typeof(EliteMonsterIdle));
-    }
-
-    public void Targeting()
-    {
-        foreach (var tr in UnitManager.Instance.players)
-        {
-            if (target == null) target = tr.Value.transform;
-            else if (target != null &&
-                (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.Value.transform.position, transform.position)))
-            {
-                target = tr.Value.transform;
-            }
-        }
-    }
-
-    public void Move()
-    {
-        transform.LookAt(target);
-        Vector3 dir = (target.position - transform.position).normalized;
-        Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(moveDir);
     }
 
     public void DieParticle()
@@ -124,6 +90,11 @@ public class EliteMonster : MonoBehaviour, ITakedamage
         }
     }
 
+    public void AtkEnd()
+    {
+        StartCoroutine(AtkCoolTime());
+    }
+
     public IEnumerator AtkCoolTime()
     {
         Debug.Log("공격쿨타임 시작");
@@ -132,18 +103,9 @@ public class EliteMonster : MonoBehaviour, ITakedamage
         isAtk = false;
     }
 
-    public void Takedamage(float damage)
+    public override void DieStatChange()
     {
-        curHp -= Mathf.RoundToInt(damage);
-        if (curHp <= 0)
-        {
-            isDie = true;
-            this.eMHandler.ChangeState(typeof(EliteMonsterDie));
-        }
-        else
-        {
-            //isHit = true;
-            //this.nMHandler.ChangeState(typeof(NormalMonsterHit));
-        }
+        isDie = true;
+        this.eMHandler.ChangeState(typeof(EliteMonsterDie));
     }
 }

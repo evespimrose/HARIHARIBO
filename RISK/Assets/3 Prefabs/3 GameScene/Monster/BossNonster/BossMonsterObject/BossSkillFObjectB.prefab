@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 809080176182639885}
   - component: {fileID: 4429091133561726987}
   m_Layer: 0
-  m_Name: BossSkillFObject
+  m_Name: BossSkillFObjectB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
