@@ -6,36 +6,50 @@ public class BossMonsterSkillD : BaseState<BossMonster>
 {
     public BossMonsterSkillD(StateHandler<BossMonster> handler) : base(handler) { }
 
-    public float atkDelay = 0f; // ¼±µô·¹ÀÌ
-    public float skillDDuration = 2.4f; // ¾Ö´Ï¸ŞÀÌ¼Ç Áö¼Ó ½Ã°£
-    public float skillFAtkTime = 1f; // ¾Ö´Ï¸ŞÀÌ¼Ç ½ÃÀÛ ÈÄ SkillDAtk ½ÇÇà±îÁö ±â´Ù¸± ½Ã°£
-    public float additionalWaitTime = 0.2f; // ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á ÈÄ Ãß°¡ ´ë±â ½Ã°£
+    public float damage = 1f;
+    public float atkDelay = 0f; // ì„ ë”œë ˆì´
+    public float skillDDuration = 2.4f; // ì• ë‹ˆë©”ì´ì…˜ ì§€ì† ì‹œê°„
+    public float skillFAtkTime = 1f; // ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘ í›„ SkillDAtk ì‹¤í–‰ê¹Œì§€ ê¸°ë‹¤ë¦´ ì‹œê°„
+    public float additionalWaitTime = 0.2f; // ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ í›„ ì¶”ê°€ ëŒ€ê¸° ì‹œê°„
+
+    private bool Action = false;
 
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("SkillD ÁøÀÔ");
-        monster.StartSkillCoroutine(SkillDCoroutine(monster)); // ÄÚ·çÆ¾ ½ÃÀÛ
+        damage = monster.atkDamage * 1f;
+        Action = true;
+        monster.isAtk = true;
+        Debug.Log("SkillD ì§„ì…");
+        monster.StartCoroutine(SkillDCoroutine(monster)); // ì½”ë£¨í‹´ ì‹œì‘
+    }
+
+    public override void Update(BossMonster monster)
+    {
+        if (Action == false)
+        {
+            monster.isAtk = false;
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-        monster.AtkEnd();
-        Debug.Log("SkillD Á¾·á");
+        Debug.Log("SkillD ì¢…ë£Œ");
     }
 
     private IEnumerator SkillDCoroutine(BossMonster monster)
     {
-        // ¼±µô·¹ÀÌ ÈÄ ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà
+        // ì„ ë”œë ˆì´ í›„ ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
         yield return new WaitForSeconds(atkDelay);
         monster.TargetLook(monster.target.position);
         monster.animator.SetTrigger("SkillD");
-        Debug.Log("SkillD ¾Ö´Ï¸ŞÀÌ¼Ç ½ÃÀÛ");
+        Debug.Log("SkillD ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘");
 
-        // ¾Ö´Ï¸ŞÀÌ¼Ç ½ÃÀÛ ÈÄ ÀÏÁ¤ ½Ã°£ÀÌ Áö³ª¸é SkillDAtk ½ÇÇà
+        // ì• ë‹ˆë©”ì´ì…˜ ì‹œì‘ í›„ ì¼ì • ì‹œê°„ì´ ì§€ë‚˜ë©´ SkillDAtk ì‹¤í–‰
         yield return new WaitForSeconds(skillFAtkTime);
         SkillDAtk(monster);
 
-        // ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³¯ ¶§±îÁö ´ë±â
+        // ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚  ë•Œê¹Œì§€ ëŒ€ê¸°
         yield return new WaitUntil(() =>
         {
             AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
@@ -43,11 +57,11 @@ public class BossMonsterSkillD : BaseState<BossMonster>
         });
 
         monster.animator.SetTrigger("Idle");
+        yield return null;
         yield return new WaitForSeconds(additionalWaitTime);
 
-        // »óÅÂ ÀüÈ¯
-        monster.bMHandler.ChangeState(typeof(BossMonsterIdle)); // »óÅÂ ÀüÈ¯
-        Debug.Log("SkillD Á¾·á ÈÄ Idle »óÅÂ·Î ÀüÈ¯");
+        Action = false;
+        Debug.Log("SkillD ì¢…ë£Œ í›„ Idle ìƒíƒœë¡œ ì „í™˜");
     }
 
     private void SkillDAtk(BossMonster monster)
@@ -61,7 +75,7 @@ public class BossMonsterSkillD : BaseState<BossMonster>
             rotDir = new Vector3(rotDir.x, 0f, rotDir.z).normalized;
             GameObject skillDObj = monster.ObjSpwan(monster.skillDPrefab, new Vector3(monster.transform.position.x, 1f, monster.transform.position.z));
             skillDObj.transform.rotation = Quaternion.LookRotation(rotDir, Vector3.up);
-            skillDObj.GetComponent<BossSkillDObject>().Seting(monster.atkDamage);
+            skillDObj.GetComponent<BossSkillDObject>().Seting(damage);
             Rigidbody skillRigidbody = skillDObj.GetComponent<Rigidbody>();
             if (skillRigidbody != null)
             {

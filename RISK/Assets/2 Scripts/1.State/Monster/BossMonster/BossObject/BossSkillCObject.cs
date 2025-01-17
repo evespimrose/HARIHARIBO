@@ -5,7 +5,7 @@ using UnityEngine;
 public class BossSkillCObject : MonoBehaviour
 {
     public float moveSpeed = 20f;      
-    public float moveDistance = 20f;   
+    public float moveDistance = 30f;   
     public int maxAtkCount = 1;        
     public float atkDamage;            
 
@@ -24,7 +24,7 @@ public class BossSkillCObject : MonoBehaviour
     void Update()
     {
         if (isSeting == false) return;
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 2);
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 5);
         if (Vector3.Distance(startPos, transform.position) >= moveDistance)
         {
             Destroy(gameObject);
@@ -52,19 +52,23 @@ public class BossSkillCObject : MonoBehaviour
             {
                 atkTargets.Add(other.gameObject); 
             }
-            //À¯´Öº° ÃÖ´ë °ø°Ý È½¼ö °Ë»ç
+            //ìœ ë‹›ë³„ ìµœëŒ€ ê³µê²© íšŸìˆ˜ ê²€ì‚¬
             if (maxAtkCount == -1 || atkTargets.Count <= maxAtkCount)
             {
-                //Á¤¸é ¹üÀ§ Ã¼Å©
+                //ì •ë©´ ë²”ìœ„ ì²´í¬
                 Vector3 directionToTarget = other.transform.position - transform.position;
                 float angle = Vector3.Angle(transform.forward, directionToTarget);
-                //Á¤¸é ¹üÀ§
-                if (angle <= 90f)//90µµ °¢µµ ³»·Î¸¸ °ø°ÝÀ» ÀÎÁ¤
+                //ì •ë©´ ë²”ìœ„
+                if (angle <= 90f)//90ë„ ê°ë„ ë‚´ë¡œë§Œ ê³µê²©ì„ ì¸ì •
                 {
                     other.GetComponent<ITakedamage>().Takedamage(atkDamage);
                     Debug.Log($"Player SkilC Hit");
                 }
             }
+        }
+        else if (other.CompareTag("Wall"))
+        {
+            Destroy(this.gameObject);
         }
     }
 }

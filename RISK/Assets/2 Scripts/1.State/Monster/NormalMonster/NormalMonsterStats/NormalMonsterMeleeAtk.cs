@@ -1,58 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
 {
     public NormalMonsterMeleeAtk(StateHandler<NormalMonster> handler) : base(handler) { }
 
-
-    public float atkDuration = 5f;
     public float atkHitTime = 0.4f;
-    private float curTime = 0;
-    private bool isAtk = false;
     public override void Enter(NormalMonster monster)
     {
-        Debug.Log("MeleeAtk°ø°İ ½ÃÀÛ");
+        Debug.Log("MeleeAtkê³µê²© ì‹œì‘");
         monster.animator.SetTrigger("Atk");
-        curTime = 0;
-        isAtk = false;
+        monster.StartCoroutine(StartAtk(monster));
     }
 
     public override void Update(NormalMonster monster)
     {
-        if (atkDuration - curTime < 0.1f)
-        {
-            //°ø°İÁ¾·á
-            monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
-        }
-        if (atkHitTime - curTime < 0.1f && isAtk == false)
-        {
-            Atk(monster);
-        }
-        curTime += Time.deltaTime;
+
     }
 
     public override void Exit(NormalMonster monster)
     {
-        Debug.Log("MeleeAtk°ø°İ Á¾·á");
+        Debug.Log("MeleeAtkê³µê²© ì¢…ë£Œ");
+    }
+
+    private IEnumerator StartAtk(NormalMonster monster)
+    {
+        yield return new WaitForSeconds(atkHitTime);
+        Atk(monster);
+        yield return new WaitUntil(() =>
+        {
+            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
+            return !stateInfo.IsName("Atk") || stateInfo.normalizedTime >= 1f;
+        });
+        yield return new WaitUntil(() => monster.isAtk == false);
+        monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
     }
 
     private void Atk(NormalMonster monster)
     {
-        Debug.Log("MeleeAtk°ø°İ");
-        monster.isAtk = true;
-        isAtk = true;
+        Debug.Log("MeleeAtkê³µê²©");
         Vector3 atkDir = monster.transform.forward;
-        //monster.transform.position = °ø°İÆÇÁ¤¹üÀ§ Áß½É
-        //monster.atkRange = °ø°İÆÇÁ¤ÀÇ ¹üÀ§(¿øÇü)
+        //monster.transform.position = ê³µê²©íŒì •ë²”ìœ„ ì¤‘ì‹¬
+        //monster.atkRange = ê³µê²©íŒì •ì˜ ë²”ìœ„(ì›í˜•)
         Collider[] cols = Physics.OverlapSphere(monster.transform.position, monster.atkRange);
         foreach (Collider col in cols)
         {
             if (col.gameObject.CompareTag("Player"))
             {
                 Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
-                //Á¤¸é±âÁØÀ¸·Î ¹İ¿ø¹üÀ§³»¿¡ ÀÖ´ÂÁö È®ÀÎ
+                //ì •ë©´ê¸°ì¤€ìœ¼ë¡œ ë°˜ì›ë²”ìœ„ë‚´ì— ìˆëŠ”ì§€ í™•ì¸
                 float angle = Vector3.Angle(atkDir, dirToTarget);
                 if (angle <= 90f)
                 {
@@ -60,7 +58,7 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
                 }
                 else
                 {
-                    Debug.Log("°ø°İÆÇÁ¤ ¹ÛÀÓ");
+                    Debug.Log("ê³µê²©íŒì • ë°–ì„");
                 }
             }
         }

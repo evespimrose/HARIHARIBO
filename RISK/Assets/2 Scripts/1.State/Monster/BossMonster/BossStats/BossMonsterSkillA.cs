@@ -6,60 +6,65 @@ using UnityEngine;
 public class BossMonsterSkillA : BaseState<BossMonster>
 {
     public BossMonsterSkillA(StateHandler<BossMonster> handler) : base(handler) { }
-    //½ºÅ³1 3¿¬¼Ó °ø°Ý
-    // °ø°Ý ÆÇÁ¤ µô·¹ÀÌ
+    //ìŠ¤í‚¬1 3ì—°ì† ê³µê²©
+
+    public float damageA = 1f;
+    public float damageB = 1f;
+
+    // ê³µê²© íŒì • ë”œë ˆì´
     public float startDelay = 0f;
-    public float atkADelay = 0.38f;
-    public float atkBDelay = 0.38f;
+    public float atkAHitTime = 0.38f;
+    public float atkBHitTime = 1.34f;
 
-    // ¾Ö´Ï¸ÞÀÌ¼Ç Áö¼Ó ½Ã°£
-    public float atkBStartTime = 1.04f;
-    public float atkADuration = 1.34f;
-    public float atkBDuration = 1.34f;
+    //ê³µê²©í›„ ì¢…ë£Œê¹Œì§€ ê±¸ë¦¬ëŠ”ì‹œê°„
+    public float endTime = 2.5f;
 
-    // End·Î ÀÏÂï µé¾î°¥ ½Ã°£
-    public float endTime = 0.2f;
+    private bool Action = false;
 
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("SkillA ½ÃÀÛ");
+        damageA = monster.atkDamage * 1.2f;
+        damageB = monster.atkDamage * 1.2f;
+        Action = true;
         monster.isAtk = true;
-        monster.StartSkillCoroutine(SkillACoroutine(monster));
+        Debug.Log("SkillA ì‹œìž‘");
+        monster.StartCoroutine(SkillACoroutine(monster));
+    }
+
+    public override void Update(BossMonster monster)
+    {
+        if (Action == false)
+        {
+            monster.isAtk = false;
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-        monster.AtkEnd();
-        Debug.Log("°ø°Ý Á¾·á");
-        monster.isAtk = false;
+        Debug.Log("ê³µê²© ì¢…ë£Œ");
     }
 
     private IEnumerator SkillACoroutine(BossMonster monster)
     {
-        // ¼±µô·¹ÀÌ
+        // ì„ ë”œë ˆì´
         yield return new WaitForSeconds(startDelay);
         monster.TargetLook(monster.target.position);
 
         monster.animator.SetTrigger("SkillA1");
-        yield return new WaitForSeconds(atkADelay); 
-        AttackHit(monster, 1); 
-        yield return new WaitForSeconds((startDelay + atkADelay) - atkBStartTime); // ¾Ö´Ï¸ÞÀÌ¼Ç ÀüÈ¯ ½ÃÁ¡
+        yield return new WaitForSeconds(atkAHitTime); 
+        AttackHit(monster, 1, damageA); 
 
-        monster.animator.SetTrigger("SkillA2");
-        yield return new WaitForSeconds(atkBDelay);
+        yield return new WaitForSeconds(atkBHitTime);
 
-        AttackHit(monster, 2); 
-        yield return new WaitUntil(() =>
-        {
-            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
-            // "SkillA2" ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³¡³¯ ¶§±îÁö ´ë±â
-            return !stateInfo.IsName("SkillA2") || stateInfo.normalizedTime >= 1f;
-        });
-        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        AttackHit(monster, 2, damageB); 
+        yield return new WaitForSeconds(endTime);
+
+        Action = false;
     }
 
 
-    private void AttackHit(BossMonster monster, int actionNumber)
+    private void AttackHit(BossMonster monster, int actionNumber, float damage)
     {
         Vector3 atkDir;
         switch (actionNumber)
@@ -83,12 +88,12 @@ public class BossMonsterSkillA : BaseState<BossMonster>
                 float angle = Vector3.Angle(atkDir, dirToTarget);
                 if (angle <= 135f)
                 {
-                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(monster.atkDamage);
-                    Debug.Log($"{actionNumber} °ø°Ý ¼º°ø");
+                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                    Debug.Log($"{actionNumber} ê³µê²© ì„±ê³µ");
                 }
                 else
                 {
-                    Debug.Log($"{actionNumber} °ø°Ý ½ÇÆÐ - ¹üÀ§ ¹Û");
+                    Debug.Log($"{actionNumber} ê³µê²© ì‹¤íŒ¨ - ë²”ìœ„ ë°–");
                 }
             }
         }

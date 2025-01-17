@@ -8,35 +8,42 @@ public class NormalMonsterStun : BaseState<NormalMonster>
     public NormalMonsterStun(StateHandler<NormalMonster> handler) : base(handler) { }
 
     public float stunTime = 5f;
-    private float curTime = 0;
 
     public override void Enter(NormalMonster monster)
     {
-        Debug.Log("Ω∫≈œ¡¯¿‘");
-        monster.isStunAction = true;
-        //monster.animator.SetBool("Stun", true);
-        curTime = 0;
+        Debug.Log("Ïä§ÌÑ¥ÏßÑÏûÖ");
+        monster.animator.SetBool("Stun", true);
+        monster.StartCoroutine(StartStun(monster));
     }
 
     public override void Update(NormalMonster monster)
     {
         if (monster.isAirborne == true)
         {
-            Debug.Log("Ω∫≈œµµ¡ﬂø° ø°æÓ∫ªµÈæÓøÕº≠ Ω∫≈œƒµΩΩ");
+            Debug.Log("Ïä§ÌÑ¥ÎèÑÏ§ëÏóê ÏóêÏñ¥Î≥∏Îì§Ïñ¥ÏôÄÏÑú Ïä§ÌÑ¥Ï∫îÏä¨");
+            monster.StopCoroutine(StartStun(monster));
+            monster.isStun = false;
+            monster.isHitAction = false;
             monster.nMHandler.ChangeState(typeof(NormalMonsterAirborne));
         }
-        if (curTime >= stunTime - 0.1f)
+        else if (!monster.isStun && !monster.isStunAction)
         {
             monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
         }
-        curTime += Time.deltaTime;
     }
 
     public override void Exit(NormalMonster monster)
     {
         monster.isStunAction = false;
         monster.isStun = false;
-        Debug.Log("Ω∫≈œ¡æ∑·");
-        //monster.animator.SetBool("Stun", false);
+        Debug.Log("Ïä§ÌÑ¥Ï¢ÖÎ£å");
+        monster.animator.SetBool("Stun", false);
+    }
+
+    private IEnumerator StartStun(NormalMonster monster)
+    {
+        yield return new WaitForSeconds(stunTime);
+        monster.isStun = false;
+        monster.isHitAction = false;
     }
 }

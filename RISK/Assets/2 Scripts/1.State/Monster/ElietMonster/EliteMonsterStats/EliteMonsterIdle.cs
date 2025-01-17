@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static NormalMonster;
 
 public class EliteMonsterIdle : BaseState<EliteMonster>
 {
@@ -9,20 +8,28 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
 
     public override void Enter(EliteMonster monster)
     {
-        Debug.Log("IdleÁøÀÔ");
+        Debug.Log("Idleì§„ìž…");
         monster.animator?.SetTrigger("Idle");
     }
 
     public override void Update(EliteMonster monster)
     {
-        if (monster.isAtk == true) return;
-        else if (monster.target == null)
+        if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            monster.Targeting();
-        }
-        else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
-        {
-            //°ø°ÝÀ¸·Î ÀÌµ¿
+            //ê³µê²©ìœ¼ë¡œ ì´ë™
+            int a = Random.Range(0, 3);
+            switch (a)
+            {
+                case 0:
+                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillA));
+                    break;
+                case 1:
+                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillB));
+                    break;
+                case 2:
+                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillC));
+                    break;
+            }
         }
         else
         {
@@ -32,6 +39,6 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
 
     public override void Exit(EliteMonster monster)
     {
-
+        Debug.Log("Idleí‡´ìž¥");
     }
 }

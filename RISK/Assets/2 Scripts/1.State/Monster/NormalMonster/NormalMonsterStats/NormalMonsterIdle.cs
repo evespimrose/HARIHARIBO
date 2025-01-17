@@ -9,25 +9,21 @@ public class NormalMonsterIdle : BaseState<NormalMonster>
 
     public override void Enter(NormalMonster monster)
     {
-        Debug.Log("IdleÁøÀÔ");
+        Debug.Log("Idleì§„ìž…");
         monster.animator?.SetTrigger("Idle");
     }
 
     public override void Update(NormalMonster monster)
     {
-        if (monster.isAtk == true) return;
-        else if (monster.target == null)
+        if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            monster.Targeting();
-        }
-        else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
-        {
+            monster.isAtk = true;
             switch (monster.monsterType)
             {
-                case MonsterType.Melee:
+                case Monster.MonsterType.Melee:
                     monster.nMHandler.ChangeState(typeof(NormalMonsterMeleeAtk));
                     break;
-                case MonsterType.Range:
+                case Monster.MonsterType.Range:
                     monster.nMHandler.ChangeState(typeof(NormalMonsterRangeAtk));
                     break;
             }

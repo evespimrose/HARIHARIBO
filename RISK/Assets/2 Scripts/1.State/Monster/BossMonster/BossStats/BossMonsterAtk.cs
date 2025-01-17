@@ -6,79 +6,78 @@ public class BossMonsterAtk : BaseState<BossMonster>
 {
     public BossMonsterAtk(StateHandler<BossMonster> handler) : base(handler) { }
 
-    // °ø°İ ÆÇÁ¤ µô·¹ÀÌ
-    public float atkDelayA = 0.17f;
-    public float atkDelayB = 0.43f;
-    public float atkDelayC = 0.18f;
+    public float damageA = 1f;
+    public float damageB = 1f;
+    public float damageC = 1f;
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç Áö¼Ó ½Ã°£
-    public float atkADuration = 1.4f;
-    public float atkBDuration = 1.6f;
-    public float atkCDuration = 1.8f;
+    // ê³µê²© íŒì • ë”œë ˆì´
+    public float atkAHitTime = 0.25f;//ë“¤ì–´ì™€ì„œ ì´ì‹œê°„í›„ 1íƒ€ íˆíŠ¸
+    public float atkBHitTime = 0.95f;//1íƒ€ì´í›„ ì´ì‹œê°„ì´í›„ 2íƒ€ íˆíŠ¸
+    public float atkCHitTime = 1.2f;//2íƒ€ì´í›„ ì´ì‹œê°„í›„ 3íƒ€íˆíŠ¸
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀüÈ¯ ½ÃÁ¡À» ¼³Á¤ÇÒ ½Ã°£
-    public float nextBTime = 0.45f; // AtkA -> AtkB·Î ³Ñ¾î°¡´Â ½Ã°£
-    public float nextCTime = 1f;    // AtkB -> AtkC·Î ³Ñ¾î°¡´Â ½Ã°£
-    public float nextEndTime = 1.3f; // AtkC -> End·Î ³Ñ¾î°¡´Â ½Ã°£
+    // ì• ë‹ˆë©”ì´ì…˜ ì§€ì† ì‹œê°„
+    public float endTime = 1.5f; //ê³µê²©í›„ ë‚˜ê°€ëŠ”ì‹œê°„
 
-    // ½ºÅ×ÀÌÆ® µé¾î¿Â µÚ ¼±µô·¹ÀÌ
+    // ìŠ¤í…Œì´íŠ¸ ë“¤ì–´ì˜¨ ë’¤ ì„ ë”œë ˆì´
     public float startDelay = 0.5f;
+
+    private bool Action = false;
 
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("Atk ½ÃÀÛ");
-        monster.isAtk = true;
+        damageA = monster.atkDamage * 1f;
+        damageB = monster.atkDamage * 1.1f;
+        damageC = monster.atkDamage * 1.2f;
 
-        // ¼±µô·¹ÀÌ ÈÄ ÄÚ·çÆ¾ ½ÃÀÛ
-        monster.StartSkillCoroutine(AttackCoroutine(monster));
+        Action = true;
+        monster.isAtk = true;
+        Debug.Log("Atk ì‹œì‘");
+
+        // ì„ ë”œë ˆì´ í›„ ì½”ë£¨í‹´ ì‹œì‘
+        monster.StartCoroutine(AttackCoroutine(monster));
+    }
+
+    public override void Update(BossMonster monster)
+    {
+        if (Action == false)
+        {
+            monster.isAtk = false;
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-        Debug.Log("Atk Á¾·á");
-        monster.isAtk = false;
+        Debug.Log("Atk ì¢…ë£Œ");
     }
 
     private IEnumerator AttackCoroutine(BossMonster monster)
     {
-        // ¼±µô·¹ÀÌ
+        // ì„ ë”œë ˆì´
         yield return new WaitForSeconds(startDelay);
         monster.TargetLook(monster.target.position);
 
-        // Ã¹ ¹øÂ° °ø°İ - AtkA
+        // ì²« ë²ˆì§¸ ê³µê²© - AtkA
         monster.animator.SetTrigger("AtkA");
-        yield return new WaitForSeconds(atkDelayA); // °ø°İ ÆÇÁ¤ µô·¹ÀÌ
-        AttackHit(monster, 105f); // °ø°İ ÆÇÁ¤
+        yield return new WaitForSeconds(atkAHitTime); // ê³µê²© íŒì • ë”œë ˆì´
+        AttackHit(monster, 105f, damageA); // ê³µê²© íŒì •
 
-        // AtkA ¾Ö´Ï¸ŞÀÌ¼Ç¿¡¼­ AtkB·Î ÀüÈ¯
-        yield return new WaitForSeconds(nextBTime); // ¾Ö´Ï¸ŞÀÌ¼Ç ÀüÈ¯ ½ÃÁ¡
+        // ë‘ ë²ˆì§¸ ê³µê²© - AtkB
+        yield return new WaitForSeconds(atkBHitTime); // ê³µê²© íŒì • ë”œë ˆì´
+        AttackHit(monster, 45f, damageB); // ê³µê²© íŒì •
 
-        // µÎ ¹øÂ° °ø°İ - AtkB
-        monster.animator.SetTrigger("AtkB");
-        yield return new WaitForSeconds(atkDelayB); // °ø°İ ÆÇÁ¤ µô·¹ÀÌ
-        AttackHit(monster, 45f); // °ø°İ ÆÇÁ¤
+        // ì„¸ ë²ˆì§¸ ê³µê²© - AtkC
+        yield return new WaitForSeconds(atkCHitTime); // ê³µê²© íŒì • ë”œë ˆì´
+        AttackHit(monster, 180f, damageC); // ê³µê²© íŒì •
 
-        // AtkB ¾Ö´Ï¸ŞÀÌ¼Ç¿¡¼­ AtkC·Î ÀüÈ¯
-        yield return new WaitForSeconds(nextCTime); // ¾Ö´Ï¸ŞÀÌ¼Ç ÀüÈ¯ ½ÃÁ¡
+        //ì „ì²´ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ
+        yield return new WaitForSeconds(endTime);
 
-        // ¼¼ ¹øÂ° °ø°İ - AtkC
-        monster.animator.SetTrigger("AtkC");
-        yield return new WaitForSeconds(atkDelayC); // °ø°İ ÆÇÁ¤ µô·¹ÀÌ
-        AttackHit(monster, 180f); // °ø°İ ÆÇÁ¤
-
-        // AtkC ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³¯ ¶§±îÁö ´ë±â
-        yield return new WaitUntil(() =>
-        {
-            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
-            // "AtkC" ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³­ ÈÄ ´Ù¸¥ »óÅÂ·Î ÀüÈ¯µÇ¾úÀ» ¶§, "AtkC"°¡ ³¡³µ´Ù°í ÆÇ´Ü
-            return !stateInfo.IsName("AtkC") || stateInfo.normalizedTime >= 1f;
-        });
-
-        // °ø°İ Á¾·á ÈÄ »óÅÂ ÀüÈ¯
-        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        Action = false;
+        // ê³µê²© ì¢…ë£Œ í›„ ìƒíƒœ ì „í™˜
     }
 
-    private void AttackHit(BossMonster monster, float angleThreshold)
+    private void AttackHit(BossMonster monster, float angleThreshold, float damage)
     {
         Vector3 atkDir = monster.transform.forward;
         Collider[] cols = Physics.OverlapSphere(monster.transform.position, monster.atkRange);
@@ -91,12 +90,12 @@ public class BossMonsterAtk : BaseState<BossMonster>
 
                 if (angle <= angleThreshold)
                 {
-                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(monster.atkDamage);
-                    Debug.Log("°ø°İ ¼º°ø");
+                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                    Debug.Log("ê³µê²© ì„±ê³µ");
                 }
                 else
                 {
-                    Debug.Log("°ø°İ ½ÇÆĞ - ¹üÀ§ ¹Û");
+                    Debug.Log("ê³µê²© ì‹¤íŒ¨ - ë²”ìœ„ ë°–");
                 }
             }
         }

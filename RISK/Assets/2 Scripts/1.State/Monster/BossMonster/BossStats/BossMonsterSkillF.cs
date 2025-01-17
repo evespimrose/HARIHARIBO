@@ -6,83 +6,94 @@ public class BossMonsterSkillF : BaseState<BossMonster>
 {
     public BossMonsterSkillF(StateHandler<BossMonster> handler) : base(handler) { }
 
-    // ½ºÅ³6 ´ë½¬ ¹Ğ°İ
-    public Vector3 dashDirection; // ´ë½¬ ¹æÇâ
-    public float atkTime = 1f; // ´ë½¬ Áö¼Ó ½Ã°£
-    public float skillFMoveSpeed = 20f; // ´ë½¬ ¼Óµµ
-    public float dashDistance = 5f; // ´ë½¬ ÀÌµ¿ °Å¸®
-    public float slowSpeed = 0.1f; // º®¿¡ Ãæµ¹ÇÒ ¶§ ´À·ÁÁö´Â ¼Óµµ ºñÀ²
+    // ìŠ¤í‚¬6 ëŒ€ì‰¬ ë°€ê²©
+    public Vector3 dashDirection; // ëŒ€ì‰¬ ë°©í–¥
+    public float atkDelay = 2f;//ì„ ë”œ
+    public float atkTime = 1f; // ëŒ€ì‰¬ ì§€ì† ì‹œê°„
+    public float skillFMoveSpeed = 20f; // ëŒ€ì‰¬ ì†ë„
+    public float dashDistance = 5f; // ëŒ€ì‰¬ ì´ë™ ê±°ë¦¬
+    public float slowSpeed = 0.1f; // ë²½ì— ì¶©ëŒí•  ë•Œ ëŠë ¤ì§€ëŠ” ì†ë„ ë¹„ìœ¨
+
+    public float additionalWaitTime = 0.5f;
+
+    private bool Action = false;
 
     public override void Enter(BossMonster monster)
     {
-        monster.StartSkillCoroutine(SkillFCoroutine(monster)); // ÄÚ·çÆ¾ ½ÃÀÛ
-        monster.Targeting(); // Å¸°Ù »õ·Î ¼³Á¤
+        monster.skillFDamage = monster.atkDamage * 1.5f;
+        Action = true;
+        monster.isAtk = true;
+        monster.StartCoroutine(SkillFCoroutine(monster)); // ì½”ë£¨í‹´ ì‹œì‘
+        monster.Targeting(); // íƒ€ê²Ÿ ìƒˆë¡œ ì„¤ì •
 
-        // ´ë½¬ ½ÃÀÛ ¹æÇâÀ» ¼³Á¤ (ÇöÀç ¹Ù¶óº¸´Â ¹æÇâ)
+        // ëŒ€ì‰¬ ì‹œì‘ ë°©í–¥ì„ ì„¤ì • (í˜„ì¬ ë°”ë¼ë³´ëŠ” ë°©í–¥)
         dashDirection = monster.transform.forward;
 
-        // ÃÊ±â È¸Àü ¼³Á¤ (´ë½¬ ¹æÇâÀ¸·Î È¸Àü)
+        // ì´ˆê¸° íšŒì „ ì„¤ì • (ëŒ€ì‰¬ ë°©í–¥ìœ¼ë¡œ íšŒì „)
         monster.TargetLook(monster.transform.position + dashDirection);
 
-        monster.SkillFReset(); // ½ºÅ³ ÃÊ±âÈ­
-        Debug.Log("SkillF ÁøÀÔ");
+        monster.SkillFReset(); // ìŠ¤í‚¬ ì´ˆê¸°í™”
+        Debug.Log("SkillF ì§„ì…");
+    }
+
+    public override void Update(BossMonster monster)
+    {
+        if (Action == false)
+        {
+            monster.isAtk = false;
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-        monster.AtkEnd();
-        Debug.Log("SkillF Á¾·á");
-        monster.SkillFReset();
-        monster.animator.SetBool("SkillF", false); // ¾Ö´Ï¸ŞÀÌ¼Ç ¸®¼Â
+        Debug.Log("SkillF ì¢…ë£Œ");
     }
 
     private IEnumerator SkillFCoroutine(BossMonster monster)
     {
-        // ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà (´ë½¬ ½ÃÀÛ)
+        // ì„ ë”œë ˆì´
+        monster.skillFPrefabA.SetActive(true);
+        yield return new WaitForSeconds(atkDelay);
+
+        // ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
+        monster.skillFPrefabA.SetActive(false);
+        monster.skillFPrefabB.SetActive(true);
         monster.animator.SetBool("SkillF", true);
-        monster.skillFPrefab.SetActive(true);
-
-        // ´ë½¬ ½ÃÀÛ
+        // ëŒ€ì‰¬ ì‹œì‘
         monster.isMoving = true;
-        Debug.Log("µ¹Áø ½ÃÀÛ");
+        Debug.Log("ëŒì§„ ì‹œì‘");
 
-        float elapsedTime = 0f; // °æ°ú ½Ã°£
-
-        // ´ë½¬ Áö¼Ó ½Ã°£ µ¿¾È ÀÌµ¿
+        Rigidbody rb = monster.GetComponent<Rigidbody>();
+        Vector3 dashDirection = monster.transform.forward;
+        Vector3 moveDirection = dashDirection * skillFMoveSpeed;
+        // ëŒ€ì‰¬ ì§€ì† ì‹œê°„ ë™ì•ˆ ì´ë™
+        float elapsedTime = 0f; 
         while (elapsedTime < atkTime)
         {
             if (monster.isMoving)
             {
-                // ´ë½¬ ¹æÇâÀ¸·Î °è¼Ó ÀÌµ¿
-                Vector3 targetPosition = monster.transform.position + dashDirection * skillFMoveSpeed * Time.deltaTime;
-
-                // º®¿¡ Ãæµ¹Çß´ÂÁö Ã¼Å©
                 if (monster.isWall)
                 {
-                    Debug.Log("º®¿¡ Ãæµ¹ÇÏ¿© ¼Óµµ °¨¼Ò");
-                    // º®¿¡ Ãæµ¹ÇÏ¸é ¼Óµµ¸¦ ³·Ãß±â: º®¿¡ °¡±î¿öÁö¸é ÀÌµ¿ ¼Óµµ¸¦ ´õ ³·Ãß±â
-                    targetPosition = monster.transform.position + dashDirection * skillFMoveSpeed * slowSpeed * Time.deltaTime;
+                    moveDirection *= slowSpeed;
                 }
-
-                targetPosition.y = monster.transform.position.y;  // yÃà °íÁ¤
-                monster.transform.position = targetPosition;
+                rb.velocity = moveDirection;
             }
-
             elapsedTime += Time.deltaTime;
-            yield return null; // ÇÑ ÇÁ·¹ÀÓ ´ë±â
+            yield return null;
         }
-
-        // ´ë½¬ Á¾·á
-        monster.skillFPrefab.SetActive(true);
+        monster.skillFPrefabB.SetActive(false);
         monster.isMoving = false;
         monster.SkillFReset();
-        Debug.Log("µ¹Áø Á¾·á");
-
-        // ´ë½¬ Á¾·á ÈÄ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ²ô°í 0.2ÃÊ ÈÄ Idle·Î ÀüÈ¯
-        yield return new WaitForSeconds(0.2f);
+        monster.RBStop();
+        Debug.Log("ëŒì§„ ì¢…ë£Œ");
         monster.animator.SetBool("SkillF", false);
+        yield return null;
 
-        // »óÅÂ ÀüÈ¯
-        monster.bMHandler.ChangeState(typeof(BossMonsterIdle)); // »óÅÂ ÀüÈ¯
+        yield return new WaitForSeconds(additionalWaitTime);
+
+        Action = false;
     }
+
+
 }
