@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using static NormalMonster;
 
 public class NormalMonsterMove : BaseState<NormalMonster>
 {
@@ -28,6 +26,7 @@ public class NormalMonsterMove : BaseState<NormalMonster>
 
     public override void Exit(NormalMonster monster)
     {
+        Debug.Log("Move퇴장");
         monster.animator.SetBool("Move", false);
     }
 }

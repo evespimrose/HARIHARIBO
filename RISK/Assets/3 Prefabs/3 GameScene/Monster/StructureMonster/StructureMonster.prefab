@@ -131,17 +131,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9353e0dd8cdff144c806d1da3e2ad0c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkDamage: 0
-  curHp: 0
-  moveSpeed: 1
-  atkDuration: 1
-  model: {fileID: 192593138123534803}
+  monsterType: 2
   target: {fileID: 0}
+  model: {fileID: 192593138123534803}
   monsterState: {fileID: 11400000, guid: 9f77abfec5c56c041af096b7adcc77cf, type: 2}
+  atkDamage: 0
+  bodyAtkDamage: 0
+  moveSpeed: 1
+  atkRange: 0
+  atkDelay: 0
+  curHp: 0
+  isAtk: 0
+  isAirborne: 0
+  isStun: 0
+  isStunAction: 0
+  isHit: 0
+  isHitAction: 0
   monsterDebuff: {fileID: 564192389389434857, guid: 2bede9326d09e7742a747606022912cd, type: 3}
   isSlow: 0
   isBleeding: 0
   isPoison: 0
+  atkDuration: 1
   isAirborne: 0
   isStun: 0
   isStunAction: 0

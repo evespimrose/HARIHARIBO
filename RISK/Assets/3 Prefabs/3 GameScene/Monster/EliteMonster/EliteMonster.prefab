@@ -523,6 +523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7819897867982679082}
   - component: {fileID: 3816173517727180913}
+  - component: {fileID: 3079257715665474663}
   - component: {fileID: 8570157997732297257}
   - component: {fileID: 7939652031089633852}
   m_Layer: 6
@@ -572,6 +573,29 @@ CapsuleCollider:
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!136 &3079257715665474663
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3368959441367381406}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!54 &8570157997732297257
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -611,12 +635,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0f9d3c687133941b58cf4a26fd6462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterType: 3
   target: {fileID: 0}
   model: {fileID: 4687839419340425959}
-  animator: {fileID: 5720708228348033515}
-  dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
-  skillBPrefab: {fileID: 7341566284177011136, guid: 81027b2e540b02340a8cc54e1c2b9c0a, type: 3}
-  skillCPrefab: {fileID: 4598972316749910789, guid: 5548946319462bf4999fa1a6f1517b9e, type: 3}
   monsterState: {fileID: 11400000, guid: 9f77abfec5c56c041af096b7adcc77cf, type: 2}
   atkDamage: 0
   moveSpeed: 0
@@ -624,12 +645,20 @@ MonoBehaviour:
   atkDelay: 0
   curHp: 0
   isAtk: 0
+  isAirborne: 0
   isStun: 0
   isStunAction: 0
+  isHit: 0
+  isHitAction: 0
   monsterDebuff: {fileID: 6028458624847643519}
   isSlow: 0
   isBleeding: 0
   isPoison: 0
+  bodyAtkDamage: 1
+  animator: {fileID: 5720708228348033515}
+  dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
+  skillBPrefab: {fileID: 7341566284177011136, guid: 81027b2e540b02340a8cc54e1c2b9c0a, type: 3}
+  skillCPrefab: {fileID: 4598972316749910789, guid: 5548946319462bf4999fa1a6f1517b9e, type: 3}
 --- !u!1 &3616709380497241219
 GameObject:
   m_ObjectHideFlags: 0

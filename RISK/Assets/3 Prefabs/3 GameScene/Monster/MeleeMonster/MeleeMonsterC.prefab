@@ -1677,6 +1677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2792274555771897510}
   - component: {fileID: 1002433665712546396}
+  - component: {fileID: 5413972106656038854}
   - component: {fileID: 4350741906700796394}
   - component: {fileID: 4972005036360606786}
   m_Layer: 6
@@ -1726,6 +1727,29 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &5413972106656038854
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5384737203170549770}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4350741906700796394
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1768,23 +1792,25 @@ MonoBehaviour:
   monsterType: 0
   target: {fileID: 0}
   model: {fileID: 7414220226655618788}
-  animator: {fileID: 1987514924220896251}
-  dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
   monsterState: {fileID: 11400000, guid: 759aff86e13ba02409ee049caec3bbde, type: 2}
   atkDamage: 0
   moveSpeed: 10
   atkRange: 10
   atkDelay: 5
   curHp: 10
-  isDie: 0
-  isAirborne: 0
   isAtk: 0
+  isAirborne: 0
   isStun: 0
   isStunAction: 0
+  isHit: 0
+  isHitAction: 0
   monsterDebuff: {fileID: 8403028421520883141}
   isSlow: 0
   isBleeding: 0
   isPoison: 0
+  bodyAtkDamage: 1
+  animator: {fileID: 1987514924220896251}
+  dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
 --- !u!1 &5420767945232793622
 GameObject:
   m_ObjectHideFlags: 0

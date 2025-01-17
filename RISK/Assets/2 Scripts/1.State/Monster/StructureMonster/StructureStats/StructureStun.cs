@@ -12,22 +12,27 @@ public class StructureStun : BaseState<StructureMonster>
     public override void Enter(StructureMonster monster)
     {
         Debug.Log("스턴진입");
-        monster.isStunAction = true;
-        curTime = 0;
+        monster.StartCoroutine(StartStun(monster));
     }
 
     public override void Update(StructureMonster monster)
     {
+        if (monster.isHit == true)
+        {
+            monster.isHit = false;
+        }
         if (monster.isAirborne == true)
         {
             Debug.Log("스턴도중에 에어본들어와서 스턴캔슬");
+            monster.StopCoroutine(StartStun(monster));
+            monster.isStun = false;
+            monster.isHitAction = false;
             monster.sMHandler.ChangeState(typeof(StructureAirborne));
         }
-        if (curTime >= stunTime - 0.1f)
+        else if (!monster.isStun && !monster.isStunAction)
         {
             monster.sMHandler.ChangeState(typeof(StructureIdle));
         }
-        curTime += Time.deltaTime;
     }
 
     public override void Exit(StructureMonster monster)
@@ -35,5 +40,12 @@ public class StructureStun : BaseState<StructureMonster>
         monster.isStunAction = false;
         monster.isStun = false;
         Debug.Log("스턴종료");
+    }
+
+    private IEnumerator StartStun(StructureMonster monster)
+    {
+        yield return new WaitForSeconds(stunTime);
+        monster.isStun = false;
+        monster.isHitAction = false;
     }
 }

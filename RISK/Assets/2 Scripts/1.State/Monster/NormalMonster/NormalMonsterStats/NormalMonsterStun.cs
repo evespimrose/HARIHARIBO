@@ -8,13 +8,12 @@ public class NormalMonsterStun : BaseState<NormalMonster>
     public NormalMonsterStun(StateHandler<NormalMonster> handler) : base(handler) { }
 
     public float stunTime = 5f;
-    private float curTime = 0;
 
     public override void Enter(NormalMonster monster)
     {
         Debug.Log("스턴진입");
         monster.animator.SetBool("Stun", true);
-        curTime = 0;
+        monster.StartCoroutine(StartStun(monster));
     }
 
     public override void Update(NormalMonster monster)
@@ -22,13 +21,15 @@ public class NormalMonsterStun : BaseState<NormalMonster>
         if (monster.isAirborne == true)
         {
             Debug.Log("스턴도중에 에어본들어와서 스턴캔슬");
+            monster.StopCoroutine(StartStun(monster));
+            monster.isStun = false;
+            monster.isHitAction = false;
             monster.nMHandler.ChangeState(typeof(NormalMonsterAirborne));
         }
-        if (curTime >= stunTime - 0.1f)
+        else if (!monster.isStun && !monster.isStunAction)
         {
             monster.nMHandler.ChangeState(typeof(NormalMonsterIdle));
         }
-        curTime += Time.deltaTime;
     }
 
     public override void Exit(NormalMonster monster)
@@ -37,5 +38,12 @@ public class NormalMonsterStun : BaseState<NormalMonster>
         monster.isStun = false;
         Debug.Log("스턴종료");
         monster.animator.SetBool("Stun", false);
+    }
+
+    private IEnumerator StartStun(NormalMonster monster)
+    {
+        yield return new WaitForSeconds(stunTime);
+        monster.isStun = false;
+        monster.isHitAction = false;
     }
 }

@@ -3,62 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalMonster : MonoBehaviour, ITakedamage
+public class NormalMonster : Monster
 {
-    public enum MonsterType
-    {
-        Melee,
-        Range
-    }
-    [Header("����Ÿ��")]
-    public MonsterType monsterType;
-    [Header("���� Ÿ�� �� ��")]
-    [Tooltip("���ݴ��")]
-    public Transform target;
     protected Collider col;
-    protected Rigidbody rb;
     public StateHandler<NormalMonster> nMHandler;
 
-    [Tooltip("�𵨸�")]
-    public GameObject model;
-    [Tooltip("�𵨸��� �ִϸ�����")]
+    [Tooltip("애니메이터")]
     public Animator animator;
-    [Tooltip("����� ��ƼŬ")]
+    [Tooltip("사망시 파티클")]
     public ParticleSystem dieParticle;
-
-    [Header("���� ����")]
-    [Tooltip("���ֽ���")]
-    public MonsterScriptableObjects monsterState;
-    [Tooltip("���ݵ�����")]
-    public float atkDamage;
-    [Tooltip("�̵��ӵ�")]
-    public float moveSpeed;
-    [Tooltip("���ݹ���")]
-    public float atkRange;
-    [Tooltip("���ݵ����")]
-    public float atkDelay;
-    [Tooltip("����ü��")]
-    public float curHp;
-    [Tooltip("�ִ�ü��")]
-    protected float maxHp;
-
-    [Header("����ȭ �����̻� üũ")]
-    [Tooltip("���")]
-    public bool isAirborne = false;
-    protected bool isAirborneAction = false;
-    public bool isStun = false;
-    public bool isStunAction = false;
-    protected bool isDie = false;
-    protected bool isDieAction = false;
-    public bool isHit = false;
-    public bool isHitAction = false;
-    public bool isAtk = false;
-
-    [Header("����� �����̻� üũ")]
-    public Debuff monsterDebuff;
-    public bool isSlow = false;
-    public bool isBleeding = false;
-    public bool isPoison = false;
 
     protected void Awake()
     {
@@ -74,27 +27,17 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     private void Update()
     {
+        RemoveBodyAtkHit();
         if (target == null) Targeting();
         monsterDebuff.DebuffCheck(this);
-        if (isDie == true && isDieAction == false)
-        {
-            monsterDebuff.DebuffAllOff();
-            nMHandler.ChangeState(typeof(NormalMonsterDie));
-            isDieAction = true;
-        }
-        else if (isAirborne == true && isAirborneAction == false)
+        if (!isDie && isAirborne == true && isAirborneAction == false)
         {
             nMHandler.ChangeState(typeof(NormalMonsterAirborne));
         }
-        else if (isAirborne == false && isStun == true && isStunAction == false)
+        else if (!isDie && !isAirborne && isStun && !isStunAction)
         {
             isStunAction = true;
             nMHandler.ChangeState(typeof(NormalMonsterStun));
-        }
-        else if (!isAirborne && !isAirborneAction && !isStun && !isStunAction && isHit && !isHitAction)
-        {
-            isHitAction = true;
-            nMHandler.ChangeState(typeof(NormalMonsterHit));
         }
         nMHandler.Update();
     }
@@ -115,8 +58,7 @@ public class NormalMonster : MonoBehaviour, ITakedamage
     protected void InitializeStateHandler()
     {
         nMHandler = new StateHandler<NormalMonster>(this);
-
-        // ���µ� ���
+        //상태등록
         nMHandler.RegisterState(new NormalMonsterIdle(nMHandler));
         nMHandler.RegisterState(new NormalMonsterMove(nMHandler));
         switch (monsterType)
@@ -132,83 +74,8 @@ public class NormalMonster : MonoBehaviour, ITakedamage
         nMHandler.RegisterState(new NormalMonsterStun(nMHandler));
         nMHandler.RegisterState(new NormalMonsterAirborne(nMHandler));
         nMHandler.RegisterState(new NormalMonsterDie(nMHandler));
-        // �ʱ� ���� ����
+        //시작상태
         nMHandler.ChangeState(typeof(NormalMonsterIdle));
-    }
-
-    public void Targeting()
-    {
-        foreach (var tr in UnitManager.Instance.players)
-        {
-            if (target == null) target = tr.Value.transform;
-            else if (target != null &&
-                (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.Value.transform.position, transform.position)))
-            {
-                target = tr.Value.transform;
-            }
-        }
-        if (target == null) nMHandler.ChangeState(typeof(NormalMonsterIdle));
-    }
-
-    public void Move()
-    {
-        transform.LookAt(target);
-        Vector3 dir = (target.position - transform.position).normalized;
-        Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(moveDir);
-    }
-
-    public void StartAirborne()
-    {
-        if (isAirborneAction == false)
-        {
-            StartCoroutine(Airborne());
-        }
-    }
-
-    private IEnumerator Airborne()
-    {
-        this.isAirborneAction = true;
-
-        float airborneTime = 2f;//������ӽð�
-        float airborneDelay = airborneTime / 2f;
-        float upDuration = airborneTime * 0.2f;//�ö󰡴½ð�
-        float downDuration = airborneTime * 0.3f;//�������½ð�
-        float startY = this.model.transform.position.y;//���ƿ���ġ
-        float targetY = startY + 5f;//�ö���ġ
-        float timer = 0f;
-
-        // ��� �ܰ� (0.4�� ���� ���� �̵�)
-        while (timer < upDuration)
-        {
-            float newY = Mathf.Lerp(startY, targetY, timer / upDuration);  // ��� ������ �ð��� �°� ���
-            this.model.transform.position = new Vector3(
-                this.model.transform.position.x,
-                newY,
-                this.model.transform.position.z
-            );
-            timer += Time.deltaTime; // �ð� ����
-            yield return null; // �����Ӹ��� ������Ʈ
-        }
-
-        // �ϰ� �ܰ� (0.6�� ���� ���� ��ġ�� ������)
-        while (timer < airborneTime)
-        {
-            float newY = Mathf.Lerp(targetY, startY, (timer - upDuration) / downDuration);  // �ϰ� ������ �ð��� �°� ���
-            this.model.transform.position = new Vector3(
-                this.model.transform.position.x,
-                newY,
-                this.model.transform.position.z
-            );
-            timer += Time.deltaTime; // �ð� ����
-            yield return null; // �����Ӹ��� ������Ʈ
-        }
-
-        yield return new WaitForSeconds(airborneDelay);
-        //����� �Ͼ�� �ð�
-        this.isAirborneAction = false;
-        this.isAirborne = false;
     }
 
     public void DieParticle()
@@ -231,24 +98,25 @@ public class NormalMonster : MonoBehaviour, ITakedamage
 
     public IEnumerator AtkCoolTime()
     {
-        Debug.Log("������Ÿ�� ����");
+        Debug.Log("쿨타임 시작");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("������Ÿ�� ����");
+        Debug.Log("쿨타임 종료");
         isAtk = false;
     }
 
-    public void Takedamage(float damage)
+    public override void Takedamage(float damage)
     {
-        curHp -= Mathf.RoundToInt(damage);
-        if (curHp <= 0)
-        {
-            isDie = true;
-            this.nMHandler.ChangeState(typeof(NormalMonsterDie));
-        }
-        else
+        base.Takedamage(damage);
+        if (isHit == false)
         {
             isHit = true;
             this.nMHandler.ChangeState(typeof(NormalMonsterHit));
         }
+    }
+
+    public override void DieStatChange()
+    {
+        isDie = true;
+        this.nMHandler.ChangeState(typeof(NormalMonsterDie));
     }
 }

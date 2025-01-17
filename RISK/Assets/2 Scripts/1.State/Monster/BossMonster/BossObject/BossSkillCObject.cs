@@ -5,7 +5,7 @@ using UnityEngine;
 public class BossSkillCObject : MonoBehaviour
 {
     public float moveSpeed = 20f;      
-    public float moveDistance = 20f;   
+    public float moveDistance = 30f;   
     public int maxAtkCount = 1;        
     public float atkDamage;            
 
@@ -24,7 +24,7 @@ public class BossSkillCObject : MonoBehaviour
     void Update()
     {
         if (isSeting == false) return;
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 2);
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 5);
         if (Vector3.Distance(startPos, transform.position) >= moveDistance)
         {
             Destroy(gameObject);

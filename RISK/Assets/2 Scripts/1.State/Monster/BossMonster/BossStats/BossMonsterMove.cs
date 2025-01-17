@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BossMonsterMove : BaseState<BossMonster>
@@ -8,26 +9,22 @@ public class BossMonsterMove : BaseState<BossMonster>
     
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("MoveÁøÀÔ");
+        Debug.Log("Moveì§„ìž…");
         monster.animator.SetBool("Move", true);
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
-        {
-            //°ø°ÝÀ¸·Î ÀÌµ¿
-            //monster.bMHandler.ChangeState(typeof(BossMonsterAtk));
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+        if (monster.isChase) monster.Move();
         else
         {
-            monster.Move();
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
         }
     }
 
     public override void Exit(BossMonster monster)
     {
+        Debug.Log("Moveí‡´ìž¥");
         monster.animator.SetBool("Move", false);
     }
 }

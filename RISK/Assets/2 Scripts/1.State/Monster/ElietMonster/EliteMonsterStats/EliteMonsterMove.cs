@@ -26,6 +26,7 @@ public class EliteMonsterMove : BaseState<EliteMonster>
 
     public override void Exit(EliteMonster monster)
     {
+        Debug.Log("Move퇴장");
         monster.animator.SetBool("Move", false);
     }
 }

@@ -1005,6 +1005,7 @@ GameObject:
   - component: {fileID: 9096354989774238969}
   - component: {fileID: 1861203761334546130}
   - component: {fileID: 2532525478795084192}
+  - component: {fileID: 5869608981049390451}
   - component: {fileID: 8596722055331692780}
   m_Layer: 6
   m_Name: BossMonster
@@ -1086,6 +1087,29 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!136 &5869608981049390451
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6534145392595676464}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &8596722055331692780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1098,8 +1122,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e6e86283c2cf3140877ee24b82a875b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterType: 4
   target: {fileID: 0}
   model: {fileID: 9067718204810012593}
+  monsterState: {fileID: 11400000, guid: 215fedc7b11462c41831b2a9bf79de7f, type: 2}
+  atkDamage: 0
+  moveSpeed: 0
+  atkRange: 0
+  atkDelay: 0
+  curHp: 0
+  isAtk: 0
+  isAirborne: 0
+  isStun: 0
+  isStunAction: 0
+  isHit: 0
+  isHitAction: 0
+  monsterDebuff: {fileID: 2820213965593361770}
+  isSlow: 0
+  isBleeding: 0
+  isPoison: 0
+  bodyAtkDamage: 1
   animator: {fileID: 5514934472971021088}
   skillBParticle:
   - {fileID: 5212373395338331399}
@@ -1116,17 +1158,6 @@ MonoBehaviour:
   isWall: 0
   skillFknockback: 5
   skillFDamage: 10
-  monsterState: {fileID: 11400000, guid: 215fedc7b11462c41831b2a9bf79de7f, type: 2}
-  atkDamage: 0
-  moveSpeed: 0
-  atkRange: 0
-  atkDelay: 0
-  curHp: 0
-  isAtk: 0
-  monsterDebuff: {fileID: 2820213965593361770}
-  isSlow: 0
-  isBleeding: 0
-  isPoison: 0
 --- !u!1 &6563487439654557525
 GameObject:
   m_ObjectHideFlags: 0

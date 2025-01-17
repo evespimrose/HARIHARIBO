@@ -14,6 +14,10 @@ public class StructureAirborne : BaseState<StructureMonster>
 
     public override void Update(StructureMonster monster)
     {
+        if (monster.isHit == true)
+        {
+            monster.isHit = false;
+        }
         if (monster.isStun == true)
         {
             monster.isStun = false;

@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class BossMonster : MonoBehaviour, ITakedamage
+public class BossMonster : Monster
 {
     [Header("몬스터 타겟 및 모델")]
-    [Tooltip("공격대상")]
-    public Transform target;
     protected Collider col;
-    private Rigidbody rb;
     public StateHandler<BossMonster> bMHandler;
 
-    [Tooltip("모델링")]
-    public GameObject model;
     [Tooltip("모델링의 애니메이터")]
     public Animator animator;
     [Header("스킬2 관련")]
@@ -26,7 +21,8 @@ public class BossMonster : MonoBehaviour, ITakedamage
     [Header("스킬5 관련")]
     public GameObject skillEPrefab;
     [Header("스킬6 관련")]
-    public GameObject skillFPrefab;
+    public GameObject skillFPrefabA;
+    public GameObject skillFPrefabB;
     [Header("스킬7 관련")]
     public GameObject skillGPrefab;
     public bool isMoving = false;
@@ -35,30 +31,9 @@ public class BossMonster : MonoBehaviour, ITakedamage
     public float skillFDamage = 10f; //skillF 공격 데미지
     private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF 타격한 대상리스트
 
-    [Header("몬스터 스텟")]
-    [Tooltip("유닛스텟")]
-    public MonsterScriptableObjects monsterState;
-    [Tooltip("공격데미지")]
-    public float atkDamage;
-    [Tooltip("이동속도")]
-    public float moveSpeed;
-    [Tooltip("공격범위")]
-    public float atkRange;
-    [Tooltip("공격딜레이")]
-    public float atkDelay;
-    [Tooltip("현재체력")]
-    public float curHp;
-    [Tooltip("최대체력")]
-    protected float maxHp;
-
-    protected bool isDie = false;
-    public bool isAtk = false;
-
-    [Header("디버프 상태이상 체크")]
-    public Debuff monsterDebuff;
-    public bool isSlow = false;
-    public bool isBleeding = false;
-    public bool isPoison = false;
+    public float chaseTime = 1f;
+    public bool isChase = false;
+    public bool isAction = false;
 
     protected void Awake()
     {
@@ -72,33 +47,31 @@ public class BossMonster : MonoBehaviour, ITakedamage
         Targeting();
     }
 
-    private void Update()
+    protected void Update()
     {
+        RemoveBodyAtkHit();
         if (target == null) Targeting();
-        if (isDie == true)
-        {
-            monsterDebuff.DebuffAllOff();
-            bMHandler.ChangeState(typeof(NormalMonsterDie));
-        }
-        monsterDebuff.DebuffCheck(this);
-        if (isAtk == true && isDie == false) return;
         bMHandler.Update();
     }
 
     public void SkillFReset()
     {
-        //rb.velocity = Vector3.zero;
         hitTargets.Clear();
     }
 
-    private void OnCollisionEnter(Collision other)
+    public void RBStop()
     {
-        Debug.Log("충돌 발생: " + other.gameObject.name);
+        rb.velocity = Vector3.zero;
+    }
 
+    // 벽과의 충돌이 시작되었을 때
+    protected void OnCollisionEnter(Collision other)
+    {
         if (isMoving == false) return;
-        if (other.gameObject.CompareTag("Wall")) isWall = true;
-        else isWall = false;
-
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            isWall = true;
+        }
         if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // 중복 오브젝트 체크
         {
             Debug.Log("SkillF 공격");
@@ -118,7 +91,17 @@ public class BossMonster : MonoBehaviour, ITakedamage
         }
     }
 
-    private void InitializeComponents()
+    // 벽과의 충돌이 종료되었을 때
+    protected void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            isWall = false; // 벽과의 충돌이 종료되었으므로 isWall을 false로 설정
+        }
+    }
+
+
+    protected void InitializeComponents()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
@@ -138,7 +121,8 @@ public class BossMonster : MonoBehaviour, ITakedamage
         {
             fieldParticle.SetActive(false);
         }
-        skillFPrefab.SetActive(false);
+        skillFPrefabA.SetActive(false);
+        skillFPrefabB.SetActive(false);
         skillGPrefab.SetActive(false);
     }
 
@@ -163,55 +147,6 @@ public class BossMonster : MonoBehaviour, ITakedamage
         bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
-    public void StartSkillCoroutine(IEnumerator coroutine)
-    {
-        StartCoroutine(coroutine);
-    }
-
-    public GameObject ObjSpwan(GameObject obj, Vector3 pos)
-    {
-        GameObject gameObject = Instantiate(obj);
-        gameObject.transform.position = pos;
-        return gameObject;
-    }
-
-    public void Targeting()
-    {
-        foreach (var tr in UnitManager.Instance.players)
-        {
-            if (target == null) target = tr.Value.transform;
-            else if (target != null &&
-                (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.Value.transform.position, transform.position)))
-            {
-                target = tr.Value.transform;
-            }
-        }
-        if (target == null) bMHandler.ChangeState(typeof(BossMonsterIdle));
-    }
-
-    public void TargetLook(Vector3 targetPosition)
-    {
-        Vector3 direction = targetPosition - transform.position;
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            direction.y = 0;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Euler(0, rotation.eulerAngles.y, 0);
-        }
-    }
-
-    public void Move()
-    {
-        transform.LookAt(target);
-        Vector3 currentRotation = transform.eulerAngles;
-        transform.eulerAngles = new Vector3(0f, currentRotation.y, 0f);
-        Vector3 dir = (target.position - transform.position).normalized;
-        Vector3 moveDir = transform.position + dir * moveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(moveDir);
-    }
-
-
     public void DieParticle()
     {
         if (isDie == true)
@@ -229,26 +164,122 @@ public class BossMonster : MonoBehaviour, ITakedamage
         }
     }
 
-    public void AtkEnd()
+    public override void DieStatChange()
     {
-        StartCoroutine(AtkCoolTime());
+        isDie = true;
+        this.bMHandler.ChangeState(typeof(BossMonsterDie));
     }
 
-    public IEnumerator AtkCoolTime()
+    public void AtkOff()
     {
-        Debug.Log("공격쿨타임 시작");
-        yield return new WaitForSeconds(atkDelay);
-        Debug.Log("공격쿨타임 종료");
         isAtk = false;
     }
 
-    public void Takedamage(float damage)
+    public IEnumerator Chase()
     {
-        curHp -= Mathf.RoundToInt(damage);
-        if (curHp <= 0)
+        isChase = true;
+        yield return new WaitForSeconds(chaseTime);
+        isChase = false;
+    }
+
+    public IEnumerator AtkSet()
+    {
+        isAction = true;
+        yield return null;
+
+        //공격분류1 중에하나스테이트로 변환
+        AtkA();
+
+        yield return null;
+        yield return new WaitUntil(() =>  isAtk == false);
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        //공격분류2 중에하나 스테이트로 변환
+        AtkB();
+        yield return null;
+        yield return new WaitUntil(() => isAtk == false);
+        yield return null;
+
+        Targeting();
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        bMHandler.ChangeState(typeof(BossMonsterAtk));
+        yield return null;
+        yield return new WaitUntil(() => isAtk == false);
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        //이동기 중에하나 스테이트로 변환
+        AtkC();
+        yield return null;
+        yield return new WaitUntil(() => isAtk == false);
+        yield return null;
+
+        StartCoroutine(Chase());
+        yield return null;
+        yield return new WaitUntil(() => isChase == false);
+        yield return null;
+
+        isAction = false;
+        yield return null;
+    }
+
+    protected void AtkA()
+    {
+        int a = Random.Range(0, 3);
+        switch (a)
         {
-            isDie = true;
-            this.bMHandler.ChangeState(typeof(BossMonsterDie));
+            case 0:
+                bMHandler.ChangeState(typeof(BossMonsterSkillA));
+                break;
+            case 1:
+                bMHandler.ChangeState(typeof(BossMonsterSkillD));
+                break;
+            case 2:
+                bMHandler.ChangeState(typeof(BossMonsterSkillE));
+                break;
+        }
+    }
+
+    protected void AtkB()
+    {
+        int b = Random.Range(0, 2);
+        switch (b)
+        {
+            case 0:
+                bMHandler.ChangeState(typeof(BossMonsterSkillB));
+                break;
+            case 1:
+                bMHandler.ChangeState(typeof(BossMonsterSkillC));
+                break;
+        }
+    }
+
+    protected void AtkC()
+    {
+        int c = Random.Range(0, 2);
+        switch (c)
+        {
+            case 0:
+                bMHandler.ChangeState(typeof(BossMonsterSkillF));
+                break;
+            case 1:
+                bMHandler.ChangeState(typeof(BossMonsterSkillG));
+                break;
         }
     }
 }

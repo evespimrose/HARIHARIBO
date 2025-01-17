@@ -11,8 +11,9 @@ public class EliteMonsterDie : BaseState<EliteMonster>
 
     public override void Enter(EliteMonster monster)
     {
-        Debug.Log("DieÁøÀÔ");
-        monster.animator.SetTrigger("Die");
+        monster.monsterDebuff.DebuffAllOff();
+        Debug.Log("Dieì§„ì…");
+        monster.animator.SetBool("Die", true);
         monster.DieParticle();
     }
 
@@ -22,12 +23,12 @@ public class EliteMonsterDie : BaseState<EliteMonster>
         {
             monster.Die();
         }
-        //Debug.Log("Å©¾Æ¾Æ¾Ç Á×´ÂÁß");
+        //Debug.Log("í¬ì•„ì•„ì•… ì£½ëŠ”ì¤‘");
         curTime = curTime + Time.deltaTime;
     }
 
     public override void Exit(EliteMonster monster)
     {
-        Debug.Log("»ç¸Á");
+        Debug.Log("ì‚¬ë§");
     }
 }

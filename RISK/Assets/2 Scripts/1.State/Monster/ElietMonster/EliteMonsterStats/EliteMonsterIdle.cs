@@ -14,14 +14,22 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
 
     public override void Update(EliteMonster monster)
     {
-        if (monster.isAtk == true) return;
-        else if (monster.target == null)
-        {
-            monster.Targeting();
-        }
-        else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
+        if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
             //공격으로 이동
+            int a = Random.Range(0, 3);
+            switch (a)
+            {
+                case 0:
+                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillA));
+                    break;
+                case 1:
+                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillB));
+                    break;
+                case 2:
+                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillC));
+                    break;
+            }
         }
         else
         {

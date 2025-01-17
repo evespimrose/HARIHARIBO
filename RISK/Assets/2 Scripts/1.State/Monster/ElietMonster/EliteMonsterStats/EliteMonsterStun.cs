@@ -7,23 +7,20 @@ public class EliteMonsterStun : BaseState<EliteMonster>
     public EliteMonsterStun(StateHandler<EliteMonster> handler) : base(handler) { }
 
     public float stunTime = 5f;
-    private float curTime = 0;
 
     public override void Enter(EliteMonster monster)
     {
         Debug.Log("스턴진입");
         monster.animator.SetBool("Stun", true);
-        curTime = 0;
+        monster.StartCoroutine(StartStun(monster));
     }
 
     public override void Update(EliteMonster monster)
     {
-
-        if (curTime >= stunTime - 0.1f)
+        if (!monster.isStun && !monster.isStunAction)
         {
             monster.eMHandler.ChangeState(typeof(EliteMonsterIdle));
         }
-        curTime += Time.deltaTime;
     }
 
     public override void Exit(EliteMonster monster)
@@ -32,5 +29,12 @@ public class EliteMonsterStun : BaseState<EliteMonster>
         monster.isStun = false;
         Debug.Log("스턴종료");
         monster.animator.SetBool("Stun", false);
+    }
+
+    private IEnumerator StartStun(EliteMonster monster)
+    {
+        yield return new WaitForSeconds(stunTime);
+        monster.isStun = false;
+        monster.isHitAction = false;
     }
 }

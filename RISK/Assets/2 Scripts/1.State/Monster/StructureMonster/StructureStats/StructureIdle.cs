@@ -14,8 +14,6 @@ public class StructureIdle : BaseState<StructureMonster>
 
     public override void Update(StructureMonster monster)
     {
-        if (monster.target == null) monster.Targeting();
-        if (monster.isAirborne || monster.isStun) return;
         monster.sMHandler.ChangeState(typeof(StructureMove));
     }
 

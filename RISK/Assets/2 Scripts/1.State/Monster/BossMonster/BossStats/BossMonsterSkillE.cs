@@ -13,21 +13,37 @@ public class BossMonsterSkillE : BaseState<BossMonster>
     public float atkDuration = 1f;
     public float skillEDuration = 0.8f;
 
-    public float bulletDamage = 10f;
+    public float damage = 10f;
     public float fireDamage = 5f;
     public float fireInterval = 1f;
     public float fireDuration = 5f;
 
+    public float additionalWaitTime = 0.5f;
+
+    private bool Action = false;
+
     public override void Enter(BossMonster monster)
     {
+        damage = monster.atkDamage * 1f;
+        fireDamage = monster.atkDamage * 0.2f;
+        Action = true;
+        monster.isAtk = true;
         projectilePrefabA = monster.skillEPrefab;
         Debug.Log("SkillE 진입");
-        monster.StartSkillCoroutine(SkillECoroutine(monster));
+        monster.StartCoroutine(SkillECoroutine(monster));
+    }
+
+    public override void Update(BossMonster monster)
+    {
+        if (Action == false)
+        {
+            monster.isAtk = false;
+            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-        monster.AtkEnd();
         Debug.Log("SkillE 종료");
     }
 
@@ -53,9 +69,10 @@ public class BossMonsterSkillE : BaseState<BossMonster>
             // "SkillE" 애니메이션이 끝난 상태인지 확인
             return !stateInfo.IsName("SkillE") || stateInfo.normalizedTime >= 1f;
         });
+        yield return null;
+        yield return new WaitForSeconds(additionalWaitTime);
 
-        // 상태 변경
-        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
+        Action = false;
     }
 
     private void SpawnProjectile1(BossMonster monster)
@@ -64,7 +81,7 @@ public class BossMonsterSkillE : BaseState<BossMonster>
         spawnPos.y = 1f;
         GameObject skillEBullet = monster.ObjSpwan(projectilePrefabA, spawnPos);
         BossSkillEObject missileScript = skillEBullet.GetComponent<BossSkillEObject>();
-        missileScript.SetMissileProperties(bulletDamage, fireDamage, fireInterval, fireDuration);
+        missileScript.SetMissileProperties(damage, fireDamage, fireInterval, fireDuration);
         missileScript.SetMissileType(1);
     }
 }

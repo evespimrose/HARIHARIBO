@@ -6,6 +6,7 @@ public class EliteMonsterSkillB : BaseState<EliteMonster>
 {
     public EliteMonsterSkillB(StateHandler<EliteMonster> handler) : base(handler) { }
 
+    public float skillBDamage = 10f;
     public float atkDelay = 0f;
     public float skillCDuration = 1.21f;
     public float skillCAtkTime = 1f;
@@ -52,6 +53,6 @@ public class EliteMonsterSkillB : BaseState<EliteMonster>
         Vector3 forwardDir = new Vector3(monster.transform.forward.x, 0f, monster.transform.forward.z).normalized;
         skillCObj.transform.forward = forwardDir;
         skillCObj.transform.position = new Vector3(skillCObj.transform.position.x, skillCObj.transform.position.y + 1f, skillCObj.transform.position.z);
-        skillCObj.GetComponent<BossSkillCObject>().Seting(monster.atkDamage);
+        skillCObj.GetComponent<EliteSkillBObjcect>().Seting(skillBDamage);
     }
 }

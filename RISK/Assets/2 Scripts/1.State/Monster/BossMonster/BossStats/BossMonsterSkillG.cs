@@ -6,20 +6,32 @@ public class BossMonsterSkillG : BaseState<BossMonster>
 {
     public BossMonsterSkillG(StateHandler<BossMonster> handler) : base(handler) { }
 
-    // ½ºÅ³7 ´ë½¬ + °ø°İ
-    public float atkDelay = 2.24f; // ÅÚ·¹Æ÷Æ® Àü ´ë±â ½Ã°£
-    private float endTime = 0.5f; // ÅÚ·¹Æ÷Æ® ÈÄ ´ë±â ½Ã°£
-    private bool isAction = false; // ÅÚ·¹Æ÷Æ® ¿©ºÎ¸¦ ÃßÀû
+    // ìŠ¤í‚¬7 ëŒ€ì‰¬ + ê³µê²©
+    public float atkDelay = 2.5f; // í…”ë ˆí¬íŠ¸ ì „ ëŒ€ê¸° ì‹œê°„
+    public float endTime = 1f;
+    public float additionalWaitTime = 0.5f;
+
+    private bool Action = false;
 
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("SkillG ÁøÀÔ");
-        monster.StartSkillCoroutine(SkillGCoroutine(monster)); // ÄÚ·çÆ¾ ½ÃÀÛ
+        Action = true;
+        monster.isAtk = true;
+        Debug.Log("SkillG ì§„ì…");
+        monster.StartCoroutine(SkillGCoroutine(monster)); // ì½”ë£¨í‹´ ì‹œì‘
+    }
+
+    public override void Update(BossMonster monster)
+    {
+        if (Action == false)
+        {
+            monster.bMHandler.ChangeState(typeof(BossMonsterSkillB));
+        }
     }
 
     public override void Exit(BossMonster monster)
     {
-        Debug.Log("SkillG Á¾·á");
+        Debug.Log("SkillG ì¢…ë£Œ");
     }
 
     private IEnumerator SkillGCoroutine(BossMonster monster)
@@ -27,36 +39,30 @@ public class BossMonsterSkillG : BaseState<BossMonster>
         monster.skillGPrefab.SetActive(true);
         monster.animator.SetTrigger("SkillG");
         monster.TargetLook(monster.target.position);
-        // Ã¹ ¹øÂ° ´ë±â ½Ã°£ ÈÄ ÅÚ·¹Æ÷Æ®
+        // ì²« ë²ˆì§¸ ëŒ€ê¸° ì‹œê°„ í›„ í…”ë ˆí¬íŠ¸
         yield return new WaitForSeconds(atkDelay);
         monster.skillGPrefab.SetActive(false);
-        // ÅÚ·¹Æ÷Æ® ¼öÇà
+        // í…”ë ˆí¬íŠ¸ ìˆ˜í–‰
         SkillGAtk(monster);
-        yield return new WaitUntil(() =>
-        {
-            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
-            return !stateInfo.IsName("SkillG") || stateInfo.normalizedTime >= 1f;
-        });
-        yield return null;
+        yield return new WaitForSeconds(endTime);
 
-        // ½ºÅ³ÀÌ ³¡³­ ÈÄ ´ÙÀ½ »óÅÂ·Î ÀüÈ¯
-        monster.bMHandler.ChangeState(typeof(BossMonsterSkillB)); // »óÅÂ ÀüÈ¯
+        Action = false;
     }
 
     public void SkillGAtk(BossMonster monster)
     {
-        // Å¸°Ù ¹æÇâ º¤ÅÍ °è»ê
+        // íƒ€ê²Ÿ ë°©í–¥ ë²¡í„° ê³„ì‚°
         Vector3 targetDir = (monster.target.position - monster.transform.position).normalized;
 
-        // Å¸°ÙÀÇ µÚÂÊ À§Ä¡ °è»ê
-        Vector3 teleportPos = monster.target.position - targetDir * 2f; // 2f´Â °Å¸® (ÇÊ¿ä½Ã Á¶Á¤ °¡´É)
+        // íƒ€ê²Ÿì˜ ë’¤ìª½ ìœ„ì¹˜ ê³„ì‚°
+        Vector3 teleportPos = monster.target.position - targetDir * 2f; // 2fëŠ” ê±°ë¦¬ (í•„ìš”ì‹œ ì¡°ì • ê°€ëŠ¥)
 
-        // YÃàÀº ±âÁ¸ ¸ó½ºÅÍ ³ôÀÌ¸¦ À¯Áö
+        // Yì¶•ì€ ê¸°ì¡´ ëª¬ìŠ¤í„° ë†’ì´ë¥¼ ìœ ì§€
         teleportPos.y = monster.transform.position.y;
 
-        // ¸ó½ºÅÍ À§Ä¡ ¼³Á¤
+        // ëª¬ìŠ¤í„° ìœ„ì¹˜ ì„¤ì •
         monster.transform.position = teleportPos;
 
-        Debug.Log($"¸ó½ºÅÍ°¡ Å¸°Ù µÚ·Î ÀÌµ¿: {teleportPos}");
+        Debug.Log($"ëª¬ìŠ¤í„°ê°€ íƒ€ê²Ÿ ë’¤ë¡œ ì´ë™: {teleportPos}");
     }
 }
