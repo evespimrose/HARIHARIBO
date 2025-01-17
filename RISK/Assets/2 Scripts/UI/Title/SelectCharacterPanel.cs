@@ -84,6 +84,10 @@ public class SelectCharacterPanel : MonoBehaviour
 
     public async void ReLoadCharacterList()
     {
+        foreach (var character in characterSelectDic)
+        {
+            DestroyImmediate(character.Value);
+        }
         characterSelectDic.Clear();
 
         characterDatalist = await FirebaseManager.Instance.LoadCharacterDataList();
