@@ -6,28 +6,16 @@ public class WarriorWSkill : BaseState<Player>
 {
     private float skillDuration = 1.4f;
     private float skillTimer;
-    private bool effectPlayed = false;
     public WarriorWSkill(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
         skillTimer = skillDuration;
-        effectPlayed = false;
         player.Animator?.SetTrigger("WSkill");
     }
     public override void Update(Player player)
     {
         skillTimer -= Time.deltaTime;
-
-        if (!effectPlayed && skillTimer <= skillDuration * 0.5f)
-        {
-            var effectHandler = player.GetComponent<AnimationEventEffects>();
-            if (effectHandler != null)
-            {
-                effectHandler.PlayEffect(0); // W 스킬 이펙트
-            }
-            effectPlayed = true;
-        }
 
         if (skillTimer <= 0)
         {

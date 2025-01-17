@@ -10,27 +10,16 @@ public class WarriorESkill : BaseState<Player>
     private float moveSpeed = 4f;
     private float maxDistance = 1.5f;
     private float movedDistance = 0f;
-    private bool effectPlayed = false;
     public WarriorESkill(StateHandler<Player> handler) : base(handler) { }
     public override void Enter(Player player)
     {
         skillTimer = skillDuration;
         movedDistance = 0f;
-        effectPlayed = false;
         player.Animator?.SetTrigger("ESkill");
     }
     public override void Update(Player player)
     {
         skillTimer -= Time.deltaTime;
-        if (!effectPlayed && skillTimer <= skillDuration * 0.5f)
-        {
-            var effectHandler = player.GetComponent<AnimationEventEffects>();
-            if (effectHandler != null)
-            {
-                effectHandler.PlayEffect(1); // E ???꾪뀬 ??袁⑥쓢??
-            }
-            effectPlayed = true;
-        }
 
         if (movedDistance < maxDistance)
         {

@@ -23448,12 +23448,12 @@ MonoBehaviour:
   - effectName: DWSkill
     Effect: {fileID: 1107296871017770, guid: 82a583916db5b7842a722df7756825eb, type: 3}
     StartPositionRotation: {fileID: 8253203075026291672}
-    DestroyAfter: 1.2
+    DestroyAfter: 1
     UseLocalPosition: 1
   - effectName: DESkill
     Effect: {fileID: 1115641076847360, guid: 9a16638939e243d4d9f9c0ee07466c8b, type: 3}
     StartPositionRotation: {fileID: 6282803701032355288}
-    DestroyAfter: 2
+    DestroyAfter: 0.9
     UseLocalPosition: 1
   - effectName: DRSkill
     Effect: {fileID: 1646871050452766, guid: 95b3ea755bc01f344a99fccc5f4702f8, type: 3}
@@ -23463,7 +23463,7 @@ MonoBehaviour:
   - effectName: DTSkill
     Effect: {fileID: 1949624779417528, guid: e73124b5ba126cc499fb7e927b7a79ac, type: 3}
     StartPositionRotation: {fileID: 4318351899215700285}
-    DestroyAfter: 2
+    DestroyAfter: 1.2
     UseLocalPosition: 1
 --- !u!114 &3308239650131142082
 MonoBehaviour:
