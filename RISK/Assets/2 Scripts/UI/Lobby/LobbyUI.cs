@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,6 +51,16 @@ public class LobbyUI : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.P))
         {
             PanelOpen("PartyListBoard");
+        }
+        if (Input.GetKeyUp(KeyCode.L))
+        {
+            if (PartyManager.Instance.isInParty && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+                PopupOpen<TwoButtonPopupPanel>().SetPopup("Dungeon Enter", $"Sure to Enter the Dungeon? Level : {PartyManager.Instance.currentPartyInfo?.goal}",
+                    (ok) =>
+                    {
+                        PhotonManager.Instance.CreateDungeonRoom(PartyManager.Instance.currentPartyInfo);
+                    }
+                );
         }
     }
 
