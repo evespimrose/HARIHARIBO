@@ -11,7 +11,7 @@ public class LobbyUI : MonoBehaviour
 
     public PartyListBoard board;
     public CreatePartyUI createPartyInUI;
-    //public PartyMemberUI partyMemberUI;
+    public PartyMemberUI partyMemberUI;
 
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
@@ -25,7 +25,7 @@ public class LobbyUI : MonoBehaviour
         {
             { "PartyListBoard", board.gameObject },
             { "CreateParty", createPartyInUI.gameObject },
-            //{ "PartyMember", partyMemberUI.gameObject },
+            { "PartyMember", partyMemberUI.gameObject },
         };
 
         popupDic = new Dictionary<string, GameObject>()

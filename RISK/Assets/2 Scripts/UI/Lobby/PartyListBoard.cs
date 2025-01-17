@@ -14,12 +14,19 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
     public Button refreshButton;
     public Button createButton;
     public Button closeButton;
+    public Button partyMemberUIOpenButton;
 
     private void Awake()
     {
         refreshButton.onClick.AddListener(OnRefreshButtonClick);
         createButton.onClick.AddListener(OnCreateButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
+        partyMemberUIOpenButton.onClick.AddListener(OnPartyMemberUIOpenButtonClick);
+    }
+
+    private void OnPartyMemberUIOpenButtonClick()
+    {
+        LobbyUI.Instance.PanelOpen("PartyMember");
     }
 
     private void Update()
@@ -30,7 +37,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
     private void OnRefreshButtonClick()
     {
         PhotonManager.Instance.partyRoomInfoList = PhotonManager.Instance.GetPartyList();
-        
+
         UpdatePartyList();
     }
 
