@@ -14,7 +14,7 @@ public class SkillDamageInfo : MonoBehaviour
     private Collider damageCollider;
     private Player ownerPlayer;
     private bool isActive = false;
-    bool isCritical = false;
+    private bool isCritical = false;
 
     [Header("공격 타입")]
     public bool isBasicAttack = false;
@@ -28,6 +28,23 @@ public class SkillDamageInfo : MonoBehaviour
             damageCollider.enabled = false;    // 시작시 비활성화
         }
         ownerPlayer = GetComponentInParent<Player>();
+
+        if (ownerPlayer == null)
+        {
+            Debug.LogError($"[{skillName}] Player를 찾을 수 없습니다!");
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 충돌한 대상이 데미지를 받을 수 있는지 확인
+        ITakedamage damageable = other.GetComponent<ITakedamage>();
+        if (damageable != null && isActive)
+        {
+            float damage = GetDamage();
+            damageable.Takedamage(damage);
+        }
     }
     public float GetDamage()
     {
@@ -35,6 +52,9 @@ public class SkillDamageInfo : MonoBehaviour
 
         PlayerStats stats = ownerPlayer.Stats;
         float damage;
+
+        Debug.Log($"[{skillName}] 현재 공격력: {stats.attackPower}");
+        Debug.Log($"[{skillName}] 데미지 계수: {damagePercent}%");
 
         if (isBasicAttack)
         {

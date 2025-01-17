@@ -6409,7 +6409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorTSkillAttack
-  damagePercent: 0
+  damagePercent: 100
   isBasicAttack: 0
 --- !u!1 &867625405861799472
 GameObject:
@@ -26042,7 +26042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorWSkillAttack
-  damagePercent: 0
+  damagePercent: 100
   isBasicAttack: 0
 --- !u!1 &3383590558287573795
 GameObject:
@@ -46397,7 +46397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: WarriorBasicAttack
   damagePercent: 0
-  isBasicAttack: 0
+  isBasicAttack: 1
 --- !u!1 &6092572729980437654
 GameObject:
   m_ObjectHideFlags: 0
@@ -61378,8 +61378,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8619309083587360457}
-  - component: {fileID: 1967671412598000871}
   - component: {fileID: 1843461772881505784}
+  - component: {fileID: 1967671412598000871}
   m_Layer: 7
   m_Name: RSkillAttackCollider
   m_TagString: Untagged
@@ -61402,21 +61402,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8344871286798382002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1967671412598000871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8291249525562018517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28a60a5c720e6344596f8148bfdff88f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillName: WarriorRSkillAttack
-  damagePercent: 0
-  isBasicAttack: 0
 --- !u!135 &1843461772881505784
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -61438,6 +61423,21 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1967671412598000871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8291249525562018517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a60a5c720e6344596f8148bfdff88f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: WarriorRSkillAttack
+  damagePercent: 100
+  isBasicAttack: 0
 --- !u!1 &8294262301023697669
 GameObject:
   m_ObjectHideFlags: 0
@@ -66011,7 +66011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorESkillAttack
-  damagePercent: 0
+  damagePercent: 100
   isBasicAttack: 0
 --- !u!1 &8799066727324178907
 GameObject:
