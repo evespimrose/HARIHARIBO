@@ -1775,7 +1775,7 @@ MonoBehaviour:
   cardContainer: {fileID: 1232810796}
   playerContainer: {fileID: 749168427}
   surrenderButton: {fileID: 622552418}
-  voteCountText: {fileID: 659918386}
+  voteCountText: {fileID: 1078664653}
 --- !u!1 &916156460
 GameObject:
   m_ObjectHideFlags: 0
