@@ -25,6 +25,7 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
     public void JoinParty(PhotonRealtimePlayer player)
     {
+        print("CreateParty???");
         if (!partyMembers.Contains(player))
         {
             if (partyMembers.Count == 0)
@@ -39,18 +40,105 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
     public void JoinParty(PhotonRealtimePlayer player, PartyInfo info)
     {
-        UpdateInfo(info);
+        print("JoinParty??");
+        if (!ValidatePartyJoin(player, info))
+        {
+            Debug.LogWarning("Failed to validate party join conditions");
+            return;
+        }
+        print("JoinPartyJoinParty!!");
 
         if (!partyMembers.Contains(player))
         {
+            currentPartyInfo = info;
+            
+            List<int> memberList = new List<int>();
+            if (info.currentMemberActorNumber != null)
+            {
+                memberList.AddRange(info.currentMemberActorNumber);
+            }
+
+            if (memberList.Count >= info.maxPartyMemberCount)
+            {
+                Debug.LogWarning("Party is full!");
+                return;
+            }
+
+            if (!memberList.Contains(player.ActorNumber))
+            {
+                memberList.Add(player.ActorNumber);
+            }
+            print($"memberList!! : {memberList.Count}");
+
+            currentPartyInfo.currentMemberActorNumber = memberList.ToArray();
+            currentPartyInfo.currentMemberCount = memberList.Count;
+            
             if (partyMembers.Count == 0)
+            {
+                print($"partyMembers.Count == 0!!");
                 SetPartyLeader(player);
+                currentPartyInfo.currentLeaderActorNumber = player.ActorNumber;
+            }
+            
             partyMembers.Add(player);
             isInParty = true;
-
-            currentPartyInfo.currentMemberCount = partyMembers.Count;
-            UpdatePartyInfo();
+            
+            if (player == PhotonNetwork.LocalPlayer)
+            {
+                print($"UpdatePartyInfoWithRetry!!");
+                StartCoroutine(UpdatePartyInfoWithRetry());
+            }
+            
             Debug.Log($"{player.NickName} joined the party!");
+        }
+    }
+
+    private bool ValidatePartyJoin(PhotonRealtimePlayer player, PartyInfo info)
+    {
+        PlayerStats playerStats = GetPartyMemberStats(player);
+        if (playerStats == null)
+        {
+            print($"playerStats == null : {playerStats == null}");
+            return false;
+        }
+
+        if (playerStats.level < info.minPartyLevel || playerStats.level > info.maxPartyLevel)
+        {
+            LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Party Join Failed", "Level is Too Low || High.", () => { LobbyUI.Instance.PopupClose(); });
+            return false;
+        }
+
+        return true;
+    }
+
+    private IEnumerator UpdatePartyInfoWithRetry(int maxRetries = 3)
+    {
+        print($"UpdatePartyInfoWithRetry!!?!");
+
+        int retryCount = 0;
+        bool updateSuccess = false;
+
+        while (!updateSuccess && retryCount < maxRetries)
+        {
+            try
+            {
+                UpdatePartyInfo();
+                updateSuccess = true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to update party info: {e.Message}");
+                retryCount++;
+                
+            }
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (!updateSuccess)
+        {
+            Debug.LogError("Failed to update party info after maximum retries");
+            LeaveParty(PhotonNetwork.LocalPlayer);
         }
     }
 
@@ -159,13 +247,18 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
     public PlayerStats GetPartyMemberStats(PhotonRealtimePlayer player)
     {
+        print("GetPartyMemberStats");
         if (UnitManager.Instance.HasPlayer(player.ActorNumber))
         {
+            print($"UnitManager.Instance.HasPlayer(player.ActorNumber) : {UnitManager.Instance.HasPlayer(player.ActorNumber)}");
             GameObject playerObj = UnitManager.Instance.GetPlayer(player.ActorNumber);
             if (playerObj.TryGetComponent(out Player playerComponent))
             {
+                print("GetPartyMemberStats : playerObj.TryGetComponent(out Player playerComponent) = true");
+
                 return playerComponent.Stats;
             }
+            print("GetPartyMemberStats : playerObj.TryGetComponent(out Player playerComponent) = false");
         }
         return null;
     }

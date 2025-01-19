@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 
-public class PartyMemberUI : MonoBehaviour
+public class PartyMemberUI : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform partyMemberContainer;
     [SerializeField] private GameObject partyMemberInfoPrefab;
@@ -17,8 +17,9 @@ public class PartyMemberUI : MonoBehaviour
         closeButton.onClick.AddListener(OnCloseButtonClick);
         quitButton.onClick.AddListener(OnQuitButtonClick);
     }
-    private void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         UpdatePartyMembers();
     }
 

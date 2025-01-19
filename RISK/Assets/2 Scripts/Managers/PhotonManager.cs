@@ -56,8 +56,6 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     {
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        //print("AutomaticallySyncScene = true");
-
         string roomName = "LobbyRoom";
 
         RoomOptions roomOptions = new RoomOptions

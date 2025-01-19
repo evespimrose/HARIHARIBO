@@ -39,6 +39,12 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         PhotonPeer.RegisterType(typeof(Healer), 101, SerializeHealer, DeserializeHealer);
         PhotonPeer.RegisterType(typeof(Mage), 102, SerializeMage, DeserializeMage);
         PhotonPeer.RegisterType(typeof(Warrior), 103, SerializeWarrior, DeserializeWarrior);
+
+        //if (photonView.IsMine)
+        //{
+        //    UnitManager.Instance.RegisterPlayer(gameObject);
+        //    UnitManager.Instance.photonView.RPC("SyncPlayer", RpcTarget.MasterClient);
+        //}
     }
 
     private static byte[] SerializeDestroyer(object customType)
@@ -125,10 +131,10 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
     private void Start()
     {
-        //if (photonView.IsMine)
-        //    UnitManager.Instance.RegisterPlayer(gameObject);
-        //else
-        //    UnitManager.Instance.RegisterPlayer(gameObject);
+        if (photonView.IsMine)
+            UnitManager.Instance.RegisterPlayer(gameObject);
+        else
+            UnitManager.Instance.RegisterPlayer(gameObject);
     }
 
     private void Update()
@@ -222,5 +228,45 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         {
             stateHandler.ChangeState(stateType);
         }
+    }
+
+    [PunRPC]
+    private void RequestPlayerSync(PhotonMessageInfo info)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        foreach (var playerPair in UnitManager.Instance.players)
+        {
+            if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView photonView))
+            {
+                photonView.RPC("SyncPlayer", info.Sender, 
+                    photonView.ViewID,
+                    photonView.Owner.ActorNumber,
+                    playerPair.Value.name);
+            }
+        }
+    }
+
+    [PunRPC]
+    private void SyncPlayer(int viewId, int actorNumber, string playerName)
+    {
+        PhotonView targetView = PhotonView.Find(viewId);
+        if (targetView != null)
+        {
+            GameObject playerObj = targetView.gameObject;
+            playerObj.name = playerName;
+            
+            if (!UnitManager.Instance.HasPlayer(actorNumber))
+            {
+                UnitManager.Instance.RegisterPlayer(playerObj);
+            }
+        }
+    }
+
+    [PunRPC]
+    private void NotifyPlayerRegistered(int actorNumber)
+    {
+        print("NotifyPlayerRegistered");
+        Debug.Log($"Player {actorNumber} has been registered to all clients");
     }
 }

@@ -49421,6 +49421,8 @@ MonoBehaviour:
   finalSpeed: 3
   finalScale: 2
   LifeTime: 5
+  normalAttackDamagePercent: 100
+  finalAttackDamagePercent: 150
 --- !u!114 &3212805586502664121
 MonoBehaviour:
   m_ObjectHideFlags: 0

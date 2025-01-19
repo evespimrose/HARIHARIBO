@@ -31,6 +31,7 @@ public class PartyInfoDisplay : MonoBehaviour
 
     private void OnPartyJoinButtonClick()
     {
+        print("OnPartyJoinButtonClick");
         PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer, partyInfo);
 
     }
