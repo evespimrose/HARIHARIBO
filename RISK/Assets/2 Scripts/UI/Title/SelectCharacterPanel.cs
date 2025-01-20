@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -29,7 +30,7 @@ public class SelectCharacterPanel : MonoBehaviour
 
     private void Awake()
     {
-        selectButton.onClick.AddListener(OnSelectButtonClick);
+        selectButton.onClick.AddListener(() => { StartCoroutine(OnSelectButtonClick()); });
         deleteButton.onClick.AddListener(OnDeleteButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
     }
@@ -137,31 +138,24 @@ public class SelectCharacterPanel : MonoBehaviour
         }
     }
 
-    private void OnSelectButtonClick()
+    private IEnumerator OnSelectButtonClick()
     {
         FirebaseManager.Instance.currentCharacterData = currentCharacterData;
 
-        PlayerStats playerStats = new PlayerStats
-        {
-            nickName = currentCharacterData.nickName,
-            level = currentCharacterData.level,
-            maxExp = currentCharacterData.maxExp,
-            currentExp = currentCharacterData.currExp,
-            maxHealth = currentCharacterData.maxHp,
-            currentHealth = currentCharacterData.maxHp,
-            moveSpeed = currentCharacterData.moveSpeed,
-            attackPower = currentCharacterData.atk,
-            damageReduction = currentCharacterData.dmgRed,
-            healthRegen = currentCharacterData.hpReg,
-            regenInterval = currentCharacterData.regInt,
-            criticalChance = currentCharacterData.cri,
-            criticalDamage = currentCharacterData.criDmg,
-            cooldownReduction = currentCharacterData.coolRed,
-            healthPerLevel = currentCharacterData.hPperLv,
-            attackPerLevel = currentCharacterData.atkperLv,
-        };
+        PhotonNetwork.ConnectUsingSettings();
 
-        GameManager.Instance.StartCoroutine(GameManager.Instance.InstantiatePlayer(playerStats));
+
+        string Json = JsonConvert.SerializeObject(currentCharacterData);
+
+        print(Json);
+
+        PhotonNetwork.NickName = Json;
+
+        yield return new WaitUntil(() => PhotonNetwork.IsConnected);
+
+        PhotonNetwork.LocalPlayer.NickName = Json;
+
+        PanelManager.Instance.PanelOpen("PartyListBoard");
     }
 
 }

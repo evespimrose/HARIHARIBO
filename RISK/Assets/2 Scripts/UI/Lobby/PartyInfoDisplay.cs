@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class PartyInfoDisplay : MonoBehaviour
 {
@@ -17,23 +18,8 @@ public class PartyInfoDisplay : MonoBehaviour
 
     public Button partyJoinButton;
 
-    private PartyInfo partyInfo;
-
     public void Awake()
     {
-        partyJoinButton.onClick.AddListener(OnPartyJoinButtonClick);
-    }
-
-    private void Update()
-    {
-        partyJoinButton.interactable = PartyManager.Instance.currentPartyInfo != null;
-    }
-
-    private void OnPartyJoinButtonClick()
-    {
-        print("OnPartyJoinButtonClick");
-        PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer, partyInfo);
-
     }
 
     public void Initialize(string Name, int currentMember, int maxMember, int goal, int minLevel, int maxLevel)
@@ -48,13 +34,42 @@ public class PartyInfoDisplay : MonoBehaviour
 
     public void Initialize(PartyInfo partyInfo)
     {
-        this.partyInfo = partyInfo;
         partyName.text = partyInfo.name;
         currentPartyMember.text = partyInfo.currentMemberCount.ToString();
         partyGoal.text = (partyInfo.goal + 1).ToString();
         minPartyLevel.text = partyInfo.minPartyLevel.ToString();
         maxPartyLevel.text = partyInfo.maxPartyLevel.ToString();
         maxPartyMember.text = partyInfo.maxPartyMemberCount.ToString();
+    }
+
+    public void Initialize(RoomInfo roomInfo)
+    {
+        //this.partyInfo = partyInfo;
+
+        PartyInfo partyInfo = new PartyInfo();
+
+        partyInfo.name = roomInfo.Name;
+        partyInfo.currentMemberCount = roomInfo.PlayerCount;
+        partyInfo.maxPartyMemberCount = roomInfo.MaxPlayers;
+
+        if (roomInfo.CustomProperties.ContainsKey("roomId"))
+            partyInfo.partyId = (int)roomInfo.CustomProperties["roomId"];
+        if (roomInfo.CustomProperties.ContainsKey("Difficulty"))
+            partyInfo.goal = (int)roomInfo.CustomProperties["Difficulty"];
+        if (roomInfo.CustomProperties.ContainsKey("minLevel"))
+            partyInfo.minPartyLevel = (int)roomInfo.CustomProperties["minLevel"];
+        if (roomInfo.CustomProperties.ContainsKey("maxLevel"))
+            partyInfo.maxPartyLevel = (int)roomInfo.CustomProperties["maxLevel"];
+
+        partyName.text = roomInfo.Name;
+        currentPartyMember.text = partyInfo.currentMemberCount.ToString();
+        partyGoal.text = (partyInfo.goal + 1).ToString();
+        minPartyLevel.text = partyInfo.minPartyLevel.ToString();
+        maxPartyLevel.text = partyInfo.maxPartyLevel.ToString();
+        maxPartyMember.text = partyInfo.maxPartyMemberCount.ToString();
+
+        partyJoinButton.onClick.AddListener(() => { PhotonNetwork.JoinRoom(roomInfo.Name); print($"JoinRoom : {roomInfo.Name}"); });
+
     }
 
     PartyInfoDisplay() { }

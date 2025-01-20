@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
@@ -16,10 +17,19 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
     {
         closeButton.onClick.AddListener(OnCloseButtonClick);
         quitButton.onClick.AddListener(OnQuitButtonClick);
+
+
     }
     public override void OnEnable()
     {
         base.OnEnable();
+    }
+
+    public IEnumerator Start()
+    {
+        yield return new WaitUntil(() => PhotonNetwork.InRoom);
+        yield return new WaitForSeconds(1f);
+
         UpdatePartyMembers();
     }
 
@@ -31,7 +41,7 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
 
     private void OnCloseButtonClick()
     {
-        gameObject.SetActive(false);
+        PanelManager.Instance.PanelOpen("PartyListBoard");
     }
 
     public void UpdatePartyMembers()
@@ -41,12 +51,18 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
             Destroy(child.gameObject);
         }
 
-        foreach (var member in PartyManager.Instance.GetPartyMembers())
+        if (PhotonNetwork.CurrentRoom.Players.Count > 0)
         {
-            GameObject memberInfoObj = Instantiate(partyMemberInfoPrefab, partyMemberContainer);
-            if (memberInfoObj.TryGetComponent(out PartyMemberInfoUI memberInfoUI))
+            print("UpdatePartyMembers");
+            foreach (var member in GameManager.Instance.connectedPlayers)
             {
-                memberInfoUI.Initialize(member);
+                print("connectedPlayersconnectedPlayers");
+
+                GameObject memberInfoObj = Instantiate(partyMemberInfoPrefab, partyMemberContainer);
+                if (memberInfoObj.TryGetComponent(out PartyMemberInfoUI memberInfoUI))
+                {
+                    memberInfoUI.Initialize(member);
+                }
             }
         }
     }

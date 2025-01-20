@@ -51,7 +51,7 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
         if (!partyMembers.Contains(player))
         {
             currentPartyInfo = info;
-            
+
             List<int> memberList = new List<int>();
             if (info.currentMemberActorNumber != null)
             {
@@ -72,23 +72,23 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
             currentPartyInfo.currentMemberActorNumber = memberList.ToArray();
             currentPartyInfo.currentMemberCount = memberList.Count;
-            
+
             if (partyMembers.Count == 0)
             {
                 print($"partyMembers.Count == 0!!");
                 SetPartyLeader(player);
                 currentPartyInfo.currentLeaderActorNumber = player.ActorNumber;
             }
-            
+
             partyMembers.Add(player);
             isInParty = true;
-            
+
             if (player == PhotonNetwork.LocalPlayer)
             {
                 print($"UpdatePartyInfoWithRetry!!");
                 StartCoroutine(UpdatePartyInfoWithRetry());
             }
-            
+
             Debug.Log($"{player.NickName} joined the party!");
         }
     }
@@ -129,7 +129,7 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
             {
                 Debug.LogError($"Failed to update party info: {e.Message}");
                 retryCount++;
-                
+
             }
         }
 
@@ -247,7 +247,6 @@ public class PartyManager : PhotonSingletonManager<PartyManager>
 
     public PlayerStats GetPartyMemberStats(PhotonRealtimePlayer player)
     {
-        print("GetPartyMemberStats");
         if (UnitManager.Instance.HasPlayer(player.ActorNumber))
         {
             print($"UnitManager.Instance.HasPlayer(player.ActorNumber) : {UnitManager.Instance.HasPlayer(player.ActorNumber)}");

@@ -4,6 +4,7 @@ using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
+using HashTable = ExitGames.Client.Photon.Hashtable;
 
 
 public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
@@ -23,24 +24,20 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
         UpdateUI();
     }
 
-    private void Start()
+    public void Initialize(FireBaseCharacterData partyMember)
     {
         UpdateUI();
     }
 
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    private void Start()
     {
-        if (propertiesThatChanged.ContainsKey("PartyList"))
-        {
-            UpdateUI();
-        }
+        UpdateUI();
     }
 
     private void UpdateUI()
     {
         if (player == null) return;
 
-        playerStats = PartyManager.Instance.GetPartyMemberStats(player);
         if (playerStats != null)
         {
             playerNameText.text = playerStats.nickName;
@@ -48,5 +45,19 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
             classText.text = PartyManager.Instance.GetPartyMemberClass(player);
             partyLeaderIcon.gameObject.SetActive(PartyManager.Instance.IsPartyLeader(player));
         }
+
+    }
+
+    private void UpdateUI(FireBaseCharacterData fireBaseCharacterData)
+    {
+        if (player == null) return;
+
+        if (playerStats != null)
+        {
+            playerNameText.text = fireBaseCharacterData.nickName;
+            levelText.text = fireBaseCharacterData.level.ToString();
+            classText.text = fireBaseCharacterData.classType.ToString();
+        }
+
     }
 }

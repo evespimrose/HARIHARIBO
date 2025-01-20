@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
@@ -5,11 +6,40 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using HashTable = ExitGames.Client.Photon.Hashtable;
+using PhotonRealtimePlayer = Photon.Realtime.Player;
 
-public class GameManager : SingletonManager<GameManager>
+public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
-    //public Transform playerPosition;
     public static bool isGameReady;
+
+    public List<FireBaseCharacterData> connectedPlayers = new List<FireBaseCharacterData>();
+
+    public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
+    {
+        yield return new WaitUntil(() => !string.IsNullOrEmpty(player.NickName));
+        FireBaseCharacterData playerData = JsonConvert.DeserializeObject<FireBaseCharacterData>(player.NickName);
+
+        connectedPlayers.Add(playerData);
+
+        SyncAllPlayers();
+    }
+
+    private void SyncAllPlayers()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            string jsonData = JsonConvert.SerializeObject(connectedPlayers);
+            photonView.RPC("SyncPlayerDataRPC", RpcTarget.All, jsonData);
+        }
+    }
+
+    [PunRPC]
+    public void SyncPlayerDataRPC(string jsonData)
+    {
+        connectedPlayers = JsonConvert.DeserializeObject<List<FireBaseCharacterData>>(jsonData);
+        Debug.Log($"Player data synchronized with all clients! : {FirebaseManager.Instance.currentCharacterData.nickName}");
+    }
 
     private IEnumerator Start()
     {
@@ -99,7 +129,6 @@ public class GameManager : SingletonManager<GameManager>
                 break;
         }
 
-        if (playerObj != null)
-            playerObj.GetComponent<PhotonView>().RPC("RequestPlayerSync", RpcTarget.MasterClient);
+        playerObj?.GetComponent<PhotonView>().RPC("RequestPlayerSync", RpcTarget.MasterClient);
     }
 }
