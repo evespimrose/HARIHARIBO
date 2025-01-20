@@ -19,9 +19,9 @@ public class BossMonsterSkillB : BaseState<BossMonster>
     public float endTime = 0.5f;//타격후 딜레이시간
     public float additionalWaitTime = 1f;
 
-    public float atkRange = 15f;         
-    public float rangeAtkMinRange = 15f; 
-    public float rangeAtkMaxRange = 25f; 
+    public float atkRange = 10f;
+    public float rangeAtkMinRange = 10f;
+    public float rangeAtkMaxRange = 15f;
 
     private AtkType atkType;
 
