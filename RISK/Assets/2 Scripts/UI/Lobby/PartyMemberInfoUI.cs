@@ -26,7 +26,8 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
 
     public void Initialize(FireBaseCharacterData partyMember)
     {
-        UpdateUI();
+        print("Initialize");
+        UpdateUI(partyMember);
     }
 
     private void Start()
@@ -50,14 +51,8 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
 
     private void UpdateUI(FireBaseCharacterData fireBaseCharacterData)
     {
-        if (player == null) return;
-
-        if (playerStats != null)
-        {
-            playerNameText.text = fireBaseCharacterData.nickName;
-            levelText.text = fireBaseCharacterData.level.ToString();
-            classText.text = fireBaseCharacterData.classType.ToString();
-        }
-
+        playerNameText.text = fireBaseCharacterData.nickName;
+        levelText.text = fireBaseCharacterData.level.ToString();
+        classText.text = fireBaseCharacterData.classType.ToString();
     }
 }

@@ -12,14 +12,36 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject partyMemberInfoPrefab;
     public Button closeButton;
     public Button quitButton;
+    public Button gameStartButton;
+
 
     private void Awake()
     {
         closeButton.onClick.AddListener(OnCloseButtonClick);
         quitButton.onClick.AddListener(OnQuitButtonClick);
-
-
+        gameStartButton.onClick.AddListener(OnGameStartButtonClick);
+        gameStartButton.interactable = false == PhotonNetwork.IsMasterClient;
     }
+
+    private void OnGameStartButtonClick()
+    {
+        if (false == PhotonNetwork.IsMasterClient) return;
+        else
+        {
+            GameManager.Instance.photonView.RPC("SetGameReady", RpcTarget.All);
+            PhotonNetwork.LoadLevel("GameScene");
+        }
+    }
+
+    private void Update()
+    {
+        if(partyMemberContainer.childCount != GameManager.Instance.connectedPlayers.Count)
+        {
+            print("TRIGGERED!!!!");
+            UpdatePartyMembers();
+        }
+    }
+
     public override void OnEnable()
     {
         base.OnEnable();
@@ -56,8 +78,7 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
             print("UpdatePartyMembers");
             foreach (var member in GameManager.Instance.connectedPlayers)
             {
-                print("connectedPlayersconnectedPlayers");
-
+                print($"member : {member.nickName}, {member.level}, {member.classType}, {member.atk}");
                 GameObject memberInfoObj = Instantiate(partyMemberInfoPrefab, partyMemberContainer);
                 if (memberInfoObj.TryGetComponent(out PartyMemberInfoUI memberInfoUI))
                 {

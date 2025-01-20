@@ -68,8 +68,7 @@ public class PartyInfoDisplay : MonoBehaviour
         maxPartyLevel.text = partyInfo.maxPartyLevel.ToString();
         maxPartyMember.text = partyInfo.maxPartyMemberCount.ToString();
 
-        partyJoinButton.onClick.AddListener(() => { PhotonNetwork.JoinRoom(roomInfo.Name); print($"JoinRoom : {roomInfo.Name}"); });
-
+        partyJoinButton.onClick.AddListener(() => { PhotonNetwork.JoinRoom(roomInfo.Name); PanelManager.Instance.PanelOpen("PartyMember"); });
     }
 
     PartyInfoDisplay() { }

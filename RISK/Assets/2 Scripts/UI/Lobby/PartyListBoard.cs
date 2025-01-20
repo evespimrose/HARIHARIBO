@@ -28,8 +28,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnPartyMemberUIOpenButtonClick()
     {
-        //PanelManager.Instance.PanelOpen("PartyMember");
-        PhotonNetwork.JoinRandomRoom();
+        PanelManager.Instance.PanelOpen("PartyMember");
     }
 
     private void Update()

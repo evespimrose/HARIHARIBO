@@ -3,11 +3,11 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
+using Photon.Pun.UtilityScripts;
 
 public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
@@ -15,9 +15,13 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public List<FireBaseCharacterData> connectedPlayers = new List<FireBaseCharacterData>();
 
+    public Transform playerPosition;
+
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
         yield return new WaitUntil(() => !string.IsNullOrEmpty(player.NickName));
+        print($"{player.NickName}");
+
         FireBaseCharacterData playerData = JsonConvert.DeserializeObject<FireBaseCharacterData>(player.NickName);
 
         connectedPlayers.Add(playerData);
@@ -38,42 +42,93 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     public void SyncPlayerDataRPC(string jsonData)
     {
         connectedPlayers = JsonConvert.DeserializeObject<List<FireBaseCharacterData>>(jsonData);
+
         Debug.Log($"Player data synchronized with all clients! : {FirebaseManager.Instance.currentCharacterData.nickName}");
     }
 
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => isGameReady);
-        //yield return new WaitForSeconds(1f);
+        print("isGameReady!!! GOGOGOGO!!!!");
+        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
 
-        //int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-        //Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
-        //GameObject playerObj = PhotonNetwork.Instantiate("Player", playerPos, Quaternion.identity);
-        //playerObj.name = $"Player {playerNumber}";
+        FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
 
-        ////Vector3 spawnPos = playerPosition.GetChild(Random.Range(0, playerPosition.childCount)).position;
+        PlayerStats playerStats = new PlayerStats
+        {
+            nickName = fireBaseCharacterData.nickName,
+            level = fireBaseCharacterData.level,
+            maxExp = fireBaseCharacterData.maxExp,
+            currentExp = fireBaseCharacterData.currExp,
+            maxHealth = fireBaseCharacterData.maxHp,
+            currentHealth = fireBaseCharacterData.maxHp,
+            moveSpeed = fireBaseCharacterData.moveSpeed,
+            attackPower = fireBaseCharacterData.atk,
+            damageReduction = fireBaseCharacterData.dmgRed,
+            healthRegen = fireBaseCharacterData.hpReg,
+            regenInterval = fireBaseCharacterData.regInt,
+            criticalChance = fireBaseCharacterData.cri,
+            criticalDamage = fireBaseCharacterData.criDmg,
+            cooldownReduction = fireBaseCharacterData.coolRed,
+            healthPerLevel = fireBaseCharacterData.hPperLv,
+            attackPerLevel = fireBaseCharacterData.atkperLv,
+        };
 
-        ////PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity).name
-        ////    = PhotonNetwork.NickName;
+        int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
+        print($"playerNumber : {playerNumber}");
+        playerPosition = GameObject.Find("SpawnPosition").transform;
 
-        //if (false == PhotonNetwork.IsMasterClient)
-        //{
-        //    yield break;
-        //}
+        Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
 
-        //while (true)
-        //{
-        //    Vector3 spawnPos = Random.insideUnitSphere * 15f;
-        //    spawnPos.y = 0;
-        //    Quaternion spawnRot = Quaternion.Euler(0, Random.Range(0, 180f), 0);
+        GameObject playerObj = null;
+        switch (FirebaseManager.Instance.currentCharacterData.classType)
+        {
+            case ClassType.Warrior:
+                playerObj = PhotonNetwork.Instantiate("Warrior", playerPos, Quaternion.identity);
+                playerObj.name = fireBaseCharacterData.nickName;
+                if (playerObj.TryGetComponent(out Warrior warrior))
+                {
+                    warrior.InitializeStatsPhoton(playerStats);
+                }
+                break;
+            case ClassType.Destroyer:
+                playerObj = PhotonNetwork.Instantiate("Destroyer", playerPos, Quaternion.identity);
+                playerObj.name = playerStats.nickName;
+                if (playerObj.TryGetComponent(out Destroyer destroyer))
+                {
+                    destroyer.InitializeStatsPhoton(playerStats);
+                }
+                break;
+            case ClassType.Healer:
+                playerObj = PhotonNetwork.Instantiate("Healer", playerPos, Quaternion.identity);
+                playerObj.name = playerStats.nickName;
+                if (playerObj.TryGetComponent(out Healer healer))
+                {
+                    healer.InitializeStatsPhoton(playerStats);
+                }
+                break;
+            case ClassType.Mage:
+                playerObj = PhotonNetwork.Instantiate("Mage", playerPos, Quaternion.identity);
+                playerObj.name = playerStats.nickName;
+                if (playerObj.TryGetComponent(out Mage mage))
+                {
+                    mage.InitializeStatsPhoton(playerStats);
+                }
+                break;
+        }
 
-        //    Vector3 color = new Vector3(Random.value, Random.value, Random.value);
-        //    float healAmount = Random.Range(10f, 30f);
+        if (false == PhotonNetwork.IsMasterClient)
+        {
+            yield break;
+        }
 
-        //    PhotonNetwork.Instantiate("Pill", spawnPos, spawnRot, data: new object[] { color, healAmount });
+        while (true)
+        {
+            yield return new WaitForSeconds(5f);
+            print("SPAWN!!");
+        }
 
-        //    yield return new WaitForSeconds(5f);
-        //}
+        // Spawner Initiate
     }
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
     {
@@ -130,5 +185,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
 
         playerObj?.GetComponent<PhotonView>().RPC("RequestPlayerSync", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    private void SetGameReady()
+    {
+        isGameReady = true;
     }
 }

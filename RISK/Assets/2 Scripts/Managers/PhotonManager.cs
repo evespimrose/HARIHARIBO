@@ -303,22 +303,6 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     {
         print("OnJoinedRoom");
 
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object dungeonRoomType) && dungeonRoomType.ToString() == "Dungeon")
-        {
-            Debug.Log($"Joined dungeon room: {PhotonNetwork.CurrentRoom.Name}");
-            PhotonNetwork.LoadLevel("DungeonScene");
-        }
-
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object lobbyroomType) && lobbyroomType.ToString() == "Lobby")
-        {
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel("LobbyScene");
-                print("PhotonNetwork.LoadLevel(\"LobbyScene\");\n");
-            }
-        }
-
         if (PhotonNetwork.IsMasterClient)
         {
             print("StartCoroutine : CollectPlayerData");

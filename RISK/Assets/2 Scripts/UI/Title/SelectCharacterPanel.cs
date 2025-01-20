@@ -144,7 +144,6 @@ public class SelectCharacterPanel : MonoBehaviour
 
         PhotonNetwork.ConnectUsingSettings();
 
-
         string Json = JsonConvert.SerializeObject(currentCharacterData);
 
         print(Json);

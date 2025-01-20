@@ -131,10 +131,6 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
     private void Start()
     {
-        if (photonView.IsMine)
-            UnitManager.Instance.RegisterPlayer(gameObject);
-        else
-            UnitManager.Instance.RegisterPlayer(gameObject);
     }
 
     private void Update()
@@ -142,11 +138,6 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         if (photonView.IsMine)
         {
             stats.UpadateHealthRegen(Time.deltaTime);
-
-            if (ChatScrollController.Instance.isFocused()) return;
-
-            //if (isSkillInProgress)
-            //    HandleInput();
 
             stateHandler.Update();
         }
