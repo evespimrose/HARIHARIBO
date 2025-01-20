@@ -47,6 +47,10 @@ MonoBehaviour:
   - SyncPlayerJoin
   - RequestExistingPlayers
   - SyncPlayerInfo
+  - NotifyPlayerRegistered
+  - RequestPlayerSync
+  - SyncPlayer
+  - SyncPlayerDataRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
