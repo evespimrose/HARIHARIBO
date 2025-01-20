@@ -6,46 +6,46 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
 {
     public EliteMonsterSkillC(StateHandler<EliteMonster> handler) : base(handler) { }
 
-    public float skillETime = 2.08f; //애니메이션 총 시간
+    public float skillCTime = 2.08f; //애니메이션 총 시간
     public float atkDuration = 1f;
-    public float skillEDuration = 0.8f;
+    public float skillCDuration = 0.8f;
 
     public float bulletDamage = 10f;
 
     public override void Enter(EliteMonster monster)
     {
 
-        Debug.Log("SkillE 진입");
+        Debug.Log("SkillC 진입");
         monster.StartCoroutine(SkillECoroutine(monster));
     }
 
     public override void Exit(EliteMonster monster)
     {
         monster.AtkEnd();
-        Debug.Log("SkillE 종료");
+        Debug.Log("SkillC 종료");
     }
 
     private IEnumerator SkillECoroutine(EliteMonster monster)
     {
-        monster.TargetLook(Vector3.zero);
+        monster.TargetLook(monster.target.position);
 
         yield return new WaitForSeconds(atkDuration); // 선딜레이
 
         // 애니메이션 실행
-        monster.animator.SetTrigger("SkillE");
+        monster.animator.SetTrigger("SkillC");
 
         // 공격 타이밍 대기
-        yield return new WaitForSeconds(skillEDuration);
+        yield return new WaitForSeconds(skillCDuration);
 
         // 미사일 발사
         SpawnProjectile1(monster);
 
-        // 애니메이션이 끝날 때까지 대기 (애니메이션이 'SkillE'일 때 완료된 상태 확인)
+        // 애니메이션이 끝날 때까지 대기 (애니메이션이 'SkillC'일 때 완료된 상태 확인)
         yield return new WaitUntil(() =>
         {
             AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
             // "SkillE" 애니메이션이 끝난 상태인지 확인
-            return !stateInfo.IsName("SkillE") || stateInfo.normalizedTime >= 1f;
+            return !stateInfo.IsName("SkillC") || stateInfo.normalizedTime >= 1f;
         });
 
         // 상태 변경
@@ -81,7 +81,7 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
 
             // 발사체의 속성 설정 (missileSpeed, missileDistance 등을 직접 설정)
             EliteSkillCObjcect missileScript = skillEBullets[i].GetComponent<EliteSkillCObjcect>();
-            missileScript.InitMissile(directions[i], 10f);
+            missileScript.InitMissile(directions[i], 20f);
         }
     }
 }

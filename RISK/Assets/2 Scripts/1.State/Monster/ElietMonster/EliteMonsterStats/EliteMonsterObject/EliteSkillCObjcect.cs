@@ -35,7 +35,7 @@ public class EliteSkillCObjcect : MonoBehaviour
         else
         {
             Vector3 direction = targetPos - transform.position;
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, missileSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, missileSpeed * Time.deltaTime * 2);
             transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         }
     }

@@ -1066,7 +1066,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &2532525478795084192
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2080,6 +2080,10 @@ PrefabInstance:
       value: BossSkillFObjectA
       objectReference: {fileID: 0}
     - target: {fileID: 8145502431507700120, guid: 000832214335ffd4782827d2a4510f4a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145502431507700120, guid: 000832214335ffd4782827d2a4510f4a, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -2101,6 +2105,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9096354989774238969}
     m_Modifications:
+    - target: {fileID: 3801143580469247617, guid: 9e2a2a59054729849a7bb288bf0069a3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4909285474212474513, guid: 9e2a2a59054729849a7bb288bf0069a3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2141,9 +2149,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8914036448449802944, guid: 9e2a2a59054729849a7bb288bf0069a3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 9043862555694351114, guid: 9e2a2a59054729849a7bb288bf0069a3, type: 3}
       propertyPath: m_Name
       value: BossSkillBParticleB
+      objectReference: {fileID: 0}
+    - target: {fileID: 9043862555694351114, guid: 9e2a2a59054729849a7bb288bf0069a3, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9043862555694351114, guid: 9e2a2a59054729849a7bb288bf0069a3, type: 3}
       propertyPath: m_IsActive
@@ -2217,6 +2233,10 @@ PrefabInstance:
       value: BossSkillFObjectB
       objectReference: {fileID: 0}
     - target: {fileID: 7019946699491237542, guid: 8a3acda7f266be3499393e36c52d8c90, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7019946699491237542, guid: 8a3acda7f266be3499393e36c52d8c90, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -2238,6 +2258,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9096354989774238969}
     m_Modifications:
+    - target: {fileID: 216100240727808727, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303599984920405668, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5182820693866792781, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2278,13 +2306,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5354097676405065749, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6942441854421822255, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8378648546881499446, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
       propertyPath: m_Name
       value: BossSkillBFieldB
       objectReference: {fileID: 0}
     - target: {fileID: 8378648546881499446, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378648546881499446, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9206057966430598094, guid: 2dcbdf452bc0136469bfb691fe6ca574, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2386,6 +2430,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9096354989774238969}
     m_Modifications:
+    - target: {fileID: 216100240727808727, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303599984920405668, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5182820693866792781, guid: 867c572a5be680d42a042d2349f10143, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2426,13 +2478,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5354097676405065749, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6942441854421822255, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
       propertyPath: m_Name
       value: BossSkillBFieldA
       objectReference: {fileID: 0}
     - target: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9206057966430598094, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2476,6 +2544,10 @@ PrefabInstance:
     - target: {fileID: 3377181292992421420, guid: 48c5715f9603c3842a353516a8baefbb, type: 3}
       propertyPath: m_Name
       value: BossSKillGObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 3377181292992421420, guid: 48c5715f9603c3842a353516a8baefbb, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3377181292992421420, guid: 48c5715f9603c3842a353516a8baefbb, type: 3}
       propertyPath: m_IsActive
@@ -2537,6 +2609,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8598798586939600705, guid: 48c5715f9603c3842a353516a8baefbb, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2560,6 +2636,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9096354989774238969}
     m_Modifications:
+    - target: {fileID: 3801143580469247617, guid: e61f1c7131f36994aab34f81a38e5c8f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4909285474212474513, guid: e61f1c7131f36994aab34f81a38e5c8f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2600,9 +2680,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8914036448449802944, guid: e61f1c7131f36994aab34f81a38e5c8f, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 9043862555694351114, guid: e61f1c7131f36994aab34f81a38e5c8f, type: 3}
       propertyPath: m_Name
       value: BossSkillBParticleA
+      objectReference: {fileID: 0}
+    - target: {fileID: 9043862555694351114, guid: e61f1c7131f36994aab34f81a38e5c8f, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9043862555694351114, guid: e61f1c7131f36994aab34f81a38e5c8f, type: 3}
       propertyPath: m_IsActive
@@ -2692,6 +2780,10 @@ PrefabInstance:
       value: BossSkillFObjectA
       objectReference: {fileID: 0}
     - target: {fileID: 8145502431507700120, guid: 000832214335ffd4782827d2a4510f4a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145502431507700120, guid: 000832214335ffd4782827d2a4510f4a, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -2761,6 +2853,10 @@ PrefabInstance:
     - target: {fileID: 7019946699491237542, guid: 8a3acda7f266be3499393e36c52d8c90, type: 3}
       propertyPath: m_Name
       value: BossSkillFObjectB
+      objectReference: {fileID: 0}
+    - target: {fileID: 7019946699491237542, guid: 8a3acda7f266be3499393e36c52d8c90, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7019946699491237542, guid: 8a3acda7f266be3499393e36c52d8c90, type: 3}
       propertyPath: m_IsActive
