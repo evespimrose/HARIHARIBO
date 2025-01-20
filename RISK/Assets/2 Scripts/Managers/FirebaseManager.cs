@@ -17,7 +17,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
 
     private DatabaseReference usersRef;
 
-    public FireBaseUserData currentUserData { get; private set; }
+    public FireBaseUserData currentUserData { get; set; }
 
     public FireBaseCharacterData currentCharacterData;
 
@@ -240,26 +240,46 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                         await characterRef.Child(dataName).SetValueAsync(currentCharacterData.maxHp + 1);
                         currentCharacterData.maxHp += 1;
                         break;
-                    case "moveSpeed":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.moveSpeed + 1);
-                        currentCharacterData.moveSpeed += 1;
+                    case "atk":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.atk + 1);
+                        currentCharacterData.atk += 1;
+                        break;
+                    case "cri":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.cri + 1);
+                        currentCharacterData.cri += 1;
+                        break;
+                    case "criDmg":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.criDmg + 1);
+                        currentCharacterData.criDmg += 1;
+                        break;
+                    case "dmgRed":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.dmgRed + 1);
+                        currentCharacterData.dmgRed += 1;
+                        break;
+                    case "hpReg":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.hpReg + 1);
+                        currentCharacterData.hpReg += 1;
+                        break;
+                    case "coolRed":
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.coolRed + 1);
+                        currentCharacterData.coolRed += 1;
                         break;
                     default:
                         Debug.LogWarning($"Unknown dataName: {dataName}");
                         break;
                 }
 
-                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
+                LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
             }
             catch (Exception e)
             {
-                PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Character upgrade failed.\n" + e.Message,
+                LobbyUI.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Character upgrade failed.\n" + e.Message,
                ok =>
                {
                    if (ok)
                        CopyToClipboard(e.Message);
                    else
-                       PanelManager.Instance.PopupClose();
+                       LobbyUI.Instance.PopupClose();
                }
                );
             }
