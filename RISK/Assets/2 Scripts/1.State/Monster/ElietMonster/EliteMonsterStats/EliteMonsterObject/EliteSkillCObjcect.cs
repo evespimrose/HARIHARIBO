@@ -18,6 +18,11 @@ public class EliteSkillCObjcect : MonoBehaviour
         isMoving = true;
     }
 
+    public void SetDamage(float damage)
+    {
+        bulletDamage = damage;
+    }
+
     private void Update()
     {
         if (isMoving)

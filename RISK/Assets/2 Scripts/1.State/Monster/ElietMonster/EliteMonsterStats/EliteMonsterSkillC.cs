@@ -10,11 +10,11 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
     public float atkDuration = 1f;
     public float skillCDuration = 0.8f;
 
-    public float bulletDamage = 10f;
+    public float skillCDamage = 10f;
 
     public override void Enter(EliteMonster monster)
     {
-
+        skillCDamage = monster.atkDamage * 0.7f;
         Debug.Log("SkillC 진입");
         monster.StartCoroutine(SkillECoroutine(monster));
     }
@@ -82,6 +82,7 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
             // 발사체의 속성 설정 (missileSpeed, missileDistance 등을 직접 설정)
             EliteSkillCObjcect missileScript = skillEBullets[i].GetComponent<EliteSkillCObjcect>();
             missileScript.InitMissile(directions[i], 20f);
+            missileScript.SetDamage(skillCDamage);
         }
     }
 }
