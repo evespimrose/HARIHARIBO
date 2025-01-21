@@ -14,6 +14,7 @@ public class CreatePartyUI : MonoBehaviour
     public Transform difficultyButtonTransform;
 
     public TextMeshProUGUI maxPartyMember;
+    public TextMeshProUGUI defficultyText;
     public TMP_InputField partyName;
 
     public Button minusMinLevelButton;
@@ -47,8 +48,8 @@ public class CreatePartyUI : MonoBehaviour
         for (int i = 0; i < 5; ++i)
         {
             Button button = Instantiate(Resources.Load<Button>("DifficultySettingButton"), difficultyButtonTransform);
+            button.onClick.AddListener(() => { goal = i; defficultyText.text = goal.ToString(); });
             button.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = (i + 1).ToString();
-            button.onClick.AddListener(() => { goal = i; });
         }
 
         createButton.onClick.AddListener(CreatePartyRoom);

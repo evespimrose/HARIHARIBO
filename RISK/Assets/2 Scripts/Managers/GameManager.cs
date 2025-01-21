@@ -121,14 +121,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         {
             yield break;
         }
-
-        while (true)
-        {
-            yield return new WaitForSeconds(5f);
-            print("SPAWN!!");
-        }
-
-        // Spawner Initiate
     }
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
     {

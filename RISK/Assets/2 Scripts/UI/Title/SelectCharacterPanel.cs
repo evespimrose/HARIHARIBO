@@ -10,7 +10,8 @@ using UnityEngine.UI;
 public class SelectCharacterPanel : MonoBehaviour
 {
     public Dictionary<string, GameObject> characterSelectDic = new Dictionary<string, GameObject>();
-    List<FireBaseCharacterData> characterDatalist = new List<FireBaseCharacterData>();
+    private List<FireBaseCharacterData> characterDatalist = new List<FireBaseCharacterData>();
+    [SerializeField] List<Sprite> classSpriteList = new List<Sprite>();
 
     public FireBaseCharacterData currentCharacterData;
 
@@ -104,7 +105,7 @@ public class SelectCharacterPanel : MonoBehaviour
                     {
                         characterSelectButton.nickNameText.text = data.nickName;
                         characterSelectButton.levelText.text = data.level.ToString();
-                        // TODO : class image load
+                        //characterSelectButton.characterImage.sprite = 
                     }
                     if (characterData.TryGetComponent(out Button databutton))
                     {
@@ -113,6 +114,7 @@ public class SelectCharacterPanel : MonoBehaviour
                             levelText.text = characterSelectButton.levelText.text;
                             nickNameText.text = characterSelectButton.nickNameText.text;
                             currentCharacterData = data;
+                            //characterModelImage = data.classType.ToString();
                         });
                     }
                     characterSelectDic.Add(data.nickName, characterData);
