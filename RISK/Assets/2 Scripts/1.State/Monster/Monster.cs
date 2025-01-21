@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,6 +39,11 @@ public class Monster : MonoBehaviour, ITakedamage
     [Tooltip("최대체력")]
     protected float maxHp;
 
+    [Tooltip("드랍 걍험치")]
+    public int exp;
+    [Tooltip("드랍 돈")]
+    public int won;
+
     [Tooltip("���")]
     public bool isAtk = false;
     protected bool isDie = false;
@@ -73,6 +79,14 @@ public class Monster : MonoBehaviour, ITakedamage
                 player.GetComponent<ITakedamage>().Takedamage(bodyAtkDamage);
                 bodyAtkHit[player] = currentTime;
             }
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        var projectile = other.GetComponent<ProjectileMove>();
+        if (projectile != null)
+        {
+            projectile.OnHit(other.ClosestPoint(transform.position));
         }
     }
 
@@ -140,9 +154,11 @@ public class Monster : MonoBehaviour, ITakedamage
 
     public virtual void Takedamage(float damage)
     {
+        if (false == PhotonNetwork.IsMasterClient) return;
         curHp -= Mathf.RoundToInt(damage);
-        if (curHp <= 0)
+        if (curHp <= 0 && !isDie)
         {
+            isDie = true;
             DieStatChange();
         }
     }

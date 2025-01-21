@@ -55,6 +55,8 @@ public class EliteMonster : Monster
         this.moveSpeed = monsterState.moveSpeed;
         this.curHp = monsterState.curHp;
         this.maxHp = curHp;
+        this.won = monsterState.won;
+        this.exp = monsterState.exp;
     }
 
     protected void InitializeStateHandler()
@@ -105,7 +107,6 @@ public class EliteMonster : Monster
 
     public override void DieStatChange()
     {
-        isDie = true;
         this.eMHandler.ChangeState(typeof(EliteMonsterDie));
     }
 }

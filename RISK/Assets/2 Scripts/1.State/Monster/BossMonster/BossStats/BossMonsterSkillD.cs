@@ -12,29 +12,26 @@ public class BossMonsterSkillD : BaseState<BossMonster>
     public float skillFAtkTime = 1f; // 애니메이션 시작 후 SkillDAtk 실행까지 기다릴 시간
     public float additionalWaitTime = 0.2f; // 애니메이션 종료 후 추가 대기 시간
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
-        damage = monster.atkDamage * 1f;
-        Action = true;
+        damage = monster.atkDamage * 0.85f;
         monster.isAtk = true;
         Debug.Log("SkillD 진입");
-        monster.StartCoroutine(SkillDCoroutine(monster)); // 코루틴 시작
+        action = monster.StartCoroutine(SkillDCoroutine(monster)); // 코루틴 시작
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("SkillD 종료");
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator SkillDCoroutine(BossMonster monster)
@@ -60,7 +57,8 @@ public class BossMonsterSkillD : BaseState<BossMonster>
         yield return null;
         yield return new WaitForSeconds(additionalWaitTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
         Debug.Log("SkillD 종료 후 Idle 상태로 전환");
     }
 

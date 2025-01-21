@@ -156,7 +156,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
             catch (JsonException e)
             {
-                Debug.LogWarning($"???꿔꺂????醫딆뇢???꿔꺂????醫딆뇢???꿔꺂????醫딆뇢????釉먮폁??嶺뚮“?팫d to parse party list JSON: {e.Message}");
+                Debug.LogWarning($"???轅붽틓?????ル봿????轅붽틓?????ル봿????轅붽틓?????ル봿??????됰Ŧ???癲ル슢???첾 to parse party list JSON: {e.Message}");
             }
         }
 
@@ -279,11 +279,6 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     //{
 
     //}
-
-    public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
-    {
-
-    }
 
     public override void OnCreatedRoom()
     {
