@@ -17,7 +17,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public Transform playerPosition;
 
-    public MonsterSpwan spwaner;
+    public MonsterSpwan spawner;
+
+    public bool isWaveDone = false;
+
+    public RiskUIController riskUIController;
 
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
@@ -55,7 +59,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         yield return new WaitUntil(() => isGameReady);
         print("isGameReady!!! GOGOGOGO!!!!");
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
-        spwaner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
+        spawner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
 
         FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
 
@@ -136,8 +140,24 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             UnitManager.Instance.players.Add(player.Value.GetPlayerNumber(), GameObject.Find(name));
         }
 
-        spwaner.SpawnStart();
+        StartCoroutine(Dungeon());
     }
+
+
+    public IEnumerator Dungeon()
+    {
+        while (true)
+        {
+            //spawner cour 끝날때가지 대기
+            yield return StartCoroutine(spawner.MonsterSpwanCorutine());
+            // riskUI enable
+
+            //
+            yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
+
+        }
+    }
+
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
     {
         if (!PhotonNetwork.IsConnected)

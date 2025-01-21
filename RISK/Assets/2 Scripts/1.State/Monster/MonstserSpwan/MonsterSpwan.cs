@@ -196,7 +196,7 @@ public class MonsterSpwan : MonoBehaviour
                 wave++;
                 if (wave > 6) // 웨이브 6까지 설정
                 {
-                    wave = 1;
+                    yield break;
                 }
             }
         }
@@ -268,6 +268,6 @@ public class MonsterSpwan : MonoBehaviour
     public GameObject MeleeMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(meleeMonsterPrefab[Random.Range(0, meleeMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
     public GameObject RangeMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(rangeMonsterPrefab[Random.Range(0, rangeMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
     public GameObject EliteMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(eliteMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
-    public GameObject StructureMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
+    public GameObject StructureMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].transform.rotation);
     public GameObject BossMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(bossMonsterPrefab.name, spwanPos, Quaternion.identity);
 }

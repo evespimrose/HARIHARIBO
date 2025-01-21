@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc4e4fcbddc9d8c42af7b4beefa42d38, type: 3}
   m_Name: EliteMonster
   m_EditorClassIdentifier: 
-  atkDamage: 1
-  moveSpeed: 1
-  atkRange: 5
-  curHp: 100
+  atkDamage: 134
+  moveSpeed: 2.2
+  atkRange: 3
+  curHp: 15000
   atkDelay: 1
+  exp: 165
+  won: 561

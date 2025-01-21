@@ -12,17 +12,20 @@ public class EliteMonsterSkillB : BaseState<EliteMonster>
     public float skillBAtkTime = 0.8f;
     public float additionalWaitTime = 0.8f;
 
+    private Coroutine action;
+
     public override void Enter(EliteMonster monster)
     {
-        skillBDamage = monster.atkDamage * 1.5f;
+        skillBDamage = monster.atkDamage * 1.2f;
         Debug.Log("SkillB 진입");
-        monster.StartCoroutine(SkillCCoroutine(monster));
+        action = monster.StartCoroutine(SkillCCoroutine(monster));
     }
 
     public override void Exit(EliteMonster monster)
     {
         monster.AtkEnd();
         Debug.Log("SkillB 종료");
+        monster.StopCoroutine(action);
     }
 
     private IEnumerator SkillCCoroutine(EliteMonster monster)

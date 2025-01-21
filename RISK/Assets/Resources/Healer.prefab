@@ -49404,17 +49404,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   joystick: {fileID: 0}
   animator: {fileID: 0}
-  baseMaxHealth: 150
+  baseMaxHealth: 551
   baseHealthPerLevel: 15
-  baseAttackPower: 15
+  baseAttackPower: 40
   baseAttackPerLevel: 3
-  baseMoveSpeed: 1
-  baseDamageReduction: 0.2
+  baseMoveSpeed: 2
+  baseDamageReduction: 0
   baseHealthRegen: 2
   baseRegenInterval: 1
-  baseCriticalChance: 0.1
+  baseCriticalChance: 0.02
   baseCriticalDamage: 1.5
-  baseCooldownReduction: 0.1
+  baseCooldownReduction: 0
   effectsHandler: {fileID: 0}
   ProjectilePrefab: {fileID: 5938167112633497377, guid: f734d15c429b3fc4f86b27ba61a21d1c, type: 3}
   attackPoint: {fileID: 744656535770289220}
@@ -49496,7 +49496,7 @@ MonoBehaviour:
   - {fileID: 2939762341057263714}
   - {fileID: -8328244261113844376}
   - {fileID: 3385839744400906751}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &-8328244261113844376

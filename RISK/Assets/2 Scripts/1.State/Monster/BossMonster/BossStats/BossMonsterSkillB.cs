@@ -11,7 +11,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         Melee, 
         Range  
     }
-    public float damage = 1f;
+    public float meleeDamage = 1f;
+    public float rangeDamage = 1f;
     public float skillBDuration = 2.09f; 
     public float atkDelay = 1f;//선딜레이
     public float atkTime = 1f;//물체 떨어지는시간
@@ -25,31 +26,29 @@ public class BossMonsterSkillB : BaseState<BossMonster>
 
     private AtkType atkType;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
-        damage = monster.atkDamage * 3f;
-        Action = true;
+        meleeDamage = monster.atkDamage * 1.35f;
+        rangeDamage = monster.atkDamage * 1.41f;
         monster.isAtk = true;
         Debug.Log("SkillB 진입");
         atkType = (AtkType)Random.Range(0, 2); 
-        monster.StartCoroutine(SkillBAtk(monster));
+        action = monster.StartCoroutine(SkillBAtk(monster));
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("SkillB 종료");
         DeactivateSkillBFieldParticle(monster);
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator SkillBAtk(BossMonster monster)
@@ -73,7 +72,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         DeactivateSkillBFieldParticle(monster);
         yield return new WaitForSeconds(endTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
         Debug.Log("SkillB 종료 후 Idle 상태로 전환");
     }
 
@@ -99,7 +99,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         {
             if (col.gameObject.CompareTag("Player"))
             {
-                col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                col.gameObject.GetComponent<ITakedamage>()?.Takedamage(meleeDamage);
                 Debug.Log("근접 공격 성공");
             }
         }
@@ -118,7 +118,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
                 float dirTarget = Vector3.Distance(atkCenter, col.transform.position);
                 if (dirTarget >= rangeAtkMinRange && dirTarget <= rangeAtkMaxRange) 
                 {
-                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(rangeDamage);
                     Debug.Log("원거리 공격 성공");
                 }
             }
