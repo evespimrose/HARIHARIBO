@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 using Photon.Realtime;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
+using HashTable = ExitGames.Client.Photon.Hashtable;
 
 
-public class PartyMemberInfoUI : MonoBehaviour
+public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
 {
     [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI playerNameText;
@@ -20,25 +22,37 @@ public class PartyMemberInfoUI : MonoBehaviour
     {
         player = partyMember;
         UpdateUI();
+    }
 
-        partyLeaderIcon.gameObject.SetActive(PartyManager.Instance.IsPartyLeader(player));
+    public void Initialize(FireBaseCharacterData partyMember)
+    {
+        print("Initialize");
+        UpdateUI(partyMember);
+    }
+
+    private void Start()
+    {
+        UpdateUI();
     }
 
     private void UpdateUI()
     {
         if (player == null) return;
 
-        playerStats = PartyManager.Instance.GetPartyMemberStats(player);
         if (playerStats != null)
         {
             playerNameText.text = playerStats.nickName;
             levelText.text = playerStats.level.ToString();
             classText.text = PartyManager.Instance.GetPartyMemberClass(player);
+            partyLeaderIcon.gameObject.SetActive(PartyManager.Instance.IsPartyLeader(player));
         }
+
     }
 
-    private void Update()
+    private void UpdateUI(FireBaseCharacterData fireBaseCharacterData)
     {
-        UpdateUI();
+        playerNameText.text = fireBaseCharacterData.nickName;
+        levelText.text = fireBaseCharacterData.level.ToString();
+        classText.text = fireBaseCharacterData.classType.ToString();
     }
 }

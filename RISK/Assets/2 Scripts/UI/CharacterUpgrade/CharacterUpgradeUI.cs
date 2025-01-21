@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.VersionControl.Asset;
 
 [System.Serializable]
 public class StatsSet

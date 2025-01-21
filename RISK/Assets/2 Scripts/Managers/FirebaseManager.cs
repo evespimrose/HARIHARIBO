@@ -44,7 +44,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, passwd);
             usersRef = DB.GetReference($"users/{result.User.UserId}");
 
-            // ȸ���� �����͸� Database�� ����
+            // 회占쏙옙占쏙옙 占쏙옙占쏙옙占싶몌옙 Database占쏙옙 占쏙옙占쏙옙
             FireBaseUserData userData = new FireBaseUserData(result.User.UserId);
 
             string userDataJson = JsonConvert.SerializeObject(userData);
