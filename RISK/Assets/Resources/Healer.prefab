@@ -49289,6 +49289,7 @@ GameObject:
   - component: {fileID: 4010414853434740814}
   - component: {fileID: -8328244261113844376}
   - component: {fileID: 3385839744400906751}
+  - component: {fileID: 2659268291653317227}
   m_Layer: 7
   m_Name: Healer
   m_TagString: Untagged
@@ -49421,6 +49422,8 @@ MonoBehaviour:
   finalSpeed: 3
   finalScale: 2
   LifeTime: 5
+  normalAttackDamagePercent: 100
+  finalAttackDamagePercent: 150
 --- !u!114 &3212805586502664121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49554,6 +49557,21 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &2659268291653317227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6354180697800532788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b901ac5d93280384b84639ed0224bc0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireDamage: 1
+  fireInterval: 1
+  fireDuration: 5
 --- !u!1 &6388144496818696443
 GameObject:
   m_ObjectHideFlags: 0

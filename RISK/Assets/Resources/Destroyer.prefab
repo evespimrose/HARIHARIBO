@@ -23306,6 +23306,7 @@ GameObject:
   - component: {fileID: 7482244917127298180}
   - component: {fileID: 2916333073600441956}
   - component: {fileID: 8583362309326636272}
+  - component: {fileID: -8172573380614941823}
   m_Layer: 7
   m_Name: Destroyer
   m_TagString: Untagged
@@ -23569,6 +23570,21 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &-8172573380614941823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3060835569387709482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b901ac5d93280384b84639ed0224bc0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireDamage: 1
+  fireInterval: 1
+  fireDuration: 5
 --- !u!1 &3079254675644821715
 GameObject:
   m_ObjectHideFlags: 0
