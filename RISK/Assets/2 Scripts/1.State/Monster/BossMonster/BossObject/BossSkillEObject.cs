@@ -15,7 +15,7 @@ public class BossSkillEObject : MonoBehaviour
     public float fireInterval = 1f;
     public float fireDuration = 5f;
     public float missileSpeed = 15f;
-    public float missileDistance = 10f;
+    public float missileDistance = 20f;
 
     private Vector3 targetPos;
     private bool isMoving = false;
@@ -26,6 +26,8 @@ public class BossSkillEObject : MonoBehaviour
         this.fireDamage = fireDamage;
         this.fireInterval = fireInterval;
         this.fireDuration = fireDuration;
+        missileSpeed = 15f;
+        missileDistance = 20f;
     }
 
     private void Update()

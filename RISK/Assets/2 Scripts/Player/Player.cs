@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon;
+using Newtonsoft.Json;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using Photon.Realtime;
@@ -33,7 +35,61 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         InitializeStateHandler();
         SetPlatform();
         InitializeStats();
+        PhotonPeer.RegisterType(typeof(Destroyer), 100, SerializeDestroyer, DeserializeDestroyer);
+        PhotonPeer.RegisterType(typeof(Healer), 101, SerializeHealer, DeserializeHealer);
+        PhotonPeer.RegisterType(typeof(Mage), 102, SerializeMage, DeserializeMage);
+        PhotonPeer.RegisterType(typeof(Warrior), 103, SerializeWarrior, DeserializeWarrior);
     }
+
+    private static byte[] SerializeDestroyer(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+    private static byte[] SerializeHealer(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+
+    private static byte[] SerializeMage(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+
+    private static byte[] SerializeWarrior(object customType)
+    {
+        string json = JsonUtility.ToJson(customType);
+        return System.Text.Encoding.UTF8.GetBytes(json);
+    }
+
+    private static object DeserializeDestroyer(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Destroyer>(json);
+    }
+
+    private static object DeserializeWarrior(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Warrior>(json);
+    }
+
+    private static object DeserializeHealer(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Healer>(json);
+    }
+
+    private static object DeserializeMage(byte[] data)
+    {
+        string json = System.Text.Encoding.UTF8.GetString(data);
+        return JsonUtility.FromJson<Mage>(json);
+    }
+
+
+
     //public void InitializeStats(PlayerStats stats)
     //{
     //    this.stats = stats;
@@ -57,7 +113,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
             networkRotation = transform.rotation;
         }
     }
-
+    public void InitializeStatsPhoton(PlayerStats stat) { stats = stat; stats.InitializeStats(); }
     protected virtual void SetPlatform()
     {
 #if UNITY_ANDROID || UNITY_IOS
@@ -93,35 +149,6 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
         }
     }
-
-    //private void HandleInput()
-    //{
-
-
-    //    if (Input.GetKeyDown(KeyCode.A))
-    //    {
-    //        stateHandler.ChangeState(typeof(PlayerAttackState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.W))
-    //    {
-    //        isSkillInProgress = true;
-    //        stateHandler.ChangeState(typeof(WSkillState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.E))
-    //    {
-    //        isSkillInProgress = true;
-    //        stateHandler.ChangeState(typeof(ESkillState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.R))
-    //    {
-    //        isSkillInProgress = true;
-    //        stateHandler.ChangeState(typeof(RSkillState));
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.P))
-    //    {
-
-    //    }
-    //}
 
     public void SetSkillInProgress(bool inProgress)
     {

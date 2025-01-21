@@ -14,17 +14,32 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
     public Button refreshButton;
     public Button createButton;
     public Button closeButton;
+    public Button partyMemberUIOpenButton;
 
     private void Awake()
     {
         refreshButton.onClick.AddListener(OnRefreshButtonClick);
         createButton.onClick.AddListener(OnCreateButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
+        partyMemberUIOpenButton.onClick.AddListener(OnPartyMemberUIOpenButtonClick);
+    }
+
+    private void OnPartyMemberUIOpenButtonClick()
+    {
+        LobbyUI.Instance.PanelOpen("PartyMember");
+    }
+
+    private void Update()
+    {
+        createButton.interactable = !PartyManager.Instance.isInParty;
+        partyMemberUIOpenButton.interactable = PartyManager.Instance.isInParty;
     }
 
     private void OnRefreshButtonClick()
     {
+        PhotonManager.Instance.partyRoomInfoList = PhotonManager.Instance.GetPartyList();
 
+        UpdatePartyList();
     }
 
     private void OnCreateButtonClick()
@@ -34,7 +49,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnCloseButtonClick()
     {
-
+        gameObject.SetActive(false);
     }
 
     private void Start()
@@ -54,12 +69,9 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
             foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
             {
                 GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
-                partyItem.GetComponentInChildren<TextMeshProUGUI>().text = party.name;
-                //Button joinButton = partyItem.GetComponentInChildren<Button>();
-                //joinButton.onClick.AddListener(() => PartyManager.Instance.JoinParty(PhotonNetwork.LocalPlayer));
+                if (partyItem.TryGetComponent(out PartyInfoDisplay component))
+                    component.Initialize(party);
             }
         }
-
     }
-
 }

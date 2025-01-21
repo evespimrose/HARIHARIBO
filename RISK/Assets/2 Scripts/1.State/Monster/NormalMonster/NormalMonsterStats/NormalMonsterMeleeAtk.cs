@@ -7,9 +7,12 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
 {
     public NormalMonsterMeleeAtk(StateHandler<NormalMonster> handler) : base(handler) { }
 
+    public float meleeAtkDamage;
     public float atkHitTime = 0.4f;
+
     public override void Enter(NormalMonster monster)
     {
+        meleeAtkDamage = monster.atkDamage * 1f;
         Debug.Log("MeleeAtk공격 시작");
         monster.animator.SetTrigger("Atk");
         monster.StartCoroutine(StartAtk(monster));
@@ -28,6 +31,7 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
     private IEnumerator StartAtk(NormalMonster monster)
     {
         yield return new WaitForSeconds(atkHitTime);
+        monster.TargetLook(monster.target.position);
         Atk(monster);
         yield return new WaitUntil(() =>
         {
@@ -54,7 +58,7 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
                 float angle = Vector3.Angle(atkDir, dirToTarget);
                 if (angle <= 90f)
                 {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(monster.atkDamage);
+                    col.gameObject.GetComponent<ITakedamage>().Takedamage(meleeAtkDamage);
                 }
                 else
                 {

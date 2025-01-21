@@ -2,39 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class WarriorAttackState : BaseState<Player>
 {
-    private float attackDuration = 1f;
+    private float[] attackDurations = new float[] { 1.2f, 0.8f, 1.4f };
     private float attackTimer;
-    private float comboWindow = 0.5f;
-    private float comboTimer;
+    private float comboWindow = 0.8f;
     private float lastKeyPressTime;
-    private int inputCount = 0;
+    private static int inputCount = 0;
+    private bool canReceiveInput = true;
 
     public WarriorAttackState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
-        attackTimer = attackDuration;
-
         if (Time.time - lastKeyPressTime > comboWindow)
         {
             inputCount = 0;
         }
 
-        inputCount++;
+        inputCount = Mathf.Min(inputCount + 1, 3);
+
+        attackTimer = attackDurations[inputCount - 1];
+
         lastKeyPressTime = Time.time;
+        canReceiveInput = true;
 
-        int attackIndex = Mathf.Clamp(inputCount, 1, 3);
-        player.Animator?.SetTrigger($"Attack{attackIndex}");
+        Debug.Log($"Attack {inputCount} Duration: {attackTimer}");
+        player.Animator?.SetTrigger($"Attack{inputCount}");
 
-        player.photonView.RPC("SyncAttackState", RpcTarget.Others, player.photonView.ViewID);
+        //player.photonView.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
     }
 
     public override void Update(Player player)
     {
         attackTimer -= Time.deltaTime;
+
+        float currentAttackDuration = attackDurations[inputCount - 1];
+        if (canReceiveInput && attackTimer <= currentAttackDuration * 0.7f)
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                if (Time.time - lastKeyPressTime <= comboWindow && inputCount < 3)
+                {
+                    handler.ChangeState(typeof(WarriorAttackState));
+                    return;
+                }
+            }
+        }
 
         if (attackTimer <= 0)
         {
@@ -56,17 +72,23 @@ public class WarriorAttackState : BaseState<Player>
     }
     public override void Exit(Player player)
     {
+        if (player.Animator != null)
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                player.Animator.ResetTrigger($"Attack{i}");
+            }
+        }
+
         if (Time.time - lastKeyPressTime > comboWindow)
         {
             inputCount = 0;
         }
     }
 
-    [PunRPC]
-    public void SyncAttackState(int playerId)
-    {
-        Player player = PhotonView.Find(playerId).GetComponent<Player>();
-        int attackIndex = Mathf.Clamp(inputCount, 1, 3);
-        player.Animator?.SetTrigger($"Attack{attackIndex}");
-    }
+    //[PunRPC]
+    //public void SyncAttackState(Player player, int attackIndex)
+    //{
+    //    player.Animator?.SetTrigger($"Attack{attackIndex}");
+    //}
 }

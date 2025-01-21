@@ -21,10 +21,26 @@ public class WarriorIdleState : BaseState<Player>
             return;
         }
 
-        
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             handler.ChangeState(typeof(WarriorAttackState));
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            handler.ChangeState(typeof(WarriorWSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            handler.ChangeState(typeof(WarriorESkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            handler.ChangeState(typeof(WarriorRSkill));
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            handler.ChangeState(typeof(WarriorTSkill));
         }
     }
 }

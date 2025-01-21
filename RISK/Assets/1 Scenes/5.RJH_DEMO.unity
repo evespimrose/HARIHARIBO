@@ -271,14 +271,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 657625257775730201, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
+      propertyPath: isBasicAttack
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1730296034643879096, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
       propertyPath: m_Name
       value: Warrior
+      objectReference: {fileID: 0}
+    - target: {fileID: 2939895835085121595, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
+      propertyPath: damagePercent
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3241364709733397796, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
       propertyPath: joystick
       value: 
       objectReference: {fileID: 1230678612}
+    - target: {fileID: 4224308736651124571, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6487196230192119751, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
+      propertyPath: damagePercent
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8344871286798382002, guid: 31ae39b13a382dd408697820d11b81e9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -372,9 +388,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4010414853434740814, guid: 2d11ea611578d71408e60d889c238980, type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6354180697800532788, guid: 2d11ea611578d71408e60d889c238980, type: 3}
       propertyPath: m_Name
       value: Healer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6354180697800532788, guid: 2d11ea611578d71408e60d889c238980, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -948,9 +972,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 978480504366718017, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2871036966586066559, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
       propertyPath: m_Name
       value: Mage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2871036966586066559, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5470352560626607532, guid: 08d896624a9afff4d91b182e109ecee7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1174,9 +1206,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1160542186824666697, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
+      propertyPath: isBasicAttack
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3060835569387709482, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
       propertyPath: m_Name
       value: Destroyer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3060835569387709482, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7482244917127298180, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7691162183741784425, guid: e094f21fb4c953d4d93047ce9056fbb6, type: 3}
       propertyPath: m_LocalPosition.x

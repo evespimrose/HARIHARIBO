@@ -16,30 +16,30 @@ public class PlayerStats
 
     [Header("level")]
     public int level = 1;
-    public int healthPerLevel = 10;
-    public int attackPerLevel = 2;
+    public int healthPerLevel;
+    public int attackPerLevel;
     public float maxExp = 100f;
     public float _currentExp = 0f;
 
     [Header("default")]
-    public float maxHealth = 100;
+    public float maxHealth;
     private float _currentHealth;
-    public float attackPower = 10;
+    public float attackPower;
     public float moveSpeed;
     [Range(0f, 1f)]
-    public float damageReduction = 0.1f;
+    public float damageReduction;
 
     [Header("regen")]
-    public float healthRegen = 1f;
-    public float regenInterval = 1f;
+    public float healthRegen;
+    public float regenInterval;
     private float regenTimer = 0f;
 
     [Header("critical")]
     [Range(0f, 1f)]
-    public float criticalChance = 0.05f;
-    public float criticalDamage = 1.5f;
+    public float criticalChance;
+    public float criticalDamage;
     [Range(0f, 1f)]
-    public float cooldownReduction = 0f;
+    public float cooldownReduction;
 
     public float currentHealth
     {
@@ -65,10 +65,6 @@ public class PlayerStats
         }
     }
 
-    public PlayerStats()
-    {
-        InitializeStats();
-    }
     public void InitializeStats()
     {
         currentHealth = maxHealth;

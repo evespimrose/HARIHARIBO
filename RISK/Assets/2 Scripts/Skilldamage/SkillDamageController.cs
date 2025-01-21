@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SkillDamageController : MonoBehaviour
 {
-    [Header("½ºÅ³ µ¥¹ÌÁö Á¤º¸")]
-    [SerializeField] private SkillDamageInfo[] skillInfos;  // Inspector¿¡¼­ ¼³Á¤
+    [Header("ìŠ¤í‚¬ ë°ë¯¸ì§€ ì •ë³´")]
+    [SerializeField] private SkillDamageInfo[] skillInfos;  // Inspectorì—ì„œ ì„¤ì •
     private Dictionary<string, SkillDamageInfo> skillDamageMap;
 
     private void Awake()

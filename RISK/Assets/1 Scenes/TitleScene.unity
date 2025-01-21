@@ -6050,7 +6050,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 968929309}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.2667889}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -7209,9 +7209,19 @@ MonoBehaviour:
     nickName: 
     classType: 0
     level: 0
-    exp: 0
+    hPperLv: 0
+    atkperLv: 0
+    maxExp: 0
+    currExp: 0
     maxHp: 0
     moveSpeed: 0
+    atk: 0
+    dmgRed: 0
+    hpReg: 0
+    regInt: 0
+    cri: 0
+    criDmg: 0
+    coolRed: 0
 --- !u!4 &901675631
 Transform:
   m_ObjectHideFlags: 0
@@ -7628,7 +7638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2963d5f11e65d1458669a3ea573f87d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPosition: {fileID: 0}
 --- !u!4 &961574175
 Transform:
   m_ObjectHideFlags: 0
@@ -10829,8 +10838,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 711821136}
   m_HandleRect: {fileID: 711821135}
   m_Direction: 2
-  m_Value: 1.0000007
-  m_Size: 0.7332111
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11104,10 +11113,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fbfba1dc60b7a44a8f60a9677c45e3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partyroomListContent: {fileID: 0}
-  partyroomListItemPrefab: {fileID: 0}
   roomInfoText: 
   playerInfoText: 
+  partyRoomInfoList: []
 --- !u!4 &1213233581
 Transform:
   m_ObjectHideFlags: 0
@@ -17416,9 +17424,19 @@ MonoBehaviour:
     nickName: 
     classType: 0
     level: 0
-    exp: 0
+    hPperLv: 0
+    atkperLv: 0
+    maxExp: 0
+    currExp: 0
     maxHp: 0
     moveSpeed: 0
+    atk: 0
+    dmgRed: 0
+    hpReg: 0
+    regInt: 0
+    cri: 0
+    criDmg: 0
+    coolRed: 0
   createCharacterPrefab: {fileID: 6739104790765747532, guid: cf9d672e08614e14da9200ab80bd0b02, type: 3}
   characterDataPrefab: {fileID: 3975505687823254418, guid: 1da220d2961f50841a3ad4fed86309e8, type: 3}
   characterListTransform: {fileID: 1911777354}

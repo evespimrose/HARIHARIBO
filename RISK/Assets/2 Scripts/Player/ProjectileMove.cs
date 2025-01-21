@@ -1,6 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class ProjectileMove : MonoBehaviour
 {
@@ -11,12 +12,22 @@ public class ProjectileMove : MonoBehaviour
     public GameObject hitPrefab;
     private Vector3 moveDirection;
     private float currentLifeTime;
+    private SkillDamageInfo skillDamageInfo;
+    private Player ownerPlayer;
 
-    public void Initialize(Vector3 direction)
+    public void Initialize(Vector3 direction, Player owner)
     {
         moveDirection = direction.normalized;
         transform.forward = moveDirection; // 발사체를 이동 방향으로 회전
         currentLifeTime = lifeTime;
+        ownerPlayer = owner;
+
+        skillDamageInfo = GetComponent<SkillDamageInfo>();
+        if (skillDamageInfo != null)
+        {
+            skillDamageInfo.SetOwnerPlayer(ownerPlayer);
+            skillDamageInfo.EnableCollider();
+        }
     }
 
 
@@ -60,6 +71,13 @@ public class ProjectileMove : MonoBehaviour
 
     void OnCollisionEnter (Collision co)
     {
+        ITakedamage damageable = co.gameObject.GetComponent<ITakedamage>();
+        if (damageable != null && skillDamageInfo != null)
+        {
+            float damage = skillDamageInfo.GetDamage();
+            damageable.Takedamage(damage);
+        }
+
         speed = 0;
 
         ContactPoint contact = co.contacts[0];

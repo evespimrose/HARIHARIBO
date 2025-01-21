@@ -4,30 +4,18 @@ using UnityEngine;
 
 public class DestroyerTSkill : BaseState<Player>
 {
-    private float skillDuration = 1.2f;
+    private float skillDuration = 2.9f;
     private float skillTimer;
-    private bool effectPlayed = false;
     public DestroyerTSkill(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
         skillTimer = skillDuration;
-        effectPlayed = false;
         player.Animator?.SetTrigger("TSkill");
     }
     public override void Update(Player player)
     {
         skillTimer -= Time.deltaTime;
-
-        if (!effectPlayed && skillTimer <= skillDuration * 0.5f)
-        {
-            var effectHandler = player.GetComponent<AnimationEventEffects>();
-            if (effectHandler != null)
-            {
-                effectHandler.PlayEffect(3); // T Ω∫≈≥ ¿Ã∆Â∆Æ
-            }
-            effectPlayed = true;
-        }
 
         if (skillTimer <= 0)
         {

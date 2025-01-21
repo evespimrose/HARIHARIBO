@@ -1,36 +1,52 @@
+using Photon.Pun;
 using Photon.Realtime;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 
 public class PartyMemberUI : MonoBehaviour
 {
-    public Text partyLeaderText;
-    public Transform partyMemberContainer;
-    public GameObject partyMemberItemPrefab;
+    [SerializeField] private Transform partyMemberContainer;
+    [SerializeField] private GameObject partyMemberInfoPrefab;
+    public Button closeButton;
+    public Button quitButton;
 
+    private void Awake()
+    {
+        closeButton.onClick.AddListener(OnCloseButtonClick);
+        quitButton.onClick.AddListener(OnQuitButtonClick);
+    }
     private void OnEnable()
     {
         UpdatePartyMembers();
     }
 
+    private void OnQuitButtonClick()
+    {
+        PartyManager.Instance.LeaveParty(PhotonNetwork.LocalPlayer);
+        LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Party Quit", "SuccessFully Left Party.", () => { OnCloseButtonClick(); LobbyUI.Instance.PopupClose(); });
+    }
+
+    private void OnCloseButtonClick()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void UpdatePartyMembers()
     {
-        PhotonRealtimePlayer partyLeader = PartyManager.Instance.GetPartyLeader();
-        if (partyLeader != null)
-        {
-            partyLeaderText.text = $"Party Leader: {partyLeader.NickName} (Level: {partyLeader.CustomProperties["Level"]})";
-        }
-
         foreach (Transform child in partyMemberContainer)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (PhotonRealtimePlayer member in PartyManager.Instance.GetPartyMembers())
+        foreach (var member in PartyManager.Instance.GetPartyMembers())
         {
-            GameObject memberItem = Instantiate(partyMemberItemPrefab, partyMemberContainer);
-            memberItem.GetComponentInChildren<Text>().text = $"{member.NickName} (Level: {member.CustomProperties["Level"]})";
+            GameObject memberInfoObj = Instantiate(partyMemberInfoPrefab, partyMemberContainer);
+            if (memberInfoObj.TryGetComponent(out PartyMemberInfoUI memberInfoUI))
+            {
+                memberInfoUI.Initialize(member);
+            }
         }
     }
 }

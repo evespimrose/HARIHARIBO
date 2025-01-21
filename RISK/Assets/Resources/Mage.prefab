@@ -23492,6 +23492,8 @@ GameObject:
   - component: {fileID: 4427513070072850994}
   - component: {fileID: 266705742501340079}
   - component: {fileID: 978480504366718017}
+  - component: {fileID: -8108350381106507482}
+  - component: {fileID: -4830462955973551265}
   m_Layer: 7
   m_Name: Mage
   m_TagString: Untagged
@@ -23624,6 +23626,8 @@ MonoBehaviour:
   finalSpeed: 3
   finalScale: 2
   LifeTime: 5
+  normalAttackDamagePercent: 100
+  finalAttackDamagePercent: 150
   wSkillProjectilePrefab: {fileID: 5938167112633497377, guid: e3523cd1c41598847b9c801e7033f590, type: 3}
   wSkillSpeed: 7
   wSkillLifeTime: 3
@@ -23693,9 +23697,69 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 1295805719403106403}
+  - {fileID: -8108350381106507482}
+  - {fileID: -4830462955973551265}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-8108350381106507482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2871036966586066559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &-4830462955973551265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2871036966586066559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: IsMoving
+  - Type: 9
+    SynchronizeType: 2
+    Name: Attack1
+  - Type: 9
+    SynchronizeType: 2
+    Name: Attack2
+  - Type: 9
+    SynchronizeType: 2
+    Name: Attack3
+  - Type: 9
+    SynchronizeType: 2
+    Name: WSkill
+  - Type: 9
+    SynchronizeType: 2
+    Name: ESkill
+  - Type: 9
+    SynchronizeType: 2
+    Name: RSkill
+  - Type: 9
+    SynchronizeType: 2
+    Name: TSkill
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
 --- !u!1 &2893899571063168237
 GameObject:
   m_ObjectHideFlags: 0
@@ -30624,7 +30688,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: MageESkillAttack
-  damage: 0
+  damagePercent: 200
+  isBasicAttack: 0
 --- !u!1 &3873282485824874073
 GameObject:
   m_ObjectHideFlags: 0
@@ -34600,7 +34665,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: MageRSkillAttack
-  damage: 0
+  damagePercent: 300
+  isBasicAttack: 0
 --- !u!135 &8729376416233466223
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,61 +6,76 @@ using UnityEngine;
 public class DestroyerAttackState : BaseState<Player>
 {
 
-    private float attackDuration = 1f;
+    private float[] attackDurations = new float[] { 1.1f, 1.3f, 1.4f, 2f };
     private float attackTimer;
-    private float comboWindow = 0.5f;
-    private float lastKeyPressTime;
-    private static int inputCount = 0;
+    private static int comboCount = 0;  // 콤보 카운트
+    private bool isNextAttackReady = false;
 
     public DestroyerAttackState(StateHandler<Player> handler) : base(handler) { }
 
     public override void Enter(Player player)
     {
+        if (!player.photonView.IsMine) return;
 
-        attackTimer = attackDuration;
+        // 콤보 카운트 증가
+        comboCount++;
+        if (comboCount > 4) comboCount = 1;
 
-        if (Time.time - lastKeyPressTime > comboWindow)
-        {
-            inputCount = 0;
-        }
+        // 공격 시작
+        attackTimer = attackDurations[comboCount - 1];
+        player.Animator?.SetTrigger($"Attack{comboCount}");
+        Debug.Log($"Attack {comboCount} Started");
 
-        inputCount++;
-        lastKeyPressTime = Time.time;
+        isNextAttackReady = false;
 
-        int attackIndex = Mathf.Clamp(inputCount, 1, 4);  // Destroyer�� 4�� �޺�
-        Debug.Log($"Attack {attackIndex}");
-        player.Animator?.SetTrigger($"Attack{attackIndex}");
+        //player.photonView?.RPC("SyncAttackState", RpcTarget.Others, player, inputCount);
+
+
     }
 
     public override void Update(Player player)
     {
+        if (!player.photonView.IsMine) return;
+
         attackTimer -= Time.deltaTime;
 
+        // 공격 키 입력 체크
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            isNextAttackReady = true;
+        }
+
+        // 현재 공격 종료 체크
         if (attackTimer <= 0)
         {
-            if (Time.time - lastKeyPressTime > comboWindow)
+            if (isNextAttackReady && comboCount < 4)
             {
-                inputCount = 0;
-            }
-
-            Vector3 moveInput = player.GetMove();
-            if (moveInput != Vector3.zero)
-            {
-                handler.ChangeState(typeof(DestroyerMoveState));
+                // 다음 콤보로
+                handler.ChangeState(typeof(DestroyerAttackState));
             }
             else
             {
-                handler.ChangeState(typeof(DestroyerIdleState));
+                // 콤보 종료
+                comboCount = 0;
+                Vector3 moveInput = player.GetMove();
+                handler.ChangeState(moveInput != Vector3.zero ?
+                    typeof(DestroyerMoveState) : typeof(DestroyerIdleState));
             }
         }
     }
     public override void Exit(Player player)
     {
-        if (Time.time - lastKeyPressTime > comboWindow)
+        if (!isNextAttackReady)
         {
-            inputCount = 0;
+            comboCount = 0;
         }
     }
+
+    //[PunRPC]
+    //public void SyncAttackState(Player player, int attackIndex)
+    //{
+    //    player.Animator?.SetTrigger($"Attack{attackIndex}");
+    //}
 }
 
 

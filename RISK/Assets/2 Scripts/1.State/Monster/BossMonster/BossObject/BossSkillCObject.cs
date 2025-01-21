@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossSkillCObject : MonoBehaviour
 {
-    public float moveSpeed = 20f;      
+    public float moveSpeed = 10f;      
     public float moveDistance = 30f;   
     public int maxAtkCount = 1;        
     public float atkDamage;            
@@ -17,6 +17,8 @@ public class BossSkillCObject : MonoBehaviour
 
     void Start()
     {
+        moveSpeed = 5f;
+        moveDistance = 30f;
         startPos = transform.position;
         particleSystems = GetComponentsInChildren<ParticleSystem>();
     }
@@ -24,7 +26,7 @@ public class BossSkillCObject : MonoBehaviour
     void Update()
     {
         if (isSeting == false) return;
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 5);
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 10);
         if (Vector3.Distance(startPos, transform.position) >= moveDistance)
         {
             Destroy(gameObject);

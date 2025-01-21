@@ -9,6 +9,7 @@ using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 [System.Serializable]
 public class PartyInfo
@@ -19,17 +20,22 @@ public class PartyInfo
     public int[] currentMemberActorNumber;
     public int currentLeaderActorNumber;
     public int maxPartyMemberCount;
-    //public int goal;
+    public int goal;
+    public int minPartyLevel;
+    public int maxPartyLevel;
 
-    public PartyInfo() { name = ""; partyId = -1; currentMemberCount = -1; currentMemberActorNumber = new int[] { }; maxPartyMemberCount = 4; }
+    public PartyInfo() { name = " "; partyId = -1; currentMemberCount = -1; currentMemberActorNumber = new int[] { }; maxPartyMemberCount = 4; goal = 1; minPartyLevel = 1; maxPartyLevel = 99; }
 
-    public PartyInfo(string name, int partyId, int currentMember = 1, int[] currentMemberActorNumber = null, int maxPartyMemberCount = 4)
+    public PartyInfo(string name, int partyId, int currentMember = 1, int[] currentMemberActorNumber = null, int maxPartyMemberCount = 4, int goal = 1, int minLevel = 1, int maxLevel = 99)
     {
         this.name = name;
         this.partyId = partyId;
         this.currentMemberCount = currentMember;
         this.currentMemberActorNumber = currentMemberActorNumber;
         this.maxPartyMemberCount = maxPartyMemberCount;
+        this.goal = goal;
+        minPartyLevel = minLevel;
+        maxPartyLevel = maxLevel;
     }
 }
 
@@ -43,6 +49,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     private void Start()
     {
+
     }
 
     public override void OnConnectedToMaster()
@@ -58,7 +65,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             MaxPlayers = 20,
             IsVisible = true,
             IsOpen = true,
-            CustomRoomProperties = new HashTable { { "RoomType", "Lobby" }, { "Difficulty", 0 }, { "PartyList", new string[] { " " } } },
+            CustomRoomProperties = new HashTable { { "RoomType", "Lobby" }, { "Difficulty", 0 }, { "PartyList", JsonConvert.SerializeObject(new List<PartyInfo>()) } },
             CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty", "PartyList" }
         };
 
@@ -128,7 +135,6 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     public void UpdatePartyInfo<T>(string key, T value)
     {
-
         string json = JsonConvert.SerializeObject(value);
 
         HashTable fixedcustomProperties = new HashTable
@@ -149,7 +155,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
             catch (JsonException e)
             {
-                Debug.LogError($"Failed to parse party list JSON: {e.Message}");
+                Debug.LogWarning($"??紐꾧께??紐꾧께??紐꾧께?饔낃엑iled to parse party list JSON: {e.Message}");
             }
         }
 
@@ -172,49 +178,75 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         PhotonNetwork.CurrentRoom.SetCustomProperties(fixedcustomProperties);
     }
 
-    //public void CreateDungeonRoom(int difficulty)
-    //{
-    //    if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
-    //    {
-    //        Debug.LogError("Only the party leader can create a dungeon room.");
-    //        return;
-    //    }
+    public void CreateDungeonRoom(int difficulty)
+    {
+        if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+        {
+            Debug.LogError("Only the party leader can create a dungeon room.");
+            return;
+        }
 
-    //    string roomName = "Dungeon_" + Random.Range(1000, 9999);
+        string roomName = "Dungeon_" + Random.Range(1000, 9999);
 
-    //    RoomOptions roomOptions = new RoomOptions
-    //    {
-    //        MaxPlayers = (byte)PartyManager.Instance.GetPartyMembers().Count,
-    //        IsVisible = false,
-    //        IsOpen = true,
-    //        CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty } },
-    //        CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
-    //    };
+        RoomOptions roomOptions = new RoomOptions
+        {
+            MaxPlayers = (byte)PartyManager.Instance.GetPartyMembers().Count,
+            IsVisible = false,
+            IsOpen = true,
+            CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty } },
+            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
+        };
 
-    //    PhotonNetwork.CreateRoom(roomName, roomOptions);
-    //}
+        PhotonNetwork.CreateRoom(roomName, roomOptions);
+    }
 
-    //public void CreateDungeonRoom(string name, int maxMember, int difficulty, int minLevel, int maxLevel)
-    //{
-    //    if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
-    //    {
-    //        Debug.LogError("Only the party leader can create a dungeon room.");
-    //        return;
-    //    }
+    public void CreateDungeonRoom(string name, int maxMember, int difficulty, int minLevel, int maxLevel)
+    {
+        if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+        {
+            Debug.LogError("Only the party leader can create a dungeon room.");
+            return;
+        }
 
-    //    string roomName = name;
+        string roomName = name;
 
-    //    RoomOptions roomOptions = new RoomOptions
-    //    {
-    //        MaxPlayers = (byte)maxMember,
-    //        IsVisible = false,
-    //        IsOpen = true,
-    //        CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty }, { "MinLevel", minLevel }, { "MaxLevel", maxLevel } },
-    //        CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty", "MinLevel", "MaxLevel" }
-    //    };
+        RoomOptions roomOptions = new RoomOptions
+        {
+            MaxPlayers = (byte)maxMember,
+            IsVisible = false,
+            IsOpen = true,
+            CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", difficulty }, { "MinLevel", minLevel }, { "MaxLevel", maxLevel } },
+            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty", "MinLevel", "MaxLevel" }
+        };
 
-    //    PhotonNetwork.CreateRoom(roomName, roomOptions);
-    //}
+        PhotonNetwork.CreateRoom(roomName, roomOptions);
+    }
+
+    public void CreateDungeonRoom(PartyInfo partyInfo)
+    {
+        if (!PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+        {
+            LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "You Are Not Party's Leader.");
+            return;
+        }
+
+        string roomName = name;
+
+        RoomOptions roomOptions = new RoomOptions
+        {
+            MaxPlayers = (byte)partyInfo.maxPartyMemberCount,
+            IsVisible = false,
+            IsOpen = true,
+            CustomRoomProperties = new HashTable { { "RoomType", "Dungeon" }, { "Difficulty", partyInfo.goal } },
+            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
+        };
+
+        PhotonNetwork.CreateRoom(roomName, roomOptions);
+        //foreach (var player in PartyManager.Instance.GetPartyMembers())
+        //{
+        //    photonView.RPC("ForceJoinDungeon", player);
+        //}
+    }
 
     private void UpdateRoomInfo(List<RoomInfo> roomList)
     {
@@ -249,15 +281,13 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     public override void OnCreatedRoom()
     {
-        print("OnCreatedRoom");
+        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")
+        //    && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon"
+        //    && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+        //{
 
-        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")
-            && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon"
-            && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
-        {
-
-            PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
-        }
+        //    PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
+        //}
     }
 
     [PunRPC]
@@ -310,21 +340,25 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     {
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomType", out object dungeonRoomType) && dungeonRoomType.ToString() == "Lobby")
         {
-            partyRoomInfoList = GetPartyList();
+            if (propertiesThatChanged.ContainsKey(PARTY_LIST_KEY))
+            {
+                string partyList = propertiesThatChanged[PARTY_LIST_KEY].ToString();
+                print(partyList);
+                partyRoomInfoList = JsonConvert.DeserializeObject<List<PartyInfo>>(partyList);
+
+                if (PartyManager.Instance.currentPartyInfo != null)
+                {
+                    var updatedPartyInfo = partyRoomInfoList.FirstOrDefault(p => p.partyId == PartyManager.Instance.currentPartyInfo.partyId);
+                    if (updatedPartyInfo != null)
+                    {
+                        PartyManager.Instance.UpdateInfo(updatedPartyInfo);
+                    }
+                }
+
+                LobbyUI.Instance.board.UpdatePartyList();
+            }
         }
     }
 
-    //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
-    //{
-    //    Debug.Log($"Player entered room: {newPlayer.NickName}");
-
-    //    foreach (var player in PhotonNetwork.PlayerList)
-    //    {
-    //        if (player != newPlayer)
-    //        {
-    //            Debug.Log($"player != newPlayer : {newPlayer.ActorNumber} != {newPlayer.ActorNumber}");
-    //        }
-    //    }
-    //}
 
 }

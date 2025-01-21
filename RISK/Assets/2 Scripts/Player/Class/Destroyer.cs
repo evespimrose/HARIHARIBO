@@ -4,31 +4,31 @@ using UnityEngine;
 
 public class Destroyer : Player
 {
-    [Header("디스트로이어 스탯 설정")]
+    [Header("?遺용뮞?紐껋쨮??곷선 ??쎄틛 ??쇱젟")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
     [SerializeField] private int baseAttackPerLevel = 3;
     [SerializeField] private float baseMoveSpeed = 1f;
 
-    [Header("방어 & 회복")]
+    [Header("獄쎻뫗堉?& ???궗")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
     [SerializeField] private float baseHealthRegen = 2f;
     [SerializeField] private float baseRegenInterval = 1f;
 
-    [Header("추가 스탯")]
+    [Header("?곕떽? ??쎄틛")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
-    [Header("이펙트")]
+    [Header("??꾨읃??")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
     protected override void Awake()
     {
-        base.Awake();  // 부모 클래스의 초기화 먼저 실행
+        base.Awake();  // ?봔筌??????쇱벥 ?λ뜃由???믪눘? ??쎈뻬
 
-        // 이펙트 핸들러 초기화
+        // ??꾨읃???紐껊굶???λ뜃由??
         if (effectsHandler == null)
         {
             effectsHandler = GetComponent<AnimationEventEffects>();

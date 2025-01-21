@@ -17,7 +17,7 @@ public class BossMonsterSkillA : BaseState<BossMonster>
     public float atkBHitTime = 1.34f;
 
     //공격후 종료까지 걸리는시간
-    public float endTime = 2.5f;
+    public float endTime = 1.5f;
 
     private bool Action = false;
 
