@@ -20,7 +20,7 @@ public class BossMonsterSkillF : BaseState<BossMonster>
 
     public override void Enter(BossMonster monster)
     {
-        monster.skillFDamage = monster.atkDamage * 1.5f;
+        monster.skillFDamage = monster.atkDamage * 1.33f;
         Action = true;
         monster.isAtk = true;
         monster.StartCoroutine(SkillFCoroutine(monster)); // 코루틴 시작
