@@ -5,31 +5,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitManager : SingletonManager<UnitManager>
+public class UnitManager : PhotonSingletonManager<UnitManager>
 {
+    protected override void Awake()
+    {
+        // PhotonView가 유지되도록 base.Awake() 호출 전에 확인
+        if (Instance != null && Instance != this)
+        {
+            // 기존 PhotonView의 ViewID를 새로운 객체로 전달
+            if (Instance.photonView != null && photonView != null)
+            {
+                photonView.ViewID = Instance.photonView.ViewID;
+            }
+        }
+        base.Awake();
+    }
+
     public Dictionary<int, GameObject> players = new Dictionary<int, GameObject>();
     public GameObject LocalPlayer { get; private set; }
     public List<GameObject> monsters = new List<GameObject>();
 
+    [PunRPC]
+    private void RequestPlayerSync(PhotonMessageInfo info)
+    {
+        print("RequestPlayerSync");
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        foreach (var playerPair in players)
+        {
+            if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView photonView))
+            {
+                photonView.RPC("SyncPlayer", info.Sender,
+                    photonView.ViewID,
+                    photonView.Owner.ActorNumber,
+                    playerPair.Value.name);
+            }
+        }
+    }
+   
+
+    [PunRPC]
+    private void SyncPlayer(int viewId, int actorNumber, string playerName)
+    {
+        print("SyncPlayer");
+        PhotonView targetView = PhotonView.Find(viewId);
+        if (targetView != null)
+        {
+            GameObject playerObj = targetView.gameObject;
+            playerObj.name = playerName;
+            
+            if (!HasPlayer(actorNumber))
+            {
+                RegisterPlayer(playerObj);
+            }
+        }
+    }
+
     public void RegisterPlayer(GameObject player)
     {
+        print("RegisterPlayer");
         if (player.TryGetComponent(out PhotonView photonView))
         {
             int actorNumber = photonView.Owner.ActorNumber;
-            print($"RegisterPlayer : {actorNumber}, {player.GetComponent<PhotonView>().IsMine}");
+            print($"RegisterPlayer : {actorNumber}, {photonView.IsMine}");
+            
             if (!players.ContainsKey(actorNumber))
             {
                 players.Add(actorNumber, player);
 
-                if (player.GetComponent<PhotonView>().IsMine)
+                if (photonView.IsMine)
                 {
                     print($"RegisterPlayer - RegisterLocalPlayer : {actorNumber}");
                     LocalPlayer = player;
                 }
+                
+                // Player의 PhotonView를 통해 RPC 호출
+                photonView.RPC("NotifyPlayerRegistered", RpcTarget.All, actorNumber);
             }
         }
         else
-            print("GameObject don't has PhotonView!!");
+            print("GameObject doesn't have PhotonView!!");
     }
 
     public void UnregisterPlayer(int actorNumber)

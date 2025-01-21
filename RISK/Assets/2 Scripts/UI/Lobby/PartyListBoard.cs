@@ -16,6 +16,8 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
     public Button closeButton;
     public Button partyMemberUIOpenButton;
 
+    private List<RoomInfo> currentRoomList = new List<RoomInfo>();
+
     private void Awake()
     {
         refreshButton.onClick.AddListener(OnRefreshButtonClick);
@@ -26,52 +28,82 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnPartyMemberUIOpenButtonClick()
     {
-        LobbyUI.Instance.PanelOpen("PartyMember");
+        PanelManager.Instance.PanelOpen("PartyMember");
     }
 
     private void Update()
     {
-        createButton.interactable = !PartyManager.Instance.isInParty;
-        partyMemberUIOpenButton.interactable = PartyManager.Instance.isInParty;
+        //createButton.interactable = !PartyManager.Instance.isInParty;
+        //partyMemberUIOpenButton.interactable = PartyManager.Instance.isInParty;
     }
 
     private void OnRefreshButtonClick()
     {
-        PhotonManager.Instance.partyRoomInfoList = PhotonManager.Instance.GetPartyList();
-
-        UpdatePartyList();
+        UpdateRoomList(PanelManager.Instance.currentRoomInfoList);
     }
 
     private void OnCreateButtonClick()
     {
-        LobbyUI.Instance.PanelOpen("CreateParty");
+        PanelManager.Instance.PanelOpen("CreateParty");
     }
 
     private void OnCloseButtonClick()
     {
-        gameObject.SetActive(false);
+        PanelManager.Instance.PanelOpen("Lobby");
+
     }
 
-    private void Start()
+    public override void OnEnable()
     {
-        UpdatePartyList();
+        base.OnEnable();
     }
 
-    public void UpdatePartyList()
+    public void UpdateRoomList(List<RoomInfo> roomList)
     {
+
+        print("OnRoomListUpdateOnRoomListUpdate");
+
         foreach (Transform child in partyListContainer)
         {
             Destroy(child.gameObject);
         }
 
-        if (PhotonManager.Instance.partyRoomInfoList != null)
+        List<RoomInfo> destroyCanditate = new List<RoomInfo>();
+        destroyCanditate = currentRoomList.FindAll(x => false == roomList.Contains(x));
+
+        foreach (RoomInfo roomInfo in roomList)
         {
-            foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
-            {
-                GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
-                if (partyItem.TryGetComponent(out PartyInfoDisplay component))
-                    component.Initialize(party);
-            }
+            if (currentRoomList.Contains(roomInfo)) continue;
+            AddRoomButton(roomInfo);
         }
+
+        foreach (Transform child in partyListContainer)
+        {
+            if (destroyCanditate.Exists(x => x.Name == child.name))
+                Destroy(child.gameObject);
+        }
+
+        currentRoomList = roomList;
+
+        //PhotonNetwork.GetCustomRoomList();
+
+        //if (PhotonManager.Instance.partyRoomInfoList != null)
+        //{
+        //    foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
+        //    {
+        //        GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
+        //        if (partyItem.TryGetComponent(out PartyInfoDisplay component))
+        //            component.Initialize(party);
+        //    }
+        //}
+
+    }
+
+    public void AddRoomButton(RoomInfo roomInfo)
+    {
+        GameObject joinButton = Instantiate(partyListItemPrefab, partyListContainer, false);
+        joinButton.name = roomInfo.Name;
+        if (joinButton.TryGetComponent(out PartyInfoDisplay component))
+            component.Initialize(roomInfo);
     }
 }

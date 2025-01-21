@@ -5,12 +5,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using System;
+using Photon.Realtime;
+using HashTable = ExitGames.Client.Photon.Hashtable;
+using PhotonRealtimePlayer = Photon.Realtime.Player;
 
 public class CreatePartyUI : MonoBehaviour
 {
     public Transform difficultyButtonTransform;
 
     public TextMeshProUGUI maxPartyMember;
+    public TextMeshProUGUI defficultyText;
     public TMP_InputField partyName;
 
     public Button minusMinLevelButton;
@@ -44,8 +48,8 @@ public class CreatePartyUI : MonoBehaviour
         for (int i = 0; i < 5; ++i)
         {
             Button button = Instantiate(Resources.Load<Button>("DifficultySettingButton"), difficultyButtonTransform);
+            button.onClick.AddListener(() => { goal = i; defficultyText.text = goal.ToString(); });
             button.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = (i + 1).ToString();
-            button.onClick.AddListener(() => { goal = i; });
         }
 
         createButton.onClick.AddListener(CreatePartyRoom);
@@ -91,22 +95,34 @@ public class CreatePartyUI : MonoBehaviour
                 name = partyName,
                 partyId = PhotonManager.Instance.partyRoomInfoList.Count,
                 currentMemberCount = 1,
-                currentMemberActorNumber = new int[] { PhotonNetwork.LocalPlayer.ActorNumber },
-                currentLeaderActorNumber = PhotonNetwork.LocalPlayer.ActorNumber,
+                maxPartyMemberCount = maxPartyMembers,
                 goal = goal,
                 minPartyLevel = minLevel,
                 maxPartyLevel = maxLevel
             };
 
-            PartyManager.Instance.CreateParty(newPartyInfo);
 
-            LobbyUI.Instance.board.UpdatePartyList();
 
-            gameObject.SetActive(false);
+            RoomOptions roomOptions = new RoomOptions
+            {
+                MaxPlayers = newPartyInfo.maxPartyMemberCount,
+                IsVisible = true,
+                IsOpen = true,
+                CustomRoomProperties = new HashTable {
+                    { "Difficulty", newPartyInfo.goal }, { "minLevel", newPartyInfo.minPartyLevel },
+                    { "maxLevel", newPartyInfo.maxPartyLevel },{ "roomId", newPartyInfo.partyId }
+                },
+                CustomRoomPropertiesForLobby = new string[] { "Difficulty", "minLevel", "maxLevel", "roomId" }
+            };
+
+            PhotonNetwork.CreateRoom(newPartyInfo.name, roomOptions, TypedLobby.Default);
+
+            //PanelManager.Instance.partyListBoard.UpdateRoomList();
+            PanelManager.Instance.PanelOpen("PartyMember");
         }
         else
         {
-            LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "party name must be filled.\n");
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "party name must be filled.\n", () => { PanelManager.Instance.PanelOpen("PartyListBoard"); });
         }
     }
 }
