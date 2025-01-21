@@ -328,7 +328,10 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
     {
-        Debug.Log($"Player left room: {otherPlayer.NickName}");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.Instance.RemovePlayerData(otherPlayer);
+        }
     }
 
     public override void OnRoomPropertiesUpdate(HashTable propertiesThatChanged)

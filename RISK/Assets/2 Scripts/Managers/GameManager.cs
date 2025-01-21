@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using Photon.Pun.UtilityScripts;
+using System;
 
 public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
@@ -219,5 +220,21 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     private void SetGameReady()
     {
         isGameReady = true;
+    }
+
+    public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)
+    {
+        FireBaseCharacterData playerToRemove = connectedPlayers.Find(player => player.nickName == otherPlayer.NickName);
+
+        if (playerToRemove != null)
+        {
+            connectedPlayers.Remove(playerToRemove);
+        }
+        else
+        {
+            Debug.LogWarning($"Player {otherPlayer.NickName} not found in connectedPlayers.");
+        }
+
+        SyncAllPlayers();
     }
 }
