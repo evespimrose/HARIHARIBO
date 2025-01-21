@@ -30,6 +30,19 @@ public class StatsSet
     }
 }
 
+[System.Serializable]
+public class UpgradeData
+{
+    public float upProb;  // 강화 성공 확률 (1.0은 100%)
+    public int useWon;    // 강화에 필요한 재화 (골드)
+    public float maxHpIncrease;
+    public float atkIncrease;
+    public float criIncrease;
+    public float criDmgIncrease;
+    public float hpRegIncrease;
+    public float coolRedIncrease;
+}
+
 public class CharacterUpgradeUI : MonoBehaviour
 {
     [Header("Character Info"), SerializeField]
@@ -39,6 +52,15 @@ public class CharacterUpgradeUI : MonoBehaviour
 
     [Header("Stats Sets"), SerializeField]
     private List<StatsSet> statSets;
+
+    [Header("Upgrade Data")]
+    [SerializeField] private Dictionary<int, UpgradeData> maxHpUpgradeData = new Dictionary<int, UpgradeData>();
+    [SerializeField] private Dictionary<int, UpgradeData> atkUpgradeData = new Dictionary<int, UpgradeData>();
+    [SerializeField] private Dictionary<int, UpgradeData> criUpgradeData = new Dictionary<int, UpgradeData>();
+    [SerializeField] private Dictionary<int, UpgradeData> criDmgUpgradeData = new Dictionary<int, UpgradeData>();
+    [SerializeField] private Dictionary<int, UpgradeData> hpRegUpgradeData = new Dictionary<int, UpgradeData>();
+    [SerializeField] private Dictionary<int, UpgradeData> coolRedUpgradeData = new Dictionary<int, UpgradeData>();
+
 
     private int currentGold;
 
