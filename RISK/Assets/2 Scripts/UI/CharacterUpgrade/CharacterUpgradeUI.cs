@@ -33,14 +33,17 @@ public class StatsSet
 [System.Serializable]
 public class UpgradeData
 {
-    public float upProb;  // 강화 성공 확률 (1.0은 100%)
+    public float upProb;  // 강화 성공 확률
     public int useWon;    // 강화에 필요한 재화 (골드)
-    public float maxHpIncrease;
-    public float atkIncrease;
-    public float criIncrease;
-    public float criDmgIncrease;
-    public float hpRegIncrease;
-    public float coolRedIncrease;
+    public float statIncrease;  // 해당 스텟의 성장 수치 (예: maxHp 증가량, atk 증가량 등)
+
+    // 생성자 (테이블 데이터를 넣을 수 있게)
+    public UpgradeData(float upProb, int useWon, float statIncrease)
+    {
+        this.upProb = upProb;
+        this.useWon = useWon;
+        this.statIncrease = statIncrease;
+    }
 }
 
 public class CharacterUpgradeUI : MonoBehaviour
@@ -61,8 +64,25 @@ public class CharacterUpgradeUI : MonoBehaviour
     [SerializeField] private Dictionary<int, UpgradeData> hpRegUpgradeData = new Dictionary<int, UpgradeData>();
     [SerializeField] private Dictionary<int, UpgradeData> coolRedUpgradeData = new Dictionary<int, UpgradeData>();
 
-
     private int currentGold;
+
+    private void InitializeUpgradeData()
+    {
+        // maxHp 스텟 데이터 초기화
+        maxHpUpgradeData.Add(0, new UpgradeData(1f, 2000, 5));
+        maxHpUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 5));
+        maxHpUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 5));
+        maxHpUpgradeData.Add(3, new UpgradeData(0.91f, 18800, 5));
+        // 추가적인 레벨 데이터를 삽입...
+
+        // atk 스텟 데이터 초기화
+        atkUpgradeData.Add(0, new UpgradeData(1f, 1500, 4));
+        atkUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 4));
+        atkUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 6));
+        // 추가적인 레벨 데이터를 삽입...
+
+        // 나머지 스텟들에 대해서도 비슷하게 추가
+    }
 
     private void OnEnable()
     {
@@ -90,13 +110,12 @@ public class CharacterUpgradeUI : MonoBehaviour
             List<(string, float, float, float, int)> allStats = new List<(string, float, float, float, int)>
             {
                 // 스텟 이름, 현재 스텟, 성장 수치, 성공 확률, 소모 재화
-                ("maxHp", characterData.maxHp, 1.0f, CalculateSuccessChance(characterData.level), 100),
-                ("atk", characterData.atk, 0.5f, CalculateSuccessChance(characterData.level), 150),
-                ("cri", characterData.cri, 1.5f, CalculateSuccessChance(characterData.level), 200),
-                ("criDmg", characterData.criDmg, 0.5f, CalculateSuccessChance(characterData.level), 250),
-                ("dmgRed", characterData.dmgRed, 0.2f, CalculateSuccessChance(characterData.level), 300),
-                ("hpReg", characterData.hpReg, 0.25f, CalculateSuccessChance(characterData.level), 400),
-                ("coolRed", characterData.coolRed, 0.1f, CalculateSuccessChance(characterData.level), 500)
+                ("maxHp", characterData.maxHp, maxHpUpgradeData[characterData.maxHpUpgradeLevel].statIncrease, maxHpUpgradeData[characterData.maxHpUpgradeLevel].upProb, maxHpUpgradeData[characterData.maxHpUpgradeLevel].useWon),
+                ("atk", characterData.atk, atkUpgradeData[characterData.atkUpgradeLevel].statIncrease, atkUpgradeData[characterData.atkUpgradeLevel].upProb, atkUpgradeData[characterData.atkUpgradeLevel].useWon),
+                ("cri", characterData.cri, criUpgradeData[characterData.criUpgradeLevel].statIncrease, criUpgradeData[characterData.criUpgradeLevel].upProb, criUpgradeData[characterData.criUpgradeLevel].useWon),
+                ("criDmg", characterData.criDmg, criDmgUpgradeData[characterData.criDmgUpgradeLevel].statIncrease, criDmgUpgradeData[characterData.criDmgUpgradeLevel].upProb, criDmgUpgradeData[characterData.criDmgUpgradeLevel].useWon),
+                ("hpReg", characterData.hpReg, hpRegUpgradeData[characterData.hpRegUpgradeLevel].statIncrease, hpRegUpgradeData[characterData.hpRegUpgradeLevel].upProb, hpRegUpgradeData[characterData.hpRegUpgradeLevel].useWon),
+                ("coolRed", characterData.coolRed, coolRedUpgradeData[characterData.coolRedUpgradeLevel].statIncrease, coolRedUpgradeData[characterData.coolRedUpgradeLevel].upProb, coolRedUpgradeData[characterData.coolRedUpgradeLevel].useWon)
             };
 
             // UI 업데이트 및 버튼 이벤트 설정

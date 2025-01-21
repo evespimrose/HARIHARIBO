@@ -102,8 +102,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
-        print("OnJoinedLobby");
-        PanelManager.Instance.PanelOpen("Lobby");
+        PanelManager.Instance.PanelOpen("PartyListBoard");
     }
 
     public void UpdatePartyInfo(PartyInfo partyInfo)
@@ -157,7 +156,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
             catch (JsonException e)
             {
-                Debug.LogWarning($"??嶺뚮ㅎ?①뙼??嶺뚮ㅎ?①뙼??嶺뚮ㅎ?①뙼??遺얘탿?硫펚ed to parse party list JSON: {e.Message}");
+                Debug.LogWarning($"???꿔꺂????醫딆뇢???꿔꺂????醫딆뇢???꿔꺂????醫딆뇢????釉먮폁??嶺뚮“?팫d to parse party list JSON: {e.Message}");
             }
         }
 

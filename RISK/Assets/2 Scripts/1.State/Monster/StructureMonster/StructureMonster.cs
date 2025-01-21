@@ -8,7 +8,7 @@ public class StructureMonster : Monster
 {
     public StateHandler<StructureMonster> sMHandler;
 
-    protected SphereCollider col;
+    protected Collider col;
 
     private Coroutine hit = null;
 
