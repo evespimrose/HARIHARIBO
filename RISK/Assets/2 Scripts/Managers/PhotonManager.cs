@@ -47,27 +47,22 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     public string playerInfoText;
     public List<PartyInfo> partyRoomInfoList = new List<PartyInfo>();
 
-    private void Start()
-    {
-
-    }
-
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        //print("AutomaticallySyncScene = true");
+        PhotonNetwork.JoinLobby(TypedLobby.Default);
 
-        string roomName = "LobbyRoom";
+        //string roomName = "LobbyRoom";
 
-        RoomOptions roomOptions = new RoomOptions
-        {
-            MaxPlayers = 20,
-            IsVisible = true,
-            IsOpen = true,
-            CustomRoomProperties = new HashTable { { "RoomType", "Lobby" }, { "Difficulty", 0 }, { "PartyList", JsonConvert.SerializeObject(new List<PartyInfo>()) } },
-            CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty", "PartyList" }
-        };
+        //RoomOptions roomOptions = new RoomOptions
+        //{
+        //    MaxPlayers = 20,
+        //    IsVisible = true,
+        //    IsOpen = true,
+        //    CustomRoomProperties = new HashTable { { "RoomType", "Lobby" }, { "Difficulty", 0 }, { "PartyList", JsonConvert.SerializeObject(new List<PartyInfo>()) } },
+        //    CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty", "PartyList" }
+        //};
 
         //string roomName = "DungeonRoom";
 
@@ -80,7 +75,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         //    CustomRoomPropertiesForLobby = new string[] { "RoomType", "Difficulty" }
         //};
 
-        PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
+        //PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -107,6 +102,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
+        PanelManager.Instance.PanelOpen("PartyListBoard");
     }
 
     public void UpdatePartyInfo(PartyInfo partyInfo)
@@ -160,7 +156,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
             catch (JsonException e)
             {
-                Debug.LogWarning($"??癲ル슢???좊쇊??癲ル슢???좊쇊??癲ル슢???좊쇊????븐뼐??筌롰럻ed to parse party list JSON: {e.Message}");
+                Debug.LogWarning($"???꿔꺂????醫딆뇢???꿔꺂????醫딆뇢???꿔꺂????醫딆뇢????釉먮폁??嶺뚮“?팫d to parse party list JSON: {e.Message}");
             }
         }
 
@@ -277,8 +273,22 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         }
     }
 
+
+
+    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    //{
+
+    //}
+
     public override void OnCreatedRoom()
     {
+        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")
+        //    && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon"
+        //    && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+        //{
+
+        //    PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
+        //}
     }
 
     [PunRPC]
@@ -312,24 +322,17 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log($"Disconnected from Photon: {cause}");
-        //if (PhotonNetwork.LocalPlayer != null && UnitManager.Instance.LocalPlayer != null)
-        //{
-        //    UnitManager.Instance.UnregisterPlayer(UnitManager.Instance.LocalPlayer.GetComponent<PhotonView>().ViewID);
-        //}
-        var loadComplete = SceneManager.LoadSceneAsync("TitleScene");
 
+        var loadComplete = SceneManager.LoadSceneAsync("TitleScene");
     }
 
     public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
     {
         Debug.Log($"Player left room: {otherPlayer.NickName}");
-
     }
 
     public override void OnRoomPropertiesUpdate(HashTable propertiesThatChanged)
     {
 
     }
-
-
 }

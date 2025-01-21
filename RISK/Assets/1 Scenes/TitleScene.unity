@@ -10453,52 +10453,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee42352196f86442bbddaa83ba315b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterNameText: {fileID: 1275398319}
-  levelText: {fileID: 1446771855}
-  curGold: {fileID: 758236743}
-  statSets:
-  - statsName: {fileID: 2125223487}
-    currentStats: {fileID: 317322416}
-    statsUpgradeValue: {fileID: 1275471584}
-    successChance: {fileID: 200896900}
-    resourceCost: {fileID: 1039883633}
-    upgradeButton: {fileID: 1311775574}
-  - statsName: {fileID: 482560449}
-    currentStats: {fileID: 1352490778}
-    statsUpgradeValue: {fileID: 1121829215}
-    successChance: {fileID: 1809960347}
-    resourceCost: {fileID: 280042757}
-    upgradeButton: {fileID: 916233123}
-  - statsName: {fileID: 69277995}
-    currentStats: {fileID: 624453934}
-    statsUpgradeValue: {fileID: 83644998}
-    successChance: {fileID: 827823402}
-    resourceCost: {fileID: 2034465589}
-    upgradeButton: {fileID: 1910730259}
-  - statsName: {fileID: 668901395}
-    currentStats: {fileID: 922823190}
-    statsUpgradeValue: {fileID: 1098320389}
-    successChance: {fileID: 1942486323}
-    resourceCost: {fileID: 515290307}
-    upgradeButton: {fileID: 1677862775}
-  - statsName: {fileID: 1244717641}
-    currentStats: {fileID: 805024941}
-    statsUpgradeValue: {fileID: 551395538}
-    successChance: {fileID: 765410159}
-    resourceCost: {fileID: 1539768023}
-    upgradeButton: {fileID: 790585770}
-  - statsName: {fileID: 1060602033}
-    currentStats: {fileID: 755593328}
-    statsUpgradeValue: {fileID: 123910038}
-    successChance: {fileID: 1937610153}
-    resourceCost: {fileID: 616703625}
-    upgradeButton: {fileID: 802124414}
-  - statsName: {fileID: 174811092}
-    currentStats: {fileID: 736324557}
-    statsUpgradeValue: {fileID: 34109473}
-    successChance: {fileID: 640444559}
-    resourceCost: {fileID: 1818951273}
-    upgradeButton: {fileID: 1854786850}
+  characterNameText: {fileID: 0}
+  levelText: {fileID: 0}
+  curGold: {fileID: 0}
+  statSets: []
 --- !u!114 &557896206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20650,6 +20608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectedPlayers: []
   playerPosition: {fileID: 0}
+  spwaner: {fileID: 0}
 --- !u!4 &961574175
 Transform:
   m_ObjectHideFlags: 0

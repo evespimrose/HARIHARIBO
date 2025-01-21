@@ -15,6 +15,12 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public SelectCharacterPanel selectCharacter;
     public CreateCharacterPanel createCharacter;
 
+    public PartyListBoard partyListBoard;
+    public CreatePartyUI createPartyUI;
+    public PartyMemberUI partyMemberUI;
+    public CharacterUpgradeUI characterUpgradeUI;
+    public LobbyPanel lobby;
+
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
 
@@ -24,6 +30,8 @@ public class PanelManager : MonoBehaviourPunCallbacks
     private Dictionary<string, GameObject> popupDic;
     private Stack<UIPopup> openPopups = new Stack<UIPopup>();
 
+    public List<RoomInfo> currentRoomInfoList = new List<RoomInfo>();
+
     private void Awake()
     {
         Instance = this;
@@ -32,7 +40,12 @@ public class PanelManager : MonoBehaviourPunCallbacks
             { "Login", login.gameObject },
             { "Signup", signup.gameObject },
             { "SelectCharacter", selectCharacter.gameObject },
-            { "CreateCharacter", createCharacter.gameObject }
+            { "CreateCharacter", createCharacter.gameObject },
+            { "PartyListBoard", partyListBoard.gameObject },
+            { "CreateParty", createPartyUI.gameObject },
+            { "PartyMember", partyMemberUI.gameObject },
+            { "CharacterUpgrade", characterUpgradeUI.gameObject },
+            { "Lobby", lobby.gameObject }
         };
 
         popupDic = new Dictionary<string, GameObject>()
@@ -86,7 +99,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
             UIPopup targetPopup = openPopups.Pop();
             targetPopup.gameObject.SetActive(false);
         }
-
     }
 
     public override void OnEnable()
@@ -98,13 +110,39 @@ public class PanelManager : MonoBehaviourPunCallbacks
     {
         PanelOpen("Login");
     }
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        print("OnRoomListUpdate?????");
+        currentRoomInfoList = roomList;
+        partyListBoard.UpdateRoomList(roomList);
+    }
 
-    public override void OnJoinedLobby()
-    {
-    }
-    public override void OnLeftLobby()
-    {
-    }
+    //public override void OnCreatedRoom()
+    //{
+    //    PanelOpen("Room");
+
+    //}
+    //public override void OnJoinedRoom()
+    //{
+    //    PanelOpen("Room");
+    //    HashTable roomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+    //    if (roomCustomProperties.ContainsKey("Difficulty"))
+    //    {
+    //        //room.OnDifficultyChange((Difficulty)roomCustomProperties["Difficulty"]);
+    //    }
+    //}
+    //public override void OnLeftRoom() //???モ닪???誘좊???????렊 ???モ닪筌????밸㎍?????렊???モ닪筌?????モ닪筌???嶺뚮　維??????렊
+    //{
+    //    PanelOpen("Menu");
+    //}
+    //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
+    //{
+    //    //room.JoinPlayer(newPlayer);
+    //}
+    //public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
+    //{
+    //    //room.LeavePlayer(otherPlayer);
+    //}
 
     public override void OnRoomPropertiesUpdate(HashTable properties)
     {
