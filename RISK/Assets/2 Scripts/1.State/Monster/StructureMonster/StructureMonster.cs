@@ -50,6 +50,8 @@ public class StructureMonster : Monster
         this.moveSpeed = monsterState.moveSpeed;
         this.curHp = monsterState.curHp;
         this.maxHp = curHp;
+        this.won = monsterState.won;
+        this.exp = monsterState.exp;
     }
 
     protected void InitializeStateHandler()
@@ -77,7 +79,6 @@ public class StructureMonster : Monster
 
     public override void DieStatChange()
     {
-        isDie = true;
         this.sMHandler.ChangeState(typeof(StructureDie));
     }
 

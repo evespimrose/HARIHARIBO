@@ -4,14 +4,19 @@ using UnityEngine;
     "Scriptable Object/Enemy", order = int.MaxValue)]
 public class MonsterScriptableObjects : ScriptableObject
 {
-    [Tooltip("°ø°İµ¥¹ÌÁö")]
+    [Tooltip("ê³µê²©ë°ë¯¸ì§€")]
     public float atkDamage;
-    [Tooltip("ÀÌµ¿¼Óµµ")]
+    [Tooltip("ì´ë™ì†ë„")]
     public float moveSpeed;
-    [Tooltip("°ø°İ¹üÀ§")]
+    [Tooltip("ê³µê²©ë²”ìœ„")]
     public float atkRange;
-    [Tooltip("ÇöÀçÃ¼·Â")]
+    [Tooltip("í˜„ì¬ì²´ë ¥")]
     public float curHp;
-    [Tooltip("°ø°İµô·¹ÀÌ")]
+    [Tooltip("ê³µê²©ë”œë ˆì´")]
     public float atkDelay;
+
+    [Tooltip("ë“œë ê±í—˜ì¹˜")]
+    public int exp;
+    [Tooltip("ë“œë ëˆ")]
+    public int won;
 }
