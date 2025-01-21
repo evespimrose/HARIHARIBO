@@ -131,6 +131,13 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
     private void Start()
     {
+        if (photonView.IsMine) return;
+        object[] instantiationData = photonView.InstantiationData;
+        if (instantiationData != null && instantiationData.Length > 0)
+        {
+            string nickName = (string)instantiationData[0];
+            gameObject.name = nickName;
+        }
     }
 
     private void Update()
@@ -230,7 +237,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         {
             if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView photonView))
             {
-                photonView.RPC("SyncPlayer", info.Sender, 
+                photonView.RPC("SyncPlayer", info.Sender,
                     photonView.ViewID,
                     photonView.Owner.ActorNumber,
                     playerPair.Value.name);
@@ -246,7 +253,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         {
             GameObject playerObj = targetView.gameObject;
             playerObj.name = playerName;
-            
+
             if (!UnitManager.Instance.HasPlayer(actorNumber))
             {
                 UnitManager.Instance.RegisterPlayer(playerObj);

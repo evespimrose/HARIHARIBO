@@ -9,10 +9,10 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
 {
     protected override void Awake()
     {
-        // PhotonView가 유지되도록 base.Awake() 호출 전에 확인
+        // PhotonView媛 ?좎??섎룄濡?base.Awake() ?몄텧 ?꾩뿉 ?뺤씤
         if (Instance != null && Instance != this)
         {
-            // 기존 PhotonView의 ViewID를 새로운 객체로 전달
+            // 湲곗〈 PhotonView??ViewID瑜??덈줈??媛앹껜濡??꾨떖
             if (Instance.photonView != null && photonView != null)
             {
                 photonView.ViewID = Instance.photonView.ViewID;
@@ -42,7 +42,7 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
             }
         }
     }
-   
+
 
     [PunRPC]
     private void SyncPlayer(int viewId, int actorNumber, string playerName)
@@ -53,7 +53,7 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
         {
             GameObject playerObj = targetView.gameObject;
             playerObj.name = playerName;
-            
+
             if (!HasPlayer(actorNumber))
             {
                 RegisterPlayer(playerObj);
@@ -68,7 +68,7 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
         {
             int actorNumber = photonView.Owner.ActorNumber;
             print($"RegisterPlayer : {actorNumber}, {photonView.IsMine}");
-            
+
             if (!players.ContainsKey(actorNumber))
             {
                 players.Add(actorNumber, player);
@@ -78,8 +78,8 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
                     print($"RegisterPlayer - RegisterLocalPlayer : {actorNumber}");
                     LocalPlayer = player;
                 }
-                
-                // Player의 PhotonView를 통해 RPC 호출
+
+                // Player??PhotonView瑜??듯빐 RPC ?몄텧
                 photonView.RPC("NotifyPlayerRegistered", RpcTarget.All, actorNumber);
             }
         }
