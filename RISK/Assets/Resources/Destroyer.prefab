@@ -23421,17 +23421,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   joystick: {fileID: 0}
   animator: {fileID: 0}
-  baseMaxHealth: 150
+  baseMaxHealth: 531
   baseHealthPerLevel: 15
-  baseAttackPower: 15
+  baseAttackPower: 42
   baseAttackPerLevel: 3
-  baseMoveSpeed: 1
-  baseDamageReduction: 0.2
-  baseHealthRegen: 2
+  baseMoveSpeed: 2
+  baseDamageReduction: 0
+  baseHealthRegen: 5
   baseRegenInterval: 1
-  baseCriticalChance: 0.1
+  baseCriticalChance: 0.02
   baseCriticalDamage: 1.5
-  baseCooldownReduction: 0.1
+  baseCooldownReduction: 0
   effectsHandler: {fileID: 0}
 --- !u!114 &7129317488361560328
 MonoBehaviour:
