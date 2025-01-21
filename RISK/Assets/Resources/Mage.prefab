@@ -23636,7 +23636,7 @@ MonoBehaviour:
   tSkillProjectilePrefab: {fileID: 5938167112633497377, guid: bf55141e68f997d49a0accc54a7ea733, type: 3}
   tSkillSpeed: 7
   tSkillLifeTime: 3
-  tSkillRange: 10
+  tSkillRange: 40
   monsterLayer:
     serializedVersion: 2
     m_Bits: 64

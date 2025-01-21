@@ -49410,7 +49410,7 @@ MonoBehaviour:
   baseAttackPerLevel: 3
   baseMoveSpeed: 2
   baseDamageReduction: 0
-  baseHealthRegen: 6.5
+  baseHealthRegen: 2
   baseRegenInterval: 1
   baseCriticalChance: 0.02
   baseCriticalDamage: 1.5
@@ -49496,7 +49496,7 @@ MonoBehaviour:
   - {fileID: 2939762341057263714}
   - {fileID: -8328244261113844376}
   - {fileID: 3385839744400906751}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &-8328244261113844376
