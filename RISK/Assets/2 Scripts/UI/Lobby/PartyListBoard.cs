@@ -39,7 +39,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnRefreshButtonClick()
     {
-        UpdateRoomList(PanelManager.Instance.currentRoomInfoList);
+        //UpdateRoomList(PanelManager.Instance.currentRoomInfoList);
     }
 
     private void OnCreateButtonClick()
@@ -60,8 +60,6 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     public void UpdateRoomList(List<RoomInfo> roomList)
     {
-
-        print("OnRoomListUpdateOnRoomListUpdate");
 
         foreach (Transform child in partyListContainer)
         {
