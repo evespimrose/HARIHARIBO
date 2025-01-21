@@ -46,19 +46,6 @@ public class UpgradeData
     }
 }
 
-[System.Serializable]
-public class UpgradeData
-{
-    public float upProb;  // ?띠룆踰???繹먭퍓沅??筌먲퐣??(1.0?? 100%)
-    public int useWon;    // ?띠룆踰????熬곣뫗???????(??λ?獄?
-    public float maxHpIncrease;
-    public float atkIncrease;
-    public float criIncrease;
-    public float criDmgIncrease;
-    public float hpRegIncrease;
-    public float coolRedIncrease;
-}
-
 public class CharacterUpgradeUI : MonoBehaviour
 {
     [Header("Character Info"), SerializeField]
