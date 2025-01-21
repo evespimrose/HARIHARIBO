@@ -7,21 +7,27 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
     public EliteMonsterSkillA(StateHandler<EliteMonster> handler) : base(handler) { }
 
     //스킬1 3연속 공격
+
+    public float aDamage;
+    public float bDamage;
+    public float cDamage;
+
     // 공격 판정 딜레이
     public float startDelay = 0f;
     public float atkADelay = 0.38f;
     public float atkBDelay = 0.38f;
 
-    // 애니메이션 지속 시간
-    public float atkBStartTime = 1.04f;
-    public float atkADuration = 1.34f;
-    public float atkBDuration = 1.34f;
+    public float aHitTime = 0.5f;
+    public float bHitTime = 1.45f;
 
-    // End로 일찍 들어갈 시간
-    public float endTime = 0.2f;
+    // 애니메이션 지속 시간
+    public float atkDuration = 1.35f;
 
     public override void Enter(EliteMonster monster)
     {
+        aDamage = monster.atkDamage * 1;
+        bDamage = monster.atkDamage * 1.1f;
+        cDamage = monster.atkDamage * 1.2f;
         Debug.Log("SkillA 시작");
         monster.isAtk = true;
         monster.StartCoroutine(SkillACoroutine(monster));
@@ -41,20 +47,13 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
         monster.TargetLook(monster.target.position);
 
         monster.animator.SetTrigger("SkillA1");
-        yield return new WaitForSeconds(atkADelay);
+        yield return new WaitForSeconds(aHitTime);
         AttackHit(monster, 1);
-        yield return new WaitForSeconds((startDelay + atkADelay) - atkBStartTime); // 애니메이션 전환 시점
 
-        monster.animator.SetTrigger("SkillA2");
-        yield return new WaitForSeconds(atkBDelay);
+        yield return new WaitForSeconds(bHitTime - aHitTime);
 
         AttackHit(monster, 2);
-        yield return new WaitUntil(() =>
-        {
-            AnimatorStateInfo stateInfo = monster.animator.GetCurrentAnimatorStateInfo(0);
-            // "SkillA2" 애니메이션이 끝날 때까지 대기
-            return !stateInfo.IsName("SkillA2") || stateInfo.normalizedTime >= 1f;
-        });
+        yield return new WaitForSeconds(atkDuration);
         monster.eMHandler.ChangeState(typeof(EliteMonsterIdle));
     }
 

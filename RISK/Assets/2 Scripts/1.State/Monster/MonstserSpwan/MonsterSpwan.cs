@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -95,11 +96,17 @@ public class MonsterSpwan : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(MonsterSpwanCorutine());
+
     }
 
     void Update()
     {
+
+    }
+
+    public void SpawnStart()
+    {
+        StartCoroutine(MonsterSpwanCorutine());
     }
 
     public IEnumerator MonsterSpwanCorutine()
@@ -131,40 +138,35 @@ public class MonsterSpwan : MonoBehaviour
             // 근접 몬스터 스폰
             for (int i = 0; i < currentSpawnSetting.meleeCount; i++)
             {
-                GameObject MeleeMonster = MeleeMonsterCreate();
                 spwanPos = GetMeleeSpwanPos(quadrant);
-                MeleeMonster.transform.position = spwanPos;
+                GameObject MeleeMonster = MeleeMonsterCreate(spwanPos);
             }
 
             // 원거리 몬스터 스폰
             for (int i = 0; i < currentSpawnSetting.rangeCount; i++)
             {
-                GameObject RangeMonster = RangeMonsterCreate();
                 spwanPos = GetRangeSpwanPos(quadrant);
-                RangeMonster.transform.position = spwanPos;
+                GameObject RangeMonster = RangeMonsterCreate(spwanPos);
             }
 
             // 엘리트 몬스터 스폰
             for (int i = 0; i < currentSpawnSetting.eliteCount; i++)
             {
-                GameObject EliteMonster = EliteMonsterCreate();
                 spwanPos = GetRangeSpwanPos(quadrant); // 엘리트 몬스터는 원거리 몬스터와 같은 위치로 스폰
-                EliteMonster.transform.position = spwanPos;
+                GameObject EliteMonster = EliteMonsterCreate(spwanPos);
             }
 
             // 구조물 몬스터 스폰 (근접 몬스터와 같은 위치)
             for (int i = 0; i < currentSpawnSetting.structureCount; i++)
             {
-                GameObject StructureMonster = StructureMonsterCreate();
                 spwanPos = GetMeleeSpwanPos(quadrant); // 근접 몬스터와 동일 위치
-                StructureMonster.transform.position = spwanPos;
+                GameObject StructureMonster = StructureMonsterCreate(spwanPos);
             }
 
             // 보스 몬스터 스폰
             for (int i = 0; i < currentSpawnSetting.bossCount; i++)
             {
-                GameObject BossMonster = BossMonsterCreate();
-                BossMonster.transform.position = bossSpawnPoint;  // 보스 몬스터는 별도의 위치에 스폰
+                GameObject BossMonster = BossMonsterCreate(bossSpawnPoint);
             }
             yield return null;
             // 스폰 후 기다리는 부분
@@ -263,9 +265,9 @@ public class MonsterSpwan : MonoBehaviour
     }
 
     // 몬스터 생성 함수들 (프리팹 생성 메소드)
-    public GameObject MeleeMonsterCreate() => Instantiate(meleeMonsterPrefab[Random.Range(0, meleeMonsterPrefab.Count)]);
-    public GameObject RangeMonsterCreate() => Instantiate(rangeMonsterPrefab[Random.Range(0, rangeMonsterPrefab.Count)]);
-    public GameObject EliteMonsterCreate() => Instantiate(eliteMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)]);
-    public GameObject StructureMonsterCreate() => Instantiate(structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)]);
-    public GameObject BossMonsterCreate() => Instantiate(bossMonsterPrefab);
+    public GameObject MeleeMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(meleeMonsterPrefab[Random.Range(0, meleeMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
+    public GameObject RangeMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(rangeMonsterPrefab[Random.Range(0, rangeMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
+    public GameObject EliteMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(eliteMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
+    public GameObject StructureMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
+    public GameObject BossMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(bossMonsterPrefab.name, spwanPos, Quaternion.identity);
 }
