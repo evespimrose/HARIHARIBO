@@ -25,7 +25,7 @@ public class BossMonsterSkillE : BaseState<BossMonster>
     public override void Enter(BossMonster monster)
     {
         damage = monster.atkDamage * 1f;
-        fireDamage = monster.atkDamage * 0.2f;
+        fireDamage = monster.atkDamage * 0.3f;
         Action = true;
         monster.isAtk = true;
         projectilePrefabA = monster.skillEPrefab;

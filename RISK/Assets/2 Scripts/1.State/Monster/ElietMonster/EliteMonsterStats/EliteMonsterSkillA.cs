@@ -10,12 +10,10 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
 
     public float aDamage;
     public float bDamage;
-    public float cDamage;
 
     // 공격 판정 딜레이
     public float startDelay = 0f;
     public float atkADelay = 0.38f;
-    public float atkBDelay = 0.38f;
 
     public float aHitTime = 0.5f;
     public float bHitTime = 1.45f;
@@ -25,9 +23,8 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
 
     public override void Enter(EliteMonster monster)
     {
-        aDamage = monster.atkDamage * 1;
-        bDamage = monster.atkDamage * 1.1f;
-        cDamage = monster.atkDamage * 1.2f;
+        aDamage = monster.atkDamage * 1.38f;
+        bDamage = monster.atkDamage * 1.38f;
         Debug.Log("SkillA 시작");
         monster.isAtk = true;
         monster.StartCoroutine(SkillACoroutine(monster));

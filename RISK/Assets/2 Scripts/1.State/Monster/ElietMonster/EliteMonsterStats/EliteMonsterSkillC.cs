@@ -14,7 +14,7 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
 
     public override void Enter(EliteMonster monster)
     {
-        skillCDamage = monster.atkDamage * 0.7f;
+        skillCDamage = monster.atkDamage * 0.75f;
         Debug.Log("SkillC 진입");
         monster.StartCoroutine(SkillECoroutine(monster));
     }

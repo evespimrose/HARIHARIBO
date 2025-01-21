@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,6 +38,11 @@ public class Monster : MonoBehaviour, ITakedamage
     public float curHp;
     [Tooltip("최대체력")]
     protected float maxHp;
+
+    [Tooltip("드랍 걍험치")]
+    public int exp;
+    [Tooltip("드랍 돈")]
+    public int won;
 
     [Tooltip("���")]
     public bool isAtk = false;
@@ -140,6 +146,7 @@ public class Monster : MonoBehaviour, ITakedamage
 
     public virtual void Takedamage(float damage)
     {
+        if (false == PhotonNetwork.IsMasterClient) return;
         curHp -= Mathf.RoundToInt(damage);
         if (curHp <= 0)
         {

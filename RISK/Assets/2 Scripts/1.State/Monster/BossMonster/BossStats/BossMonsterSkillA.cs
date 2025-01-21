@@ -23,8 +23,8 @@ public class BossMonsterSkillA : BaseState<BossMonster>
 
     public override void Enter(BossMonster monster)
     {
-        damageA = monster.atkDamage * 1.2f;
-        damageB = monster.atkDamage * 1.2f;
+        damageA = monster.atkDamage * 1.52f;
+        damageB = monster.atkDamage * 1.52f;
         Action = true;
         monster.isAtk = true;
         Debug.Log("SkillA 시작");

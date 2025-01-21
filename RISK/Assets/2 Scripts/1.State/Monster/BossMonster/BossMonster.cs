@@ -112,6 +112,8 @@ public class BossMonster : Monster
         this.moveSpeed = monsterState.moveSpeed;
         this.curHp = monsterState.curHp;
         this.maxHp = curHp;
+        this.won = monsterState.won;
+        this.exp = monsterState.exp;
         foreach (GameObject particle in skillBParticle)
         {
             particle.SetActive(false);

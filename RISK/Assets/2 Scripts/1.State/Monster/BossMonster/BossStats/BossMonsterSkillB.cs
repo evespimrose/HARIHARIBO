@@ -11,7 +11,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         Melee, 
         Range  
     }
-    public float damage = 1f;
+    public float meleeDamage = 1f;
+    public float rangeDamage = 1f;
     public float skillBDuration = 2.09f; 
     public float atkDelay = 1f;//선딜레이
     public float atkTime = 1f;//물체 떨어지는시간
@@ -29,7 +30,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
 
     public override void Enter(BossMonster monster)
     {
-        damage = monster.atkDamage * 3f;
+        meleeDamage = monster.atkDamage * 1.35f;
+        rangeDamage = monster.atkDamage * 1.41f;
         Action = true;
         monster.isAtk = true;
         Debug.Log("SkillB 진입");
@@ -99,7 +101,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         {
             if (col.gameObject.CompareTag("Player"))
             {
-                col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                col.gameObject.GetComponent<ITakedamage>()?.Takedamage(meleeDamage);
                 Debug.Log("근접 공격 성공");
             }
         }
@@ -118,7 +120,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
                 float dirTarget = Vector3.Distance(atkCenter, col.transform.position);
                 if (dirTarget >= rangeAtkMinRange && dirTarget <= rangeAtkMaxRange) 
                 {
-                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+                    col.gameObject.GetComponent<ITakedamage>()?.Takedamage(rangeDamage);
                     Debug.Log("원거리 공격 성공");
                 }
             }

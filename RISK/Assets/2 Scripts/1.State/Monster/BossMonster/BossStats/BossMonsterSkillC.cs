@@ -16,7 +16,7 @@ public class BossMonsterSkillC : BaseState<BossMonster>
 
     public override void Enter(BossMonster monster)
     {
-        damage = monster.atkDamage * 2f;
+        damage = monster.atkDamage * 1.31f;
         Action = true;
         monster.isAtk = true;
         Debug.Log("SkillC 진입");

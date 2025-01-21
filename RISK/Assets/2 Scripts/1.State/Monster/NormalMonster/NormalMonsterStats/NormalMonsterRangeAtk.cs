@@ -8,13 +8,14 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
 
     public float rangeAtkDamage;
     public float atkHitTime = 0.6f;
+    private Coroutine action;
 
     public override void Enter(NormalMonster monster)
     {
         rangeAtkDamage = monster.atkDamage * 1f;
         Debug.Log("RangeAtk공격 시작");
         monster.animator.SetTrigger("Atk");
-        monster.StartCoroutine(StartAtk(monster));
+        action = monster.StartCoroutine(StartAtk(monster));
     }
 
     public override void Update(NormalMonster monster)
@@ -24,6 +25,7 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
 
     public override void Exit(NormalMonster monster)
     {
+        monster.StopCoroutine(action);
         Debug.Log("RangeAtk공격 종료");
     }
     private IEnumerator StartAtk(NormalMonster monster)

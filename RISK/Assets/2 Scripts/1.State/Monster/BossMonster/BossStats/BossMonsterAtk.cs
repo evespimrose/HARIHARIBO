@@ -25,9 +25,9 @@ public class BossMonsterAtk : BaseState<BossMonster>
 
     public override void Enter(BossMonster monster)
     {
-        damageA = monster.atkDamage * 1f;
-        damageB = monster.atkDamage * 1.1f;
-        damageC = monster.atkDamage * 1.2f;
+        damageA = monster.atkDamage * 1.12f;
+        damageB = monster.atkDamage * 1.12f;
+        damageC = monster.atkDamage * 1.81f;
 
         Action = true;
         monster.isAtk = true;
