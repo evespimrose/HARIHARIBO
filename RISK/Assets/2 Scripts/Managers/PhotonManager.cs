@@ -160,7 +160,7 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             }
             catch (JsonException e)
             {
-                Debug.LogWarning($"??筌뤾쑨猿??筌뤾쑨猿??筌뤾쑨猿?耀붾굛?멼led to parse party list JSON: {e.Message}");
+                Debug.LogWarning($"??癲ル슢???좊쇊??癲ル슢???좊쇊??癲ル슢???좊쇊????븐뼐??筌롰럻ed to parse party list JSON: {e.Message}");
             }
         }
 
@@ -277,22 +277,8 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         }
     }
 
-
-
-    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    //{
-
-    //}
-
     public override void OnCreatedRoom()
     {
-        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")
-        //    && PhotonNetwork.CurrentRoom.CustomProperties["RoomType"].ToString() == "Dungeon"
-        //    && PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
-        //{
-
-        //    PhotonNetwork.JoinRoom(PhotonNetwork.CurrentRoom.Name);
-        //}
     }
 
     [PunRPC]

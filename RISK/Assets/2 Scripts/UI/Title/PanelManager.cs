@@ -98,32 +98,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     {
         PanelOpen("Login");
     }
-    //public override void OnCreatedRoom()
-    //{
-    //    PanelOpen("Room");
 
-    //}
-    //public override void OnJoinedRoom()
-    //{
-    //    PanelOpen("Room");
-    //    HashTable roomCustomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-    //    if (roomCustomProperties.ContainsKey("Difficulty"))
-    //    {
-    //        //room.OnDifficultyChange((Difficulty)roomCustomProperties["Difficulty"]);
-    //    }
-    //}
-    //public override void OnLeftRoom() //�濡�� ������ �� ȣ��
-    //{
-    //    PanelOpen("Menu");
-    //}
-    //public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
-    //{
-    //    //room.JoinPlayer(newPlayer);
-    //}
-    //public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
-    //{
-    //    //room.LeavePlayer(otherPlayer);
-    //}
     public override void OnJoinedLobby()
     {
     }
