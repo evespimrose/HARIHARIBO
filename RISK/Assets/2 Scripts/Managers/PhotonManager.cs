@@ -280,6 +280,11 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
 
     //}
 
+    public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
+    {
+
+    }
+
     public override void OnCreatedRoom()
     {
         //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")

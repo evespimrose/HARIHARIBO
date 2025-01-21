@@ -139,10 +139,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     //{
     //    //room.JoinPlayer(newPlayer);
     //}
-    //public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
-    //{
-    //    //room.LeavePlayer(otherPlayer);
-    //}
+
 
     public override void OnRoomPropertiesUpdate(HashTable properties)
     {
