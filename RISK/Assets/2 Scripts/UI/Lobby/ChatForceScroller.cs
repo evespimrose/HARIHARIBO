@@ -1,7 +1,10 @@
+using Photon.Pun;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
+using Button = UnityEngine.UI.Button;
 
 public class ChatScrollController : SingletonManager<ChatScrollController>
 {
@@ -45,6 +48,22 @@ public class ChatScrollController : SingletonManager<ChatScrollController>
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
         ScrollToBottom();
+    }
+
+    void Update()
+    {
+        ChatterUpdate();
+        //if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !chatInputField.isFocused) SendButtonOnClicked();
+    }
+
+    void ChatterUpdate()
+    {
+        //players = "참가자 목록\n";
+        //foreach (Player p in PhotonNetwork.PlayerList)
+        //{
+        //    players += p.NickName + "\n";
+        //}
+        //playerList.text = players;
     }
 
     public void AddMessage()
