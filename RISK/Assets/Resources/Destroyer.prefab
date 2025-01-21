@@ -23324,7 +23324,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0.912, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7021922973062009529}
@@ -23506,7 +23506,7 @@ MonoBehaviour:
   - {fileID: 8400142347402010963}
   - {fileID: 2916333073600441956}
   - {fileID: 8583362309326636272}
-  sceneViewId: 0
+  sceneViewId: 9
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &2916333073600441956
