@@ -53,6 +53,8 @@ public class NormalMonster : Monster
         this.moveSpeed = monsterState.moveSpeed;
         this.curHp = monsterState.curHp;
         this.maxHp = curHp;
+        this.won = monsterState.won;
+        this.exp = monsterState.exp;
     }
 
     protected void InitializeStateHandler()
@@ -116,7 +118,6 @@ public class NormalMonster : Monster
 
     public override void DieStatChange()
     {
-        isDie = true;
         this.nMHandler.ChangeState(typeof(NormalMonsterDie));
     }
 }

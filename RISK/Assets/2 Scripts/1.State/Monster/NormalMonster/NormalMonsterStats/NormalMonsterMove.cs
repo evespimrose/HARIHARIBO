@@ -9,7 +9,14 @@ public class NormalMonsterMove : BaseState<NormalMonster>
     public override void Enter(NormalMonster monster)
     {
         Debug.Log("Move진입");
-        monster.animator.SetBool("Move", true);
+        if (monster.monsterType != Monster.MonsterType.Range)
+        {
+            monster.animator.SetBool("Move", true);
+        }
+        else
+        {
+            Debug.Log("원거리 몬스터라 안움직임");
+        }
     }
 
     public override void Update(NormalMonster monster)
@@ -27,6 +34,9 @@ public class NormalMonsterMove : BaseState<NormalMonster>
     public override void Exit(NormalMonster monster)
     {
         Debug.Log("Move퇴장");
-        monster.animator.SetBool("Move", false);
+        if (monster.monsterType != Monster.MonsterType.Range)
+        {
+            monster.animator.SetBool("Move", false);
+        }
     }
 }

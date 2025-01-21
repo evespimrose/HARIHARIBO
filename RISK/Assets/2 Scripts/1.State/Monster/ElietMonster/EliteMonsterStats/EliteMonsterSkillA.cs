@@ -10,12 +10,10 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
 
     public float aDamage;
     public float bDamage;
-    public float cDamage;
 
     // 공격 판정 딜레이
     public float startDelay = 0f;
     public float atkADelay = 0.38f;
-    public float atkBDelay = 0.38f;
 
     public float aHitTime = 0.5f;
     public float bHitTime = 1.45f;
@@ -23,20 +21,22 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
     // 애니메이션 지속 시간
     public float atkDuration = 1.35f;
 
+    private Coroutine action;
+
     public override void Enter(EliteMonster monster)
     {
-        aDamage = monster.atkDamage * 1;
-        bDamage = monster.atkDamage * 1.1f;
-        cDamage = monster.atkDamage * 1.2f;
+        aDamage = monster.atkDamage * 1.38f;
+        bDamage = monster.atkDamage * 1.38f;
         Debug.Log("SkillA 시작");
         monster.isAtk = true;
-        monster.StartCoroutine(SkillACoroutine(monster));
+        action = monster.StartCoroutine(SkillACoroutine(monster));
     }
 
     public override void Exit(EliteMonster monster)
     {
         monster.AtkEnd();
         Debug.Log("공격 종료");
+        monster.StopCoroutine(action);
         monster.isAtk = false;
     }
 
