@@ -59,27 +59,20 @@ public class SkillDamageInfo : MonoBehaviour
         PlayerStats stats = ownerPlayer.Stats;
         float damage;
 
-        Debug.Log($"[{skillName}] 현재 공격력: {stats.attackPower}");
-        Debug.Log($"[{skillName}] 데미지 계수: {damagePercent}%");
-
         if (isBasicAttack)
         {
             damage = stats.attackPower;
-            Debug.Log($"[{skillName}] 기본공격 데미지: {damage}");
         }
         else
         {
             damage = stats.attackPower * (damagePercent / 100f);
-            Debug.Log($"[{skillName}] 스킬 기본 데미지: {damage} (공격력: {stats.attackPower} * 계수: {damagePercent}%)");
         }
         if (Random.value <= stats.criticalChance)
         {
             isCritical = true;
             float beforeCrit = damage;
             damage *= (1f + stats.criticalDamage);
-            Debug.Log($"[{skillName}] 크리티컬! {beforeCrit} -> {damage} (크리티컬 데미지: {stats.criticalDamage})");
         }
-        Debug.Log($"[{skillName}] 최종 데미지: {damage} {(isCritical ? "(크리티컬!)" : "")}");
         return damage;
       
     }

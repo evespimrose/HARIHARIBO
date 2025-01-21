@@ -5,21 +5,21 @@ using UnityEngine;
 public class Destroyer : Player
 {
     [Header("??釉먯뒠獒?嶺뚮ㅎ?붷ㅇ???⑤９苑????袁る뻺 ???源놁젳")]
-    [SerializeField] private float baseMaxHealth = 150f;
-    [SerializeField] private int baseHealthPerLevel = 15;
-    [SerializeField] private float baseAttackPower = 15f;
-    [SerializeField] private int baseAttackPerLevel = 3;
-    [SerializeField] private float baseMoveSpeed = 1f;
+    [SerializeField] private float baseMaxHealth;
+    [SerializeField] private int baseHealthPerLevel;
+    [SerializeField] private float baseAttackPower;
+    [SerializeField] private int baseAttackPerLevel;
+    [SerializeField] private float baseMoveSpeed;
 
     [Header("?袁⑸젻泳?μ젂?& ???亦?")]
-    [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
-    [SerializeField] private float baseHealthRegen = 2f;
-    [SerializeField] private float baseRegenInterval = 1f;
+    [SerializeField, Range(0f, 1f)] private float baseDamageReduction;
+    [SerializeField] private float baseHealthRegen;
+    [SerializeField] private float baseRegenInterval;
 
     [Header("??⑤베堉? ???袁る뻺")]
-    [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
-    [SerializeField] private float baseCriticalDamage = 1.5f;
-    [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
+    [SerializeField, Range(0f, 1f)] private float baseCriticalChance;
+    [SerializeField] private float baseCriticalDamage;
+    [SerializeField, Range(0f, 1f)] private float baseCooldownReduction;
 
     [Header("??熬곣뫁???")]
     [SerializeField] private AnimationEventEffects effectsHandler;
