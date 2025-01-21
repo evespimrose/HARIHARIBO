@@ -20,31 +20,28 @@ public class BossMonsterSkillE : BaseState<BossMonster>
 
     public float additionalWaitTime = 0.5f;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
         damage = monster.atkDamage * 1f;
-        fireDamage = monster.atkDamage * 0.2f;
-        Action = true;
+        fireDamage = monster.atkDamage * 0.3f;
         monster.isAtk = true;
         projectilePrefabA = monster.skillEPrefab;
         Debug.Log("SkillE 진입");
-        monster.StartCoroutine(SkillECoroutine(monster));
+        action = monster.StartCoroutine(SkillECoroutine(monster));
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("SkillE 종료");
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator SkillECoroutine(BossMonster monster)
@@ -72,7 +69,8 @@ public class BossMonsterSkillE : BaseState<BossMonster>
         yield return null;
         yield return new WaitForSeconds(additionalWaitTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
     private void SpawnProjectile1(BossMonster monster)

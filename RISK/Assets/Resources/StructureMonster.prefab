@@ -103,12 +103,14 @@ MonoBehaviour:
   monsterType: 2
   target: {fileID: 0}
   model: {fileID: 7121646202909548812}
-  monsterState: {fileID: 11400000, guid: 9f77abfec5c56c041af096b7adcc77cf, type: 2}
+  monsterState: {fileID: 11400000, guid: 9ed6a83cdc30f444aa40ce293a6a8974, type: 2}
   atkDamage: 0
   moveSpeed: 1
   atkRange: 0
   atkDelay: 0
   curHp: 0
+  exp: 0
+  won: 0
   isAtk: 0
   isAirborne: 0
   isStun: 0
@@ -167,7 +169,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8604757329203367953}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &8604757329203367953
