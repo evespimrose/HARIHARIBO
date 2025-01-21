@@ -118,7 +118,6 @@ public class NormalMonster : Monster
 
     public override void DieStatChange()
     {
-        isDie = true;
         this.nMHandler.ChangeState(typeof(NormalMonsterDie));
     }
 }

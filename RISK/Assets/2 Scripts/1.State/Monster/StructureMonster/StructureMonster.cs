@@ -79,7 +79,6 @@ public class StructureMonster : Monster
 
     public override void DieStatChange()
     {
-        isDie = true;
         this.sMHandler.ChangeState(typeof(StructureDie));
     }
 

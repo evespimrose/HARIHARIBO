@@ -21,19 +21,22 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
     // 애니메이션 지속 시간
     public float atkDuration = 1.35f;
 
+    private Coroutine action;
+
     public override void Enter(EliteMonster monster)
     {
         aDamage = monster.atkDamage * 1.38f;
         bDamage = monster.atkDamage * 1.38f;
         Debug.Log("SkillA 시작");
         monster.isAtk = true;
-        monster.StartCoroutine(SkillACoroutine(monster));
+        action = monster.StartCoroutine(SkillACoroutine(monster));
     }
 
     public override void Exit(EliteMonster monster)
     {
         monster.AtkEnd();
         Debug.Log("공격 종료");
+        monster.StopCoroutine(action);
         monster.isAtk = false;
     }
 

@@ -107,7 +107,6 @@ public class EliteMonster : Monster
 
     public override void DieStatChange()
     {
-        isDie = true;
         this.eMHandler.ChangeState(typeof(EliteMonsterDie));
     }
 }

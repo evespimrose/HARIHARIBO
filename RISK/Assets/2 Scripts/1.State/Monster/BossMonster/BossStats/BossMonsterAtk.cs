@@ -21,7 +21,7 @@ public class BossMonsterAtk : BaseState<BossMonster>
     // 스테이트 들어온 뒤 선딜레이
     public float startDelay = 0.5f;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
@@ -29,26 +29,23 @@ public class BossMonsterAtk : BaseState<BossMonster>
         damageB = monster.atkDamage * 1.12f;
         damageC = monster.atkDamage * 1.81f;
 
-        Action = true;
         monster.isAtk = true;
         Debug.Log("Atk 시작");
 
         // 선딜레이 후 코루틴 시작
-        monster.StartCoroutine(AttackCoroutine(monster));
+        action = monster.StartCoroutine(AttackCoroutine(monster));
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("Atk 종료");
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator AttackCoroutine(BossMonster monster)
@@ -73,7 +70,8 @@ public class BossMonsterAtk : BaseState<BossMonster>
         //전체애니메이션 종료
         yield return new WaitForSeconds(endTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
         // 공격 종료 후 상태 전환
     }
 

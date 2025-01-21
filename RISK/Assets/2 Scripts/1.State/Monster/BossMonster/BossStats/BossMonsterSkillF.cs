@@ -16,14 +16,13 @@ public class BossMonsterSkillF : BaseState<BossMonster>
 
     public float additionalWaitTime = 0.5f;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
         monster.skillFDamage = monster.atkDamage * 1.33f;
-        Action = true;
         monster.isAtk = true;
-        monster.StartCoroutine(SkillFCoroutine(monster)); // 코루틴 시작
+        action = monster.StartCoroutine(SkillFCoroutine(monster)); // 코루틴 시작
         monster.Targeting(); // 타겟 새로 설정
 
         // 대쉬 시작 방향을 설정 (현재 바라보는 방향)
@@ -38,16 +37,14 @@ public class BossMonsterSkillF : BaseState<BossMonster>
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("SkillF 종료");
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator SkillFCoroutine(BossMonster monster)
@@ -92,7 +89,8 @@ public class BossMonsterSkillF : BaseState<BossMonster>
 
         yield return new WaitForSeconds(additionalWaitTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
 

@@ -196,7 +196,7 @@ public class MonsterSpwan : MonoBehaviour
                 wave++;
                 if (wave > 6) // 웨이브 6까지 설정
                 {
-                    wave = 1;
+                    yield break;
                 }
             }
         }

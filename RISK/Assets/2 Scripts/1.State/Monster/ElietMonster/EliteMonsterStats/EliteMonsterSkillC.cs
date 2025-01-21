@@ -12,17 +12,20 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
 
     public float skillCDamage = 10f;
 
+    private Coroutine action;
+
     public override void Enter(EliteMonster monster)
     {
         skillCDamage = monster.atkDamage * 0.75f;
         Debug.Log("SkillC 진입");
-        monster.StartCoroutine(SkillECoroutine(monster));
+        action = monster.StartCoroutine(SkillECoroutine(monster));
     }
 
     public override void Exit(EliteMonster monster)
     {
         monster.AtkEnd();
         Debug.Log("SkillC 종료");
+        monster.StopCoroutine(action);
     }
 
     private IEnumerator SkillECoroutine(EliteMonster monster)

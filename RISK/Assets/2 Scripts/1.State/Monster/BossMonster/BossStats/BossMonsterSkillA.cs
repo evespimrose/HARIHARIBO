@@ -19,30 +19,27 @@ public class BossMonsterSkillA : BaseState<BossMonster>
     //공격후 종료까지 걸리는시간
     public float endTime = 1.5f;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
         damageA = monster.atkDamage * 1.52f;
         damageB = monster.atkDamage * 1.52f;
-        Action = true;
         monster.isAtk = true;
         Debug.Log("SkillA 시작");
-        monster.StartCoroutine(SkillACoroutine(monster));
+        action = monster.StartCoroutine(SkillACoroutine(monster));
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("공격 종료");
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator SkillACoroutine(BossMonster monster)
@@ -60,7 +57,8 @@ public class BossMonsterSkillA : BaseState<BossMonster>
         AttackHit(monster, 2, damageB); 
         yield return new WaitForSeconds(endTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
 

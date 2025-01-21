@@ -12,29 +12,26 @@ public class BossMonsterSkillC : BaseState<BossMonster>
     public float skillCAtkTime = 1f;    
     public float additionalWaitTime = 0.4f;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
         damage = monster.atkDamage * 1.31f;
-        Action = true;
         monster.isAtk = true;
         Debug.Log("SkillC 진입");
-        monster.StartCoroutine(SkillCCoroutine(monster)); 
+        action = monster.StartCoroutine(SkillCCoroutine(monster)); 
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("SkillC 종료");
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator SkillCCoroutine(BossMonster monster)
@@ -57,7 +54,8 @@ public class BossMonsterSkillC : BaseState<BossMonster>
         yield return null;
         yield return new WaitForSeconds(additionalWaitTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
         Debug.Log("SkillC 종료 후 Idle 상태로 전환");
     }
 

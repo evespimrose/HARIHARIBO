@@ -26,32 +26,29 @@ public class BossMonsterSkillB : BaseState<BossMonster>
 
     private AtkType atkType;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
         meleeDamage = monster.atkDamage * 1.35f;
         rangeDamage = monster.atkDamage * 1.41f;
-        Action = true;
         monster.isAtk = true;
         Debug.Log("SkillB 진입");
         atkType = (AtkType)Random.Range(0, 2); 
-        monster.StartCoroutine(SkillBAtk(monster));
+        action = monster.StartCoroutine(SkillBAtk(monster));
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.isAtk = false;
-            monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("SkillB 종료");
         DeactivateSkillBFieldParticle(monster);
+        monster.StopCoroutine(action);
+        monster.isAtk = false;
     }
 
     private IEnumerator SkillBAtk(BossMonster monster)
@@ -75,7 +72,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         DeactivateSkillBFieldParticle(monster);
         yield return new WaitForSeconds(endTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterIdle));
         Debug.Log("SkillB 종료 후 Idle 상태로 전환");
     }
 

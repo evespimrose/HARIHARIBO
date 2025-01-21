@@ -148,8 +148,9 @@ public class Monster : MonoBehaviour, ITakedamage
     {
         if (false == PhotonNetwork.IsMasterClient) return;
         curHp -= Mathf.RoundToInt(damage);
-        if (curHp <= 0)
+        if (curHp <= 0 && !isDie)
         {
+            isDie = true;
             DieStatChange();
         }
     }

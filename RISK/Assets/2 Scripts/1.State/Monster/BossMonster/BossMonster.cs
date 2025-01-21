@@ -168,7 +168,6 @@ public class BossMonster : Monster
 
     public override void DieStatChange()
     {
-        isDie = true;
         this.bMHandler.ChangeState(typeof(BossMonsterDie));
     }
 

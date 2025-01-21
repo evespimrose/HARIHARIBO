@@ -11,27 +11,24 @@ public class BossMonsterSkillG : BaseState<BossMonster>
     public float endTime = 1f;
     public float additionalWaitTime = 0.5f;
 
-    private bool Action = false;
+    private Coroutine action;
 
     public override void Enter(BossMonster monster)
     {
-        Action = true;
         monster.isAtk = true;
         Debug.Log("SkillG 진입");
-        monster.StartCoroutine(SkillGCoroutine(monster)); // 코루틴 시작
+        action = monster.StartCoroutine(SkillGCoroutine(monster)); // 코루틴 시작
     }
 
     public override void Update(BossMonster monster)
     {
-        if (Action == false)
-        {
-            monster.bMHandler.ChangeState(typeof(BossMonsterSkillB));
-        }
+
     }
 
     public override void Exit(BossMonster monster)
     {
         Debug.Log("SkillG 종료");
+        monster.StopCoroutine(action);
     }
 
     private IEnumerator SkillGCoroutine(BossMonster monster)
@@ -46,7 +43,8 @@ public class BossMonsterSkillG : BaseState<BossMonster>
         SkillGAtk(monster);
         yield return new WaitForSeconds(endTime);
 
-        Action = false;
+        yield return null;
+        monster.bMHandler.ChangeState(typeof(BossMonsterSkillB));
     }
 
     public void SkillGAtk(BossMonster monster)
