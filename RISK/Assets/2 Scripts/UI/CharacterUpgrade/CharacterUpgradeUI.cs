@@ -7,40 +7,43 @@ using UnityEngine.UI;
 [System.Serializable]
 public class StatsSet
 {
-    [Tooltip("???댟????藥?")]
+    [Tooltip("?ㅽ뀩 ?대쫫")]
     public TextMeshProUGUI statsName;
-    [Tooltip("?熬곣뫗?????댟?")]
+    [Tooltip("?꾩옱 ?ㅽ뀩")]
     public TextMeshProUGUI currentStats;
-    [Tooltip("???댟??繹먮냱?€뤆?")]
+    [Tooltip("?ㅽ뀩 ?깆옣媛?")]
     public TextMeshProUGUI statsUpgradeValue;
-    [Tooltip("?띠룆踰???繹먭퍓沅??筌먲퐣??")]
+    [Tooltip("媛뺥솕 ?깃났 ?뺣쪧")]
     public TextMeshProUGUI successChance;
-    [Tooltip("???????嫄잍뤆?")]
+    [Tooltip("?ы솕 ?뚮え媛?")]
     public TextMeshProUGUI resourceCost;
-    [Tooltip("?띠룆踰???뺢퀗???")]
+    [Tooltip("媛뺥솕 踰꾪듉")]
     public Button upgradeButton;
 
     public void UpdateUI(string name, float current, float upgradeValue, float chance, int cost)
     {
         statsName.text = name;
-        currentStats.text = $"?熬곣뫗?????꾪떅 : {current}";
-        statsUpgradeValue.text = $"?繹먮냱?€뤆?: +{upgradeValue}";
-        successChance.text = $"?띠룆踰???筌먲퐣??: {chance * 100}%";
-        resourceCost.text = $"???嫄?????: {cost}";
+        currentStats.text = $"?꾩옱 ?ㅽ꺈 : {current}";
+        statsUpgradeValue.text = $"?깆옣媛?: +{upgradeValue}";
+        successChance.text = $"媛뺥솕 ?뺣쪧 : {chance * 100}%";
+        resourceCost.text = $"?뚮え ?ы솕 : {cost}";
     }
 }
 
 [System.Serializable]
 public class UpgradeData
 {
-    public float upProb;  // ?띠룆踰???繹먭퍓沅??筌먲퐣??(1.0?? 100%)
-    public int useWon;    // ?띠룆踰????熬곣뫗???????(??λ?獄?
-    public float maxHpIncrease;
-    public float atkIncrease;
-    public float criIncrease;
-    public float criDmgIncrease;
-    public float hpRegIncrease;
-    public float coolRedIncrease;
+    public float upProb;  // 媛뺥솕 ?깃났 ?뺣쪧
+    public int useWon;    // 媛뺥솕???꾩슂???ы솕 (怨⑤뱶)
+    public float statIncrease;  // ?대떦 ?ㅽ뀩???깆옣 ?섏튂 (?? maxHp 利앷??? atk 利앷?????
+
+    // ?앹꽦??(?뚯씠釉??곗씠?곕? ?ｌ쓣 ???덇쾶)
+    public UpgradeData(float upProb, int useWon, float statIncrease)
+    {
+        this.upProb = upProb;
+        this.useWon = useWon;
+        this.statIncrease = statIncrease;
+    }
 }
 
 public class CharacterUpgradeUI : MonoBehaviour
@@ -61,45 +64,61 @@ public class CharacterUpgradeUI : MonoBehaviour
     [SerializeField] private Dictionary<int, UpgradeData> hpRegUpgradeData = new Dictionary<int, UpgradeData>();
     [SerializeField] private Dictionary<int, UpgradeData> coolRedUpgradeData = new Dictionary<int, UpgradeData>();
 
-
     private int currentGold;
+
+    private void InitializeUpgradeData()
+    {
+        // maxHp ?ㅽ뀩 ?곗씠??珥덇린??
+        maxHpUpgradeData.Add(0, new UpgradeData(1f, 2000, 5));
+        maxHpUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 5));
+        maxHpUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 5));
+        maxHpUpgradeData.Add(3, new UpgradeData(0.91f, 18800, 5));
+        // 異붽??곸씤 ?덈꺼 ?곗씠?곕? ?쎌엯...
+
+        // atk ?ㅽ뀩 ?곗씠??珥덇린??
+        atkUpgradeData.Add(0, new UpgradeData(1f, 1500, 4));
+        atkUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 4));
+        atkUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 6));
+        // 異붽??곸씤 ?덈꺼 ?곗씠?곕? ?쎌엯...
+
+        // ?섎㉧吏 ?ㅽ뀩?ㅼ뿉 ??댁꽌??鍮꾩듂?섍쾶 異붽?
+    }
 
     private void OnEnable()
     {
         UpdateStatsFromServer();
     }
 
-    // ??類ㅼ뮅?β돦裕????꾩룇猷? ??⑥щ턄??? UI????⑤챷??
+    // ?쒕쾭濡쒕???諛쏆? ?곗씠?곕? UI???곸슜
     public void UpdateStatsFromServer()
     {
-        // FirebaseManager?????嶺뚯쉳????띠럾??筌뤾쑴沅???⑥щ턄??? ????
+        // FirebaseManager?먯꽌 吏곸젒 媛?몄삩 ?곗씠?곕? ?ъ슜
         FireBaseCharacterData characterData = FirebaseManager.Instance.currentCharacterData;
-        FireBaseUserData userData = FirebaseManager.Instance.currentUserData;  // won ?띠룆????띠럾??筌뤾쑴沅????????
+        FireBaseUserData userData = FirebaseManager.Instance.currentUserData;  // won 媛믪쓣 媛?몄삤?????ъ슜
 
         if (characterData != null && userData != null)
         {
-            // ??λ?獄????낆몥??袁⑤콦 (won ??????
+            // 怨⑤뱶 ?낅뜲?댄듃 (won 媛??ъ슜)
             currentGold = userData.won;
             UpdateGoldUI();
 
-            // 嶺?큔??????藥꿔깺?????뉖낵 ???낆몥??袁⑤콦
+            // 罹먮┃???대쫫怨??덈꺼 ?낅뜲?댄듃
             characterNameText.text = characterData.nickName;
             levelText.text = $"{characterData.level}";
 
-            // ???댟??洹먮봾裕?????낆몥??袁⑤콦 (?繹먭퍓沅??筌먲퐣??????뉖낵??嶺뚮씮?????ｌ뫒亦?
+            // ?ㅽ뀩 由ъ뒪???낅뜲?댄듃 (?깃났 ?뺣쪧???덈꺼??留욎떠 怨꾩궛)
             List<(string, float, float, float, int)> allStats = new List<(string, float, float, float, int)>
             {
-                // ???댟????藥? ?熬곣뫗?????댟? ?繹먮냱????瑜귣뭵, ?繹먭퍓沅??筌먲퐣?? ???嫄?????
-                ("maxHp", characterData.maxHp, 1.0f, CalculateSuccessChance(characterData.level), 100),
-                ("atk", characterData.atk, 0.5f, CalculateSuccessChance(characterData.level), 150),
-                ("cri", characterData.cri, 1.5f, CalculateSuccessChance(characterData.level), 200),
-                ("criDmg", characterData.criDmg, 0.5f, CalculateSuccessChance(characterData.level), 250),
-                ("dmgRed", characterData.dmgRed, 0.2f, CalculateSuccessChance(characterData.level), 300),
-                ("hpReg", characterData.hpReg, 0.25f, CalculateSuccessChance(characterData.level), 400),
-                ("coolRed", characterData.coolRed, 0.1f, CalculateSuccessChance(characterData.level), 500)
+                // ?ㅽ뀩 ?대쫫, ?꾩옱 ?ㅽ뀩, ?깆옣 ?섏튂, ?깃났 ?뺣쪧, ?뚮え ?ы솕
+                ("maxHp", characterData.maxHp, maxHpUpgradeData[characterData.maxHpUpgradeLevel].statIncrease, maxHpUpgradeData[characterData.maxHpUpgradeLevel].upProb, maxHpUpgradeData[characterData.maxHpUpgradeLevel].useWon),
+                ("atk", characterData.atk, atkUpgradeData[characterData.atkUpgradeLevel].statIncrease, atkUpgradeData[characterData.atkUpgradeLevel].upProb, atkUpgradeData[characterData.atkUpgradeLevel].useWon),
+                ("cri", characterData.cri, criUpgradeData[characterData.criUpgradeLevel].statIncrease, criUpgradeData[characterData.criUpgradeLevel].upProb, criUpgradeData[characterData.criUpgradeLevel].useWon),
+                ("criDmg", characterData.criDmg, criDmgUpgradeData[characterData.criDmgUpgradeLevel].statIncrease, criDmgUpgradeData[characterData.criDmgUpgradeLevel].upProb, criDmgUpgradeData[characterData.criDmgUpgradeLevel].useWon),
+                ("hpReg", characterData.hpReg, hpRegUpgradeData[characterData.hpRegUpgradeLevel].statIncrease, hpRegUpgradeData[characterData.hpRegUpgradeLevel].upProb, hpRegUpgradeData[characterData.hpRegUpgradeLevel].useWon),
+                ("coolRed", characterData.coolRed, coolRedUpgradeData[characterData.coolRedUpgradeLevel].statIncrease, coolRedUpgradeData[characterData.coolRedUpgradeLevel].upProb, coolRedUpgradeData[characterData.coolRedUpgradeLevel].useWon)
             };
 
-            // UI ???낆몥??袁⑤콦 ???뺢퀗??????繹?????깆젧
+            // UI ?낅뜲?댄듃 諛?踰꾪듉 ?대깽???ㅼ젙
             for (int i = 0; i < statSets.Count; i++)
             {
                 if (i < allStats.Count)
@@ -107,80 +126,80 @@ public class CharacterUpgradeUI : MonoBehaviour
                     var (name, current, upgradeValue, chance, cost) = allStats[i];
                     StatsSet uiStat = statSets[i];
 
-                    // UI ???낆몥??袁⑤콦
+                    // UI ?낅뜲?댄듃
                     uiStat.UpdateUI(name, current, upgradeValue, chance, cost);
 
-                    // ?뺢퀗???????????띠룆踰??嶺뚳퐣瑗??
+                    // 踰꾪듉 ?대┃ ??媛뺥솕 泥섎━
                     uiStat.upgradeButton.onClick.RemoveAllListeners();
-                    int index = i; // ???堉??諭踰?closure ??쒖굣?????㏉뜖???熬곥굥由??筌뤾퍓???????
+                    int index = i; // ?뚮떎?앹쓽 closure 臾몄젣 ?닿껐???꾪븳 ?몃뜳?????
                     uiStat.upgradeButton.onClick.AddListener(() => UpgradeStat(statSets[index]));
                 }
             }
         }
     }
 
-    // ??λ?獄?UI ???낆몥??袁⑤콦
+    // 怨⑤뱶 UI ?낅뜲?댄듃
     private void UpdateGoldUI()
     {
-        curGold.text = $"?熬곣뫗????λ?獄? {currentGold}";
+        curGold.text = $"?꾩옱 怨⑤뱶: {currentGold}";
     }
 
-    // ?繹먭퍓沅??筌먲퐣??????뉖낵??嶺뚮씮?녘떋???ｌ뫒亦??濡ル츎 嶺뚮∥?꾥땻??
+    // ?깃났 ?뺣쪧???덈꺼??留욊쾶 怨꾩궛?섎뒗 硫붿꽌??
     private float CalculateSuccessChance(int level)
     {
-        // ?リ옇????繹먭퍓沅??筌먲퐣??(75%)
+        // 湲곕낯 ?깃났 ?뺣쪧 (75%)
         float baseChance = 0.75f;
 
-        // ???뉖낵??嶺뚯빘鍮???貫????⑤벡逾??繹먭퍓沅??筌먲퐣???0.5%???띠룆흮??(嶺뚣끉裕??5%?????ル┰)
+        // ?덈꺼??利앷??⑥뿉 ?곕씪 ?깃났 ?뺣쪧??0.5%??媛먯냼 (理쒖냼 5%濡??쒗븳)
         float decreasePerLevel = 0.005f; // 0.5% -> 0.005
 
-        // ?繹먭퍓沅??筌먲퐣????ｌ뫒亦?
+        // ?깃났 ?뺣쪧 怨꾩궛
         float successChance = Mathf.Max(baseChance - (level - 1) * decreasePerLevel, 0.05f);
 
         return successChance;
     }
 
-    // ?띠룆踰???뺢퀗???????????繹??
+    // 媛뺥솕 踰꾪듉 ?대┃ ?대깽??
     private void UpgradeStat(StatsSet stat)
     {
-        int resourceCostValue = int.Parse(stat.resourceCost.text.Replace("???嫄?????: ", "").Trim());
+        int resourceCostValue = int.Parse(stat.resourceCost.text.Replace("?뚮え ?ы솕 : ", "").Trim());
 
         if (currentGold < resourceCostValue)
         {
-            Debug.Log("???遊붋??");
+            Debug.Log("??遺議?");
             return;
         }
 
-        // ?繹먭퍓沅??筌먲퐣?????怨뺚뵛 ?熬곥굥??text?????堉?
-        float chance = float.Parse(stat.successChance.text.Replace("?띠룆踰???筌먲퐣??: ", "").Replace("%", "")) / 100;
+        // ?깃났 ?뺣쪧???산린 ?꾪빐 text瑜??뚯떛
+        float chance = float.Parse(stat.successChance.text.Replace("媛뺥솕 ?뺣쪧 : ", "").Replace("%", "")) / 100;
         bool isSuccess = Random.value <= chance;
 
         if (isSuccess)
         {
-            // ?띠룆踰???繹먭퍓沅???UI ???낆몥??袁⑤콦
-            float current = float.Parse(stat.currentStats.text.Replace("?熬곣뫗?????꾪떅 : ", ""));
-            float upgradeValue = float.Parse(stat.statsUpgradeValue.text.Replace("?繹먮냱?€뤆?: +", ""));
+            // 媛뺥솕 ?깃났 ??UI ?낅뜲?댄듃
+            float current = float.Parse(stat.currentStats.text.Replace("?꾩옱 ?ㅽ꺈 : ", ""));
+            float upgradeValue = float.Parse(stat.statsUpgradeValue.text.Replace("?깆옣媛?: +", ""));
             stat.UpdateUI(
                 stat.statsName.text,
                 current + upgradeValue,
                 upgradeValue,
                 chance,
-                int.Parse(stat.resourceCost.text.Replace("???嫄?????: ", ""))
+                int.Parse(stat.resourceCost.text.Replace("?뚮え ?ы솕 : ", ""))
             );
-            Debug.Log($"{stat.statsName.text} ?띠룆踰???繹먭퍓沅?");
+            Debug.Log($"{stat.statsName.text} 媛뺥솕 ?깃났!");
 
-            // Firebase???????⑥щ턄?????낆몥??袁⑤콦
-            FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text);  // ?띠룆踰??????댟??Firebase???꾩룇瑗??
+            // Firebase?먯꽌 ?곗씠???낅뜲?댄듃
+            FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text);  // 媛뺥솕???ㅽ뀩??Firebase??諛섏쁺
 
-            // ?띠룆踰???繹먭퍓沅??? ???嫄???ル?녽뇡紐뚯춹?怨뚭퍖 ??λ?獄?쓣紐?嶺뚢뼰紐욤?
+            // 媛뺥솕 ?깃났 ?? ?뚮え??湲덉븸留뚰겮 怨⑤뱶瑜?李④컧
             currentGold -= resourceCostValue;
 
-            // ??λ?獄?UI ???낆몥??袁⑤콦
-            UpdateGoldUI();  // ??λ?獄?UI???띠룄???
+            // 怨⑤뱶 UI ?낅뜲?댄듃
+            UpdateGoldUI();  // 怨⑤뱶 UI瑜?媛깆떊
         }
         else
         {
-            Debug.Log($"{stat.statsName.text} ?띠룆踰?????덉넮...");
+            Debug.Log($"{stat.statsName.text} 媛뺥솕 ?ㅽ뙣...");
         }
     }
 }

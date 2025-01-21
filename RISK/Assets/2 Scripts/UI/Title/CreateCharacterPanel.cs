@@ -150,6 +150,12 @@ public class FireBaseCharacterData
     public float criDmg;
     public float coolRed;
 
+    public int maxHpUpgradeLevel;
+    public int atkUpgradeLevel;
+    public int criUpgradeLevel;
+    public int criDmgUpgradeLevel;
+    public int hpRegUpgradeLevel;
+    public int coolRedUpgradeLevel;
 
     public FireBaseCharacterData() { }
     public FireBaseCharacterData(string nickName, ClassType classType)
