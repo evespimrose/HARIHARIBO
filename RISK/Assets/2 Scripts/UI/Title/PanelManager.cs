@@ -15,12 +15,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public SelectCharacterPanel selectCharacter;
     public CreateCharacterPanel createCharacter;
 
-    public PartyListBoard partyListBoard;
-    public CreatePartyUI createPartyUI;
-    public PartyMemberUI partyMemberUI;
-    public CharacterUpgradeUI characterUpgradeUI;
-    public LobbyPanel lobby;
-
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
 
@@ -30,8 +24,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
     private Dictionary<string, GameObject> popupDic;
     private Stack<UIPopup> openPopups = new Stack<UIPopup>();
 
-    public List<RoomInfo> currentRoomInfoList = new List<RoomInfo>();
-
     private void Awake()
     {
         Instance = this;
@@ -40,12 +32,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
             { "Login", login.gameObject },
             { "Signup", signup.gameObject },
             { "SelectCharacter", selectCharacter.gameObject },
-            { "CreateCharacter", createCharacter.gameObject },
-            { "PartyListBoard", partyListBoard.gameObject },
-            { "CreateParty", createPartyUI.gameObject },
-            { "PartyMember", partyMemberUI.gameObject },
-            { "CharacterUpgrade", characterUpgradeUI.gameObject },
-            { "Lobby", lobby.gameObject }
+            { "CreateCharacter", createCharacter.gameObject }
         };
 
         popupDic = new Dictionary<string, GameObject>()
@@ -99,6 +86,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
             UIPopup targetPopup = openPopups.Pop();
             targetPopup.gameObject.SetActive(false);
         }
+
     }
 
     public override void OnEnable()
@@ -110,13 +98,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
     {
         PanelOpen("Login");
     }
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        print("OnRoomListUpdate?????");
-        currentRoomInfoList = roomList;
-        partyListBoard.UpdateRoomList(roomList);
-    }
-
     //public override void OnCreatedRoom()
     //{
     //    PanelOpen("Room");
@@ -131,7 +112,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     //        //room.OnDifficultyChange((Difficulty)roomCustomProperties["Difficulty"]);
     //    }
     //}
-    //public override void OnLeftRoom() //?좎뜽?먨뜝?숈삕 ?좎룞?쇿뜝?숈삕?좎룞???좎룞???멨뜝?숈삕
+    //public override void OnLeftRoom() //�濡�� ������ �� ȣ��
     //{
     //    PanelOpen("Menu");
     //}
@@ -145,12 +126,9 @@ public class PanelManager : MonoBehaviourPunCallbacks
     //}
     public override void OnJoinedLobby()
     {
-        print("OnJoinedLobby ::");
     }
     public override void OnLeftLobby()
     {
-        print("OnLeftLobby ::");
-
     }
 
     public override void OnRoomPropertiesUpdate(HashTable properties)
