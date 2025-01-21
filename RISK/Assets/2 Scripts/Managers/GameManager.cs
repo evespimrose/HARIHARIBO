@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public Transform playerPosition;
 
+    public MonsterSpwan spwaner;
+
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
         yield return new WaitUntil(() => !string.IsNullOrEmpty(player.NickName));
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         yield return new WaitUntil(() => isGameReady);
         print("isGameReady!!! GOGOGOGO!!!!");
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
+        spwaner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
 
         FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
 
@@ -121,6 +124,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         {
             yield break;
         }
+
+        spwaner.SpawnStart();
     }
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
     {

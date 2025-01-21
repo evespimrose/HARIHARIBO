@@ -4,32 +4,38 @@ using UnityEngine;
 
 public class BossSkillDObject : MonoBehaviour
 {
-    public float moveSpeed = 5f;       // ÀÌµ¿ ¼Óµµ
-    public float moveDistance = 20f;  // ÀÌµ¿ÇÒ °Å¸®
-    public float atkDamage;           // °ø°İ µ¥¹ÌÁö
+    public float moveSpeed = 5f;       // ì´ë™ ì†ë„
+    public float moveDistance = 30f;  // ì´ë™í•  ê±°ë¦¬
+    public float atkDamage;           // ê³µê²© ë°ë¯¸ì§€
 
-    private Vector3 startPos;    // ½ÃÀÛ À§Ä¡
+    private Vector3 startPos;    // ì‹œì‘ ìœ„ì¹˜
     private bool isSeting = false;
+
+    private void Start()
+    {
+        moveSpeed = 5f;
+        moveDistance = 30f;
+    }
 
     void Update()
     {
         if (!isSeting) return;
 
-        // ¿ÀºêÁ§Æ®ÀÇ ·ÎÄÃ Àü¹æÀ¸·Î ÀÌµ¿
+        // ì˜¤ë¸Œì íŠ¸ì˜ ë¡œì»¬ ì „ë°©ìœ¼ë¡œ ì´ë™
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 2);
 
-        // ÀÌµ¿ °Å¸® È®ÀÎ
+        // ì´ë™ ê±°ë¦¬ í™•ì¸
         if (Vector3.Distance(startPos, transform.position) >= moveDistance)
         {
-            Destroy(gameObject); // ÀÌµ¿ °Å¸® µµ´Ş ½Ã ¿ÀºêÁ§Æ® »èÁ¦
+            Destroy(gameObject); // ì´ë™ ê±°ë¦¬ ë„ë‹¬ ì‹œ ì˜¤ë¸Œì íŠ¸ ì‚­ì œ
         }
     }
 
     public void Seting(float damage)
     {
         this.atkDamage = damage;
-        startPos = transform.position; // ÃÊ±â À§Ä¡ ÀúÀå
-        isSeting = true;               // ÀÌµ¿ È°¼ºÈ­
+        startPos = transform.position; // ì´ˆê¸° ìœ„ì¹˜ ì €ì¥
+        isSeting = true;               // ì´ë™ í™œì„±í™”
     }
 
     private void OnTriggerEnter(Collider other)
