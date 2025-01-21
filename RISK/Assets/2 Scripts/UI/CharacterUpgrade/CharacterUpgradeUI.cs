@@ -3,31 +3,30 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.VersionControl.Asset;
 
 [System.Serializable]
 public class StatsSet
 {
-    [Tooltip("스텟 이름")]
+    [Tooltip("?ㅽ뀩 ?대쫫")]
     public TextMeshProUGUI statsName;
-    [Tooltip("현재 스텟")]
+    [Tooltip("?꾩옱 ?ㅽ뀩")]
     public TextMeshProUGUI currentStats;
-    [Tooltip("스텟 성장값")]
+    [Tooltip("?ㅽ뀩 ?깆옣媛?")]
     public TextMeshProUGUI statsUpgradeValue;
-    [Tooltip("강화 성공 확률")]
+    [Tooltip("媛뺥솕 ?깃났 ?뺣쪧")]
     public TextMeshProUGUI successChance;
-    [Tooltip("재화 소모값")]
+    [Tooltip("?ы솕 ?뚮え媛?")]
     public TextMeshProUGUI resourceCost;
-    [Tooltip("강화 버튼")]
+    [Tooltip("媛뺥솕 踰꾪듉")]
     public Button upgradeButton;
 
     public void UpdateUI(string name, float current, float upgradeValue, float chance, int cost)
     {
         statsName.text = name;
-        currentStats.text = $"현재 스탯 : {current}";
-        statsUpgradeValue.text = $"성장값 : +{upgradeValue}";
-        successChance.text = $"강화 확률 : {chance * 100}%";
-        resourceCost.text = $"소모 재화 : {cost}";
+        currentStats.text = $"?꾩옱 ?ㅽ꺈 : {current}";
+        statsUpgradeValue.text = $"?깆옣媛?: +{upgradeValue}";
+        successChance.text = $"媛뺥솕 ?뺣쪧 : {chance * 100}%";
+        resourceCost.text = $"?뚮え ?ы솕 : {cost}";
     }
 }
 
@@ -48,27 +47,27 @@ public class CharacterUpgradeUI : MonoBehaviour
         UpdateStatsFromServer();
     }
 
-    // 서버로부터 받은 데이터를 UI에 적용
+    // ?쒕쾭濡쒕???諛쏆? ?곗씠?곕? UI???곸슜
     public void UpdateStatsFromServer()
     {
-        // FirebaseManager에서 직접 가져온 데이터를 사용
+        // FirebaseManager?먯꽌 吏곸젒 媛?몄삩 ?곗씠?곕? ?ъ슜
         FireBaseCharacterData characterData = FirebaseManager.Instance.currentCharacterData;
-        FireBaseUserData userData = FirebaseManager.Instance.currentUserData;  // won 값을 가져오는 데 사용
+        FireBaseUserData userData = FirebaseManager.Instance.currentUserData;  // won 媛믪쓣 媛?몄삤?????ъ슜
 
         if (characterData != null && userData != null)
         {
-            // 골드 업데이트 (won 값 사용)
+            // 怨⑤뱶 ?낅뜲?댄듃 (won 媛??ъ슜)
             currentGold = userData.won;
             UpdateGoldUI();
 
-            // 캐릭터 이름과 레벨 업데이트
+            // 罹먮┃???대쫫怨??덈꺼 ?낅뜲?댄듃
             characterNameText.text = characterData.nickName;
             levelText.text = $"{characterData.level}";
 
-            // 스텟 리스트 업데이트 (성공 확률을 레벨에 맞춰 계산)
+            // ?ㅽ뀩 由ъ뒪???낅뜲?댄듃 (?깃났 ?뺣쪧???덈꺼??留욎떠 怨꾩궛)
             List<(string, float, float, float, int)> allStats = new List<(string, float, float, float, int)>
             {
-                // 스텟 이름, 현재 스텟, 성장 수치, 성공 확률, 소모 재화
+                // ?ㅽ뀩 ?대쫫, ?꾩옱 ?ㅽ뀩, ?깆옣 ?섏튂, ?깃났 ?뺣쪧, ?뚮え ?ы솕
                 ("maxHp", characterData.maxHp, 1.0f, CalculateSuccessChance(characterData.level), 100),
                 ("atk", characterData.atk, 0.5f, CalculateSuccessChance(characterData.level), 150),
                 ("cri", characterData.cri, 1.5f, CalculateSuccessChance(characterData.level), 200),
@@ -78,7 +77,7 @@ public class CharacterUpgradeUI : MonoBehaviour
                 ("coolRed", characterData.coolRed, 0.1f, CalculateSuccessChance(characterData.level), 500)
             };
 
-            // UI 업데이트 및 버튼 이벤트 설정
+            // UI ?낅뜲?댄듃 諛?踰꾪듉 ?대깽???ㅼ젙
             for (int i = 0; i < statSets.Count; i++)
             {
                 if (i < allStats.Count)
@@ -86,80 +85,80 @@ public class CharacterUpgradeUI : MonoBehaviour
                     var (name, current, upgradeValue, chance, cost) = allStats[i];
                     StatsSet uiStat = statSets[i];
 
-                    // UI 업데이트
+                    // UI ?낅뜲?댄듃
                     uiStat.UpdateUI(name, current, upgradeValue, chance, cost);
 
-                    // 버튼 클릭 시 강화 처리
+                    // 踰꾪듉 ?대┃ ??媛뺥솕 泥섎━
                     uiStat.upgradeButton.onClick.RemoveAllListeners();
-                    int index = i; // 람다식의 closure 문제 해결을 위한 인덱스 저장
+                    int index = i; // ?뚮떎?앹쓽 closure 臾몄젣 ?닿껐???꾪븳 ?몃뜳?????
                     uiStat.upgradeButton.onClick.AddListener(() => UpgradeStat(statSets[index]));
                 }
             }
         }
     }
 
-    // 골드 UI 업데이트
+    // 怨⑤뱶 UI ?낅뜲?댄듃
     private void UpdateGoldUI()
     {
-        curGold.text = $"현재 골드: {currentGold}";
+        curGold.text = $"?꾩옱 怨⑤뱶: {currentGold}";
     }
 
-    // 성공 확률을 레벨에 맞게 계산하는 메서드
+    // ?깃났 ?뺣쪧???덈꺼??留욊쾶 怨꾩궛?섎뒗 硫붿꽌??
     private float CalculateSuccessChance(int level)
     {
-        // 기본 성공 확률 (75%)
+        // 湲곕낯 ?깃났 ?뺣쪧 (75%)
         float baseChance = 0.75f;
 
-        // 레벨이 증가함에 따라 성공 확률을 0.5%씩 감소 (최소 5%로 제한)
+        // ?덈꺼??利앷??⑥뿉 ?곕씪 ?깃났 ?뺣쪧??0.5%??媛먯냼 (理쒖냼 5%濡??쒗븳)
         float decreasePerLevel = 0.005f; // 0.5% -> 0.005
 
-        // 성공 확률 계산
+        // ?깃났 ?뺣쪧 怨꾩궛
         float successChance = Mathf.Max(baseChance - (level - 1) * decreasePerLevel, 0.05f);
 
         return successChance;
     }
 
-    // 강화 버튼 클릭 이벤트
+    // 媛뺥솕 踰꾪듉 ?대┃ ?대깽??
     private void UpgradeStat(StatsSet stat)
     {
-        int resourceCostValue = int.Parse(stat.resourceCost.text.Replace("소모 재화 : ", "").Trim());
+        int resourceCostValue = int.Parse(stat.resourceCost.text.Replace("?뚮え ?ы솕 : ", "").Trim());
 
         if (currentGold < resourceCostValue)
         {
-            Debug.Log("돈 부족");
+            Debug.Log("??遺議?");
             return;
         }
 
-            // 성공 확률을 얻기 위해 text를 파싱
-            float chance = float.Parse(stat.successChance.text.Replace("강화 확률 : ", "").Replace("%", "")) / 100;
-            bool isSuccess = Random.value <= chance;
+        // ?깃났 ?뺣쪧???산린 ?꾪빐 text瑜??뚯떛
+        float chance = float.Parse(stat.successChance.text.Replace("媛뺥솕 ?뺣쪧 : ", "").Replace("%", "")) / 100;
+        bool isSuccess = Random.value <= chance;
 
         if (isSuccess)
         {
-            // 강화 성공 시 UI 업데이트
-            float current = float.Parse(stat.currentStats.text.Replace("현재 스탯 : ", ""));
-            float upgradeValue = float.Parse(stat.statsUpgradeValue.text.Replace("성장값 : +", ""));
+            // 媛뺥솕 ?깃났 ??UI ?낅뜲?댄듃
+            float current = float.Parse(stat.currentStats.text.Replace("?꾩옱 ?ㅽ꺈 : ", ""));
+            float upgradeValue = float.Parse(stat.statsUpgradeValue.text.Replace("?깆옣媛?: +", ""));
             stat.UpdateUI(
                 stat.statsName.text,
                 current + upgradeValue,
                 upgradeValue,
                 chance,
-                int.Parse(stat.resourceCost.text.Replace("소모 재화 : ", ""))
+                int.Parse(stat.resourceCost.text.Replace("?뚮え ?ы솕 : ", ""))
             );
-            Debug.Log($"{stat.statsName.text} 강화 성공!");
+            Debug.Log($"{stat.statsName.text} 媛뺥솕 ?깃났!");
 
-            // Firebase에서 데이터 업데이트
-            FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text);  // 강화된 스텟을 Firebase에 반영
+            // Firebase?먯꽌 ?곗씠???낅뜲?댄듃
+            FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text);  // 媛뺥솕???ㅽ뀩??Firebase??諛섏쁺
 
-            // 강화 성공 후, 소모된 금액만큼 골드를 차감
+            // 媛뺥솕 ?깃났 ?? ?뚮え??湲덉븸留뚰겮 怨⑤뱶瑜?李④컧
             currentGold -= resourceCostValue;
 
-            // 골드 UI 업데이트
-            UpdateGoldUI();  // 골드 UI를 갱신
+            // 怨⑤뱶 UI ?낅뜲?댄듃
+            UpdateGoldUI();  // 怨⑤뱶 UI瑜?媛깆떊
         }
         else
         {
-            Debug.Log($"{stat.statsName.text} 강화 실패...");
+            Debug.Log($"{stat.statsName.text} 媛뺥솕 ?ㅽ뙣...");
         }
     }
 }
