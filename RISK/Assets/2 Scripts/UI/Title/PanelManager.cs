@@ -131,7 +131,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     //        //room.OnDifficultyChange((Difficulty)roomCustomProperties["Difficulty"]);
     //    }
     //}
-    //public override void OnLeftRoom() //?좎뜽?먨뜝?숈삕 ?좎룞?쇿뜝?숈삕?좎룞???좎룞???멨뜝?숈삕
+    //public override void OnLeftRoom() //???モ닪???誘좊???????렊 ???モ닪筌????밸㎍?????렊???モ닪筌?????モ닪筌???嶺뚮　維??????렊
     //{
     //    PanelOpen("Menu");
     //}
@@ -143,15 +143,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
     //{
     //    //room.LeavePlayer(otherPlayer);
     //}
-    public override void OnJoinedLobby()
-    {
-        print("OnJoinedLobby ::");
-    }
-    public override void OnLeftLobby()
-    {
-        print("OnLeftLobby ::");
-
-    }
 
     public override void OnRoomPropertiesUpdate(HashTable properties)
     {

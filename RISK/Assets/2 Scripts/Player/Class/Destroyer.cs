@@ -4,31 +4,31 @@ using UnityEngine;
 
 public class Destroyer : Player
 {
-    [Header("?遺용뮞?紐껋쨮??곷선 ??쎄틛 ??쇱젟")]
+    [Header("??釉먯뒠獒?嶺뚮ㅎ?붷ㅇ???⑤９苑????袁る뻺 ???源놁젳")]
     [SerializeField] private float baseMaxHealth = 150f;
     [SerializeField] private int baseHealthPerLevel = 15;
     [SerializeField] private float baseAttackPower = 15f;
     [SerializeField] private int baseAttackPerLevel = 3;
     [SerializeField] private float baseMoveSpeed = 1f;
 
-    [Header("獄쎻뫗堉?& ???궗")]
+    [Header("?袁⑸젻泳?μ젂?& ???亦?")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
     [SerializeField] private float baseHealthRegen = 2f;
     [SerializeField] private float baseRegenInterval = 1f;
 
-    [Header("?곕떽? ??쎄틛")]
+    [Header("??⑤베堉? ???袁る뻺")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
     [SerializeField] private float baseCriticalDamage = 1.5f;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
 
-    [Header("??꾨읃??")]
+    [Header("??熬곣뫁???")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
     protected override void Awake()
     {
-        base.Awake();  // ?봔筌??????쇱벥 ?λ뜃由???믪눘? ??쎈뻬
+        base.Awake();  // ??딅텑?癲????????源낃틖 ?縕?猿녿뎨???沃섅굥?? ????덈틖
 
-        // ??꾨읃???紐껊굶???λ뜃由??
+        // ??熬곣뫁????嶺뚮ㅎ?볠뤃???縕?猿녿뎨??
         if (effectsHandler == null)
         {
             effectsHandler = GetComponent<AnimationEventEffects>();

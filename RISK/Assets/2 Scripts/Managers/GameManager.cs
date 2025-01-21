@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public Transform playerPosition;
 
+    public MonsterSpwan spwaner;
+
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
         yield return new WaitUntil(() => !string.IsNullOrEmpty(player.NickName));
@@ -25,6 +27,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         FireBaseCharacterData playerData = JsonConvert.DeserializeObject<FireBaseCharacterData>(player.NickName);
 
         connectedPlayers.Add(playerData);
+
+        player.NickName = playerData.nickName;
 
         SyncAllPlayers();
     }
@@ -51,6 +55,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         yield return new WaitUntil(() => isGameReady);
         print("isGameReady!!! GOGOGOGO!!!!");
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
+        spwaner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
 
         FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
 
@@ -80,11 +85,12 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
 
+
         GameObject playerObj = null;
         switch (FirebaseManager.Instance.currentCharacterData.classType)
         {
             case ClassType.Warrior:
-                playerObj = PhotonNetwork.Instantiate("Warrior", playerPos, Quaternion.identity);
+                playerObj = PhotonNetwork.Instantiate("Warrior", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
                 playerObj.name = fireBaseCharacterData.nickName;
                 if (playerObj.TryGetComponent(out Warrior warrior))
                 {
@@ -92,7 +98,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 }
                 break;
             case ClassType.Destroyer:
-                playerObj = PhotonNetwork.Instantiate("Destroyer", playerPos, Quaternion.identity);
+                playerObj = PhotonNetwork.Instantiate("Destroyer", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
                 playerObj.name = playerStats.nickName;
                 if (playerObj.TryGetComponent(out Destroyer destroyer))
                 {
@@ -100,7 +106,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 }
                 break;
             case ClassType.Healer:
-                playerObj = PhotonNetwork.Instantiate("Healer", playerPos, Quaternion.identity);
+                playerObj = PhotonNetwork.Instantiate("Healer", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
                 playerObj.name = playerStats.nickName;
                 if (playerObj.TryGetComponent(out Healer healer))
                 {
@@ -108,7 +114,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 }
                 break;
             case ClassType.Mage:
-                playerObj = PhotonNetwork.Instantiate("Mage", playerPos, Quaternion.identity);
+                playerObj = PhotonNetwork.Instantiate("Mage", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
                 playerObj.name = playerStats.nickName;
                 if (playerObj.TryGetComponent(out Mage mage))
                 {
@@ -122,13 +128,15 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield break;
         }
 
-        while (true)
+        UnitManager.Instance.players.Clear();
+
+        foreach (var player in PhotonNetwork.CurrentRoom.Players)
         {
-            yield return new WaitForSeconds(5f);
-            print("SPAWN!!");
+            string name = player.Value.NickName;
+            UnitManager.Instance.players.Add(player.Value.GetPlayerNumber(), GameObject.Find(name));
         }
 
-        // Spawner Initiate
+        spwaner.SpawnStart();
     }
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
     {

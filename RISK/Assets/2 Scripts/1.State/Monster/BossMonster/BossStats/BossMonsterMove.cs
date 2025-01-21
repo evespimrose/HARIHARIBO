@@ -15,7 +15,10 @@ public class BossMonsterMove : BaseState<BossMonster>
 
     public override void Update(BossMonster monster)
     {
-        if (monster.isChase) monster.Move();
+        if (monster.isChase)
+        {
+            monster.Move();
+        }
         else
         {
             monster.bMHandler.ChangeState(typeof(BossMonsterIdle));

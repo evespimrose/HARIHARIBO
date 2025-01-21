@@ -139,6 +139,7 @@ public class FireBaseCharacterData
     public int atkperLv;
     public float maxExp;
     public float currExp;
+
     public float maxHp;
     public float moveSpeed;
     public float atk;

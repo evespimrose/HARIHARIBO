@@ -6,10 +6,12 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
 {
     public NormalMonsterRangeAtk(StateHandler<NormalMonster> handler) : base(handler) { }
 
+    public float rangeAtkDamage;
     public float atkHitTime = 0.6f;
 
     public override void Enter(NormalMonster monster)
     {
+        rangeAtkDamage = monster.atkDamage * 1f;
         Debug.Log("RangeAtk공격 시작");
         monster.animator.SetTrigger("Atk");
         monster.StartCoroutine(StartAtk(monster));
@@ -27,6 +29,7 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     private IEnumerator StartAtk(NormalMonster monster)
     {
         yield return new WaitForSeconds(atkHitTime);
+        monster.TargetLook(monster.target.position);
         Atk(monster);
         yield return new WaitUntil(() =>
         {
@@ -40,7 +43,7 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     private void Atk(NormalMonster monster)
     {
         GameObject bullet = monster.GetComponent<RangeShooter>().BulletSpwan();
-        bullet.GetComponent<RangeBullet>().Seting(monster.target.transform.position, monster.atkDamage);
+        bullet.GetComponent<RangeBullet>().Seting(monster.target.transform.position, rangeAtkDamage);
         monster.StartCoroutine(monster.AtkCoolTime());
     }
 }
