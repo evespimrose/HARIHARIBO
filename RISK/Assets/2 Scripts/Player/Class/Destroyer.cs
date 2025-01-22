@@ -85,6 +85,7 @@ public class Destroyer : Player
             stateHandler.Update();
             return;
         }
+        var dungeonUI = FindObjectOfType<DungeonUIController>();
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(DestroyerAttackState));
@@ -93,21 +94,25 @@ public class Destroyer : Player
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(DestroyerWSkill));
+            dungeonUI?.StartPCCooldown(0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(DestroyerESkill));
+            dungeonUI?.StartPCCooldown(1);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(DestroyerRSkill));
+            dungeonUI?.StartPCCooldown(2);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(DestroyerTSkill));
+            dungeonUI?.StartPCCooldown(3);
         }
 
         stateHandler.Update();

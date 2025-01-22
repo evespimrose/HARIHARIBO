@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,7 @@ public class DungeonUIController : MonoBehaviour
     [SerializeField] private Image bossHPBar;
     [SerializeField] private Image[] partyHPBars;
     [SerializeField] private Image playerHPBar;
+    [SerializeField] private GameObject joystickUI;
 
     [Header("Combat UI")]
     [SerializeField] private GameObject combatPanel;
@@ -21,28 +23,46 @@ public class DungeonUIController : MonoBehaviour
 
     [Header("Skill Icons & Cooldowns")]
     // 각 직업별 스킬 아이콘 (기본공격, W, E, R, T 순서로 5개)
-    [SerializeField] private Sprite[] warriorIcons;    // Size: 5
-    [SerializeField] private Sprite[] mageIcons;       // Size: 5
-    [SerializeField] private Sprite[] healerIcons;     // Size: 5
-    [SerializeField] private Sprite[] destroyerIcons;  // Size: 5
+    [SerializeField] private Sprite[] warriorIcons;    
+    [SerializeField] private Sprite[] mageIcons;       
+    [SerializeField] private Sprite[] healerIcons;     
+    [SerializeField] private Sprite[] destroyerIcons;  
 
     // 각 직업별 스킬 쿨타임 (W, E, R, T 순서로 4개)
-    [SerializeField] private float[] warriorCooldowns;   // Size: 4
-    [SerializeField] private float[] mageCooldowns;     // Size: 4
-    [SerializeField] private float[] healerCooldowns;   // Size: 4
-    [SerializeField] private float[] destroyerCooldowns; // Size: 4
+    [SerializeField] private float[] warriorCooldowns;   
+    [SerializeField] private float[] mageCooldowns;     
+    [SerializeField] private float[] healerCooldowns;   
+    [SerializeField] private float[] destroyerCooldowns;
+
+    [Header("PC UI Elements")]
+    [SerializeField] private GameObject pcSkillPanel;     
+    [SerializeField] private Image[] pcSkillIcons;        
+    [SerializeField] private Image[] pcCooldownOverlays;  
+    [SerializeField] private TMP_Text[] pcKeyBindTexts;    
+
 
     private float[] currentCooldowns;  // 현재 선택된 직업의 쿨타임 저장
-    private Player localPlayer; // 로컬 플레이어 참조 추가
+    private Player localPlayer; 
 
     private void Awake()
     {
-#if UNITY_ANDROID       
+#if UNITY_ANDROID
+        joystickUI?.SetActive(true);
         combatPanel?.SetActive(true);
-        SetupSkillIconsByClass();  
-        SetupButtons();            
+        pcSkillPanel?.SetActive(false);
+        SetupSkillIconsByClass();
+        SetupButtons();
 #else
+        joystickUI?.SetActive(false);
         combatPanel?.SetActive(false);
+        pcSkillPanel?.SetActive(true);
+#endif
+    }
+    private void Start()
+    {
+#if !UNITY_ANDROID
+        // Firebase 초기화 이후에 실행
+        SetupPCSkillUI();
 #endif
     }
 
@@ -50,6 +70,101 @@ public class DungeonUIController : MonoBehaviour
     public void SetPlayer(Player player)
     {
         localPlayer = player;
+    }
+
+    // PC 버전 UI 설정
+    private void SetupPCSkillUI()
+    {
+        ClassType currentClass = FirebaseManager.Instance.currentCharacterData.classType;
+        Sprite[] selectedIcons = null;
+        float[] selectedCooldowns = null;
+
+        // 직업에 따른 아이콘과 쿨타임 선택 (기존 switch문과 동일)
+        switch (currentClass)
+        {
+            case ClassType.Warrior:
+                selectedIcons = warriorIcons;
+                selectedCooldowns = warriorCooldowns;
+                break;
+            case ClassType.Mage:
+                selectedIcons = mageIcons;
+                selectedCooldowns = mageCooldowns;
+                break;
+            case ClassType.Healer:
+                selectedIcons = healerIcons;
+                selectedCooldowns = healerCooldowns;
+                break;
+            case ClassType.Destroyer:
+                selectedIcons = destroyerIcons;
+                selectedCooldowns = destroyerCooldowns;
+                break;
+        }
+
+        if (selectedIcons != null && pcSkillIcons.Length >= 4)
+        {
+            for (int i = 0; i < pcSkillIcons.Length; i++)
+            {
+                if (pcSkillIcons[i] != null)
+                {
+                    // 스킬 아이콘 설정
+                    pcSkillIcons[i].sprite = selectedIcons[i + 1];
+
+                    // 쿨다운 오버레이 설정
+                    if (i < pcCooldownOverlays.Length && pcCooldownOverlays[i] != null)
+                    {
+                        pcCooldownOverlays[i].gameObject.SetActive(true);
+                        pcCooldownOverlays[i].fillAmount = 0f;
+
+                        // 오버레이 이미지 색상 설정
+                        Color overlayColor = new Color(0, 0, 0, 0.7f);
+                        pcCooldownOverlays[i].color = overlayColor;
+                    }
+                }
+            }
+        
+        }
+
+        // 키 바인딩 텍스트 설정
+        if (pcKeyBindTexts.Length >= 4)
+        {
+            pcKeyBindTexts[0].text = "W";   // W 스킬
+            pcKeyBindTexts[1].text = "E";   // E 스킬
+            pcKeyBindTexts[2].text = "R";   // R 스킬
+            pcKeyBindTexts[3].text = "T";   // T 스킬
+        }
+
+        currentCooldowns = selectedCooldowns;
+    }
+
+    // PC 버전 쿨다운 시작 (Player 클래스에서 호출)
+    public void StartPCCooldown(int skillIndex)
+    {
+        if (skillIndex >= 0 && skillIndex < pcCooldownOverlays.Length)
+        {
+            StartCoroutine(PCCooldownRoutine(skillIndex));
+        }
+    }
+
+    // PC 버전 쿨다운 처리
+    private IEnumerator PCCooldownRoutine(int skillIndex)
+    {
+        float cooldownTime = currentCooldowns[skillIndex];
+        float cooldownReduction = FirebaseManager.Instance.currentCharacterData.coolRed;
+        cooldownTime *= (1 - (cooldownReduction * 0.01f));
+
+        float elapsed = 0;
+        pcCooldownOverlays[skillIndex].gameObject.SetActive(true);
+        pcCooldownOverlays[skillIndex].fillAmount = 1f;
+
+        while (elapsed < cooldownTime)
+        {
+            elapsed += Time.deltaTime;
+            pcCooldownOverlays[skillIndex].fillAmount = 1 - (elapsed / cooldownTime);
+            yield return null;
+        }
+
+        pcCooldownOverlays[skillIndex].fillAmount = 0;
+        pcCooldownOverlays[skillIndex].gameObject.SetActive(false);
     }
 
     // FirebaseManager의 캐릭터 데이터를 기반으로 스킬 아이콘과 쿨타임 설정
@@ -85,8 +200,6 @@ public class DungeonUIController : MonoBehaviour
         // 선택된 아이콘 설정
         if (selectedIcons != null)
         {
-            // 기본 공격 아이콘 (0번 인덱스)
-            basicAttackButton.image.sprite = selectedIcons[0];
 
             // 스킬 아이콘들 (1~4번 인덱스)
             for (int i = 0; i < skillButtons.Length; i++)
@@ -117,81 +230,38 @@ public class DungeonUIController : MonoBehaviour
             }
         });
 
-        // 스킬 버튼들 (W, E, R, T)
+        // 스킬 버튼들 설정
         if (skillButtons.Length >= 4)
         {
-            // W 스킬
-            skillButtons[0].onClick.AddListener(() => {
-                if (localPlayer != null && localPlayer.photonView.IsMine)
-                {
-                    localPlayer.SetSkillInProgress(true);
-                    if (localPlayer is Warrior)
-                        localPlayer.MobileChangeState(typeof(WarriorWSkill));
-                    else if (localPlayer is Mage)
-                        localPlayer.MobileChangeState(typeof(MageWSkill));
-                    else if (localPlayer is Healer)
-                        localPlayer.MobileChangeState(typeof(HealerWSkill));
-                    else if (localPlayer is Destroyer)
-                        localPlayer.MobileChangeState(typeof(DestroyerWSkill));
-                    StartCooldown(0);
-                }
-            });
-
-            // E 스킬
-            skillButtons[1].onClick.AddListener(() => {
-                if (localPlayer != null && localPlayer.photonView.IsMine)
-                {
-                    localPlayer.SetSkillInProgress(true);
-                    if (localPlayer is Warrior)
-                        localPlayer.MobileChangeState(typeof(WarriorESkill));
-                    else if (localPlayer is Mage)
-                        localPlayer.MobileChangeState(typeof(MageESkill));
-                    else if (localPlayer is Healer)
-                        localPlayer.MobileChangeState(typeof(HealerESkill));
-                    else if (localPlayer is Destroyer)
-                        localPlayer.MobileChangeState(typeof(DestroyerESkill));
-                    StartCooldown(1);
-                }
-            });
-
-            // R 스킬
-            skillButtons[2].onClick.AddListener(() => {
-                if (localPlayer != null && localPlayer.photonView.IsMine)
-                {
-                    localPlayer.SetSkillInProgress(true);
-                    if (localPlayer is Warrior)
-                        localPlayer.MobileChangeState(typeof(WarriorRSkill));
-                    else if (localPlayer is Mage)
-                        localPlayer.MobileChangeState(typeof(MageRSkill));
-                    else if (localPlayer is Healer)
-                        localPlayer.MobileChangeState(typeof(HealerRSkill));
-                    else if (localPlayer is Destroyer)
-                        localPlayer.MobileChangeState(typeof(DestroyerRSkill));
-                    StartCooldown(2);
-                }
-            });
-
-            // T 스킬
-            skillButtons[3].onClick.AddListener(() => {
-                if (localPlayer != null && localPlayer.photonView.IsMine)
-                {
-                    localPlayer.SetSkillInProgress(true);
-                    // 메이지의 경우 특수 처리
-                    if (localPlayer is Mage)
-                        ((Mage)localPlayer).SetTSkillTarget();
-
-                    if (localPlayer is Warrior)
-                        localPlayer.MobileChangeState(typeof(WarriorTSkill));
-                    else if (localPlayer is Mage)
-                        localPlayer.MobileChangeState(typeof(MageTSkill));
-                    else if (localPlayer is Healer)
-                        localPlayer.MobileChangeState(typeof(HealerTSkill));
-                    else if (localPlayer is Destroyer)
-                        localPlayer.MobileChangeState(typeof(DestroyerTSkill));
-                    StartCooldown(3);
-                }
-            });
+            SetupSkillButton(0, "W");
+            SetupSkillButton(1, "E");
+            SetupSkillButton(2, "R");
+            SetupSkillButton(3, "T");
         }
+    }
+
+    private void SetupSkillButton(int index, string skillKey)
+    {
+        skillButtons[index].onClick.AddListener(() => {
+            if (localPlayer != null && localPlayer.photonView.IsMine)
+            {
+                localPlayer.SetSkillInProgress(true);
+
+                // 메이지 T스킬 특수 처리
+                if (skillKey == "T" && localPlayer is Mage)
+                {
+                    ((Mage)localPlayer).SetTSkillTarget();
+                }
+
+                string skillTypeName = $"{localPlayer.GetType().Name}{skillKey}Skill";
+                Type skillType = Type.GetType(skillTypeName);
+                if (skillType != null)
+                {
+                    localPlayer.MobileChangeState(skillType);
+                    StartCooldown(index);
+                }
+            }
+        });
     }
 
     // 쿨다운 시작

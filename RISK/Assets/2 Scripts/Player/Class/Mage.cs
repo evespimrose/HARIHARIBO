@@ -115,6 +115,7 @@ public class Mage : Player
             stateHandler.Update();
             return;
         }
+        var dungeonUI = FindObjectOfType<DungeonUIController>();
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(MageAttackState));
@@ -123,21 +124,25 @@ public class Mage : Player
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(MageWSkill));
+            dungeonUI?.StartPCCooldown(0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(MageESkill));
+            dungeonUI?.StartPCCooldown(1);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(MageRSkill));
+            dungeonUI?.StartPCCooldown(2);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(MageTSkill));
+            dungeonUI?.StartPCCooldown(3);
         }
 
         stateHandler.Update();

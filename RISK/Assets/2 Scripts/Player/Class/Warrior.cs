@@ -84,6 +84,8 @@ public class Warrior : Player
             stateHandler.Update();
             return;
         }
+
+        var dungeonUI = FindObjectOfType<DungeonUIController>();
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(WarriorAttackState));
@@ -92,21 +94,25 @@ public class Warrior : Player
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(WarriorWSkill));
+            dungeonUI?.StartPCCooldown(0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(WarriorESkill));
+            dungeonUI?.StartPCCooldown(1);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(WarriorRSkill));
+            dungeonUI?.StartPCCooldown(2);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(WarriorTSkill));
+            dungeonUI?.StartPCCooldown(3);
         }
 
         stateHandler.Update();

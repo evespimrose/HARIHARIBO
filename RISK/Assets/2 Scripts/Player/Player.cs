@@ -126,10 +126,13 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
         if (photonView.IsMine)
         {
-            if (GameObject.Find("Outline").TryGetComponent(out bl_Joystick joystick))
-            {
-                InitializeJoystick(joystick);
-            }
+#if UNITY_ANDROID
+        // 모바일에서만 조이스틱 초기화
+        if (GameObject.Find("Outline").TryGetComponent(out bl_Joystick joystick))
+        {
+            InitializeJoystick(joystick);
+        }
+#endif
         }
         else
         {
@@ -179,17 +182,14 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
     public Vector3 GetMove()
     {
-        if (isMobile)
-        {
-            if (joystick == null) return Vector3.zero;
-            return new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
-        }
-        else
-        {
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
-            return new Vector3(horizontal, 0f, vertical).normalized;
-        }
+#if UNITY_ANDROID
+    if (joystick == null) return Vector3.zero;
+    return new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
+#else
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        return new Vector3(horizontal, 0f, vertical).normalized;
+#endif
     }
 
     public void Move(Vector3 direction)

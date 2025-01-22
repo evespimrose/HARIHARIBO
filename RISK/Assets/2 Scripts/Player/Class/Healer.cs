@@ -98,6 +98,7 @@ public class Healer : Player
             stateHandler.Update();
             return;
         }
+        var dungeonUI = FindObjectOfType<DungeonUIController>();
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(HealerAttackState));
@@ -106,21 +107,25 @@ public class Healer : Player
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(HealerWSkill));
+            dungeonUI?.StartPCCooldown(0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(HealerESkill));
+            dungeonUI?.StartPCCooldown(1);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(HealerRSkill));
+            dungeonUI?.StartPCCooldown(2);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(HealerTSkill));
+            dungeonUI?.StartPCCooldown(3);
         }
 
         stateHandler.Update();
