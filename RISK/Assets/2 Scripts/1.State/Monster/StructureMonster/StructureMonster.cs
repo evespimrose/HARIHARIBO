@@ -38,6 +38,8 @@ public class StructureMonster : Monster
         {
             sMHandler.ChangeState(typeof(StructureStun));
         }
+        float newYRotation = model.transform.eulerAngles.y - 90f * Time.deltaTime;
+        model.transform.rotation = Quaternion.Euler(model.transform.eulerAngles.x, newYRotation, model.transform.eulerAngles.z);
         sMHandler.Update();
     }
 
