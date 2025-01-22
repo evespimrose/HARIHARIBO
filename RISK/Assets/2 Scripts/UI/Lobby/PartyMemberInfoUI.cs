@@ -14,6 +14,7 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI classText;
     [SerializeField] private Image partyLeaderIcon;
+    [SerializeField] private Image memberImage;
 
     private PhotonRealtimePlayer player;
     private PlayerStats playerStats;

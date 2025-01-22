@@ -8,10 +8,6 @@ using UnityEngine.UI;
 
 public class CreateCharacterPanel : MonoBehaviour
 {
-    [SerializeField]
-    private List<ClassNameToCharacterData> classDataList;
-
-    public Dictionary<ClassType, CharacterData> characterDataDic = new Dictionary<ClassType, CharacterData>();
 
     public Image characterModelImage;
     public Image characterImage;
@@ -29,33 +25,32 @@ public class CreateCharacterPanel : MonoBehaviour
 
     public Action<ClassType> UpdateInfo;
 
+    private Dictionary<ClassType, CharacterData> characterDataDictionary = new Dictionary<ClassType, CharacterData>();
+
     private void Awake()
     {
         UpdateInfo += SwapInfoText;
+        characterDataDictionary = GameManager.Instance.characterDataDic;
 
-        foreach (var classdata in classDataList)
+        foreach (var classdata in characterDataDictionary)
         {
-            if (!characterDataDic.ContainsKey(classdata.classType))
+            GameObject characterInfo = Instantiate(characterInfoPrefab, characterInfoListTransform);
+            if (characterInfo.TryGetComponent(out CharacterInfoUI characterInfoUI))
             {
-                characterDataDic.Add(classdata.classType, classdata.characterData);
+                characterInfoUI.classType = classdata.Key;
+                characterInfoUI.classImage.sprite = characterDataDictionary[classdata.Key].headSprite;
 
-                GameObject characterInfo = Instantiate(characterInfoPrefab, characterInfoListTransform);
-                if (characterInfo.TryGetComponent(out CharacterInfoUI characterInfoUI))
+                if (characterInfo.TryGetComponent(out Button button))
                 {
-                    characterInfoUI.classType = classdata.classType;
-                    characterInfoUI.classImage.sprite = characterDataDic[classdata.classType].headSprite;
-
-                    if (characterInfo.TryGetComponent(out Button button))
+                    button.onClick.AddListener(() =>
                     {
-                        button.onClick.AddListener(() =>
-                        {
-                            currentClassType = characterInfoUI.classType;
+                        currentClassType = characterInfoUI.classType;
 
-                            UpdateInfo?.Invoke(currentClassType);
-                        });
-                    }
+                        UpdateInfo?.Invoke(currentClassType);
+                    });
                 }
             }
+
         }
         currentClassType = ClassType.Warrior;
         currentClassNameText.text = currentClassType.ToString();
@@ -67,7 +62,7 @@ public class CreateCharacterPanel : MonoBehaviour
 
     private void SwapInfoText(ClassType classType)
     {
-        characterDataDic.TryGetValue(classType, out CharacterData cd);
+        characterDataDictionary.TryGetValue(classType, out CharacterData cd);
         currentClassDescriptionText.text = cd.description;
         currentClassCharacteristicText.text = cd.characteristic;
         currentClassNameText.text = classType.ToString();

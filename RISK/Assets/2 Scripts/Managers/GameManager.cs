@@ -25,6 +25,26 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     public RiskUIController riskUIController;
 
     public ChatScrollController chat;
+
+    [SerializeField]
+    private List<ClassNameToCharacterData> classDataList;
+
+    public Dictionary<ClassType, CharacterData> characterDataDic = new Dictionary<ClassType, CharacterData>();
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        foreach (var classdata in classDataList)
+        {
+            if (!characterDataDic.ContainsKey(classdata.classType))
+            {
+                characterDataDic.Add(classdata.classType, classdata.characterData);
+
+            }
+        }
+    }
+
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
         yield return new WaitUntil(() => !string.IsNullOrEmpty(player.NickName));
