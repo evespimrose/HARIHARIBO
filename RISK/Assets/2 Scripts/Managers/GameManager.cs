@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public RiskUIController riskUIController;
 
+    public ChatScrollController chat;
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
         yield return new WaitUntil(() => !string.IsNullOrEmpty(player.NickName));

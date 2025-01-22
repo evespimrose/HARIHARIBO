@@ -46,6 +46,7 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
     public override void OnEnable()
     {
         base.OnEnable();
+        GameManager.Instance.chat.gameObject.SetActive(true);
     }
 
     public IEnumerator Start()

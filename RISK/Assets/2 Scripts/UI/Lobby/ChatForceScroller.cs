@@ -9,7 +9,6 @@ using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using ExitGames.Client.Photon;
-using static UnityEngine.Rendering.DebugUI;
 
 public class ChatScrollController : PhotonSingletonManager<ChatScrollController>, IChatClientListener
 {
@@ -18,6 +17,7 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
     public TMP_InputField chatInputField;
     public Button sendButton;
     public Button hideButton;
+    public Button showButton;
     public TextMeshProUGUI hideText;
 
     public TextMeshProUGUI playerList;
@@ -26,20 +26,30 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
     private ChatClient chatClient;
     private string currentChannelName;
     public TextMeshProUGUI chatLogText;
+    public GameObject Users;
 
     protected override void Awake()
     {
         base.Awake();
 
+
         sendButton.onClick.AddListener(OnSendButtonClick);
         hideButton.onClick.AddListener(OnHideButtonClick);
+        showButton.onClick.AddListener(OnShowButtonClick);
 
         chatInputField.onSubmit.AddListener(OnSendButtonClick);
 
         chatLogText.fontSize = 24f;
+
+        gameObject.SetActive(false);
     }
 
     private void OnHideButtonClick()
+    {
+        Users.gameObject.SetActive(!Users.gameObject.activeSelf);
+    }
+
+    private void OnShowButtonClick()
     {
         if (gameObject.activeSelf)
             hideText.text = "+";
@@ -190,12 +200,12 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
 
     void IChatClientListener.OnSubscribed(string[] channels, bool[] results)
     {
-        AddMessage(string.Format("채널 입장 ({0})", string.Join(",", channels)));
+        AddMessage(string.Format("梨꾨꼸 ?낆옣 ({0})", string.Join(",", channels)));
     }
 
     void IChatClientListener.OnUnsubscribed(string[] channels)
     {
-        AddMessage(string.Format("채널 퇴장 ({0})", string.Join(",", channels)));
+        AddMessage(string.Format("梨꾨꼸 ?댁옣 ({0})", string.Join(",", channels)));
     }
 
     void IChatClientListener.OnGetMessages(string channelName, string[] senders, object[] messages)
