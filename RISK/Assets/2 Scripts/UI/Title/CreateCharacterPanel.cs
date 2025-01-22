@@ -219,5 +219,12 @@ public class FireBaseCharacterData
         cri = 0f;
         criDmg = 0f;
         coolRed = 0f;
+
+        maxHpUpgradeLevel = 0;
+        atkUpgradeLevel = 0;
+        criUpgradeLevel = 0;
+        criDmgUpgradeLevel = 0;
+        hpRegUpgradeLevel = 0;
+        coolRedUpgradeLevel = 0;
     }
 }

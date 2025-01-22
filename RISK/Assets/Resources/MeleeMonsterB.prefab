@@ -782,8 +782,6 @@ MonoBehaviour:
   atkRange: 10
   atkDelay: 5
   curHp: 10
-  exp: 0
-  won: 0
   isAtk: 0
   isAirborne: 0
   isStun: 0
@@ -834,31 +832,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 0
-    Name: Move
-  - Type: 9
-    SynchronizeType: 0
-    Name: Atk
-  - Type: 9
-    SynchronizeType: 0
-    Name: Idle
-  - Type: 9
-    SynchronizeType: 0
-    Name: Airborne
-  - Type: 4
-    SynchronizeType: 0
-    Name: Die
-  - Type: 4
-    SynchronizeType: 0
-    Name: Stun
-  - Type: 9
-    SynchronizeType: 0
-    Name: Hit
-  m_SynchronizeLayers:
-  - SynchronizeType: 0
-    LayerIndex: 0
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &2076977966341379181
 GameObject:
   m_ObjectHideFlags: 0
