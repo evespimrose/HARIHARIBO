@@ -46,6 +46,5 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     {
         GameObject bullet = monster.GetComponent<RangeShooter>().BulletSpwan();
         bullet.GetComponent<RangeBullet>().Seting(monster.target.transform.position, rangeAtkDamage);
-        monster.StartCoroutine(monster.AtkCoolTime());
     }
 }
