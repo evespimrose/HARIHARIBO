@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 888012299233796058}
   - component: {fileID: 1895782654798138395}
   - component: {fileID: 3543262989931255540}
-  - component: {fileID: 8604757329203367953}
   - component: {fileID: 7263771167986524640}
   m_Layer: 6
   m_Name: StructureMonster
@@ -103,6 +102,8 @@ MonoBehaviour:
   monsterType: 2
   target: {fileID: 0}
   model: {fileID: 7121646202909548812}
+  hitSoundClips: {fileID: 8300000, guid: 414fea2733048bf4b94f694a2c14759d, type: 3}
+  dieSoundClips: {fileID: 8300000, guid: efa023f02aeeb444d843dd6271ee173a, type: 3}
   monsterState: {fileID: 11400000, guid: 9ed6a83cdc30f444aa40ce293a6a8974, type: 2}
   atkDamage: 0
   moveSpeed: 1
@@ -167,27 +168,10 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 8604757329203367953}
-  sceneViewId: 1
+  ObservedComponents: []
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &8604757329203367953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7121646202909548812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
 --- !u!65 &7263771167986524640
 BoxCollider:
   m_ObjectHideFlags: 0

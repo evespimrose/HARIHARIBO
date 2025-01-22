@@ -11,9 +11,11 @@ public class GameSettingUI : UIPopup
     public Button noButton;
     public GameObject confirmExitPanel;
 
-    public Slider volumeSlider;
+    public Slider backgroundMusicSlider;
+    public Slider effectSoundSlider;
 
-    // Start is called before the first frame update
+    private GameSoundManager gameSound;
+
     void Start()
     {
         gameExitButton.onClick.AddListener(ConfirmExit);
@@ -21,11 +23,13 @@ public class GameSettingUI : UIPopup
         noButton.onClick.AddListener(CancelExit);
         confirmExitPanel.SetActive(false);
 
+        gameSound = GameSoundManager.Instance;
+
+        backgroundMusicSlider.onValueChanged.AddListener(OnBackgroundMusicVolumeChanged);
+        effectSoundSlider.onValueChanged.AddListener(OnEffectSoundVolumeChanged);
         VolumeSeting();
-        volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -33,24 +37,31 @@ public class GameSettingUI : UIPopup
 
     public void VolumeSeting()
     {
-        if (PlayerPrefs.HasKey("Volume"))
+        if (gameSound != null)
         {
-            float savedVolume = PlayerPrefs.GetFloat("Volume");
-            AudioListener.volume = savedVolume;
-            volumeSlider.value = savedVolume;
-        }
-        else
-        {
-            AudioListener.volume = 0.5f;
-            volumeSlider.value = 0.5f;
+            // 배경음악 볼륨 설정
+            backgroundMusicSlider.value = PlayerPrefs.GetFloat("BackgroundMusicVolume", 0.5f);
+            // 효과음 볼륨 설정
+            effectSoundSlider.value = PlayerPrefs.GetFloat("EffectSoundVolume", 0.5f);
         }
     }
 
-    public void OnVolumeChanged(float volume)
+    // 배경음악 볼륨 슬라이더 변경
+    public void OnBackgroundMusicVolumeChanged(float volume)
     {
-        AudioListener.volume = volume;
-        PlayerPrefs.SetFloat("Volume", volume);
-        Debug.Log("볼륨 변경: " + volume);
+        if (gameSound != null)
+        {
+            gameSound.SetBackgroundMusicVolume(volume);  // 배경음악 볼륨 설정
+        }
+    }
+
+    // 효과음 볼륨 슬라이더 변경
+    public void OnEffectSoundVolumeChanged(float volume)
+    {
+        if (gameSound != null)
+        {
+            gameSound.SetEffectSoundVolume(volume); // 전체 효과음 볼륨 설정
+        }
     }
 
     public void ConfirmExit()

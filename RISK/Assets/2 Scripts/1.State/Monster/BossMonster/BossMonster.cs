@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -11,19 +12,29 @@ public class BossMonster : Monster
 
     [Tooltip("모델링의 애니메이터")]
     public Animator animator;
+    [Header("공격 관련")]
+    public AudioClip[] atkSoundClips;
+    [Header("스킬1 관련")]
+    public AudioClip[] skillASoundClips;
     [Header("스킬2 관련")]
+    public AudioClip[] skillBSoundClips;
     public GameObject[] skillBParticle;
     public GameObject[] skillBFieldParticle;
     [Header("스킬3 관련")]
+    public AudioClip skillCSoundClips;
     public GameObject skillCPrefab;
     [Header("스킬4 관련")]
+    public AudioClip skillDSoundClips;
     public GameObject skillDPrefab;
     [Header("스킬5 관련")]
+    public AudioClip[] skillESoundClips;
     public GameObject skillEPrefab;
     [Header("스킬6 관련")]
+    public AudioClip skillFSoundClips;
     public GameObject skillFPrefabA;
     public GameObject skillFPrefabB;
     [Header("스킬7 관련")]
+    public AudioClip skillGSoundClips;
     public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;

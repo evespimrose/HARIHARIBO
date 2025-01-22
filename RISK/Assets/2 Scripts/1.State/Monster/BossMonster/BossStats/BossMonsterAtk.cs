@@ -55,16 +55,19 @@ public class BossMonsterAtk : BaseState<BossMonster>
         monster.TargetLook(monster.target.position);
 
         // 첫 번째 공격 - AtkA
+        GameSoundManager.Instance.PlayBossEffectSound(monster.atkSoundClips[0]);
         monster.animator.SetTrigger("AtkA");
         yield return new WaitForSeconds(atkAHitTime); // 공격 판정 딜레이
         AttackHit(monster, 105f, damageA); // 공격 판정
 
         // 두 번째 공격 - AtkB
         yield return new WaitForSeconds(atkBHitTime); // 공격 판정 딜레이
+        GameSoundManager.Instance.PlayBossEffectSound(monster.atkSoundClips[1]);
         AttackHit(monster, 45f, damageB); // 공격 판정
 
         // 세 번째 공격 - AtkC
-        yield return new WaitForSeconds(atkCHitTime); // 공격 판정 딜레이
+        yield return new WaitForSeconds(atkCHitTime - 0.2f); // 공격 판정 딜레이
+        GameSoundManager.Instance.PlayBossEffectSound(monster.atkSoundClips[2]);
         AttackHit(monster, 180f, damageC); // 공격 판정
 
         //전체애니메이션 종료

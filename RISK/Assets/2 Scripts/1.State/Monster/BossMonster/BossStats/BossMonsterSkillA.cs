@@ -48,11 +48,13 @@ public class BossMonsterSkillA : BaseState<BossMonster>
         yield return new WaitForSeconds(startDelay);
         monster.TargetLook(monster.target.position);
 
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillASoundClips[0]);
         monster.animator.SetTrigger("SkillA1");
         yield return new WaitForSeconds(atkAHitTime); 
         AttackHit(monster, 1, damageA); 
 
         yield return new WaitForSeconds(atkBHitTime);
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillASoundClips[1]);
 
         AttackHit(monster, 2, damageB); 
         yield return new WaitForSeconds(endTime);

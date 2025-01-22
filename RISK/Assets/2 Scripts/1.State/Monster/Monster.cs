@@ -22,6 +22,9 @@ public class Monster : MonoBehaviour, ITakedamage
     public Transform target;
     protected Rigidbody rb;
     public GameObject model;
+    [Tooltip("사운드")]
+    public AudioClip hitSoundClips;
+    public AudioClip dieSoundClips;
 
     [Header("몬스터 스텟")]
     [Tooltip("유닛스텟")]
@@ -155,10 +158,12 @@ public class Monster : MonoBehaviour, ITakedamage
     public virtual void Takedamage(float damage)
     {
         if (false == PhotonNetwork.IsMasterClient) return;
+        GameSoundManager.Instance.PlayMonsterEffectSound(hitSoundClips);
         curHp -= Mathf.RoundToInt(damage);
         if (curHp <= 0 && !isDie)
         {
             isDie = true;
+            GameSoundManager.Instance.PlayMonsterEffectSound(dieSoundClips);
             DieStatChange();
         }
     }
