@@ -13,10 +13,7 @@ public class GameSettingClose : MonoBehaviour
     void Start()
     {
         closeButton = this.gameObject.GetComponent<Button>();
-        if (PanelManager.Instance == null)
-        {
-            closeButton.onClick.AddListener(CloseSettingPanel);
-        }
+        closeButton.onClick.AddListener(CloseSettingPanel);
     }
 
     // Update is called once per frame
