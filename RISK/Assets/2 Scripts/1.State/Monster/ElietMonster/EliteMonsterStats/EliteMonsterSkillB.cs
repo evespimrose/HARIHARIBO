@@ -23,7 +23,6 @@ public class EliteMonsterSkillB : BaseState<EliteMonster>
 
     public override void Exit(EliteMonster monster)
     {
-        monster.AtkEnd();
         Debug.Log("SkillB 종료");
         monster.StopCoroutine(action);
     }

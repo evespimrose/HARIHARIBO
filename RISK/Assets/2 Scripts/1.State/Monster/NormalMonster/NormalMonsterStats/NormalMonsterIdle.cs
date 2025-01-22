@@ -17,7 +17,7 @@ public class NormalMonsterIdle : BaseState<NormalMonster>
     {
         if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            monster.isAtk = true;
+            monster.StartCoroutine(monster.AtkCoolTime());
             switch (monster.monsterType)
             {
                 case Monster.MonsterType.Melee:
