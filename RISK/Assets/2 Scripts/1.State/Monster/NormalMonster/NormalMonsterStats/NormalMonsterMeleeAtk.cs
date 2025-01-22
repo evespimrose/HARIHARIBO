@@ -68,6 +68,5 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
                 }
             }
         }
-        monster.StartCoroutine(monster.AtkCoolTime());
     }
 }

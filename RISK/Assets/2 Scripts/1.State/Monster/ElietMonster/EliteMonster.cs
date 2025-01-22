@@ -99,9 +99,10 @@ public class EliteMonster : Monster
 
     public IEnumerator AtkCoolTime()
     {
-        Debug.Log("공격쿨타임 시작");
+        isAtk = true;
+        Debug.Log("쿨타임 시작");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("공격쿨타임 종료");
+        Debug.Log("쿨타임 종료");
         isAtk = false;
     }
 
