@@ -93,7 +93,7 @@ public class RiskUIController : MonoBehaviour
         // 기존 카드 제거
         foreach (var card in riskCards)
         {
-            Destroy(card);
+            DestroyImmediate(card);
         }
         riskCards.Clear();
 

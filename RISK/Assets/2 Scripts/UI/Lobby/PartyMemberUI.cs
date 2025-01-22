@@ -34,7 +34,7 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        gameStartButton.interactable = false == PhotonNetwork.IsMasterClient;
+        gameStartButton.interactable = !false == PhotonNetwork.IsMasterClient;
 
         if (partyMemberContainer.childCount != GameManager.Instance.connectedPlayers.Count)
         {

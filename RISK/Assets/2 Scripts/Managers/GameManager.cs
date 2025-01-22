@@ -149,9 +149,14 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     {
         while (true)
         {
-            //spawner cour 끝날때가지 대기
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
             // riskUI enable
+            print("All Wave Launched....");
+
+            yield return new WaitUntil(() => UnitManager.Instance.monsters.Count <= 0);
+
+            print("All Monsters Dead || Time Out....");
+
 
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
