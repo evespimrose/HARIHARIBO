@@ -1090,7 +1090,6 @@ GameObject:
   - component: {fileID: 307003426}
   - component: {fileID: 307003425}
   - component: {fileID: 307003424}
-  - component: {fileID: 307003423}
   - component: {fileID: 307003428}
   m_Layer: 5
   m_Name: SetingButton
@@ -1099,22 +1098,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &307003423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307003422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6e10243280b938419e5f1a119789838, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backgroundMusicSource: {fileID: 2086311178}
-  bossEffectSoundSource: {fileID: 0}
-  monsterEffectSoundSources: []
-  backgroundMusicClip: {fileID: 0}
 --- !u!114 &307003424
 MonoBehaviour:
   m_ObjectHideFlags: 0

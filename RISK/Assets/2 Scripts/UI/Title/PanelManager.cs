@@ -23,7 +23,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public LobbyPanel lobby;
 
     public GameSettingUI gameSetingUI;
-    public Button setingUIButton;
 
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
@@ -56,7 +55,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
         {
             { "Popup", popup.gameObject },
             { "TwoButtonPopup", twoButtonPopup.gameObject },
-            { "GameSetting", gameSetingUI.gameObject }
         };
 
         PanelOpen("Login");
@@ -64,7 +62,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        setingUIButton.onClick.AddListener(() => { PopupOpen<GameSettingUI>(); });
+        
     }
 
     private void Update()
