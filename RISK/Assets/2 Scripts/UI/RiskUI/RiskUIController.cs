@@ -24,14 +24,10 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     private void Start()
     {
         if (surrenderButton != null)
-        {
             surrenderButton.onClick.AddListener(OnSurrenderClick);
-        }
 
         if (PhotonNetwork.IsMasterClient)
-        {
             InitializeRiskData();
-        }
     }
 
     private void InitializeRiskData()

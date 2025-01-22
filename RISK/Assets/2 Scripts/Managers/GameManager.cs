@@ -9,6 +9,7 @@ using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using Photon.Pun.UtilityScripts;
 using System;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     public RiskUIController riskUIController;
 
     public ChatScrollController chat;
+
+    private Canvas persistentCanvas;
 
     [SerializeField]
     private List<ClassNameToCharacterData> classDataList;
@@ -43,6 +46,36 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
             }
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void CreatePersistentCanvas()
+    {
+        GameObject canvasObject = new GameObject("PersistentCanvas");
+        persistentCanvas = canvasObject.AddComponent<Canvas>();
+        canvasObject.AddComponent<CanvasScaler>();
+        canvasObject.AddComponent<GraphicRaycaster>();
+
+        persistentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        DontDestroyOnLoad(canvasObject);
+
+        transform.SetParent(persistentCanvas.transform, false);
+    }
+
+    public void AttachToNewCanvas(Canvas newCanvas)
+    {
+        // 새 Canvas에 UI 오브젝트를 연결
+        if (chat != null && newCanvas != null)
+        {
+            chat.transform.SetParent(newCanvas.transform, false);
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Canvas newCanvas = FindObjectOfType<Canvas>();
+        AttachToNewCanvas(newCanvas);
     }
 
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
