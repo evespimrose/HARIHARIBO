@@ -94,6 +94,8 @@ public class SelectCharacterPanel : MonoBehaviour
 
         characterDatalist = await FirebaseManager.Instance.LoadCharacterDataList();
 
+        Dictionary<ClassType, CharacterData> characterdatadic = PanelManager.Instance.createCharacter.characterDataDic;
+
         if (characterDatalist != null)
         {
             foreach (var data in characterDatalist)
@@ -105,7 +107,7 @@ public class SelectCharacterPanel : MonoBehaviour
                     {
                         characterSelectButton.nickNameText.text = data.nickName;
                         characterSelectButton.levelText.text = data.level.ToString();
-                        //characterSelectButton.characterImage.sprite = 
+                        characterSelectButton.characterImage.sprite = characterdatadic[data.classType].headSprite;
                     }
                     if (characterData.TryGetComponent(out Button databutton))
                     {
@@ -114,7 +116,7 @@ public class SelectCharacterPanel : MonoBehaviour
                             levelText.text = characterSelectButton.levelText.text;
                             nickNameText.text = characterSelectButton.nickNameText.text;
                             currentCharacterData = data;
-                            //characterModelImage = data.classType.ToString();
+                            characterModelImage.sprite = characterdatadic[data.classType].sprite;
                         });
                     }
                     characterSelectDic.Add(data.nickName, characterData);

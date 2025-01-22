@@ -109284,8 +109284,6 @@ MonoBehaviour:
   atkRange: 0
   atkDelay: 0
   curHp: 0
-  exp: 0
-  won: 0
   isAtk: 0
   isAirborne: 0
   isStun: 0
