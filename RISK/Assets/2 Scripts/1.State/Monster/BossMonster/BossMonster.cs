@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BossMonster : Monster
 {
+    public string bossName = "진광대왕";
+    
     [Header("몬스터 타겟 및 모델")]
     protected Collider col;
     public StateHandler<BossMonster> bMHandler;
