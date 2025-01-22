@@ -118,7 +118,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
     }
 
-    public async void CharacterDuplicationCheck(string nickName, Action<bool> callback)
+    public async void CharacterDuplicationCheck(string nickName, Action<bool> callback = null)
     {
         try
         {
@@ -132,7 +132,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                 {
                     foreach (var childSnapshot in userSnapshot.Children)
                     {
-                        string characterNickName = childSnapshot.Child("nickName").GetValue(true).ToString();
+                        string characterNickName = childSnapshot.GetValue(true).ToString();
                         if (characterNickName.Equals(nickName, StringComparison.OrdinalIgnoreCase))
                         {
                             isDuplicate = true;
