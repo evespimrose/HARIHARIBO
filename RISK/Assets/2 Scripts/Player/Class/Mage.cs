@@ -5,21 +5,21 @@ using UnityEngine;
 public class Mage : Player
 {
     [Header("筌띾뜄苡????쎄틛 ??쇱젟")]
-    [SerializeField] private float baseMaxHealth = 150f;
-    [SerializeField] private int baseHealthPerLevel = 15;
-    [SerializeField] private float baseAttackPower = 15f;
-    [SerializeField] private int baseAttackPerLevel = 3;
-    [SerializeField] private float baseMoveSpeed = 1f;
+    [SerializeField] private float baseMaxHealth;
+    [SerializeField] private int baseHealthPerLevel;
+    [SerializeField] private float baseAttackPower;
+    [SerializeField] private int baseAttackPerLevel;
+    [SerializeField] private float baseMoveSpeed;
 
     [Header("獄쎻뫗堉?& ???궗")]
-    [SerializeField, Range(0f, 1f)] private float baseDamageReduction = 0.2f;
-    [SerializeField] private float baseHealthRegen = 2f;
-    [SerializeField] private float baseRegenInterval = 1f;
+    [SerializeField, Range(0f, 1f)] private float baseDamageReduction;
+    [SerializeField] private float baseHealthRegen;
+    [SerializeField] private float baseRegenInterval;
 
     [Header("?곕떽? ??쎄틛")]
-    [SerializeField, Range(0f, 1f)] private float baseCriticalChance = 0.1f;
-    [SerializeField] private float baseCriticalDamage = 1.5f;
-    [SerializeField, Range(0f, 1f)] private float baseCooldownReduction = 0.1f;
+    [SerializeField, Range(0f, 1f)] private float baseCriticalChance;
+    [SerializeField] private float baseCriticalDamage;
+    [SerializeField, Range(0f, 1f)] private float baseCooldownReduction;
 
     [Header("??꾨읃??")]
     [SerializeField] private AnimationEventEffects effectsHandler;

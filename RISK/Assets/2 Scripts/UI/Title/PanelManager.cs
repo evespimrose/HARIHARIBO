@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 
@@ -20,6 +21,9 @@ public class PanelManager : MonoBehaviourPunCallbacks
     public PartyMemberUI partyMemberUI;
     public CharacterUpgradeUI characterUpgradeUI;
     public LobbyPanel lobby;
+
+    public GameSettingUI gameSetingUI;
+    public Button setingUIButton;
 
     public PopupPanel popup;
     public TwoButtonPopupPanel twoButtonPopup;
@@ -51,10 +55,21 @@ public class PanelManager : MonoBehaviourPunCallbacks
         popupDic = new Dictionary<string, GameObject>()
         {
             { "Popup", popup.gameObject },
-            { "TwoButtonPopup", twoButtonPopup.gameObject }
+            { "TwoButtonPopup", twoButtonPopup.gameObject },
+            { "GameSetting", gameSetingUI.gameObject }
         };
 
         PanelOpen("Login");
+    }
+
+    private void Start()
+    {
+        setingUIButton.onClick.AddListener(() => { PopupOpen<GameSettingUI>(); });
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void PanelOpen(string panelName)
@@ -139,10 +154,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     //{
     //    //room.JoinPlayer(newPlayer);
     //}
-    //public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
-    //{
-    //    //room.LeavePlayer(otherPlayer);
-    //}
+
 
     public override void OnRoomPropertiesUpdate(HashTable properties)
     {
