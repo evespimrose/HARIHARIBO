@@ -907,6 +907,7 @@ GameObject:
   - component: {fileID: 5641612047003501743}
   - component: {fileID: 7076437767997635359}
   - component: {fileID: 6500686467150062643}
+  - component: {fileID: 3562597346759995339}
   m_Layer: 5
   m_Name: RiskCard
   m_TagString: Untagged
@@ -1003,6 +1004,32 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3562597346759995339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4410840156325137377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d8a5ffac3f7c9478ab50aa57cc465a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  riskIcon: {fileID: 8685325812160013178}
+  riskNameText: {fileID: 1976642807837534162}
+  descriptionText: {fileID: 7618016667138824124}
+  goldMultiplierText: {fileID: 770601874048522461}
+  expectedGoldText: {fileID: 6534495182413213045}
+  playerVoteImages:
+  - {fileID: 2114216008650127367}
+  - {fileID: 2823918381286284031}
+  - {fileID: 4289110567100044890}
+  - {fileID: 7464901236999224319}
+  selectButton: {fileID: 2326588395277937074}
+  cancelButton: {fileID: 4963602480075388996}
+  selectButtonText: {fileID: 4060160423965204684}
+  cancelButtonText: {fileID: 7310113620751334473}
 --- !u!1 &4813670121526563729
 GameObject:
   m_ObjectHideFlags: 0

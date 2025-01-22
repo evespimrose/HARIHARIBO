@@ -21,6 +21,7 @@ public class DestroyerIdleState : BaseState<Player>
             return;
         }
 
+        var dungeonUI = GameObject.FindObjectOfType<DungeonUIController>();
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -31,24 +32,28 @@ public class DestroyerIdleState : BaseState<Player>
             Debug.Log("GetKeyDown : W");
 
             handler.ChangeState(typeof(DestroyerWSkill));
+            dungeonUI?.StartPCCooldown(0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("GetKeyDown : E");
 
             handler.ChangeState(typeof(DestroyerESkill));
+            dungeonUI?.StartPCCooldown(1);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("GetKeyDown : R");
 
             handler.ChangeState(typeof(DestroyerRSkill));
+            dungeonUI?.StartPCCooldown(2);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log("GetKeyDown : T");
 
             handler.ChangeState(typeof(DestroyerTSkill));
+            dungeonUI?.StartPCCooldown(3);
         }
     }
 }

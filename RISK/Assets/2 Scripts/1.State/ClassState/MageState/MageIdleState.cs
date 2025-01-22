@@ -21,7 +21,7 @@ public class MageIdleState : BaseState<Player>
             handler.ChangeState(typeof(MageMoveState));
             return;
         }
-
+        var dungeonUI = GameObject.FindObjectOfType<DungeonUIController>();
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -30,18 +30,22 @@ public class MageIdleState : BaseState<Player>
         else if (Input.GetKeyDown(KeyCode.W))
         {
             handler.ChangeState(typeof(MageWSkill));
+            dungeonUI?.StartPCCooldown(0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             handler.ChangeState(typeof(MageESkill));
+            dungeonUI?.StartPCCooldown(1);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             handler.ChangeState(typeof(MageRSkill));
+            dungeonUI?.StartPCCooldown(2);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             handler.ChangeState(typeof(MageTSkill));
+            dungeonUI?.StartPCCooldown(3);
         }
     }
 }

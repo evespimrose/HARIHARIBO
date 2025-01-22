@@ -20,7 +20,7 @@ public class WarriorIdleState : BaseState<Player>
             handler.ChangeState(typeof(WarriorMoveState));
             return;
         }
-
+        var dungeonUI = GameObject.FindObjectOfType<DungeonUIController>();
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -29,18 +29,22 @@ public class WarriorIdleState : BaseState<Player>
         else if (Input.GetKeyDown(KeyCode.W))
         {
             handler.ChangeState(typeof(WarriorWSkill));
+            dungeonUI?.StartPCCooldown(0);
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             handler.ChangeState(typeof(WarriorESkill));
+            dungeonUI?.StartPCCooldown(1);
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             handler.ChangeState(typeof(WarriorRSkill));
+            dungeonUI?.StartPCCooldown(2);
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
             handler.ChangeState(typeof(WarriorTSkill));
+            dungeonUI?.StartPCCooldown(3);
         }
     }
 }

@@ -86,15 +86,21 @@ public class Destroyer : Player
             return;
         }
         var dungeonUI = FindObjectOfType<DungeonUIController>();
+        Debug.Log($"DungeonUI found: {dungeonUI != null}");
         if (Input.GetKeyDown(KeyCode.A))
         {
             stateHandler.ChangeState(typeof(DestroyerAttackState));
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
+            Debug.Log("W skill triggered");
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(DestroyerWSkill));
-            dungeonUI?.StartPCCooldown(0);
+            if (dungeonUI != null)
+            {
+                Debug.Log("Starting W skill cooldown"); // 디버그 로그 추가
+                dungeonUI.StartPCCooldown(0);
+            }
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {

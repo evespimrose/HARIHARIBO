@@ -123,8 +123,6 @@ public class DungeonUIController : MonoBehaviour
             }
         
         }
-
-        // 키 바인딩 텍스트 설정
         if (pcKeyBindTexts.Length >= 4)
         {
             pcKeyBindTexts[0].text = "W";   // W 스킬
