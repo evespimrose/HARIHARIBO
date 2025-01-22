@@ -94,7 +94,7 @@ public class SelectCharacterPanel : MonoBehaviour
 
         characterDatalist = await FirebaseManager.Instance.LoadCharacterDataList();
 
-        Dictionary<ClassType, CharacterData> characterdatadic = PanelManager.Instance.createCharacter.characterDataDic;
+        Dictionary<ClassType, CharacterData> characterdatadic = GameManager.Instance.characterDataDic;
 
         if (characterDatalist != null)
         {
@@ -139,6 +139,7 @@ public class SelectCharacterPanel : MonoBehaviour
 
             levelText.text = currentCharacterData.level.ToString();
             nickNameText.text = currentCharacterData.nickName;
+            characterModelImage.sprite = GameManager.Instance.characterDataDic[currentCharacterData.classType].sprite;
         }
     }
 
