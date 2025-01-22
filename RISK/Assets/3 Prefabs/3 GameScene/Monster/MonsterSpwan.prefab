@@ -55,7 +55,7 @@ MonoBehaviour:
   - {fileID: 5563592875290583862, guid: f0b5dd53922e8804c8b0786e40045333, type: 3}
   - {fileID: 4895862228875006388, guid: b829f3af327176e4abb0c5f013e01ff0, type: 3}
   structureMonsterPrefab:
-  - {fileID: 7121646202909548812, guid: 5e443a1855554384088022b601b6df58, type: 3}
+  - {fileID: 0}
   eliteMonsterPrefab:
   - {fileID: 5179692953179437697, guid: 33cbafedbe85899448735248ecceee9a, type: 3}
   bossMonsterPrefab: {fileID: 8588490523938595768, guid: 963f1bd073720044c9785f3a28cda39d, type: 3}

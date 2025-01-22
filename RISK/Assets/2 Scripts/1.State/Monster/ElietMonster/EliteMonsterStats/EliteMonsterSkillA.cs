@@ -28,7 +28,6 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
         aDamage = monster.atkDamage * 1.38f;
         bDamage = monster.atkDamage * 1.38f;
         Debug.Log("SkillA 시작");
-        monster.isAtk = true;
         action = monster.StartCoroutine(SkillACoroutine(monster));
     }
 
@@ -37,7 +36,6 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
         monster.AtkEnd();
         Debug.Log("공격 종료");
         monster.StopCoroutine(action);
-        monster.isAtk = false;
     }
 
     private IEnumerator SkillACoroutine(EliteMonster monster)

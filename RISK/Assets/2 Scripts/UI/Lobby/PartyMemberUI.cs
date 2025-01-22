@@ -20,7 +20,6 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
         closeButton.onClick.AddListener(OnCloseButtonClick);
         quitButton.onClick.AddListener(OnQuitButtonClick);
         gameStartButton.onClick.AddListener(OnGameStartButtonClick);
-        gameStartButton.interactable = false == PhotonNetwork.IsMasterClient;
     }
 
     private void OnGameStartButtonClick()
@@ -35,16 +34,19 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if(partyMemberContainer.childCount != GameManager.Instance.connectedPlayers.Count)
+        gameStartButton.interactable = !false == PhotonNetwork.IsMasterClient;
+
+        if (partyMemberContainer.childCount != GameManager.Instance.connectedPlayers.Count)
         {
             print("TRIGGERED!!!!");
-            UpdatePartyMembers();
+            UpdateRoomMembers();
         }
     }
 
     public override void OnEnable()
     {
         base.OnEnable();
+        GameManager.Instance.chat.gameObject.SetActive(true);
     }
 
     public IEnumerator Start()
@@ -52,12 +54,11 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
         yield return new WaitUntil(() => PhotonNetwork.InRoom);
         yield return new WaitForSeconds(1f);
 
-        UpdatePartyMembers();
+        UpdateRoomMembers();
     }
 
     private void OnQuitButtonClick()
     {
-        PartyManager.Instance.LeaveParty(PhotonNetwork.LocalPlayer);
         LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Party Quit", "SuccessFully Left Party.", () => { OnCloseButtonClick(); LobbyUI.Instance.PopupClose(); });
     }
 
@@ -66,7 +67,7 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
         PanelManager.Instance.PanelOpen("PartyListBoard");
     }
 
-    public void UpdatePartyMembers()
+    public void UpdateRoomMembers()
     {
         foreach (Transform child in partyMemberContainer)
         {
@@ -75,10 +76,8 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.CurrentRoom.Players.Count > 0)
         {
-            print("UpdatePartyMembers");
             foreach (var member in GameManager.Instance.connectedPlayers)
             {
-                print($"member : {member.nickName}, {member.level}, {member.classType}, {member.atk}");
                 GameObject memberInfoObj = Instantiate(partyMemberInfoPrefab, partyMemberContainer);
                 if (memberInfoObj.TryGetComponent(out PartyMemberInfoUI memberInfoUI))
                 {

@@ -51,12 +51,14 @@ public class BossMonsterSkillE : BaseState<BossMonster>
         yield return new WaitForSeconds(atkDuration); // 선딜레이
 
         // 애니메이션 실행
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillESoundClips[0]);
         monster.animator.SetTrigger("SkillE");
 
         // 공격 타이밍 대기
         yield return new WaitForSeconds(skillEDuration);
 
         // 미사일 발사
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillESoundClips[1]);
         SpawnProjectile1(monster);
 
         // 애니메이션이 끝날 때까지 대기 (애니메이션이 'SkillE'일 때 완료된 상태 확인)

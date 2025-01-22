@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditorInternal.VersionControl.ListControl;
 
 public class EliteMonsterIdle : BaseState<EliteMonster>
 {
@@ -17,19 +16,27 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
     {
         if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
         {
-            //공격으로 이동
-            int a = Random.Range(0, 3);
-            switch (a)
+            if (!monster.isAtk)
             {
-                case 0:
-                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillA));
-                    break;
-                case 1:
-                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillB));
-                    break;
-                case 2:
-                    monster.eMHandler.ChangeState(typeof(EliteMonsterSkillC));
-                    break;
+            //공격으로 이동
+            monster.AtkEnd();
+            int a = Random.Range(0, 3);
+                switch (a)
+                {
+                    case 0:
+                        monster.eMHandler.ChangeState(typeof(EliteMonsterSkillA));
+                        break;
+                    case 1:
+                        monster.eMHandler.ChangeState(typeof(EliteMonsterSkillB));
+                        break;
+                    case 2:
+                        monster.eMHandler.ChangeState(typeof(EliteMonsterSkillC));
+                        break;
+                }
+            }
+            else
+            {
+                Debug.Log("공격범위지만 공격쿨타임임");
             }
         }
         else

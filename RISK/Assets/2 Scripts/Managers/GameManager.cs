@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using Photon.Pun.UtilityScripts;
+using System;
 
 public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
@@ -22,6 +23,27 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     public bool isWaveDone = false;
 
     public RiskUIController riskUIController;
+
+    public ChatScrollController chat;
+
+    [SerializeField]
+    private List<ClassNameToCharacterData> classDataList;
+
+    public Dictionary<ClassType, CharacterData> characterDataDic = new Dictionary<ClassType, CharacterData>();
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        foreach (var classdata in classDataList)
+        {
+            if (!characterDataDic.ContainsKey(classdata.classType))
+            {
+                characterDataDic.Add(classdata.classType, classdata.characterData);
+
+            }
+        }
+    }
 
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
@@ -148,9 +170,14 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     {
         while (true)
         {
-            //spawner cour 끝날때가지 대기
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
             // riskUI enable
+            print("All Wave Launched....");
+
+            yield return new WaitUntil(() => UnitManager.Instance.monsters.Count <= 0);
+
+            print("All Monsters Dead || Time Out....");
+
 
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
@@ -219,5 +246,21 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     private void SetGameReady()
     {
         isGameReady = true;
+    }
+
+    public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)
+    {
+        FireBaseCharacterData playerToRemove = connectedPlayers.Find(player => player.nickName == otherPlayer.NickName);
+
+        if (playerToRemove != null)
+        {
+            connectedPlayers.Remove(playerToRemove);
+        }
+        else
+        {
+            Debug.LogWarning($"Player {otherPlayer.NickName} not found in connectedPlayers.");
+        }
+
+        SyncAllPlayers();
     }
 }

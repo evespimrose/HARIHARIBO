@@ -8,10 +8,6 @@ using UnityEngine.UI;
 
 public class CreateCharacterPanel : MonoBehaviour
 {
-    [SerializeField]
-    private List<ClassNameToCharacterData> classDataList;
-
-    private Dictionary<ClassType, CharacterData> characterDataDic = new Dictionary<ClassType, CharacterData>();
 
     public Image characterModelImage;
     public Image characterImage;
@@ -27,39 +23,38 @@ public class CreateCharacterPanel : MonoBehaviour
     public TextMeshProUGUI currentClassDescriptionText;
     public TextMeshProUGUI currentClassCharacteristicText;
 
-
     public Action<ClassType> UpdateInfo;
+
+    private Dictionary<ClassType, CharacterData> characterDataDictionary = new Dictionary<ClassType, CharacterData>();
 
     private void Awake()
     {
         UpdateInfo += SwapInfoText;
+        characterDataDictionary = GameManager.Instance.characterDataDic;
 
-        foreach (var classdata in classDataList)
+        foreach (var classdata in characterDataDictionary)
         {
-            if (!characterDataDic.ContainsKey(classdata.classType))
+            GameObject characterInfo = Instantiate(characterInfoPrefab, characterInfoListTransform);
+            if (characterInfo.TryGetComponent(out CharacterInfoUI characterInfoUI))
             {
-                characterDataDic.Add(classdata.classType, classdata.characterData);
+                characterInfoUI.classType = classdata.Key;
+                characterInfoUI.classImage.sprite = characterDataDictionary[classdata.Key].headSprite;
 
-                GameObject characterInfo = Instantiate(characterInfoPrefab, characterInfoListTransform);
-                if (characterInfo.TryGetComponent(out CharacterInfoUI characterInfoUI))
+                if (characterInfo.TryGetComponent(out Button button))
                 {
-                    characterInfoUI.classType = classdata.classType;
-
-                    if (characterInfo.TryGetComponent(out Button button))
+                    button.onClick.AddListener(() =>
                     {
-                        button.onClick.AddListener(() =>
-                        {
-                            currentClassType = characterInfoUI.classType;
+                        currentClassType = characterInfoUI.classType;
 
-                            UpdateInfo?.Invoke(currentClassType);
-                        });
-                    }
+                        UpdateInfo?.Invoke(currentClassType);
+                    });
                 }
             }
+
         }
         currentClassType = ClassType.Warrior;
-        print(currentClassType.ToString());
         currentClassNameText.text = currentClassType.ToString();
+        SwapInfoText(currentClassType);
 
         createButton.onClick.AddListener(OnCreateButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
@@ -67,10 +62,12 @@ public class CreateCharacterPanel : MonoBehaviour
 
     private void SwapInfoText(ClassType classType)
     {
-        characterDataDic.TryGetValue(classType, out CharacterData cd);
+        characterDataDictionary.TryGetValue(classType, out CharacterData cd);
         currentClassDescriptionText.text = cd.description;
         currentClassCharacteristicText.text = cd.characteristic;
         currentClassNameText.text = classType.ToString();
+        characterImage.sprite = cd.headSprite;
+        characterModelImage.sprite = cd.sprite;
     }
 
     private void OnCloseButtonClick()
@@ -102,6 +99,8 @@ public class CharacterData
 {
     public string description;
     public string characteristic;
+    public Sprite sprite;
+    public Sprite headSprite;
 }
 
 [Serializable]
@@ -216,5 +215,12 @@ public class FireBaseCharacterData
         cri = 0f;
         criDmg = 0f;
         coolRed = 0f;
+
+        maxHpUpgradeLevel = 0;
+        atkUpgradeLevel = 0;
+        criUpgradeLevel = 0;
+        criDmgUpgradeLevel = 0;
+        hpRegUpgradeLevel = 0;
+        coolRedUpgradeLevel = 0;
     }
 }

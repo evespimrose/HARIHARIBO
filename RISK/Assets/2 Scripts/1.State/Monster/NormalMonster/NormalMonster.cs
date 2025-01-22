@@ -100,6 +100,7 @@ public class NormalMonster : Monster
 
     public IEnumerator AtkCoolTime()
     {
+        isAtk = true;
         Debug.Log("쿨타임 시작");
         yield return new WaitForSeconds(atkDelay);
         Debug.Log("쿨타임 종료");

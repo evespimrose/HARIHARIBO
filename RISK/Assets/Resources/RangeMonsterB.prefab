@@ -1191,12 +1191,16 @@ MonoBehaviour:
   monsterType: 1
   target: {fileID: 0}
   model: {fileID: 4895862228875006388}
-  monsterState: {fileID: 11400000, guid: 5de7aa03653524a4db36cc41c674e407, type: 2}
+  hitSoundClips: {fileID: 8300000, guid: 414fea2733048bf4b94f694a2c14759d, type: 3}
+  dieSoundClips: {fileID: 8300000, guid: efa023f02aeeb444d843dd6271ee173a, type: 3}
+  monsterState: {fileID: 11400000, guid: 619b5d6fccfc61a4db80521a2ef9acde, type: 2}
   atkDamage: 0
   moveSpeed: 0
   atkRange: 0
   atkDelay: 0
   curHp: 0
+  exp: 0
+  won: 0
   isAtk: 0
   isAirborne: 0
   isStun: 0

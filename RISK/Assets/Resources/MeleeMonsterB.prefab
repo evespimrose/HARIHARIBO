@@ -774,7 +774,9 @@ MonoBehaviour:
   monsterType: 0
   target: {fileID: 0}
   model: {fileID: 2076494417076438055}
-  monsterState: {fileID: 11400000, guid: 759aff86e13ba02409ee049caec3bbde, type: 2}
+  hitSoundClips: {fileID: 8300000, guid: 414fea2733048bf4b94f694a2c14759d, type: 3}
+  dieSoundClips: {fileID: 8300000, guid: efa023f02aeeb444d843dd6271ee173a, type: 3}
+  monsterState: {fileID: 11400000, guid: 49f5f71b7d146234fbf22f40e39e359d, type: 2}
   atkDamage: 0
   moveSpeed: 10
   atkRange: 10
