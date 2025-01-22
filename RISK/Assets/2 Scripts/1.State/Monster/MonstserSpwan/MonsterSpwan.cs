@@ -10,37 +10,37 @@ public class MonsterSpwan : MonoBehaviour
     public int inWave = 1;
     public float SpwanTiem = 10f;
 
-    // 근접 몬스터 관련 변수
-    [Header("근접 몬스터")]
-    [Tooltip("근접 몬스터 스폰될 갯수")]
+    // 洹쇱젒 紐ъ뒪??愿??蹂??
+    [Header("洹쇱젒 紐ъ뒪??")]
+    [Tooltip("洹쇱젒 紐ъ뒪???ㅽ룿??媛?닔")]
     private int meleeMonsterSpwanCount = 5;
-    [Tooltip("근거리 몬스터 프리팹")]
+    [Tooltip("洹쇨굅由?紐ъ뒪???꾨━??")]
     public List<GameObject> meleeMonsterPrefab;
 
-    // 원거리 몬스터 관련 변수
-    [Header("원거리 몬스터")]
-    [Tooltip("원거리 몬스터 스폰될 갯수")]
+    // ?먭굅由?紐ъ뒪??愿??蹂??
+    [Header("?먭굅由?紐ъ뒪??")]
+    [Tooltip("?먭굅由?紐ъ뒪???ㅽ룿??媛?닔")]
     private int rangeMonsterSpwanCount = 2;
-    [Tooltip("원거리 몬스터 프리팹")]
+    [Tooltip("?먭굅由?紐ъ뒪???꾨━??")]
     public List<GameObject> rangeMonsterPrefab;
 
-    // 추가된 몬스터 관련 변수
-    [Header("구조물 몬스터")]
-    [Tooltip("구조물 몬스터 스폰될 갯수")]
+    // 異붽???紐ъ뒪??愿??蹂??
+    [Header("援ъ“臾?紐ъ뒪??")]
+    [Tooltip("援ъ“臾?紐ъ뒪???ㅽ룿??媛?닔")]
     private int structureMonsterSpwanCount = 1;
-    [Tooltip("구조물 몬스터 프리팹")]
+    [Tooltip("援ъ“臾?紐ъ뒪???꾨━??")]
     public List<GameObject> structureMonsterPrefab;
 
-    [Header("엘리트 몬스터")]
-    [Tooltip("엘리트 몬스터 스폰될 갯수")]
+    [Header("?섎━??紐ъ뒪??")]
+    [Tooltip("?섎━??紐ъ뒪???ㅽ룿??媛?닔")]
     private int eliteMonsterSpwanCount = 1;
-    [Tooltip("엘리트 몬스터 프리팹")]
+    [Tooltip("?섎━??紐ъ뒪???꾨━??")]
     public List<GameObject> eliteMonsterPrefab;
 
-    [Header("보스 몬스터")]
-    [Tooltip("보스 몬스터 스폰될 갯수")]
+    [Header("蹂댁뒪 紐ъ뒪??")]
+    [Tooltip("蹂댁뒪 紐ъ뒪???ㅽ룿??媛?닔")]
     private int bossMonsterSpwanCount = 1;
-    [Tooltip("보스 몬스터 프리팹")]
+    [Tooltip("蹂댁뒪 紐ъ뒪???꾨━??")]
     public GameObject bossMonsterPrefab;
 
     public float meleeMinRadius = 5f;
@@ -49,48 +49,48 @@ public class MonsterSpwan : MonoBehaviour
     public float rangeMaxRadius = 15f;
     public Vector3 center;
 
-    private Vector3 bossSpawnPoint = Vector3.zero; // 보스 몬스터 스폰 위치
+    private Vector3 bossSpawnPoint = Vector3.zero; // 蹂댁뒪 紐ъ뒪???ㅽ룿 ?꾩튂
 
-    // 딕셔너리로 각 웨이브 및 스폰에 대한 설정을 저장
+    // ?뺤뀛?덈━濡?媛??⑥씠釉?諛??ㅽ룿??????ㅼ젙?????
     private Dictionary<(int wave, int inWave), (int meleeCount, int rangeCount, int eliteCount, int bossCount, int structureCount)> spawnSettings = new Dictionary<(int wave, int inWave), (int, int, int, int, int)>
     {
-        // 웨이브 1
+        // ?⑥씠釉?1
         {(1, 1), (8, 0, 0, 0, 0)},
         {(1, 2), (8, 0, 0, 0, 0)},
         {(1, 3), (8, 0, 0, 0, 0)},
         {(1, 4), (8, 0, 0, 0, 0)},
         
-        // 웨이브 2
+        // ?⑥씠釉?2
         {(2, 1), (6, 2, 0, 0, 0)},
         {(2, 2), (6, 2, 0, 0, 0)},
         {(2, 3), (6, 2, 0, 0, 0)},
         {(2, 4), (6, 2, 0, 0, 0)},
         
-        // 웨이브 3
-        {(3, 1), (4, 2, 0, 0, 10)}, // 구조물 10마리
+        // ?⑥씠釉?3
+        {(3, 1), (4, 2, 0, 0, 10)}, // 援ъ“臾?10留덈━
         {(3, 2), (6, 2, 0, 0, 10)},
-        {(3, 3), (0, 0, 0, 0, 0)}, // 3번 웨이브 종료
+        {(3, 3), (0, 0, 0, 0, 0)}, // 3踰??⑥씠釉?醫낅즺
         
-        // 웨이브 4
+        // ?⑥씠釉?4
         {(4, 1), (4, 2, 0, 0, 10)},
         {(4, 2), (6, 2, 0, 0, 10)},
-        {(4, 3), (10, 0, 1, 0, 0)}, // 엘리트 1마리
+        {(4, 3), (10, 0, 1, 0, 0)}, // ?섎━??1留덈━
         {(4, 4), (5, 2, 0, 0, 10)},
         
-        // 웨이브 5
+        // ?⑥씠釉?5
         {(5, 1), (6, 2, 0, 0, 0)},
-        {(5, 2), (5, 2, 2, 0, 0)}, // 엘리트 2마리
+        {(5, 2), (5, 2, 2, 0, 0)}, // ?섎━??2留덈━
         {(5, 3), (4, 2, 0, 0, 10)},
         {(5, 4), (5, 2, 0, 0, 0)},
         
-        // 웨이브 6
-        {(6, 1), (0, 0, 0, 1, 0)}  // 보스 1마리
+        // ?⑥씠釉?6
+        {(6, 1), (0, 0, 0, 1, 0)}  // 蹂댁뒪 1留덈━
     };
 
     private void Awake()
     {
         center = transform.position;
-        // 보스 몬스터 스폰 위치를 초기화 (필요에 따라 조정)
+        // 蹂댁뒪 紐ъ뒪???ㅽ룿 ?꾩튂瑜?珥덇린??(?꾩슂???곕씪 議곗젙)
         bossSpawnPoint = new Vector3(0f, 0f, 20f);
     }
 
@@ -115,13 +115,13 @@ public class MonsterSpwan : MonoBehaviour
         int quadrant = 0;
         float curTime = 0f;
 
-        // 웨이브 및 스폰 반복
+        // ?⑥씠釉?諛??ㅽ룿 諛섎났
         while (true)
         {
-            // 스폰 구역 선택
+            // ?ㅽ룿 援ъ뿭 ?좏깮
             while (true)
             {
-                quadrant = Random.Range(1, 5); // 랜덤 구역 선택 (1, 2, 3, 4 사분면)
+                quadrant = Random.Range(1, 5); // ?쒕뜡 援ъ뿭 ?좏깮 (1, 2, 3, 4 ?щ텇硫?
                 if (lastQuadrant != quadrant || lastQuadrant == 0)
                 {
                     lastQuadrant = quadrant;
@@ -131,51 +131,52 @@ public class MonsterSpwan : MonoBehaviour
 
             Vector3 spwanPos;
 
-            // 딕셔너리에서 현재 웨이브와 스폰에 해당하는 몬스터 수 가져오기
+            // ?뺤뀛?덈━?먯꽌 ?꾩옱 ?⑥씠釉뚯? ?ㅽ룿???대떦?섎뒗 紐ъ뒪????媛?몄삤湲?
+
             var currentSpawnSetting = spawnSettings[(wave, inWave)];
             Debug.Log($"Wave {wave}, InWave {inWave}: {currentSpawnSetting.meleeCount}, {currentSpawnSetting.rangeCount}, {currentSpawnSetting.eliteCount}, {currentSpawnSetting.bossCount}, {currentSpawnSetting.structureCount}");
 
-            // 근접 몬스터 스폰
+            // 洹쇱젒 紐ъ뒪???ㅽ룿
             for (int i = 0; i < currentSpawnSetting.meleeCount; i++)
             {
                 spwanPos = GetMeleeSpwanPos(quadrant);
                 GameObject MeleeMonster = MeleeMonsterCreate(spwanPos);
             }
 
-            // 원거리 몬스터 스폰
+            // ?먭굅由?紐ъ뒪???ㅽ룿
             for (int i = 0; i < currentSpawnSetting.rangeCount; i++)
             {
                 spwanPos = GetRangeSpwanPos(quadrant);
                 GameObject RangeMonster = RangeMonsterCreate(spwanPos);
             }
 
-            // 엘리트 몬스터 스폰
+            // ?섎━??紐ъ뒪???ㅽ룿
             for (int i = 0; i < currentSpawnSetting.eliteCount; i++)
             {
-                spwanPos = GetRangeSpwanPos(quadrant); // 엘리트 몬스터는 원거리 몬스터와 같은 위치로 스폰
+                spwanPos = GetRangeSpwanPos(quadrant); // ?섎━??紐ъ뒪?곕뒗 ?먭굅由?紐ъ뒪?곗? 媛숈? ?꾩튂濡??ㅽ룿
                 GameObject EliteMonster = EliteMonsterCreate(spwanPos);
             }
 
-            // 구조물 몬스터 스폰 (근접 몬스터와 같은 위치)
+            // 援ъ“臾?紐ъ뒪???ㅽ룿 (洹쇱젒 紐ъ뒪?곗? 媛숈? ?꾩튂)
             for (int i = 0; i < currentSpawnSetting.structureCount; i++)
             {
-                spwanPos = GetMeleeSpwanPos(quadrant); // 근접 몬스터와 동일 위치
+                spwanPos = GetMeleeSpwanPos(quadrant); // 洹쇱젒 紐ъ뒪?곗? ?숈씪 ?꾩튂
                 GameObject StructureMonster = StructureMonsterCreate(spwanPos);
             }
 
-            // 보스 몬스터 스폰
+            // 蹂댁뒪 紐ъ뒪???ㅽ룿
             for (int i = 0; i < currentSpawnSetting.bossCount; i++)
             {
                 GameObject BossMonster = BossMonsterCreate(bossSpawnPoint);
             }
             yield return null;
-            // 스폰 후 기다리는 부분
+            // ?ㅽ룿 ??湲곕떎由щ뒗 遺遺?
             curTime = 0f;
 
-            // 스폰 타임 동안 기다리되, 필드에 몬스터가 모두 죽었을 경우 즉시 스폰을 다시 시작
+            // ?ㅽ룿 ????숈븞 湲곕떎由щ릺, ?꾨뱶??紐ъ뒪?곌? 紐⑤몢 二쎌뿀??寃쎌슦 利됱떆 ?ㅽ룿???ㅼ떆 ?쒖옉
             while (curTime < SpwanTiem)
             {
-                // 필드에 몬스터가 모두 죽었을 경우, 즉시 스폰을 다시 시작
+                // ?꾨뱶??紐ъ뒪?곌? 紐⑤몢 二쎌뿀??寃쎌슦, 利됱떆 ?ㅽ룿???ㅼ떆 ?쒖옉
                 if (UnitManager.Instance.monsters.Count == 0)
                 {
                     Debug.Log("All monsters are dead, respawning...");
@@ -186,15 +187,15 @@ public class MonsterSpwan : MonoBehaviour
                 yield return null;
             }
 
-            // 스폰이 끝나면 inWave 증가
+            // ?ㅽ룿???앸굹硫?inWave 利앷?
             inWave++;
 
-            // 모든 스폰이 끝나면 웨이브를 넘어감 (웨이브 6까지)
+            // 紐⑤뱺 ?ㅽ룿???앸굹硫??⑥씠釉뚮? ?섏뼱媛?(?⑥씠釉?6源뚯?)
             if (inWave > 4)
             {
                 inWave = 1;
                 wave++;
-                if (wave > 6) // 웨이브 6까지 설정
+                if (wave >= 6) // ?⑥씠釉?6源뚯? ?ㅼ젙
                 {
                     yield break;
                 }
@@ -202,13 +203,13 @@ public class MonsterSpwan : MonoBehaviour
         }
     }
 
-    // 근접 몬스터의 스폰 위치 계산
+    // 洹쇱젒 紐ъ뒪?곗쓽 ?ㅽ룿 ?꾩튂 怨꾩궛
     public Vector3 GetMeleeSpwanPos(int quadrant)
     {
         float angle = 0f;
-        float radius = Random.Range(meleeMinRadius, meleeMaxRadius); // 5 ~ 10 사이의 랜덤 거리
+        float radius = Random.Range(meleeMinRadius, meleeMaxRadius); // 5 ~ 10 ?ъ씠???쒕뜡 嫄곕━
 
-        // 각 구역에 맞는 각도 범위 지정
+        // 媛?援ъ뿭??留욌뒗 媛곷룄 踰붿쐞 吏??
         switch (quadrant)
         {
             case 1:
@@ -225,21 +226,21 @@ public class MonsterSpwan : MonoBehaviour
                 break;
         }
 
-        // polar 좌표계에서 Cartesian 좌표로 변환
+        // polar 醫뚰몴怨꾩뿉??Cartesian 醫뚰몴濡?蹂??
         float x = center.x + radius * Mathf.Cos(angle);
         float z = center.z + radius * Mathf.Sin(angle);
-        float y = 0.1f; // y는 0.1로 고정
+        float y = 0.1f; // y??0.1濡?怨좎젙
 
         return new Vector3(x, y, z);
     }
 
-    // 원거리 몬스터의 스폰 위치 계산
+    // ?먭굅由?紐ъ뒪?곗쓽 ?ㅽ룿 ?꾩튂 怨꾩궛
     public Vector3 GetRangeSpwanPos(int quadrant)
     {
         float angle = 0f;
-        float radius = Random.Range(rnageMinRadius, rangeMaxRadius); // 10 ~ 15 사이의 랜덤 거리
+        float radius = Random.Range(rnageMinRadius, rangeMaxRadius); // 10 ~ 15 ?ъ씠???쒕뜡 嫄곕━
 
-        // 각 구역에 맞는 각도 범위 지정
+        // 媛?援ъ뿭??留욌뒗 媛곷룄 踰붿쐞 吏??
         switch (quadrant)
         {
             case 1:
@@ -256,15 +257,15 @@ public class MonsterSpwan : MonoBehaviour
                 break;
         }
 
-        // polar 좌표계에서 Cartesian 좌표로 변환
+        // polar 醫뚰몴怨꾩뿉??Cartesian 醫뚰몴濡?蹂??
         float x = center.x + radius * Mathf.Cos(angle);
         float z = center.z + radius * Mathf.Sin(angle);
-        float y = 0.1f; // y는 0.1로 고정
+        float y = 0.1f; // y??0.1濡?怨좎젙
 
         return new Vector3(x, y, z);
     }
 
-    // 몬스터 생성 함수들 (프리팹 생성 메소드)
+    // 紐ъ뒪???앹꽦 ?⑥닔??(?꾨━???앹꽦 硫붿냼??
     public GameObject MeleeMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(meleeMonsterPrefab[Random.Range(0, meleeMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
     public GameObject RangeMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(rangeMonsterPrefab[Random.Range(0, rangeMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
     public GameObject EliteMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(eliteMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);

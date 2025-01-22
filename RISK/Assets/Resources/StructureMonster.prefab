@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 888012299233796058}
   - component: {fileID: 1895782654798138395}
   - component: {fileID: 3543262989931255540}
-  - component: {fileID: 8604757329203367953}
   - component: {fileID: 7263771167986524640}
   m_Layer: 6
   m_Name: StructureMonster
@@ -168,26 +167,10 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 8604757329203367953}
-  sceneViewId: 1
+  - {fileID: 0}
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &8604757329203367953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7121646202909548812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
 --- !u!65 &7263771167986524640
 BoxCollider:
   m_ObjectHideFlags: 0
