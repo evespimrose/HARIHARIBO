@@ -85,7 +85,7 @@ public class BossMonster : Monster
         {
             isWall = true;
         }
-        if (other.gameObject.CompareTag("Player") && !hitTargets.Contains(other.gameObject)) // 중복 오브젝트 체크
+        if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer") && !hitTargets.Contains(other.gameObject)) // 중복 오브젝트 체크
         {
             Debug.Log("SkillF 공격");
             other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
