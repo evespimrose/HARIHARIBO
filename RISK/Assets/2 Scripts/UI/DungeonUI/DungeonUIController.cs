@@ -38,9 +38,10 @@ public class DungeonUIController : MonoBehaviour
     [SerializeField] private GameObject pcSkillPanel;     
     [SerializeField] private Image[] pcSkillIcons;        
     [SerializeField] private Image[] pcCooldownOverlays;  
-    [SerializeField] private TMP_Text[] pcKeyBindTexts;    
+    [SerializeField] private TMP_Text[] pcKeyBindTexts;
 
 
+    private bool[] isSkillInCooldown = new bool[4]; // W, E, R, T 스킬의 쿨타임 상태
     private float[] currentCooldowns;  // 현재 선택된 직업의 쿨타임 저장
     private Player localPlayer; 
 
@@ -139,10 +140,19 @@ public class DungeonUIController : MonoBehaviour
     {
         if (skillIndex >= 0 && skillIndex < pcCooldownOverlays.Length)
         {
+            isSkillInCooldown[skillIndex] = true;
             StartCoroutine(PCCooldownRoutine(skillIndex));
         }
     }
 
+    public bool IsSkillInCooldown(int skillIndex)
+    {
+        if (skillIndex >= 0 && skillIndex < isSkillInCooldown.Length)
+        {
+            return isSkillInCooldown[skillIndex];
+        }
+        return false;
+    }
     // PC 버전 쿨다운 처리
     private IEnumerator PCCooldownRoutine(int skillIndex)
     {
@@ -160,7 +170,7 @@ public class DungeonUIController : MonoBehaviour
             pcCooldownOverlays[skillIndex].fillAmount = 1 - (elapsed / cooldownTime);
             yield return null;
         }
-
+        isSkillInCooldown[skillIndex] = false;
         pcCooldownOverlays[skillIndex].fillAmount = 0;
         pcCooldownOverlays[skillIndex].gameObject.SetActive(false);
     }

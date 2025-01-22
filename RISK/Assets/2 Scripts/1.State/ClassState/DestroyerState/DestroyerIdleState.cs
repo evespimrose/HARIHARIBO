@@ -22,38 +22,36 @@ public class DestroyerIdleState : BaseState<Player>
         }
 
         var dungeonUI = GameObject.FindObjectOfType<DungeonUIController>();
+        if (dungeonUI == null) return;
 
         if (Input.GetKeyDown(KeyCode.A))
         {
             handler.ChangeState(typeof(DestroyerAttackState));
         }
-        else if (Input.GetKeyDown(KeyCode.W))
+        else if (Input.GetKeyDown(KeyCode.W) && !dungeonUI.IsSkillInCooldown(0))
         {
             Debug.Log("GetKeyDown : W");
-
             handler.ChangeState(typeof(DestroyerWSkill));
-            dungeonUI?.StartPCCooldown(0);
+            dungeonUI.StartPCCooldown(0);
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E) && !dungeonUI.IsSkillInCooldown(1))
         {
             Debug.Log("GetKeyDown : E");
-
             handler.ChangeState(typeof(DestroyerESkill));
-            dungeonUI?.StartPCCooldown(1);
+            dungeonUI.StartPCCooldown(1);
         }
-        else if (Input.GetKeyDown(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.R) && !dungeonUI.IsSkillInCooldown(2))
         {
             Debug.Log("GetKeyDown : R");
-
             handler.ChangeState(typeof(DestroyerRSkill));
-            dungeonUI?.StartPCCooldown(2);
+            dungeonUI.StartPCCooldown(2);
         }
-        else if (Input.GetKeyDown(KeyCode.T))
+        else if (Input.GetKeyDown(KeyCode.T) && !dungeonUI.IsSkillInCooldown(3))
         {
             Debug.Log("GetKeyDown : T");
-
             handler.ChangeState(typeof(DestroyerTSkill));
-            dungeonUI?.StartPCCooldown(3);
+            dungeonUI.StartPCCooldown(3);
         }
     }
+    
 }

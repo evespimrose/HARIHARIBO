@@ -21,31 +21,31 @@ public class HealerIdleState : BaseState<Player>
             return;
         }
         var dungeonUI = GameObject.FindObjectOfType<DungeonUIController>();
+        if (dungeonUI == null) return;
 
         if (Input.GetKeyDown(KeyCode.A))
         {
             handler.ChangeState(typeof(HealerAttackState));
         }
-
-        else if (Input.GetKeyDown(KeyCode.W))
+        else if (Input.GetKeyDown(KeyCode.W) && !dungeonUI.IsSkillInCooldown(0))
         {
             handler.ChangeState(typeof(HealerWSkill));
-            dungeonUI?.StartPCCooldown(0);
+            dungeonUI.StartPCCooldown(0);
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E) && !dungeonUI.IsSkillInCooldown(1))
         {
             handler.ChangeState(typeof(HealerESkill));
-            dungeonUI?.StartPCCooldown(1);
+            dungeonUI.StartPCCooldown(1);
         }
-        else if (Input.GetKeyDown(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.R) && !dungeonUI.IsSkillInCooldown(2))
         {
             handler.ChangeState(typeof(HealerRSkill));
-            dungeonUI?.StartPCCooldown(2);
+            dungeonUI.StartPCCooldown(2);
         }
-        else if (Input.GetKeyDown(KeyCode.T))
+        else if (Input.GetKeyDown(KeyCode.T) && !dungeonUI.IsSkillInCooldown(3))
         {
             handler.ChangeState(typeof(HealerTSkill));
-            dungeonUI?.StartPCCooldown(3);
+            dungeonUI.StartPCCooldown(3);
         }
     }
 
