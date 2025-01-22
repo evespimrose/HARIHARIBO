@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             }
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
+        CreatePersistentCanvas();
     }
 
     private void CreatePersistentCanvas()
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         DontDestroyOnLoad(canvasObject);
 
-        transform.SetParent(persistentCanvas.transform, false);
+        chat.gameObject.transform.SetParent(persistentCanvas.transform, false);
     }
 
     public void AttachToNewCanvas(Canvas newCanvas)
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         // 새 Canvas에 UI 오브젝트를 연결
         if (chat != null && newCanvas != null)
         {
-            chat.transform.SetParent(newCanvas.transform, false);
+            chat.gameObject.transform.SetParent(newCanvas.transform, false);
         }
     }
 
@@ -196,6 +197,9 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
 
         StartCoroutine(Dungeon());
+
+        yield return new WaitUntil(() => !isGameReady);
+        // TODO : game over logic initiate
     }
 
 
@@ -203,11 +207,12 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     {
         while (true)
         {
+            isWaveDone = false;
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
             // riskUI enable
             print("All Wave Launched....");
 
-            yield return new WaitUntil(() => UnitManager.Instance.monsters.Count <= 0);
+            yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
             print("All Monsters Dead || Time Out....");
 
