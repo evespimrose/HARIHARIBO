@@ -66,7 +66,8 @@ public class CreateCharacterPanel : MonoBehaviour
         currentClassDescriptionText.text = cd.description;
         currentClassCharacteristicText.text = cd.characteristic;
         currentClassNameText.text = classType.ToString();
-        characterImage.sprite = cd.sprite;
+        characterImage.sprite = cd.headSprite;
+        characterModelImage.sprite = cd.sprite;
     }
 
     private void OnCloseButtonClick()

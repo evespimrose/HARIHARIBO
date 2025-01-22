@@ -44,7 +44,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, passwd);
             usersRef = DB.GetReference($"users/{result.User.UserId}");
 
-            // 회占쏙옙占쏙옙 占쏙옙占쏙옙占싶몌옙 Database占쏙옙 占쏙옙占쏙옙
+            // ?뚦뜝?숈삕?좎룞???좎룞?쇿뜝?숈삕?좎떢紐뚯삕 Database?좎룞???좎룞?쇿뜝?숈삕
             FireBaseUserData userData = new FireBaseUserData(result.User.UserId);
 
             string userDataJson = JsonConvert.SerializeObject(userData);
@@ -98,7 +98,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         {
             var providers = await Auth.FetchProvidersForEmailAsync(email);
 
-            bool isDuplicate = providers != null && providers.Any();
+            bool isDuplicate = providers == null || !providers.Any();
             callback?.Invoke(isDuplicate);
         }
         catch (FirebaseException e)
