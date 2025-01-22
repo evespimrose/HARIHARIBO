@@ -782,6 +782,8 @@ MonoBehaviour:
   atkRange: 10
   atkDelay: 5
   curHp: 10
+  exp: 0
+  won: 0
   isAtk: 0
   isAirborne: 0
   isStun: 0

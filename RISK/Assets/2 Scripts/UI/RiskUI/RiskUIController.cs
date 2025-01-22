@@ -158,6 +158,11 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         Debug.Log("항복 투표가 통과되었습니다.");
         // 게임 매니저에 항복 처리 요청
         // TODO: 게임 매니저에 항복 처리 메서드 구현 필요
+
+        ProcessSurrender();
+
+        // UI 비활성화
+        gameObject.SetActive(false);
     }
 
     private void FinalizeVoting(Dictionary<int, int> votes)
@@ -230,4 +235,57 @@ public class RiskUIController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    public void ProcessSurrender()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        photonView.RPC("ProcessSurrenderRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void ProcessSurrenderRPC()
+    {
+        GameManager.Instance.isWaveDone = true;
+
+        CalculateRewards(true);
+    }
+
+    private void CalculateRewards(bool isSurrender)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        Dictionary<string, float> playerRewards = new Dictionary<string, float>();
+
+        foreach (var playerObj in UnitManager.Instance.players.Values)
+        {
+            if (playerObj.TryGetComponent(out Player player))
+            {
+                float baseReward = 1000f; // 기본 보상
+                float levelMultiplier = player.Stats.level * 0.1f; // 레벨 보너스
+                float surrenderPenalty = isSurrender ? 0.5f : 1f; // 항복 페널티
+
+                float finalReward = baseReward * (1 + levelMultiplier) * surrenderPenalty;
+                playerRewards.Add(player.Stats.nickName, finalReward);
+            }
+        }
+
+        photonView.RPC("UpdatePlayerRewardsRPC", RpcTarget.All, JsonConvert.SerializeObject(playerRewards));
+    }
+
+    [PunRPC]
+    private void UpdatePlayerRewardsRPC(string rewardsJson)
+    {
+        Dictionary<string, float> rewards = JsonConvert.DeserializeObject<Dictionary<string, float>>(rewardsJson);
+
+        foreach (var reward in rewards)
+        {
+
+            if (reward.Key == FirebaseManager.Instance.currentCharacterData.nickName)
+            {
+                // TODO: Update reward to Firebase Database
+            }
+        }
+    }
+}
 }
