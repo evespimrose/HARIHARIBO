@@ -40,6 +40,15 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         PhotonPeer.RegisterType(typeof(Mage), 102, SerializeMage, DeserializeMage);
         PhotonPeer.RegisterType(typeof(Warrior), 103, SerializeWarrior, DeserializeWarrior);
 
+
+        if (photonView.IsMine)
+        {
+            var dungeonUI = FindObjectOfType<DungeonUIController>();
+            if (dungeonUI != null)
+            {
+                dungeonUI.SetPlayer(this);
+            }
+        }
         //if (photonView.IsMine)
         //{
         //    UnitManager.Instance.RegisterPlayer(gameObject);
@@ -100,6 +109,15 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     //{
     //    this.stats = stats;
     //}
+
+    // 상태 변경을 위한 public 메서드 추가
+    public void MobileChangeState(Type stateType)
+    {
+        if (photonView.IsMine)
+        {
+            stateHandler.ChangeState(stateType);
+        }
+    }
     private void InitializeComponents()
     {
         animator = GetComponent<Animator>();
