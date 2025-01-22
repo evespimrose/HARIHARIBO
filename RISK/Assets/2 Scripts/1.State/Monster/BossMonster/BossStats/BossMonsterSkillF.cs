@@ -51,6 +51,7 @@ public class BossMonsterSkillF : BaseState<BossMonster>
     {
         // 선딜레이
         monster.skillFPrefabA.SetActive(true);
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillFSoundClips);
         yield return new WaitForSeconds(atkDelay);
 
         // 애니메이션 실행

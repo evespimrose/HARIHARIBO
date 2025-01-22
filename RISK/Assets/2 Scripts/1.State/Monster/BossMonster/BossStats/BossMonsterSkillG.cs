@@ -34,6 +34,7 @@ public class BossMonsterSkillG : BaseState<BossMonster>
     private IEnumerator SkillGCoroutine(BossMonster monster)
     {
         monster.skillGPrefab.SetActive(true);
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillGSoundClips);
         monster.animator.SetTrigger("SkillG");
         monster.TargetLook(monster.target.position);
         // 첫 번째 대기 시간 후 텔레포트

@@ -39,6 +39,7 @@ public class BossMonsterSkillD : BaseState<BossMonster>
         // 선딜레이 후 애니메이션 실행
         yield return new WaitForSeconds(atkDelay);
         monster.TargetLook(monster.target.position);
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillDSoundClips);
         monster.animator.SetTrigger("SkillD");
         Debug.Log("SkillD 애니메이션 시작");
 

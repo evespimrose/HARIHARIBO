@@ -102,6 +102,8 @@ MonoBehaviour:
   monsterType: 2
   target: {fileID: 0}
   model: {fileID: 7121646202909548812}
+  hitSoundClips: {fileID: 8300000, guid: 414fea2733048bf4b94f694a2c14759d, type: 3}
+  dieSoundClips: {fileID: 8300000, guid: efa023f02aeeb444d843dd6271ee173a, type: 3}
   monsterState: {fileID: 11400000, guid: 9ed6a83cdc30f444aa40ce293a6a8974, type: 2}
   atkDamage: 0
   moveSpeed: 1
@@ -166,8 +168,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 0}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
