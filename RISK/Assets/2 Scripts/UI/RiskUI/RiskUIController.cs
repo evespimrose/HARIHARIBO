@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -175,6 +176,14 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     {
         Debug.Log($"선택된 리스크: {selectedRisk.riskName}");
         // TODO: 선택된 리스크 효과 적용 로직 구현 필요
+        ApplyRiskEffect(selectedRisk);
+
+        gameObject.SetActive(false);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.Instance.isWaveDone = false;
+        }
     }
 
     private void UpdateCardVisuals()
@@ -182,6 +191,43 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         foreach (RiskCard card in cardContainer.GetComponentsInChildren<RiskCard>())
         {
             card.SetSelected(card.RiskId == selectedCard);
+        }
+    }
+
+    public void ApplyRiskEffect(RiskData selectedRisk)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        photonView.RPC("ApplyRiskEffectRPC", RpcTarget.All, JsonConvert.SerializeObject(selectedRisk));
+    }
+
+    [PunRPC]
+    private void ApplyRiskEffectRPC(string riskDataJson)
+    {
+        RiskData risk = JsonConvert.DeserializeObject<RiskData>(riskDataJson);
+
+        foreach (var playerObj in UnitManager.Instance.players.Values)
+        {
+            if (playerObj.TryGetComponent(out Player player))
+            {
+                PlayerStats stats = player.Stats;
+
+                switch (risk.riskId)
+                {
+                    case 1:
+                        stats.maxHealth *= 0.8f;
+                        stats.currentHealth = Mathf.Min(stats.currentHealth, stats.maxHealth);
+                        break;
+                    case 2:
+                        stats.attackPower *= 1.3f;
+                        stats.damageReduction *= 0.7f;
+                        break;
+                    case 3:
+                        stats.moveSpeed *= 1.2f;
+                        stats.healthRegen *= 0.5f;
+                        break;
+                }
+            }
         }
     }
 }
