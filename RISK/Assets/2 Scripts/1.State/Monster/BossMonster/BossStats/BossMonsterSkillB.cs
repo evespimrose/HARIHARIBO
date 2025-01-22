@@ -68,6 +68,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         ActivateSkillBFieldParticle(monster);
         yield return new WaitForSeconds(hitTime);
 
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillBSoundClips[0]);
         Atk(monster);
         DeactivateSkillBFieldParticle(monster);
         yield return new WaitForSeconds(endTime);
@@ -130,10 +131,12 @@ public class BossMonsterSkillB : BaseState<BossMonster>
     {
         if (atkType == AtkType.Melee)
         {
+            GameSoundManager.Instance.PlayBossEffectSound(monster.skillBSoundClips[2]);
             monster.skillBParticle[0].SetActive(true);
         }
         else if (atkType == AtkType.Range)
         {
+            GameSoundManager.Instance.PlayBossEffectSound(monster.skillBSoundClips[1]);
             monster.skillBParticle[1].SetActive(true);
         }
     }

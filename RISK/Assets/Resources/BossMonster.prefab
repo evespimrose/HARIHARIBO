@@ -109276,6 +109276,8 @@ MonoBehaviour:
   monsterType: 4
   target: {fileID: 0}
   model: {fileID: 8588490523938595768}
+  hitSoundClips: {fileID: 8300000, guid: 414fea2733048bf4b94f694a2c14759d, type: 3}
+  dieSoundClips: {fileID: 8300000, guid: efa023f02aeeb444d843dd6271ee173a, type: 3}
   monsterState: {fileID: 11400000, guid: 215fedc7b11462c41831b2a9bf79de7f, type: 2}
   atkDamage: 0
   moveSpeed: 0
@@ -109296,17 +109298,35 @@ MonoBehaviour:
   isPoison: 0
   bodyAtkDamage: 1
   animator: {fileID: 6463728419022047405}
+  atkSoundClips:
+  - {fileID: 8300000, guid: cf09a6644b4024c4997c694a0e47d43e, type: 3}
+  - {fileID: 8300000, guid: d1ef47804af0c0644a21a6ba155987b2, type: 3}
+  - {fileID: 8300000, guid: 39b1d8f788a46d24c8849639a23ca72f, type: 3}
+  skillASoundClips:
+  - {fileID: 8300000, guid: 582531f6d453051488511e0d363ac429, type: 3}
+  - {fileID: 8300000, guid: e5c5be3076c8fcc4b907ed7c1f8ec869, type: 3}
+  skillBSoundClips:
+  - {fileID: 8300000, guid: cb03c0056c9ac4f439f062768df9a291, type: 3}
+  - {fileID: 8300000, guid: a700330279906f043871c00e8ec26391, type: 3}
+  - {fileID: 8300000, guid: 8641df5ec23bd714d96377a8537de1dd, type: 3}
   skillBParticle:
   - {fileID: 8855011746057135158}
   - {fileID: 2267613541218829949}
   skillBFieldParticle:
   - {fileID: 6376343473359624387}
   - {fileID: 2315923337818955209}
+  skillCSoundClips: {fileID: 8300000, guid: ad26be008eef25b4cbd1434639af756c, type: 3}
   skillCPrefab: {fileID: 8026561472859799840, guid: aee27a3670b80d34bbe2ccf670e7285c, type: 3}
+  skillDSoundClips: {fileID: 8300000, guid: 9d5afb8cc6f8c7843819cd5a4c0e8305, type: 3}
   skillDPrefab: {fileID: 3333531521651989703, guid: 5fdd9157d09e2974ba4d403be0b6b5be, type: 3}
+  skillESoundClips:
+  - {fileID: 8300000, guid: 85b0f6eb23fbe9442b4578a9a649d282, type: 3}
+  - {fileID: 8300000, guid: 830e62628d12f5145a6e905fa20411b2, type: 3}
   skillEPrefab: {fileID: 4598972316749910789, guid: 02e24e3a8a752564d8c52fa80d6b497a, type: 3}
+  skillFSoundClips: {fileID: 8300000, guid: ea9efd9a43d4f364ea6a0dcdd1339b91, type: 3}
   skillFPrefabA: {fileID: 3587186783874240702}
   skillFPrefabB: {fileID: 9127892874518466094}
+  skillGSoundClips: {fileID: 8300000, guid: 20c0fde16a7aa2a41930f81e3e358c9a, type: 3}
   skillGPrefab: {fileID: 6379079059883315448}
   isMoving: 0
   isWall: 0

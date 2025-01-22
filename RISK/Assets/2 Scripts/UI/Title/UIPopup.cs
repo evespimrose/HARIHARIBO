@@ -27,7 +27,10 @@ public class UIPopup : MonoBehaviour
 
     protected virtual void CloseButtonClick()
     {
-        PanelManager.Instance.PopupClose();
-        callback?.Invoke();
+        if (PanelManager.Instance != null)
+        {
+            PanelManager.Instance.PopupClose();
+            callback?.Invoke();
+        }
     }
 }

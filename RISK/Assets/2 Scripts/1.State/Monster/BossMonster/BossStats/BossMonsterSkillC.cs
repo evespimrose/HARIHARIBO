@@ -40,6 +40,7 @@ public class BossMonsterSkillC : BaseState<BossMonster>
         yield return new WaitForSeconds(atkDelay);
 
         monster.TargetLook(monster.target.position);
+        GameSoundManager.Instance.PlayBossEffectSound(monster.skillCSoundClips);
         monster.animator.SetTrigger("SkillC");
         yield return new WaitForSeconds(skillCAtkTime);
 
