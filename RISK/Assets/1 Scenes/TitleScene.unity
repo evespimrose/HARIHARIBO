@@ -10280,12 +10280,12 @@ GameObject:
   - component: {fileID: 479420149}
   - component: {fileID: 479420148}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Member Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &479420147
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21612,11 +21612,11 @@ MonoBehaviour:
   chatInputField: {fileID: 132700043}
   sendButton: {fileID: 1942263109}
   hideButton: {fileID: 694789628}
-  showButton: {fileID: 0}
+  showButton: {fileID: 502670125}
   hideText: {fileID: 1938815023}
   playerList: {fileID: 859118061}
   chatLogText: {fileID: 2023538553}
-  Users: {fileID: 0}
+  Users: {fileID: 479420146}
 --- !u!114 &852740075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23698,19 +23698,27 @@ MonoBehaviour:
       description: warrior warrior warrior
       characteristic: warrior warrior warriorwarrior warrior warriorwarrior warrior
         warriorwarrior warrior warriorwarrior warrior warriorwarrior warrior warrior
+      sprite: {fileID: 21300000, guid: 9f08612f3f6778e4ba9c3560ef05a8cb, type: 3}
+      headSprite: {fileID: 21300000, guid: c552d821feb72af44acadc2c73e8dda0, type: 3}
   - classType: 2
     characterData:
-      description: 'SpearMan SpearMan SpearMan SpearMan SpearMan SpearMan SpearMan
-        SpearMan SpearMan '
-      characteristic: 'SpearMan SpearMan SpearMan SpearMan SpearMan SpearMan SpearMan '
+      description: DestroyerDestroyerDestroyerDestroyerDestroyerDestroyer
+      characteristic: DestroyerDestroyerDestroyerDestroyerDestroyerDestroyer
+      sprite: {fileID: 21300000, guid: 03943f4d53009c545a6eee71f1b7bb57, type: 3}
+      headSprite: {fileID: 21300000, guid: 03943f4d53009c545a6eee71f1b7bb57, type: 3}
   - classType: 3
     characterData:
-      description: ' ArcherArcherArcher'
-      characteristic: ArcherArcherArcherArcherArcherArcherArcher
+      description: ' Healer Healer Healer Healer Healer'
+      characteristic: ' Healer Healer Healer Healer Healer Healer'
+      sprite: {fileID: 21300000, guid: 54d48f0903104674e850ea91ca8ae61a, type: 3}
+      headSprite: {fileID: 21300000, guid: 85acb62e18a865b408909f4ca2ad9d67, type: 3}
   - classType: 4
     characterData:
       description: 'Mage Mage Mage Mage Mage '
       characteristic: 'Mage Mage Mage Mage Mage Mage Mage Mage Mage Mage Mage Mage '
+      sprite: {fileID: 21300000, guid: 3f8d79bfdc5d09b4c8236488bb07fa14, type: 3}
+      headSprite: {fileID: 21300000, guid: aec8e68b4f568984da738e8e2b261469, type: 3}
+  characterHeadImages: []
   characterModelImage: {fileID: 979531883}
   characterImage: {fileID: 1852901597}
   nickNameInputfield: {fileID: 1500765133}

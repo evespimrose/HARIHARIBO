@@ -11,7 +11,7 @@ public class CreateCharacterPanel : MonoBehaviour
     [SerializeField]
     private List<ClassNameToCharacterData> classDataList;
 
-    private Dictionary<ClassType, CharacterData> characterDataDic = new Dictionary<ClassType, CharacterData>();
+    public Dictionary<ClassType, CharacterData> characterDataDic = new Dictionary<ClassType, CharacterData>();
 
     public Image characterModelImage;
     public Image characterImage;
@@ -26,7 +26,6 @@ public class CreateCharacterPanel : MonoBehaviour
     public TextMeshProUGUI currentClassNameText;
     public TextMeshProUGUI currentClassDescriptionText;
     public TextMeshProUGUI currentClassCharacteristicText;
-
 
     public Action<ClassType> UpdateInfo;
 
@@ -44,6 +43,7 @@ public class CreateCharacterPanel : MonoBehaviour
                 if (characterInfo.TryGetComponent(out CharacterInfoUI characterInfoUI))
                 {
                     characterInfoUI.classType = classdata.classType;
+                    characterInfoUI.classImage.sprite = characterDataDic[classdata.classType].headSprite;
 
                     if (characterInfo.TryGetComponent(out Button button))
                     {
@@ -58,8 +58,8 @@ public class CreateCharacterPanel : MonoBehaviour
             }
         }
         currentClassType = ClassType.Warrior;
-        print(currentClassType.ToString());
         currentClassNameText.text = currentClassType.ToString();
+        SwapInfoText(currentClassType);
 
         createButton.onClick.AddListener(OnCreateButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
@@ -71,6 +71,7 @@ public class CreateCharacterPanel : MonoBehaviour
         currentClassDescriptionText.text = cd.description;
         currentClassCharacteristicText.text = cd.characteristic;
         currentClassNameText.text = classType.ToString();
+        characterImage.sprite = cd.sprite;
     }
 
     private void OnCloseButtonClick()
@@ -102,6 +103,8 @@ public class CharacterData
 {
     public string description;
     public string characteristic;
+    public Sprite sprite;
+    public Sprite headSprite;
 }
 
 [Serializable]
