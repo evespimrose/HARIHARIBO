@@ -47,9 +47,10 @@ public class CreatePartyUI : MonoBehaviour
 
         for (int i = 0; i < 5; ++i)
         {
+            int capturedIndex = i;
             Button button = Instantiate(Resources.Load<Button>("DifficultySettingButton"), difficultyButtonTransform);
-            button.onClick.AddListener(() => { goal = i; defficultyText.text = goal.ToString(); });
-            button.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = (i + 1).ToString();
+            button.onClick.AddListener(() => { goal = capturedIndex + 1; defficultyText.text = goal.ToString(); });
+            button.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = (capturedIndex + 1).ToString();
         }
 
         createButton.onClick.AddListener(CreatePartyRoom);

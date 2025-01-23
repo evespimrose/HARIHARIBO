@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public bool isTickGoes = false;
 
+    public bool isGamePaused = false;
+
     public List<FireBaseCharacterData> connectedPlayers = new List<FireBaseCharacterData>();
 
     public Transform playerPosition;
@@ -32,6 +34,10 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     private DungeonUIController dungeonUIController;
 
+    public float roomReward = 0f;
+    private float rewardMagnification = 1.0f;
+
+    public Action<float> WhenMonsterDies;
 
     [SerializeField]
     private List<ClassNameToCharacterData> classDataList;
@@ -57,13 +63,19 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
         CreatePersistentCanvas();
+        WhenMonsterDies += MonsterReward;
+    }
+
+    public void MonsterReward(float won)
+    {
+        roomReward += won;
     }
 
     private IEnumerator GameClock()
     {
         while (remainingTime > 0)
         {
-            if (isTickGoes)
+            if (isTickGoes && !isGamePaused)
             {
                 remainingTime -= Time.deltaTime;
             }
@@ -268,7 +280,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
             print("All Monsters Dead || Time Out....");
-
+            riskUIController.gameObject.SetActive(true);
 
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
@@ -340,6 +352,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     private void SetGameReady()
     {
         isGameRunning = true;
+        isGamePaused = false;
     }
 
     public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)
