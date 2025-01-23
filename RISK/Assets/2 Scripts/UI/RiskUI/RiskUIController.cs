@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,14 +25,10 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     private void Start()
     {
         if (surrenderButton != null)
-        {
             surrenderButton.onClick.AddListener(OnSurrenderClick);
-        }
 
         if (PhotonNetwork.IsMasterClient)
-        {
             InitializeRiskData();
-        }
     }
 
     private void InitializeRiskData()
@@ -161,6 +158,11 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         Debug.Log("항복 투표가 통과되었습니다.");
         // 게임 매니저에 항복 처리 요청
         // TODO: 게임 매니저에 항복 처리 메서드 구현 필요
+
+        ProcessSurrender();
+
+        // UI 비활성화
+        gameObject.SetActive(false);
     }
 
     private void FinalizeVoting(Dictionary<int, int> votes)
@@ -179,6 +181,14 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     {
         Debug.Log($"선택된 리스크: {selectedRisk.riskName}");
         // TODO: 선택된 리스크 효과 적용 로직 구현 필요
+        ApplyRiskEffect(selectedRisk);
+
+        gameObject.SetActive(false);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameManager.Instance.isWaveDone = false;
+        }
     }
 
     private void UpdateCardVisuals()
@@ -188,4 +198,94 @@ public class RiskUIController : MonoBehaviourPunCallbacks
             card.SetSelected(card.RiskId == selectedCard);
         }
     }
+
+    public void ApplyRiskEffect(RiskData selectedRisk)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        photonView.RPC("ApplyRiskEffectRPC", RpcTarget.All, JsonConvert.SerializeObject(selectedRisk));
+    }
+
+    [PunRPC]
+    private void ApplyRiskEffectRPC(string riskDataJson)
+    {
+        RiskData risk = JsonConvert.DeserializeObject<RiskData>(riskDataJson);
+
+        foreach (var playerObj in UnitManager.Instance.players.Values)
+        {
+            if (playerObj.TryGetComponent(out Player player))
+            {
+                PlayerStats stats = player.Stats;
+
+                switch (risk.riskId)
+                {
+                    case 1:
+                        stats.maxHealth *= 0.8f;
+                        stats.currentHealth = Mathf.Min(stats.currentHealth, stats.maxHealth);
+                        break;
+                    case 2:
+                        stats.attackPower *= 1.3f;
+                        stats.damageReduction *= 0.7f;
+                        break;
+                    case 3:
+                        stats.moveSpeed *= 1.2f;
+                        stats.healthRegen *= 0.5f;
+                        break;
+                }
+            }
+        }
+    }
+
+    public void ProcessSurrender()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        photonView.RPC("ProcessSurrenderRPC", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void ProcessSurrenderRPC()
+    {
+        GameManager.Instance.isWaveDone = true;
+
+        CalculateRewards(true);
+    }
+
+    private void CalculateRewards(bool isSurrender)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        Dictionary<string, float> playerRewards = new Dictionary<string, float>();
+
+        foreach (var playerObj in UnitManager.Instance.players.Values)
+        {
+            if (playerObj.TryGetComponent(out Player player))
+            {
+                float baseReward = 1000f; // 기본 보상
+                float levelMultiplier = player.Stats.level * 0.1f; // 레벨 보너스
+                float surrenderPenalty = isSurrender ? 0.5f : 1f; // 항복 페널티
+
+                float finalReward = baseReward * (1 + levelMultiplier) * surrenderPenalty;
+                playerRewards.Add(player.Stats.nickName, finalReward);
+            }
+        }
+
+        photonView.RPC("UpdatePlayerRewardsRPC", RpcTarget.All, JsonConvert.SerializeObject(playerRewards));
+    }
+
+    [PunRPC]
+    private void UpdatePlayerRewardsRPC(string rewardsJson)
+    {
+        Dictionary<string, float> rewards = JsonConvert.DeserializeObject<Dictionary<string, float>>(rewardsJson);
+
+        foreach (var reward in rewards)
+        {
+
+            if (reward.Key == FirebaseManager.Instance.currentCharacterData.nickName)
+            {
+                // TODO: Update reward to Firebase Database
+            }
+        }
+    }
+}
 }

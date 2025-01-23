@@ -32,7 +32,6 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
     {
         base.Awake();
 
-
         sendButton.onClick.AddListener(OnSendButtonClick);
         hideButton.onClick.AddListener(OnHideButtonClick);
         showButton.onClick.AddListener(OnShowButtonClick);
@@ -42,6 +41,15 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
         chatLogText.fontSize = 24f;
 
         gameObject.SetActive(false);
+    }
+
+    private void AttachToCurrentCanvas()
+    {
+        Canvas newCanvas = FindObjectOfType<Canvas>();
+        if (newCanvas != null)
+        {
+            transform.SetParent(newCanvas.transform, false);
+        }
     }
 
     private void OnHideButtonClick()

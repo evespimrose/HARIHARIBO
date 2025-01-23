@@ -9,6 +9,7 @@ using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using Photon.Pun.UtilityScripts;
 using System;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
@@ -22,9 +23,13 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public bool isWaveDone = false;
 
+    public bool isTickGoes = false;
+
     public RiskUIController riskUIController;
 
     public ChatScrollController chat;
+
+    private Canvas persistentCanvas;
 
     [SerializeField]
     private List<ClassNameToCharacterData> classDataList;
@@ -43,6 +48,37 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
             }
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        CreatePersistentCanvas();
+    }
+
+    private void CreatePersistentCanvas()
+    {
+        GameObject canvasObject = new GameObject("PersistentCanvas");
+        persistentCanvas = canvasObject.AddComponent<Canvas>();
+        canvasObject.AddComponent<CanvasScaler>();
+        canvasObject.AddComponent<GraphicRaycaster>();
+
+        persistentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        DontDestroyOnLoad(canvasObject);
+
+        chat.gameObject.transform.SetParent(persistentCanvas.transform, false);
+    }
+
+    public void AttachToNewCanvas(Canvas newCanvas)
+    {
+        // 새 Canvas에 UI 오브젝트를 연결
+        if (chat != null && newCanvas != null)
+        {
+            chat.gameObject.transform.SetParent(newCanvas.transform, false);
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Canvas newCanvas = FindObjectOfType<Canvas>();
+        AttachToNewCanvas(newCanvas);
     }
 
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
@@ -106,7 +142,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         };
 
         int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-        print($"playerNumber : {playerNumber}");
         playerPosition = GameObject.Find("SpawnPosition").transform;
 
         Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
@@ -163,6 +198,9 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
 
         StartCoroutine(Dungeon());
+
+        yield return new WaitUntil(() => !isGameReady);
+        // TODO : game over logic initiate
     }
 
 
@@ -170,11 +208,12 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     {
         while (true)
         {
+            isWaveDone = false;
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
             // riskUI enable
             print("All Wave Launched....");
 
-            yield return new WaitUntil(() => UnitManager.Instance.monsters.Count <= 0);
+            yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
             print("All Monsters Dead || Time Out....");
 
@@ -182,7 +221,10 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
 
+
         }
+
+        isGameReady = false;
     }
 
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
