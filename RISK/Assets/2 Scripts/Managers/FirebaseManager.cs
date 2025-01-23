@@ -8,6 +8,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Linq;
+using UnityEditor;
 
 public class FirebaseManager : SingletonManager<FirebaseManager>
 {
@@ -168,14 +169,31 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         {
             FireBaseCharacterData characterData = new FireBaseCharacterData(nickName, classType);
 
+            // 직업별 초기 스탯 설정
+            GameObject prefab = Resources.Load<GameObject>(classType.ToString());
+
+            if (prefab != null)
+            {
+                var playerComponent = prefab.GetComponent<Player>();
+                if (playerComponent != null)
+                {
+                    // 각 직업별 컴포넌트에서 기본 스탯 가져오기
+                    SerializedObject serializedObject = new SerializedObject(playerComponent);
+                    characterData.maxHp = GetSerializedPropertyValue(serializedObject, "baseMaxHealth");
+                    characterData.atk = GetSerializedPropertyValue(serializedObject, "baseAttackPower");
+                    characterData.cri = GetSerializedPropertyValue(serializedObject, "baseCriticalChance");
+                    characterData.criDmg = GetSerializedPropertyValue(serializedObject, "baseCriticalDamage");
+                    characterData.dmgRed = GetSerializedPropertyValue(serializedObject, "baseDamageReduction");
+                    characterData.hpReg = GetSerializedPropertyValue(serializedObject, "baseHealthRegen");
+                    characterData.coolRed = GetSerializedPropertyValue(serializedObject, "baseCooldownReduction");
+                }
+            }
+
             string characterDataJson = JsonConvert.SerializeObject(characterData);
-
             DatabaseReference charactersRef = DB.GetReference($"characters/{Auth.CurrentUser.UserId}");
-
             await charactersRef.Child(nickName).SetRawJsonValueAsync(characterDataJson);
 
             PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "character creation successed.", () => PanelManager.Instance.PanelOpen("SelectCharacter"));
-
         }
         catch (Exception e)
         {
@@ -190,6 +208,13 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                );
         }
     }
+
+    private float GetSerializedPropertyValue(SerializedObject serializedObject, string propertyName)
+    {
+        var property = serializedObject.FindProperty(propertyName);
+        return property != null ? property.floatValue : 0f;
+    }
+
 
     public async Task<List<FireBaseCharacterData>> LoadCharacterDataList()
     {

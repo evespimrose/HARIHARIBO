@@ -53,6 +53,9 @@ MonoBehaviour:
   - SyncPlayerDataRPC
   - SetGameReady
   - ReceiveMsg
+  - ApplyRiskEffectRPC
+  - ProcessSurrenderRPC
+  - UpdatePlayerRewardsRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
