@@ -12551,11 +12551,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 0}
   message: {fileID: 0}
-  closeButton: {fileID: 2127936175}
+  closeButton: {fileID: 0}
   characterNameText: {fileID: 1275398319}
   levelText: {fileID: 1446771855}
   curGold: {fileID: 758236743}
-  characterImage: {fileID: 162427743}
+  characterImage: {fileID: 0}
   statSets:
   - statsName: {fileID: 2125223487}
     currentStats: {fileID: 317322416}
@@ -22771,11 +22771,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2963d5f11e65d1458669a3ea573f87d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWaveDone: 0
+  isTickGoes: 0
   connectedPlayers: []
   playerPosition: {fileID: 0}
   spawner: {fileID: 0}
-  isWaveDone: 0
-  isTickGoes: 0
   riskUIController: {fileID: 0}
   chat: {fileID: 2136224627}
   classDataList:
@@ -50574,6 +50574,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7922112072478673929, guid: 9f97c408ecb4d294c9804d5de69c4d53, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7922112072478673929, guid: 9f97c408ecb4d294c9804d5de69c4d53, type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8456894537798103728, guid: 9f97c408ecb4d294c9804d5de69c4d53, type: 3}
