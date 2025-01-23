@@ -35,12 +35,12 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     {
         risks = new RiskData[]
         {
-            new RiskData { riskId = 1, riskName = "리스크 1", description = "설명 1", multiplier = 1.5f },
-            new RiskData { riskId = 2, riskName = "리스크 2", description = "설명 2", multiplier = 2.0f },
-            new RiskData { riskId = 3, riskName = "리스크 3", description = "설명 3", multiplier = 2.5f }
+            new RiskData { riskId = 1, riskName = "由ъ뒪??1", description = "?ㅻ챸 1", multiplier = 1.5f },
+            new RiskData { riskId = 2, riskName = "由ъ뒪??2", description = "?ㅻ챸 2", multiplier = 2.0f },
+            new RiskData { riskId = 3, riskName = "由ъ뒪??3", description = "?ㅻ챸 3", multiplier = 2.5f }
         };
 
-        // 초기 투표 데이터 설정
+        // 珥덇린 ?ы몴 ?곗씠???ㅼ젙
         var initialVotes = new ExitGames.Client.Photon.Hashtable
         {
             { RISK_VOTES_KEY, new Dictionary<int, int>() },
@@ -77,11 +77,11 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         selectedCard = index;
         isVoting = true;
 
-        // 현재 투표 상태 가져오기
+        // ?꾩옱 ?ы몴 ?곹깭 媛?몄삤湲?
         var votes = (Dictionary<int, int>)PhotonNetwork.CurrentRoom.CustomProperties[RISK_VOTES_KEY];
         votes[PhotonNetwork.LocalPlayer.ActorNumber] = risks[index].riskId;
 
-        // 투표 정보 업데이트
+        // ?ы몴 ?뺣낫 ?낅뜲?댄듃
         PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable
         {
             { RISK_VOTES_KEY, votes }
@@ -123,19 +123,19 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
     private void UpdateVoteCounts(Dictionary<int, int> votes)
     {
-        // 각 카드의 플레이어 투표 상태 업데이트
+        // 媛?移대뱶???뚮젅?댁뼱 ?ы몴 ?곹깭 ?낅뜲?댄듃
         foreach (RiskCard card in cardContainer.GetComponentsInChildren<RiskCard>())
         {
-            // 각 플레이어의 투표 여부 확인
+            // 媛??뚮젅?댁뼱???ы몴 ?щ? ?뺤씤
             foreach (var vote in votes)
             {
-                int playerIndex = vote.Key - 1; // ActorNumber는 1부터 시작하므로 0-based index로 변환
+                int playerIndex = vote.Key - 1; // ActorNumber??1遺???쒖옉?섎?濡?0-based index濡?蹂??
                 bool votedForThisCard = vote.Value == card.RiskId;
                 card.UpdatePlayerVote(playerIndex, votedForThisCard);
             }
         }
 
-        // 모든 플레이어가 투표했는지 확인
+        // 紐⑤뱺 ?뚮젅?댁뼱媛 ?ы몴?덈뒗吏 ?뺤씤
         if (votes.Count == PhotonNetwork.CurrentRoom.PlayerCount && PhotonNetwork.IsMasterClient)
         {
             FinalizeVoting(votes);
@@ -145,7 +145,7 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
     private void UpdateSurrenderVotes(HashSet<int> surrenderVotes)
     {
-        voteCountText.text = $"항복 투표: {surrenderVotes.Count}/{PhotonNetwork.CurrentRoom.PlayerCount}";
+        voteCountText.text = $"??났 ?ы몴: {surrenderVotes.Count}/{PhotonNetwork.CurrentRoom.PlayerCount}";
 
         if (surrenderVotes.Count >= PhotonNetwork.CurrentRoom.PlayerCount)
         {
@@ -155,13 +155,13 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
     private void OnSurrenderConfirmed()
     {
-        Debug.Log("항복 투표가 통과되었습니다.");
-        // 게임 매니저에 항복 처리 요청
-        // TODO: 게임 매니저에 항복 처리 메서드 구현 필요
+        Debug.Log("??났 ?ы몴媛 ?듦낵?섏뿀?듬땲??");
+        // 寃뚯엫 留ㅻ땲?????났 泥섎━ ?붿껌
+        // TODO: 寃뚯엫 留ㅻ땲?????났 泥섎━ 硫붿꽌??援ы쁽 ?꾩슂
 
         ProcessSurrender();
 
-        // UI 비활성화
+        // UI 鍮꾪솢?깊솕
         gameObject.SetActive(false);
     }
 
@@ -172,15 +172,15 @@ public class RiskUIController : MonoBehaviourPunCallbacks
                                 .First()
                                 .Key;
 
-        // 선택된 리스크 효과 적용
+        // ?좏깮??由ъ뒪???④낵 ?곸슜
         var selectedRisk = risks.First(r => r.riskId == mostVotedRisk);
         OnRiskSelected(selectedRisk);
     }
 
     private void OnRiskSelected(RiskData selectedRisk)
     {
-        Debug.Log($"선택된 리스크: {selectedRisk.riskName}");
-        // TODO: 선택된 리스크 효과 적용 로직 구현 필요
+        Debug.Log($"?좏깮??由ъ뒪?? {selectedRisk.riskName}");
+        // TODO: ?좏깮??由ъ뒪???④낵 ?곸슜 濡쒖쭅 援ы쁽 ?꾩슂
         ApplyRiskEffect(selectedRisk);
 
         gameObject.SetActive(false);
@@ -261,9 +261,9 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         {
             if (playerObj.TryGetComponent(out Player player))
             {
-                float baseReward = 1000f; // 기본 보상
-                float levelMultiplier = player.Stats.level * 0.1f; // 레벨 보너스
-                float surrenderPenalty = isSurrender ? 0.5f : 1f; // 항복 페널티
+                float baseReward = 1000f; // 湲곕낯 蹂댁긽
+                float levelMultiplier = player.Stats.level * 0.1f; // ?덈꺼 蹂대꼫??
+                float surrenderPenalty = isSurrender ? 0.5f : 1f; // ??났 ?섎꼸??
 
                 float finalReward = baseReward * (1 + levelMultiplier) * surrenderPenalty;
                 playerRewards.Add(player.Stats.nickName, finalReward);
@@ -287,5 +287,4 @@ public class RiskUIController : MonoBehaviourPunCallbacks
             }
         }
     }
-}
 }
