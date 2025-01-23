@@ -9,10 +9,10 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
 {
     protected override void Awake()
     {
-        // PhotonView媛 ?좎??섎룄濡?base.Awake() ?몄텧 ?꾩뿉 ?뺤씤
+        // PhotonView揶쎛 ?醫???롫즲嚥?base.Awake() ?紐꾪뀱 ?袁⑸퓠 ?類ㅼ뵥
         if (Instance != null && Instance != this)
         {
-            // 湲곗〈 PhotonView??ViewID瑜??덈줈??媛앹껜濡??꾨떖
+            // 疫꿸퀣??PhotonView??ViewID????덉쨮??揶쏆빘猿쒏에??袁⑤뼎
             if (Instance.photonView != null && photonView != null)
             {
                 photonView.ViewID = Instance.photonView.ViewID;
@@ -43,6 +43,16 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
         }
     }
 
+    public void DoomToMonsters()
+    {
+        foreach (var monster in monsters)
+        {
+            if (monster != null && monster.TryGetComponent(out Monster monsterComponent))
+            {
+                monsterComponent.Takedamage(2000000);
+            }
+        }
+    }
 
     [PunRPC]
     private void SyncPlayer(int viewId, int actorNumber, string playerName)
@@ -79,7 +89,7 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
                     LocalPlayer = player;
                 }
 
-                // Player??PhotonView瑜??듯빐 RPC ?몄텧
+                // Player??PhotonView?????퉸 RPC ?紐꾪뀱
                 photonView.RPC("NotifyPlayerRegistered", RpcTarget.All, actorNumber);
             }
         }

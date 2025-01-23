@@ -1,34 +1,35 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Destroyer : Player
 {
-    [Header("???됰Ŋ?좂뜏?癲ル슢??遺룔뀋????ㅿ폎?????熬곥굥六????繹먮냱??")]
+    [Header("????거?醫귣쐪??꿔꺂????븍짅??????욱룑??????ш낄援ο쭛????濚밸Ŧ???")]
     [SerializeField] public float baseMaxHealth;
     [SerializeField] private int baseHealthPerLevel;
     [SerializeField] public float baseAttackPower;
     [SerializeField] private int baseAttackPerLevel;
     [SerializeField] public float baseMoveSpeed;
 
-    [Header("?熬곣뫖?삥납??關??& ???雅?")]
+    [Header("??ш끽維??λ궔?????& ?????")]
     [SerializeField, Range(0f, 1f)] public float baseDamageReduction;
     [SerializeField] public float baseHealthRegen;
     [SerializeField] public float baseRegenInterval;
 
-    [Header("???ㅻ쿋?? ???熬곥굥六?")]
+    [Header("????살퓢?? ????ш낄援ο쭛?")]
     [SerializeField, Range(0f, 1f)] public float baseCriticalChance;
     [SerializeField] public float baseCriticalDamage;
     [SerializeField, Range(0f, 1f)] public float baseCooldownReduction;
 
-    [Header("???ш끽維???")]
+    [Header("?????썹땟???")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
     protected override void Awake()
     {
-        base.Awake();  // ???낇뀘??????????繹먮굛???潁??용끏????亦껋꼨援?? ?????덊떀
+        base.Awake();  // ????뉖??????????濚밸Ŧ援???逆???⑸걦????雅?퍔瑗ⓩ뤃?? ??????딅?
 
-        // ???ш끽維????癲ル슢??蹂좊쨨???潁??용끏???
+        // ?????썹땟?????꿔꺂???癰귥쥓夷???逆???⑸걦???
         if (effectsHandler == null)
         {
             effectsHandler = GetComponent<AnimationEventEffects>();
@@ -98,7 +99,7 @@ public class Destroyer : Player
             stateHandler.ChangeState(typeof(DestroyerWSkill));
             if (dungeonUI != null)
             {
-                Debug.Log("Starting W skill cooldown"); // ?붾쾭洹?濡쒓렇 異붽?
+                Debug.Log("Starting W skill cooldown"); // ?遺얠쒔域?嚥≪뮄???곕떽?
                 dungeonUI.StartPCCooldown(0);
             }
         }
@@ -119,6 +120,11 @@ public class Destroyer : Player
             isSkillInProgress = true;
             stateHandler.ChangeState(typeof(DestroyerTSkill));
             dungeonUI?.StartPCCooldown(3);
+        }
+
+        if (PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.I))
+        {
+            UnitManager.Instance.DoomToMonsters();
         }
 
         stateHandler.Update();

@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 {
@@ -111,7 +112,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     //    this.stats = stats;
     //}
 
-    // 상태 변경을 위한 public 메서드 추가
+    // ?怨밴묶 癰궰野껋럩???袁る립 public 筌롫뗄苑???곕떽?
     public void MobileChangeState(Type stateType)
     {
         if (photonView.IsMine)
@@ -128,7 +129,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         if (photonView.IsMine)
         {
 #if UNITY_ANDROID
-        // 모바일에서만 조이스틱 초기화
+        // 筌뤴뫀而??깅퓠??뺤춸 鈺곌퀣???쎈뼓 ?λ뜃由??
         if (GameObject.Find("Outline").TryGetComponent(out bl_Joystick joystick))
         {
             InitializeJoystick(joystick);
@@ -170,10 +171,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
             stateHandler.Update();
         }
-        else
-        {
 
-        }
     }
 
     public void SetSkillInProgress(bool inProgress)
@@ -249,12 +247,12 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
 
     private IEnumerator ApplyAttackBuffCoroutine(float amount, float duration)
     {
-        // 공격력 버프 적용
+        // ?⑤벀爰??甕곌쑵遊??怨몄뒠
         stats.attackPower += amount;
 
         yield return new WaitForSeconds(duration);
 
-        // 버프 해제
+        // 甕곌쑵遊???곸젫
         stats.attackPower -= amount;
     }
 
