@@ -26151,8 +26151,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerTSkillAttack
+  skillType: 0
   damagePercent: 400
   isBasicAttack: 0
+  isAirborneAttack: 1
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!65 &3873938769181911330
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47557,8 +47565,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerWSkillAttack
+  skillType: 0
   damagePercent: 150
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!135 &2926593614426059
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -65710,8 +65726,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerBasicAttack
+  skillType: 0
   damagePercent: 0
   isBasicAttack: 1
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!1 &8597035709166758581
 GameObject:
   m_ObjectHideFlags: 0
@@ -66574,8 +66598,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerRSkillAttack
+  skillType: 0
   damagePercent: 250
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!135 &3015738624982876707
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -69173,8 +69205,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: DestroyerESkillAttack
+  skillType: 0
   damagePercent: 200
   isBasicAttack: 0
+  isAirborneAttack: 1
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!65 &3155658883443766104
 BoxCollider:
   m_ObjectHideFlags: 0

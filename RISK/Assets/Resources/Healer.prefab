@@ -20789,8 +20789,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerESkillAttack
+  skillType: 3
   damagePercent: 150
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 10
+  knockbackDuration: 0.5
 --- !u!135 &8637931621210447297
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -56071,8 +56079,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerWSkillAttack
+  skillType: 1
   damagePercent: 150
-  isBasicAttack: 1
+  isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 100
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!135 &6197382340286119964
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -59246,8 +59262,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerRSkillAttack
+  skillType: 2
   damagePercent: 150
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 50
+  buffDuration: 10
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!135 &1956614651484434264
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -61651,8 +61675,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: HealerTSkillAttack
+  skillType: 0
   damagePercent: 500
   isBasicAttack: 0
+  isAirborneAttack: 1
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!135 &660730842317730909
 SphereCollider:
   m_ObjectHideFlags: 0

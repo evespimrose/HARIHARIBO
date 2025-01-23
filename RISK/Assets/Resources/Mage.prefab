@@ -23700,7 +23700,7 @@ MonoBehaviour:
   - {fileID: 1295805719403106403}
   - {fileID: -8108350381106507482}
   - {fileID: -4830462955973551265}
-  sceneViewId: 2
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &-8108350381106507482
@@ -30704,8 +30704,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: MageESkillAttack
+  skillType: 0
   damagePercent: 200
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!1 &3873282485824874073
 GameObject:
   m_ObjectHideFlags: 0
@@ -34681,8 +34689,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: MageRSkillAttack
+  skillType: 0
   damagePercent: 300
   isBasicAttack: 0
+  isAirborneAttack: 1
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!135 &8729376416233466223
 SphereCollider:
   m_ObjectHideFlags: 0

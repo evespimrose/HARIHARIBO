@@ -7,32 +7,44 @@ using Random = UnityEngine.Random;
 public enum SkillType
 {
     Damage,
-    DamageAndHeal,    
-    DamageAndDebuff,  
+    DamageAndHeal,
+    DamageAndBuff,  
     Knockback        
 }
 public class SkillDamageInfo : MonoBehaviour
 {
     [Header("스킬 기본 정보")]
-    public string skillName;    
+    public string skillName;
+    public SkillType skillType = SkillType.Damage;
+
+    [Header("데미지 정보")]
     [Range(0f, 500f)]
     public float damagePercent;  // 공격력 계수
+
+    [Header("공격 타입")]
+    public bool isBasicAttack = false;
+    public bool isAirborneAttack = false;
+    public bool isStunAttack = false;
+
+    [Header("추가 효과 정보")]
+    public float healPercent;    // 힐링 계수
+    public float attackBuffPercent;    // 공격력 증가량
+    public float buffDuration;   // 버프 지속시간
+    public float knockbackForce; // 넉백 힘
+    public float knockbackDuration; // 넉백 지속시간
 
     private Collider damageCollider;
     private Player ownerPlayer;
     private bool isActive = false;
     private bool isCritical = false;
 
-    [Header("공격 타입")]
-    public bool isBasicAttack = false;
-
     private void Awake()
     {
         damageCollider = GetComponent<Collider>();
         if (damageCollider != null)
         {
-            damageCollider.isTrigger = true;  // 트리거로 설정
-            damageCollider.enabled = false;    // 시작시 비활성화
+            damageCollider.isTrigger = true;
+            damageCollider.enabled = false;
         }
         if (ownerPlayer == null)
         {
@@ -42,23 +54,103 @@ public class SkillDamageInfo : MonoBehaviour
                 Debug.Log($"[{skillName}] Player를 부모에서 찾음: {ownerPlayer.name}");
             }
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // 충돌한 대상이 데미지를 받을 수 있는지 확인
+        if (!isActive || ownerPlayer == null) return;
+
+        Player targetPlayer = other.GetComponent<Player>();
+        bool isAlly = targetPlayer != null && targetPlayer.TeamID == ownerPlayer.TeamID;
+
+        switch (skillType)
+        {
+            case SkillType.Damage:
+                if (!isAlly)
+                {
+                    HandleDamageAndEffects(other);
+                }
+                break;
+
+            case SkillType.DamageAndHeal:
+                if (isAlly)
+                {
+                    // 아군이면 힐
+                    float healAmount = GetHealAmount();
+                    targetPlayer.Heal(healAmount);
+                }
+                else
+                {
+                    // 적군이면 데미지
+                    HandleDamageAndEffects(other);
+                }
+                break;
+
+            case SkillType.DamageAndBuff:
+                if (isAlly)
+                {
+                    // 아군이면 공격력 버프
+                    targetPlayer.ApplyAttackBuff(attackBuffPercent, buffDuration);
+                }
+                else
+                {
+                    // 적군이면 데미지
+                    HandleDamageAndEffects(other);
+                }
+                break;
+
+            case SkillType.Knockback:
+                if (!isAlly)
+                {
+                    HandleDamageAndEffects(other);
+                    if (other.TryGetComponent<Rigidbody>(out var rb))
+                    {
+                        Vector3 direction = (other.transform.position - transform.position).normalized;
+                        rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
+                        StartCoroutine(ResetKnockback(rb));
+                    }
+                }
+                break;
+        }
+    }
+
+    private void HandleDamageAndEffects(Collider other)
+    {
+        // 데미지 처리
+        HandleDamage(other);
+
+        // 몬스터인 경우 에어본/스턴 효과 적용
+        Monster monster = other.GetComponent<Monster>();
+        if (monster != null)
+        {
+            if (isAirborneAttack)
+            {
+                monster.isAirborne = true;
+            }
+
+            if (isStunAttack)
+            {
+                monster.isStun = true;
+            }
+        }
+    }
+
+    private void HandleDamage(Collider other)
+    {
         ITakedamage damageable = other.GetComponent<ITakedamage>();
-        if (damageable != null && isActive)
+        if (damageable != null)
         {
             float damage = GetDamage();
             damageable.Takedamage(damage);
         }
     }
-    public void SetOwnerPlayer(Player player)
+
+    private IEnumerator ResetKnockback(Rigidbody rb)
     {
-        ownerPlayer = player;     
+        yield return new WaitForSeconds(knockbackDuration);
+        rb.velocity = Vector3.zero;
     }
+
     public float GetDamage()
     {
         if (ownerPlayer == null) return 0f;
@@ -77,11 +169,20 @@ public class SkillDamageInfo : MonoBehaviour
         if (Random.value <= stats.criticalChance)
         {
             isCritical = true;
-            float beforeCrit = damage;
             damage *= (1f + stats.criticalDamage);
         }
         return damage;
-      
+    }
+
+    public float GetHealAmount()
+    {
+        if (ownerPlayer == null) return 0f;
+        return ownerPlayer.Stats.attackPower * (healPercent / 100f);
+    }
+
+    public void SetOwnerPlayer(Player player)
+    {
+        ownerPlayer = player;
     }
 
     public void EnableCollider()
@@ -102,6 +203,5 @@ public class SkillDamageInfo : MonoBehaviour
         }
     }
 
-    // 현재 콜라이더 활성화 상태 확인
     public bool IsActive() => isActive;
 }
