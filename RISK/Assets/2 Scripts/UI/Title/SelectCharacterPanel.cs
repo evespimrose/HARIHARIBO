@@ -29,6 +29,8 @@ public class SelectCharacterPanel : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI nickNameText;
 
+    public bool isOnceSelected;
+
     private void Awake()
     {
         selectButton.onClick.AddListener(() => { StartCoroutine(OnSelectButtonClick()); });
@@ -117,6 +119,7 @@ public class SelectCharacterPanel : MonoBehaviour
                             nickNameText.text = characterSelectButton.nickNameText.text;
                             currentCharacterData = data;
                             characterModelImage.sprite = characterdatadic[data.classType].sprite;
+                            isOnceSelected = true;
                         });
                     }
                     characterSelectDic.Add(data.nickName, characterData);
@@ -145,6 +148,7 @@ public class SelectCharacterPanel : MonoBehaviour
 
     private IEnumerator OnSelectButtonClick()
     {
+        if (!isOnceSelected) yield break;
         FirebaseManager.Instance.currentCharacterData = currentCharacterData;
 
         PhotonNetwork.ConnectUsingSettings();

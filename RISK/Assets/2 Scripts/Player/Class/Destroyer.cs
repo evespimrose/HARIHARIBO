@@ -4,31 +4,31 @@ using UnityEngine;
 
 public class Destroyer : Player
 {
-    [Header("??釉먯뒠獒?嶺뚮ㅎ?붷ㅇ???⑤９苑????袁る뻺 ???源놁젳")]
+    [Header("???됰Ŋ?좂뜏?癲ル슢??遺룔뀋????ㅿ폎?????熬곥굥六????繹먮냱??")]
     [SerializeField] private float baseMaxHealth;
     [SerializeField] private int baseHealthPerLevel;
     [SerializeField] private float baseAttackPower;
     [SerializeField] private int baseAttackPerLevel;
     [SerializeField] private float baseMoveSpeed;
 
-    [Header("?袁⑸젻泳?μ젂?& ???亦?")]
+    [Header("?熬곣뫖?삥납??關??& ???雅?")]
     [SerializeField, Range(0f, 1f)] private float baseDamageReduction;
     [SerializeField] private float baseHealthRegen;
     [SerializeField] private float baseRegenInterval;
 
-    [Header("??⑤베堉? ???袁る뻺")]
+    [Header("???ㅻ쿋?? ???熬곥굥六?")]
     [SerializeField, Range(0f, 1f)] private float baseCriticalChance;
     [SerializeField] private float baseCriticalDamage;
     [SerializeField, Range(0f, 1f)] private float baseCooldownReduction;
 
-    [Header("??熬곣뫁???")]
+    [Header("???ш끽維???")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
     protected override void Awake()
     {
-        base.Awake();  // ??딅텑?癲????????源낃틖 ?縕?猿녿뎨???沃섅굥?? ????덈틖
+        base.Awake();  // ???낇뀘??????????繹먮굛???潁??용끏????亦껋꼨援?? ?????덊떀
 
-        // ??熬곣뫁????嶺뚮ㅎ?볠뤃???縕?猿녿뎨??
+        // ???ш끽維????癲ル슢??蹂좊쨨???潁??용끏???
         if (effectsHandler == null)
         {
             effectsHandler = GetComponent<AnimationEventEffects>();
@@ -98,7 +98,7 @@ public class Destroyer : Player
             stateHandler.ChangeState(typeof(DestroyerWSkill));
             if (dungeonUI != null)
             {
-                Debug.Log("Starting W skill cooldown"); // 디버그 로그 추가
+                Debug.Log("Starting W skill cooldown"); // ?붾쾭洹?濡쒓렇 異붽?
                 dungeonUI.StartPCCooldown(0);
             }
         }
