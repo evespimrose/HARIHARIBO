@@ -8,7 +8,6 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Linq;
-using UnityEditor;
 
 public class FirebaseManager : SingletonManager<FirebaseManager>
 {
@@ -259,12 +258,6 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                }
                );
         }
-    }
-
-    private float GetSerializedPropertyValue(SerializedObject serializedObject, string propertyName)
-    {
-        var property = serializedObject.FindProperty(propertyName);
-        return property != null ? property.floatValue : 0f;
     }
 
 
