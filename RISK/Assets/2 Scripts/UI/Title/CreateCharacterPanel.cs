@@ -120,7 +120,7 @@ public class FireBaseUserData
     public FireBaseUserData(string userId)
     {
         this.userId = userId;
-        won = 2000000000;
+        won = 0;
     }
     public FireBaseUserData(string userId, int won)
     {

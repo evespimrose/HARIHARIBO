@@ -45,7 +45,7 @@ public class Monster : MonoBehaviour, ITakedamage
     [Tooltip("드랍 걍험치")]
     public int exp;
     [Tooltip("드랍 돈")]
-    public int won;
+    public float won;
 
     [Tooltip("���")]
     public bool isAtk = false;
@@ -59,7 +59,7 @@ public class Monster : MonoBehaviour, ITakedamage
     public bool isHitAction = false;
 
     [Header("디버프 상태이상 체크")]
-    public Debuff monsterDebuff;
+    public MonsterDebuff monsterDebuff;
     public bool isSlow = false;
     public bool isBleeding = false;
     public bool isPoison = false;
@@ -162,6 +162,7 @@ public class Monster : MonoBehaviour, ITakedamage
         curHp -= Mathf.RoundToInt(damage);
         if (curHp <= 0 && !isDie)
         {
+            //여기에 게임메니저 돈보내기
             isDie = true;
             GameSoundManager.Instance.PlayMonsterEffectSound(dieSoundClips);
             DieStatChange();

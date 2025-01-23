@@ -15,8 +15,8 @@ public class MonsterScriptableObjects : ScriptableObject
     [Tooltip("공격딜레이")]
     public float atkDelay;
 
-    [Tooltip("드랍 걍험치")]
+    [Tooltip("드랍 경험치")]
     public int exp;
     [Tooltip("드랍 돈")]
-    public int won;
+    public float won;
 }

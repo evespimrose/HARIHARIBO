@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Debuff : MonoBehaviour
+public class MonsterDebuff : MonoBehaviour
 {
     [Header("출혈")]
     [Tooltip("출혈 데미지 간격")]
