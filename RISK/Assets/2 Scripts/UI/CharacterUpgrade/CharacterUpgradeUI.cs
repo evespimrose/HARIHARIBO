@@ -1,3 +1,4 @@
+using Firebase.Database;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -24,10 +25,10 @@ public class StatsSet
     public void UpdateUI(string name, float current, float upgradeValue, float chance, int cost)
     {
         statsName.text = name;  // 스탯 이름 업데이트
-        currentStats.text = $"현재 스탯 : {current}";  // 현재 스탯 값 표시
-        statsUpgradeValue.text = $"업그레이드 값: +{upgradeValue}";  // 업그레이드 값 표시
-        successChance.text = $"성공 확률 : {chance * 100}%";  // 성공 확률 표시
-        resourceCost.text = $"강화 비용 : {cost}";  // 리소스 비용 표시
+        currentStats.text = $"{current}";  // 현재 스탯 값 표시
+        statsUpgradeValue.text = $"{upgradeValue}";  // 업그레이드 값 표시
+        successChance.text = $"{chance * 100}";  // 성공 확률 표시
+        resourceCost.text = $"{cost}";  // 리소스 비용 표시
     }
 }
 
@@ -47,13 +48,15 @@ public class UpgradeData
     }
 }
 
-public class CharacterUpgradeUI : UIPopup
+public class CharacterUpgradeUI : MonoBehaviour
 {
     [Header("Character Info"), SerializeField]
     public TextMeshProUGUI characterNameText;  // 캐릭터 이름을 표시하는 UI 텍스트
     public TextMeshProUGUI levelText;  // 캐릭터 레벨을 표시하는 UI 텍스트
     public TextMeshProUGUI curGold;  // 현재 보유한 골드를 표시하는 UI 텍스트
     public Image characterImage;
+
+    public Button closeButton;
 
     [Header("Stats Sets"), SerializeField]
     private List<StatsSet> statSets;  // 여러 스탯들을 UI에 업데이트할 리스트
@@ -67,6 +70,114 @@ public class CharacterUpgradeUI : UIPopup
     [SerializeField] private Dictionary<int, UpgradeData> coolRedUpgradeData = new Dictionary<int, UpgradeData>();  // 쿨타임 감소 업그레이드 데이터
 
     private int currentGold;  // 현재 보유한 골드
+
+    private FireBaseCharacterData characterData;
+    private FireBaseUserData userData;
+
+    // UI가 활성화되었을 때 스탯을 서버에서 갱신
+    private void OnEnable()
+    {
+        characterData = FirebaseManager.Instance.currentCharacterData;
+        userData = FirebaseManager.Instance.currentUserData;
+        InitializeUpgradeData();
+        UpdateStatsFromServer();
+        closeButton.onClick.AddListener(CloseUI);
+    }
+
+    public void CloseUI()
+    {
+        PanelManager.Instance.PanelOpen("PartyListBoard");
+    }
+
+    // 서버로부터 받은 데이터를 이용해 UI를 업데이트
+    public void UpdateStatsFromServer()
+    {
+        if (characterData != null && userData != null)
+        {
+            // 원화 데이터 업데이트
+            UpdateGoldUI(userData);
+
+            // 캐릭터 이름과 레벨 업데이트
+            characterNameText.text = characterData.nickName;
+            levelText.text = $"{characterData.level}";
+            characterImage.sprite = GameManager.Instance.characterDataDic[characterData.classType].sprite;
+
+            // 스탯 정보 업데이트
+            List<(string, float, float, float, int)> allStats = new List<(string, float, float, float, int)>
+            {
+                // 스탯 이름, 현재 값, 업그레이드 수치, 성공 확률, 리소스 비용
+                ("maxHp", characterData.maxHp, maxHpUpgradeData[characterData.maxHpUpgradeLevel].statIncrease, maxHpUpgradeData[characterData.maxHpUpgradeLevel].upProb, maxHpUpgradeData[characterData.maxHpUpgradeLevel].useWon),
+                ("atk", characterData.atk, atkUpgradeData[characterData.atkUpgradeLevel].statIncrease, atkUpgradeData[characterData.atkUpgradeLevel].upProb, atkUpgradeData[characterData.atkUpgradeLevel].useWon),
+                ("cri", characterData.cri, criUpgradeData[characterData.criUpgradeLevel].statIncrease, criUpgradeData[characterData.criUpgradeLevel].upProb, criUpgradeData[characterData.criUpgradeLevel].useWon),
+                ("criDmg", characterData.criDmg, criDmgUpgradeData[characterData.criDmgUpgradeLevel].statIncrease, criDmgUpgradeData[characterData.criDmgUpgradeLevel].upProb, criDmgUpgradeData[characterData.criDmgUpgradeLevel].useWon),
+                ("hpReg", characterData.hpReg, hpRegUpgradeData[characterData.hpRegUpgradeLevel].statIncrease, hpRegUpgradeData[characterData.hpRegUpgradeLevel].upProb, hpRegUpgradeData[characterData.hpRegUpgradeLevel].useWon),
+                ("coolRed", characterData.coolRed, coolRedUpgradeData[characterData.coolRedUpgradeLevel].statIncrease, coolRedUpgradeData[characterData.coolRedUpgradeLevel].upProb, coolRedUpgradeData[characterData.coolRedUpgradeLevel].useWon)
+            };
+
+            // UI 업데이트
+            for (int i = 0; i < statSets.Count; i++)
+            {
+                if (i < allStats.Count)
+                {
+                    var (name, current, upgradeValue, chance, cost) = allStats[i];
+                    StatsSet uiStat = statSets[i];
+
+                    // UI 업데이트
+                    uiStat.UpdateUI(name, current, upgradeValue, chance, cost);
+
+                    // 업그레이드 버튼 이벤트 리스너 추가
+                    uiStat.upgradeButton.onClick.RemoveAllListeners();
+                    int index = i; // 클로저 문제를 방지하기 위해 인덱스를 캡처
+                    uiStat.upgradeButton.onClick.AddListener(() => UpgradeStat(statSets[index]));
+                }
+            }
+        }
+    }
+
+    // 골드 UI 업데이트
+    private void UpdateGoldUI(FireBaseUserData userData)
+    {
+        curGold.text = $"현재 골드: {userData.won}";
+    }
+
+    // 스탯 업그레이드 함수
+    private void UpgradeStat(StatsSet stat)
+    {
+        int resourceCostValue = int.Parse(stat.resourceCost.text);
+
+        if (userData.won < resourceCostValue)
+        {
+            Debug.Log("골드가 부족합니다");
+            return;
+        }
+
+        // 골드 차감
+        userData.won -= resourceCostValue;
+
+        // 성공 확률 계산
+        float chance = float.Parse(stat.successChance.text) / 100f;
+        bool isSuccess = Random.value <= chance;
+
+        if (isSuccess)
+        {
+            // 업그레이드 성공
+            float current = float.Parse(stat.currentStats.text);
+            float upgradeValue = float.Parse(stat.statsUpgradeValue.text);
+            // Firebase에 업그레이드된 데이터 전송
+            FirebaseManager.Instance.currentUserData = userData;
+            // 콜백을 이용해 업데이트 후 처리
+            FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text, upgradeValue, () =>
+            {
+                // 업그레이드 후 UI 갱신
+                UpdateStatsFromServer();
+            });
+        }
+        else
+        {
+            Debug.Log($"{stat.statsName.text} 업그레이드 실패...");
+        }
+        UpdateGoldUI(userData);
+    }
 
     // 업그레이드 데이터를 초기화하는 함수
     private void InitializeUpgradeData()
@@ -238,111 +349,5 @@ public class CharacterUpgradeUI : UIPopup
         coolRedUpgradeData.Add(23, new UpgradeData(0.26f, 22753200, 0.025f));
         coolRedUpgradeData.Add(24, new UpgradeData(0.03f, 24221000, 0.03f));
         coolRedUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 0.032f));
-    }
-
-    // UI가 활성화되었을 때 스탯을 서버에서 갱신
-    private void OnEnable()
-    {
-        InitializeUpgradeData();
-        UpdateStatsFromServer();
-    }
-
-    // 서버로부터 받은 데이터를 이용해 UI를 업데이트
-    public void UpdateStatsFromServer()
-    {
-        FireBaseCharacterData characterData = FirebaseManager.Instance.currentCharacterData;
-        FireBaseUserData userData = FirebaseManager.Instance.currentUserData;  // 사용자 데이터 (원화 정보)
-
-        if (characterData != null && userData != null)
-        {
-            // 원화 데이터 업데이트
-            currentGold = userData.won;
-            UpdateGoldUI();
-
-            // 캐릭터 이름과 레벨 업데이트
-            characterNameText.text = characterData.nickName;
-            levelText.text = $"{characterData.level}";
-            characterImage.sprite = GameManager.Instance.characterDataDic[characterData.classType].sprite;
-
-            // 스탯 정보 업데이트
-            List<(string, float, float, float, int)> allStats = new List<(string, float, float, float, int)>
-            {
-                // 스탯 이름, 현재 값, 업그레이드 수치, 성공 확률, 리소스 비용
-                ("maxHp", characterData.maxHp, maxHpUpgradeData[characterData.maxHpUpgradeLevel].statIncrease, maxHpUpgradeData[characterData.maxHpUpgradeLevel].upProb, maxHpUpgradeData[characterData.maxHpUpgradeLevel].useWon),
-                ("atk", characterData.atk, atkUpgradeData[characterData.atkUpgradeLevel].statIncrease, atkUpgradeData[characterData.atkUpgradeLevel].upProb, atkUpgradeData[characterData.atkUpgradeLevel].useWon),
-                ("cri", characterData.cri, criUpgradeData[characterData.criUpgradeLevel].statIncrease, criUpgradeData[characterData.criUpgradeLevel].upProb, criUpgradeData[characterData.criUpgradeLevel].useWon),
-                ("criDmg", characterData.criDmg, criDmgUpgradeData[characterData.criDmgUpgradeLevel].statIncrease, criDmgUpgradeData[characterData.criDmgUpgradeLevel].upProb, criDmgUpgradeData[characterData.criDmgUpgradeLevel].useWon),
-                ("hpReg", characterData.hpReg, hpRegUpgradeData[characterData.hpRegUpgradeLevel].statIncrease, hpRegUpgradeData[characterData.hpRegUpgradeLevel].upProb, hpRegUpgradeData[characterData.hpRegUpgradeLevel].useWon),
-                ("coolRed", characterData.coolRed, coolRedUpgradeData[characterData.coolRedUpgradeLevel].statIncrease, coolRedUpgradeData[characterData.coolRedUpgradeLevel].upProb, coolRedUpgradeData[characterData.coolRedUpgradeLevel].useWon)
-            };
-
-            // UI 업데이트
-            for (int i = 0; i < statSets.Count; i++)
-            {
-                if (i < allStats.Count)
-                {
-                    var (name, current, upgradeValue, chance, cost) = allStats[i];
-                    StatsSet uiStat = statSets[i];
-
-                    // UI 업데이트
-                    uiStat.UpdateUI(name, current, upgradeValue, chance, cost);
-
-                    // 업그레이드 버튼 이벤트 리스너 추가
-                    uiStat.upgradeButton.onClick.RemoveAllListeners();
-                    int index = i; // 클로저 문제를 방지하기 위해 인덱스를 캡처
-                    uiStat.upgradeButton.onClick.AddListener(() => UpgradeStat(statSets[index]));
-                }
-            }
-        }
-    }
-
-    // 골드 UI 업데이트
-    private void UpdateGoldUI()
-    {
-        curGold.text = $"현재 골드: {currentGold}";
-    }
-
-    // 스탯 업그레이드 함수
-    private void UpgradeStat(StatsSet stat)
-    {
-        int resourceCostValue = int.Parse(stat.resourceCost.text.Replace("강화 비용 : ", "").Trim());
-
-        if (currentGold < resourceCostValue)
-        {
-            Debug.Log("골드가 부족합니다");
-            return;
-        }
-
-        // 성공 확률 계산
-        float chance = float.Parse(stat.successChance.text.Replace("성공 확률 : ", "").Replace("%", "")) / 100;
-        bool isSuccess = Random.value <= chance;
-
-        if (isSuccess)
-        {
-            // 업그레이드 성공
-            float current = float.Parse(stat.currentStats.text.Replace("현재 스탯 : ", ""));
-            float upgradeValue = float.Parse(stat.statsUpgradeValue.text.Replace("업그레이드 값: +", ""));
-            stat.UpdateUI(
-                stat.statsName.text,
-                current + upgradeValue,
-                upgradeValue,
-                chance,
-                int.Parse(stat.resourceCost.text.Replace("리소스 비용 : ", ""))
-            );
-            Debug.Log($"{stat.statsName.text} 업그레이드 성공!");
-
-            // Firebase에 업그레이드된 데이터 전송
-            FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text);
-
-            // 골드 차감
-            currentGold -= resourceCostValue;
-
-            // 골드 UI 업데이트
-            UpdateGoldUI();
-        }
-        else
-        {
-            Debug.Log($"{stat.statsName.text} 업그레이드 실패...");
-        }
     }
 }

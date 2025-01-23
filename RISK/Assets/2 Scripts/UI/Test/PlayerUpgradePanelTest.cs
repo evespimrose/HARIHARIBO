@@ -39,7 +39,7 @@ public class PlayerUpgradePanelTest : MonoBehaviour
 
     public void StatsPlusButtonClick()
     {
-        FirebaseManager.Instance.UpgradeCharacter(statsName.text);
+        //FirebaseManager.Instance.UpgradeCharacter(statsName.text);
     }
 
     

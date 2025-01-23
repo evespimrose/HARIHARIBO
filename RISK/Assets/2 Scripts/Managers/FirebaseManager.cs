@@ -251,7 +251,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         return result;
     }
 
-    public async void UpgradeCharacter(string dataName)
+    public async void UpgradeCharacter(string dataName,  float statIncrease, Action onSuccess)
     {
         if (currentCharacterData != null)
         {
@@ -262,49 +262,83 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                 switch (dataName)
                 {
                     case "maxHp":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.maxHp + 1);
-                        currentCharacterData.maxHp += 1;
+                        Debug.Log($"MaxHp 강화 {dataName}, {statIncrease}, {currentCharacterData.maxHpUpgradeLevel}");
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.maxHp + statIncrease);
+                        Debug.Log($"데이터 업데이트 완료: {dataName} -> {currentCharacterData.maxHp + statIncrease}");
+                        currentCharacterData.maxHp += statIncrease;
+                        currentCharacterData.maxHpUpgradeLevel++;
+                        await characterRef.Child("maxHpUpgradeLevel").SetValueAsync(currentCharacterData.maxHpUpgradeLevel);
+                        Debug.Log($"{currentCharacterData.maxHpUpgradeLevel}");
                         break;
                     case "atk":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.atk + 1);
-                        currentCharacterData.atk += 1;
+                        Debug.Log($"atk 강화 {dataName}, {statIncrease}, {currentCharacterData.atkUpgradeLevel}");
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.atk + statIncrease);
+                        Debug.Log($"데이터 업데이트 완료: {dataName} -> {currentCharacterData.atk + statIncrease}");
+                        currentCharacterData.atk += statIncrease;
+                        currentCharacterData.atkUpgradeLevel++;
+                        await characterRef.Child("atkUpgradeLevel").SetValueAsync(currentCharacterData.atkUpgradeLevel);
+                        Debug.Log($"{currentCharacterData.atkUpgradeLevel}");
                         break;
                     case "cri":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.cri + 1);
-                        currentCharacterData.cri += 1;
+                        Debug.Log($"cri 강화 {dataName}, {statIncrease}, {currentCharacterData.criUpgradeLevel}");
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.cri + statIncrease);
+                        Debug.Log($"데이터 업데이트 완료: {dataName} -> {currentCharacterData.cri + statIncrease}");
+                        currentCharacterData.cri += statIncrease;
+                        currentCharacterData.criUpgradeLevel++;
+                        await characterRef.Child("criUpgradeLevel").SetValueAsync(currentCharacterData.criUpgradeLevel);
+                        Debug.Log($"{currentCharacterData.criUpgradeLevel}");
                         break;
                     case "criDmg":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.criDmg + 1);
-                        currentCharacterData.criDmg += 1;
-                        break;
-                    case "dmgRed":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.dmgRed + 1);
-                        currentCharacterData.dmgRed += 1;
+                        Debug.Log($"criDmg 강화 {dataName}, {statIncrease}, {currentCharacterData.criDmgUpgradeLevel}");
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.criDmg + statIncrease);
+                        Debug.Log($"데이터 업데이트 완료: {dataName} -> {currentCharacterData.criDmg + statIncrease}");
+                        currentCharacterData.criDmg += statIncrease;
+                        currentCharacterData.criDmgUpgradeLevel++;
+                        await characterRef.Child("criDmgUpgradeLevel").SetValueAsync(currentCharacterData.criDmgUpgradeLevel);
+                        Debug.Log($"{currentCharacterData.criDmgUpgradeLevel}");
                         break;
                     case "hpReg":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.hpReg + 1);
-                        currentCharacterData.hpReg += 1;
+                        Debug.Log($"hpReg 강화 {dataName}, {statIncrease}, {currentCharacterData.hpRegUpgradeLevel}");
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.hpReg + statIncrease);
+                        Debug.Log($"데이터 업데이트 완료: {dataName} -> {currentCharacterData.hpReg + statIncrease}");
+                        currentCharacterData.hpReg += statIncrease;
+                        currentCharacterData.hpRegUpgradeLevel++;
+                        await characterRef.Child("hpRegUpgradeLevel").SetValueAsync(currentCharacterData.hpRegUpgradeLevel);
+                        Debug.Log($"{currentCharacterData.hpRegUpgradeLevel}");
                         break;
                     case "coolRed":
-                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.coolRed + 1);
-                        currentCharacterData.coolRed += 1;
+                        Debug.Log($"coolRed 강화 {dataName}, {statIncrease}, {currentCharacterData.coolRedUpgradeLevel}");
+                        await characterRef.Child(dataName).SetValueAsync(currentCharacterData.coolRed + statIncrease);
+                        Debug.Log($"데이터 업데이트 완료: {dataName} -> {currentCharacterData.coolRed + statIncrease}");
+                        currentCharacterData.coolRed += statIncrease;
+                        currentCharacterData.coolRedUpgradeLevel++;
+                        await characterRef.Child("coolRedUpgradeLevel").SetValueAsync(currentCharacterData.coolRedUpgradeLevel);
+                        Debug.Log($"{currentCharacterData.coolRedUpgradeLevel}");
                         break;
                     default:
                         Debug.LogWarning($"Unknown dataName: {dataName}");
                         break;
                 }
 
-                LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
+                await usersRef.Child("won").SetValueAsync(currentUserData.won);
+
+                var snapshot = await characterRef.Child(dataName).GetValueAsync();
+                Debug.Log($"저장된 값 확인: {snapshot.Value}");
+
+                // 성공 후 콜백 호출
+                onSuccess?.Invoke();  // 여기서 UpdateStatsFromServer을 콜백으로 호출합니다.
+
+                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
             }
             catch (Exception e)
             {
-                LobbyUI.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Character upgrade failed.\n" + e.Message,
+                PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "Character upgrade failed.\n" + e.Message,
                ok =>
                {
                    if (ok)
                        CopyToClipboard(e.Message);
                    else
-                       LobbyUI.Instance.PopupClose();
+                       PanelManager.Instance.PopupClose();
                }
                );
             }
