@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public bool isWaveDone = false;
 
+    public bool isTickGoes = false;
+
     public RiskUIController riskUIController;
 
     public ChatScrollController chat;
@@ -140,7 +142,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         };
 
         int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-        print($"playerNumber : {playerNumber}");
         playerPosition = GameObject.Find("SpawnPosition").transform;
 
         Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
@@ -220,7 +221,10 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
 
+
         }
+
+        isGameReady = false;
     }
 
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
