@@ -6409,8 +6409,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorTSkillAttack
+  skillType: 0
   damagePercent: 100
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!1 &867625405861799472
 GameObject:
   m_ObjectHideFlags: 0
@@ -26058,8 +26066,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorWSkillAttack
+  skillType: 0
   damagePercent: 100
   isBasicAttack: 0
+  isAirborneAttack: 1
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!1 &3383590558287573795
 GameObject:
   m_ObjectHideFlags: 0
@@ -46412,8 +46428,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorBasicAttack
+  skillType: 0
   damagePercent: 0
   isBasicAttack: 1
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!1 &6092572729980437654
 GameObject:
   m_ObjectHideFlags: 0
@@ -61452,8 +61476,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorRSkillAttack
+  skillType: 0
   damagePercent: 100
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!1 &8294262301023697669
 GameObject:
   m_ObjectHideFlags: 0
@@ -66027,8 +66059,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillName: WarriorESkillAttack
+  skillType: 0
   damagePercent: 100
   isBasicAttack: 0
+  isAirborneAttack: 0
+  isStunAttack: 0
+  healPercent: 0
+  attackBuffPercent: 0
+  buffDuration: 0
+  knockbackForce: 0
+  knockbackDuration: 0
 --- !u!1 &8799066727324178907
 GameObject:
   m_ObjectHideFlags: 0

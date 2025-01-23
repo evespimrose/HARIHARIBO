@@ -28,6 +28,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     protected abstract void InitializeStats();
     protected abstract void InitializeStateHandler();
     protected abstract void HandleSkillInput();
+    public int TeamID { get; private set; } = 1;
 
     protected virtual void Awake()
     {
@@ -234,6 +235,32 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
             networkRotation = (Quaternion)stream.ReceiveNext();
             stats.currentHealth = (float)stream.ReceiveNext();
         }
+    }
+
+    public void SetTeamID(int teamId)
+    {
+        TeamID = teamId;
+    }
+
+    public void ApplyAttackBuff(float amount, float duration)
+    {
+        StartCoroutine(ApplyAttackBuffCoroutine(amount, duration));
+    }
+
+    private IEnumerator ApplyAttackBuffCoroutine(float amount, float duration)
+    {
+        // 공격력 버프 적용
+        stats.attackPower += amount;
+
+        yield return new WaitForSeconds(duration);
+
+        // 버프 해제
+        stats.attackPower -= amount;
+    }
+
+    public void Heal(float amount)
+    {
+        stats.currentHealth = Mathf.Min(stats.currentHealth + amount, stats.maxHealth);
     }
 
     [PunRPC]

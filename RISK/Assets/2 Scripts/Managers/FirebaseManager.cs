@@ -167,33 +167,85 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
     {
         try
         {
+            Debug.Log($"Creating character: {nickName}, Class: {classType}");
             FireBaseCharacterData characterData = new FireBaseCharacterData(nickName, classType);
 
+            string prefabPath = classType.ToString();
+            Debug.Log($"Loading prefab from path: {prefabPath}");
+
             // 프리팹에서 기본 스탯 가져오기
-            GameObject prefab = Resources.Load<GameObject>(classType.ToString());
+            GameObject prefab = Resources.Load<GameObject>(prefabPath);
+
             if (prefab != null)
             {
-                Player playerComponent = prefab.GetComponent<Player>();
-                if (playerComponent != null)
-                {
-                    // Awake에서 InitializeStats가 호출되도록 활성화
-                    prefab.SetActive(true);
+                Debug.Log($"Failed to load prefab for class type: {classType}");
 
-                    // 초기화된 스탯 가져오기
-                    PlayerStats stats = playerComponent.Stats;
-                    characterData.maxHp = stats.maxHealth;
-                    characterData.atk = stats.attackPower;
-                    characterData.cri = stats.criticalChance;
-                    characterData.criDmg = stats.criticalDamage;
-                    characterData.dmgRed = stats.damageReduction;
-                    characterData.hpReg = stats.healthRegen;
-                    characterData.coolRed = stats.cooldownReduction;
+                Debug.Log($"Prefab loaded successfully: {prefab.name}");
+                switch (classType)
+                {
+                    case ClassType.Warrior:
+                        Warrior warrior = prefab.GetComponent<Warrior>();
+                        if (warrior != null)
+                        {
+                            Debug.Log($"Warrior component found. MaxHealth: {warrior.baseMaxHealth}");
+                            characterData.maxHp = warrior.baseMaxHealth;
+                            characterData.atk = warrior.baseAttackPower;
+                            characterData.cri = warrior.baseCriticalChance;
+                            characterData.criDmg = warrior.baseCriticalDamage;
+                            characterData.dmgRed = warrior.baseDamageReduction;
+                            characterData.hpReg = warrior.baseHealthRegen;
+                            characterData.coolRed = warrior.baseCooldownReduction;
+                        }
+                        break;
+
+                    case ClassType.Mage:
+                        Mage mage = prefab.GetComponent<Mage>();
+                        if (mage != null)
+                        {
+                            characterData.maxHp = mage.baseMaxHealth;
+                            characterData.atk = mage.baseAttackPower;
+                            characterData.cri = mage.baseCriticalChance;
+                            characterData.criDmg = mage.baseCriticalDamage;
+                            characterData.dmgRed = mage.baseDamageReduction;
+                            characterData.hpReg = mage.baseHealthRegen;
+                            characterData.coolRed = mage.baseCooldownReduction;
+                        }
+                        break;
+
+                    case ClassType.Healer:
+                        Healer healer = prefab.GetComponent<Healer>();
+                        if (healer != null)
+                        {
+                            characterData.maxHp = healer.baseMaxHealth;
+                            characterData.atk = healer.baseAttackPower;
+                            characterData.cri = healer.baseCriticalChance;
+                            characterData.criDmg = healer.baseCriticalDamage;
+                            characterData.dmgRed = healer.baseDamageReduction;
+                            characterData.hpReg = healer.baseHealthRegen;
+                            characterData.coolRed = healer.baseCooldownReduction;
+                        }
+                        break;
+
+                    case ClassType.Destroyer:
+                        Destroyer destroyer = prefab.GetComponent<Destroyer>();
+                        if (destroyer != null)
+                        {
+                            characterData.maxHp = destroyer.baseMaxHealth;
+                            characterData.atk = destroyer.baseAttackPower;
+                            characterData.cri = destroyer.baseCriticalChance;
+                            characterData.criDmg = destroyer.baseCriticalDamage;
+                            characterData.dmgRed = destroyer.baseDamageReduction;
+                            characterData.hpReg = destroyer.baseHealthRegen;
+                            characterData.coolRed = destroyer.baseCooldownReduction;
+                        }
+                        break;
                 }
             }
 
             string characterDataJson = JsonConvert.SerializeObject(characterData);
             DatabaseReference charactersRef = DB.GetReference($"characters/{Auth.CurrentUser.UserId}");
             await charactersRef.Child(nickName).SetRawJsonValueAsync(characterDataJson);
+            PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "character creation successed.", () => PanelManager.Instance.PanelOpen("SelectCharacter"));
         }
         catch (Exception e)
         {
