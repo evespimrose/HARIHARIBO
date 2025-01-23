@@ -56072,7 +56072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: HealerWSkillAttack
   damagePercent: 150
-  isBasicAttack: 0
+  isBasicAttack: 1
 --- !u!135 &6197382340286119964
 SphereCollider:
   m_ObjectHideFlags: 0

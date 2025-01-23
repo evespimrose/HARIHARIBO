@@ -23,7 +23,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     protected PlayerStats stats;
 
     public Animator Animator => animator;
-    public PlayerStats Stats => stats;
+    public PlayerStats Stats { get; protected set; }
     public int ComboCount { get; set; } = 0;
     protected abstract void InitializeStats();
     protected abstract void InitializeStateHandler();
