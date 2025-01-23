@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
-    public static bool isGameReady;
+    public static bool isGameRunning;
 
     public List<FireBaseCharacterData> connectedPlayers = new List<FireBaseCharacterData>();
 
@@ -31,10 +31,18 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     private Canvas persistentCanvas;
 
+    private DungeonUIController dungeonUIController;
+
+
     [SerializeField]
     private List<ClassNameToCharacterData> classDataList;
 
     public Dictionary<ClassType, CharacterData> characterDataDic = new Dictionary<ClassType, CharacterData>();
+
+    [Header("Timer")]
+    [SerializeField]
+    private float startTime = 300f; // 시작 시간(초) (5분)
+    private float remainingTime;
 
     protected override void Awake()
     {
@@ -50,6 +58,30 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
         SceneManager.sceneLoaded += OnSceneLoaded;
         CreatePersistentCanvas();
+    }
+
+    private IEnumerator GameClock()
+    {
+        while (remainingTime > 0)
+        {
+            if (isTickGoes)
+            {
+                remainingTime -= Time.deltaTime;
+            }
+
+            yield return null;
+        }
+
+        remainingTime = 0;
+
+        Debug.Log("Time's up!");
+        OnTimeOut();
+    }
+
+    private void OnTimeOut()
+    {
+        //isGameRunning = false;
+        Debug.Log("Game over! Timer reached 0.");
     }
 
     private void CreatePersistentCanvas()
@@ -68,7 +100,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public void AttachToNewCanvas(Canvas newCanvas)
     {
-        // 새 Canvas에 UI 오브젝트를 연결
+        // ??Canvas??UI ??삵닏??븍뱜???怨뚭퍙
         if (chat != null && newCanvas != null)
         {
             chat.gameObject.transform.SetParent(newCanvas.transform, false);
@@ -114,7 +146,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     private IEnumerator Start()
     {
-        yield return new WaitUntil(() => isGameReady);
+        yield return new WaitUntil(() => isGameRunning);
         print("isGameReady!!! GOGOGOGO!!!!");
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
         spawner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
@@ -197,12 +229,33 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             UnitManager.Instance.players.Add(player.Value.GetPlayerNumber(), GameObject.Find(name));
         }
 
+        remainingTime = startTime; // 카운트다운 시간 초기화
+        StartCoroutine(GameClock());
+
         StartCoroutine(Dungeon());
 
-        yield return new WaitUntil(() => !isGameReady);
+        yield return new WaitUntil(() => !isGameRunning);
         // TODO : game over logic initiate
     }
 
+    private IEnumerator UpdateTimer()
+    {
+        while (remainingTime > 0)
+        {
+            if (isTickGoes && dungeonUIController != null)
+            {
+                TimeSpan timeSpan = TimeSpan.FromSeconds(remainingTime);
+                dungeonUIController.UpdateTimerText($"{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}");
+            }
+            yield return null;
+        }
+
+        // 타이머가 0이 되었을 때
+        if (dungeonUIController != null)
+        {
+            dungeonUIController.UpdateTimerText("00:00");
+        }
+    }
 
     public IEnumerator Dungeon()
     {
@@ -224,7 +277,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         }
 
-        isGameReady = false;
+        isGameRunning = false;
     }
 
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
@@ -287,7 +340,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     [PunRPC]
     private void SetGameReady()
     {
-        isGameReady = true;
+        isGameRunning = true;
     }
 
     public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)
