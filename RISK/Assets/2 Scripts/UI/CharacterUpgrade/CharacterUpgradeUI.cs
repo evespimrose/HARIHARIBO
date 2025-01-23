@@ -47,12 +47,13 @@ public class UpgradeData
     }
 }
 
-public class CharacterUpgradeUI : MonoBehaviour
+public class CharacterUpgradeUI : UIPopup
 {
     [Header("Character Info"), SerializeField]
     public TextMeshProUGUI characterNameText;  // 캐릭터 이름을 표시하는 UI 텍스트
     public TextMeshProUGUI levelText;  // 캐릭터 레벨을 표시하는 UI 텍스트
     public TextMeshProUGUI curGold;  // 현재 보유한 골드를 표시하는 UI 텍스트
+    public Image characterImage;
 
     [Header("Stats Sets"), SerializeField]
     private List<StatsSet> statSets;  // 여러 스탯들을 UI에 업데이트할 리스트
@@ -261,6 +262,7 @@ public class CharacterUpgradeUI : MonoBehaviour
             // 캐릭터 이름과 레벨 업데이트
             characterNameText.text = characterData.nickName;
             levelText.text = $"{characterData.level}";
+            characterImage.sprite = GameManager.Instance.characterDataDic[characterData.classType].sprite;
 
             // 스탯 정보 업데이트
             List<(string, float, float, float, int)> allStats = new List<(string, float, float, float, int)>

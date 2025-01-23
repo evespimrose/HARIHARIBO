@@ -25,6 +25,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
         createButton.onClick.AddListener(OnCreateButtonClick);
         closeButton.onClick.AddListener(OnCloseButtonClick);
         partyMemberUIOpenButton.onClick.AddListener(OnPartyMemberUIOpenButtonClick);
+        upgadeButton.onClick.AddListener(CharacterUpgradeOpen);
     }
 
     private void OnPartyMemberUIOpenButtonClick()
@@ -104,5 +105,10 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
         joinButton.name = roomInfo.Name;
         if (joinButton.TryGetComponent(out PartyInfoDisplay component))
             component.Initialize(roomInfo);
+    }
+
+    public void CharacterUpgradeOpen()
+    {
+        PanelManager.Instance.PanelOpen("CharacterUpgrade");
     }
 }
