@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public enum SkillType
+{
+    Damage,
+    DamageAndHeal,    
+    DamageAndDebuff,  
+    Knockback        
+}
 public class SkillDamageInfo : MonoBehaviour
 {
     [Header("스킬 기본 정보")]
