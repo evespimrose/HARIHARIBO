@@ -48,7 +48,7 @@ public class RangeBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer"))
         {
             other.GetComponent<ITakedamage>().Takedamage(atkDamage);
             Destroy(this.gameObject);

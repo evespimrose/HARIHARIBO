@@ -73,7 +73,7 @@ public class Monster : MonoBehaviour, ITakedamage
     protected void OnTriggerStay(Collider other)
     {
         if (isAirborne || isAirborneAction || isStun || isStunAction || isDie || isHit || isHitAction) return;
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer"))
         {
             GameObject player = other.gameObject;
             float currentTime = Time.time;

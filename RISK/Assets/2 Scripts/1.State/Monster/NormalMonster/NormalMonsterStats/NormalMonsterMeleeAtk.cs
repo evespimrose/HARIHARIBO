@@ -53,7 +53,7 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
         Collider[] cols = Physics.OverlapSphere(monster.transform.position, monster.atkRange);
         foreach (Collider col in cols)
         {
-            if (col.gameObject.CompareTag("Player"))
+            if (col.gameObject.CompareTag("LocalPlayer") || col.gameObject.CompareTag("RemotePlayer"))
             {
                 Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
                 //정면기준으로 반원범위내에 있는지 확인

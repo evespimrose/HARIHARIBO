@@ -74,7 +74,7 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
         Collider[] cols = Physics.OverlapSphere(monster.transform.position, monster.atkRange);
         foreach (Collider col in cols)
         {
-            if (col.gameObject.CompareTag("Player"))
+            if (col.gameObject.CompareTag("LocalPlayer") || col.gameObject.CompareTag("RemotePlayer"))
             {
                 Vector3 dirToTarget = (col.transform.position - monster.transform.position).normalized;
                 float angle = Vector3.Angle(atkDir, dirToTarget);

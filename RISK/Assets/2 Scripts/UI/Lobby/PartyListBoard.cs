@@ -15,6 +15,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
     public Button createButton;
     public Button closeButton;
     public Button partyMemberUIOpenButton;
+    public Button upgadeButton;
 
     private List<RoomInfo> currentRoomList = new List<RoomInfo>();
 

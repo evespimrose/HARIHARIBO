@@ -113,7 +113,7 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         Debug.Log("원거리 공격 진입");
         foreach (Collider col in cols)
         {
-            if (col.gameObject.CompareTag("Player"))
+            if (col.gameObject.CompareTag("LocalPlayer") || col.gameObject.CompareTag("RemotePlayer"))
             {
                 Vector3 dirToTarget = (col.transform.position - atkCenter).normalized;
                 float dirTarget = Vector3.Distance(atkCenter, col.transform.position);
