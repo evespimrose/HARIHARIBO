@@ -183,8 +183,8 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     public Vector3 GetMove()
     {
 #if UNITY_ANDROID
-    if (joystick == null) return Vector3.zero;
-    return new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
+        if (joystick == null) return Vector3.zero;
+        return new Vector3(joystick.Horizontal, 0f, joystick.Vertical);
 #else
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");

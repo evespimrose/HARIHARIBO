@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using HashTable = ExitGames.Client.Photon.Hashtable;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
-using Photon.Pun.UtilityScripts;
 using System;
 using UnityEngine.UI;
 
@@ -15,15 +14,15 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
     public static bool isGameRunning;
 
+    public bool isWaveDone = false;
+
+    public bool isTickGoes = false;
+
     public List<FireBaseCharacterData> connectedPlayers = new List<FireBaseCharacterData>();
 
     public Transform playerPosition;
 
     public MonsterSpwan spawner;
-
-    public bool isWaveDone = false;
-
-    public bool isTickGoes = false;
 
     public RiskUIController riskUIController;
 
@@ -173,8 +172,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             attackPerLevel = fireBaseCharacterData.atkperLv,
         };
 
-        int playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
         playerPosition = GameObject.Find("SpawnPosition").transform;
+        int playerNumber = PhotonNetwork.LocalPlayer.ActorNumber;
 
         Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
 
@@ -226,7 +225,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         foreach (var player in PhotonNetwork.CurrentRoom.Players)
         {
             string name = player.Value.NickName;
-            UnitManager.Instance.players.Add(player.Value.GetPlayerNumber(), GameObject.Find(name));
+            UnitManager.Instance.players.Add(player.Value.ActorNumber, GameObject.Find(name));
         }
 
         remainingTime = startTime; // 카운트다운 시간 초기화
@@ -257,7 +256,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
     }
 
-    public IEnumerator Dungeon()
+    public IEnumerator Dungeon() // Main LOOP
     {
         while (true)
         {
