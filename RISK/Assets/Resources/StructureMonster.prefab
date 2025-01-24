@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6024525509703421732}
   - component: {fileID: 4595273710974472711}
   - component: {fileID: 7823016091815985910}
+  - component: {fileID: 43871762485198605}
   m_Layer: 6
   m_Name: StructureMonster
   m_TagString: Monster
@@ -118,7 +119,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 43871762485198605}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -145,6 +147,22 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &43871762485198605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504799143444333131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &974529426817034815
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,8 +10,6 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
 {
     [Header("UI Elements")]
     [SerializeField] private TMP_Text timerText;
-    [SerializeField] private TMP_Text bossNameText;
-    [SerializeField] private Image bossHPBar;
     [SerializeField] private Image[] partyHPBars;
     [SerializeField] private Image playerHPBar;
     [SerializeField] private GameObject joystickUI;
@@ -318,12 +316,6 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
         int minutes = Mathf.FloorToInt(time / 60f);
         int seconds = Mathf.FloorToInt(time % 60f);
         timerText.text = $"{minutes:00}:{seconds:00}";
-    }
-
-    public void UpdateBossInfo(string bossName, float hpRatio)
-    {
-        bossNameText.text = bossName;
-        bossHPBar.fillAmount = hpRatio;
     }
 
     public void UpdatePartyHP(int memberIndex, float hpRatio)

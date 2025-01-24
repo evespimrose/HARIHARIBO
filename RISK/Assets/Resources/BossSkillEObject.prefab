@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.041606348, g: 0.03444286, b: 0.16981131, a: 1}
+      maxColor: {r: 0, g: 0, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4898,9 +4898,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5039986988119056383}
   - component: {fileID: 2500389614657374772}
-  - component: {fileID: 8348795944114258406}
+  - component: {fileID: 9054154238597330100}
+  - component: {fileID: 4960961917808617800}
+  - component: {fileID: 7170515216708858934}
   m_Layer: 0
-  m_Name: EliteSkillCObj
+  m_Name: BossSkillEObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4944,7 +4946,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8348795944114258406
+--- !u!114 &9054154238597330100
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4953,12 +4955,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 4598972316749910789}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c98d5b05a5c777a48a18d971ae3af9a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 86844c9cdb1a6c84885eb3ae11b0fb46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillType: 0
   bulletDamage: 10
+  fireDamage: 5
+  fireInterval: 1
+  fireDuration: 5
   missileSpeed: 15
   missileDistance: 10
+--- !u!114 &4960961917808617800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4598972316749910789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &7170515216708858934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4598972316749910789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 4960961917808617800}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &8508719486242197379
 GameObject:
   m_ObjectHideFlags: 0
@@ -5182,7 +5227,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.14542542, g: 0.2163529, b: 0.7169812, a: 1}
+      maxColor: {r: 0.33962262, g: 0.004805972, b: 0.004805972, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
