@@ -40,8 +40,9 @@ public class Healer : Player
     [SerializeField] private float finalAttackDamagePercent = 150f;
 
     protected override void Awake()
-    {
+    {   
         base.Awake();
+        InitializeStats();
 
         if (effectsHandler == null)
         {
@@ -56,6 +57,7 @@ public class Healer : Player
     protected override void InitializeStats()
     {
         stats = new PlayerStats();
+        Stats = stats;
 
         stats.maxHealth = baseMaxHealth;
         stats.healthPerLevel = baseHealthPerLevel;
@@ -148,6 +150,7 @@ public class Healer : Player
             var skillDamage = card.GetComponent<SkillDamageInfo>();
             if (skillDamage != null)
             {
+                skillDamage.SetOwnerPlayer(this);
                 skillDamage.skillName = "HealerProjectile";
                 if (comboIndex == 3)
                 {
@@ -177,6 +180,14 @@ public class Healer : Player
                         break;
                 }
             }
+        }
+    }
+    public void EnsureStatsInitialized()
+    {
+        if (Stats == null)
+        {
+            Debug.Log($"[{gameObject.name}] Stats 초기화 시도");
+            InitializeStats();
         }
     }
 }
