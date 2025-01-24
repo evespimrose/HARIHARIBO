@@ -48,6 +48,8 @@ public class BossMonster : Monster
     public bool isChase = false;
     public bool isAction = false;
 
+    public Coroutine action;
+
     protected void Awake()
     {
         InitializeComponents();
