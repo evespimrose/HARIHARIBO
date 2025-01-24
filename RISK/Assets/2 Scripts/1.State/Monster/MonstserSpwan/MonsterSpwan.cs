@@ -176,8 +176,10 @@ public class MonsterSpwan : MonoBehaviour
 
             if (inWave > 4 || wave >= 6)
             {
-                if (wave >= 6) 
+                if (wave >= 6)
                 {
+                    wave = 1;
+                    inWave = 1;
                     GameManager.Instance.isWaveDone = true;
                     yield break;
                 }

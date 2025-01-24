@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     [Header("Timer")]
     [SerializeField]
-    private float startTime = 300f; // 시작 시간(초) (5분)
+    private float startTime = 300f; // ?쒖옉 ?쒓컙(珥? (5遺?
     private float remainingTime;
 
     protected override void Awake()
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     private IEnumerator GameClock()
     {
-        Debug.Log("Time Goes...!");
+        isTickGoes = true;
         while (remainingTime > 0)
         {
             if (isTickGoes && !isGamePaused)
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public void AttachToNewCanvas(Canvas newCanvas)
     {
-        // ??Canvas??UI ??삵닏??븍뱜???怨뚭퍙
+        // ??Canvas??UI ???듬땹??釉띾콦????⑤슡??
         if (chat != null && newCanvas != null)
         {
             chat.gameObject.transform.SetParent(newCanvas.transform, false);
@@ -162,6 +162,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         print("isGameReady!!! GOGOGOGO!!!!");
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
         spawner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
+        riskUIController = (RiskUIController)FindAnyObjectByType(typeof(RiskUIController));
+        riskUIController.gameObject.SetActive(false);
 
         FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
 
@@ -241,7 +243,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             UnitManager.Instance.players.Add(player.Value.ActorNumber, GameObject.Find(name));
         }
 
-        remainingTime = startTime; // 카운트다운 시간 초기화
+
+        remainingTime = startTime; // 移댁슫?몃떎???쒓컙 珥덇린??
         StartCoroutine(GameClock());
 
         StartCoroutine(Dungeon());
@@ -262,7 +265,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield return null;
         }
 
-        // 타이머가 0이 되었을 때
+        // ??대㉧媛 0???섏뿀????
         if (dungeonUIController != null)
         {
             dungeonUIController.UpdateTimerText("00:00");
@@ -276,11 +279,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             isWaveDone = false;
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
             // riskUI enable
-            Debug.LogError("All Wave Launched....");
+            Debug.Log("All Wave Launched....");
 
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
-            Debug.LogError("All Monsters Dead || Time Out....");
+            Debug.Log("All Monsters Dead || Time Out....");
             riskUIController.gameObject.SetActive(true);
 
             //

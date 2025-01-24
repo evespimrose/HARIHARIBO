@@ -13,7 +13,6 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     public override void Enter(NormalMonster monster)
     {
         rangeAtkDamage = monster.atkDamage * 1f;
-        Debug.Log("RangeAtk공격 시작");
         monster.animator.SetTrigger("Atk");
         action = monster.StartCoroutine(StartAtk(monster));
     }
@@ -26,7 +25,7 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     public override void Exit(NormalMonster monster)
     {
         monster.StopCoroutine(action);
-        Debug.Log("RangeAtk공격 종료");
+        Debug.Log("RangeAtk怨듦꺽 醫낅즺");
     }
     private IEnumerator StartAtk(NormalMonster monster)
     {

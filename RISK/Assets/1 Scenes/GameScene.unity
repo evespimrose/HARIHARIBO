@@ -6032,7 +6032,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &839785929
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6098,7 +6098,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 1
+  sceneViewId: 997
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &852615713
