@@ -12,7 +12,7 @@ public class NormalMonsterDie : BaseState<NormalMonster>
     public override void Enter(NormalMonster monster)
     {
         monster.monsterDebuff.DebuffAllOff();
-        monster.animator.SetBool("Die", true);
+        monster.animator.SetTrigger("Die");
         monster.DieParticle();
     }
 

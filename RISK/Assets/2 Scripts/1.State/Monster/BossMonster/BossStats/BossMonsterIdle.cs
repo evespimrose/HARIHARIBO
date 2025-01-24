@@ -18,7 +18,7 @@ public class BossMonsterIdle : BaseState<BossMonster>
     {
         if (monster.isAction == false)
         {
-            monster.StartCoroutine(monster.AtkSet());
+            monster.action = monster.StartCoroutine(monster.AtkSet());
         }
         if (monster.isChase) monster.bMHandler.ChangeState(typeof(BossMonsterMove));
         //monster.bMHandler.ChangeState(typeof(BossMonsterSkillE));

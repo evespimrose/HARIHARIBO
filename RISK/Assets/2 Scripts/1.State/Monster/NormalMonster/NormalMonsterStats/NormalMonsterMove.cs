@@ -14,7 +14,7 @@ public class NormalMonsterMove : BaseState<NormalMonster>
         }
         else
         {
-            Debug.Log("원거리 몬스터라 안움직임");
+            
         }
     }
 
@@ -38,6 +38,10 @@ public class NormalMonsterMove : BaseState<NormalMonster>
         if (monster.monsterType != Monster.MonsterType.Range)
         {
             monster.animator.SetBool("Move", false);
+        }
+        else
+        {
+
         }
     }
 }

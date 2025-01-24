@@ -12,8 +12,7 @@ public class EliteMonsterDie : BaseState<EliteMonster>
     public override void Enter(EliteMonster monster)
     {
         monster.monsterDebuff.DebuffAllOff();
-        Debug.Log("Die진입");
-        monster.animator.SetBool("Die", true);
+        monster.animator.SetTrigger("Die");
         monster.DieParticle();
     }
 

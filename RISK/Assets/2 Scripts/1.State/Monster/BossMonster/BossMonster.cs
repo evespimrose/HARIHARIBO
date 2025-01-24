@@ -48,6 +48,8 @@ public class BossMonster : Monster
     public bool isChase = false;
     public bool isAction = false;
 
+    public Coroutine action;
+
     protected void Awake()
     {
         InitializeComponents();
@@ -176,7 +178,6 @@ public class BossMonster : Monster
         if (isDie == true)
         {
             UnitManager.Instance.monsters.Remove(this.gameObject);
-
             Destroy(this.gameObject);
         }
     }

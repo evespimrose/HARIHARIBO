@@ -36,11 +36,6 @@ public class EliteMonster : Monster
         RemoveBodyAtkHit();
         if (target == null) Targeting();
         monsterDebuff.DebuffCheck(this);
-        if (!isDie && isStun && isStunAction == false)
-        {
-            isStunAction = true;
-            eMHandler.ChangeState(typeof(EliteMonsterStun));
-        }
         eMHandler.Update();
     }
 
@@ -73,6 +68,16 @@ public class EliteMonster : Monster
         eMHandler.RegisterState(new EliteMonsterSkillC(eMHandler));
         //// 珥덇린 ?곹깭 ?ㅼ젙
         eMHandler.ChangeState(typeof(EliteMonsterIdle));
+    }
+
+    public override void Takedamage(float damage)
+    {
+        base.Takedamage(damage);
+        if (!isDie && isStun && isStunAction == false)
+        {
+            isStunAction = true;
+            eMHandler.ChangeState(typeof(EliteMonsterStun));
+        }
     }
 
     public void DieParticle()

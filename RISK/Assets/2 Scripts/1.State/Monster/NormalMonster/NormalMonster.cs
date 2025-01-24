@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class NormalMonster : Monster
@@ -30,15 +31,6 @@ public class NormalMonster : Monster
         RemoveBodyAtkHit();
         if (target == null) Targeting();
         monsterDebuff.DebuffCheck(this);
-        if (!isDie && isAirborne == true && isAirborneAction == false)
-        {
-            nMHandler.ChangeState(typeof(NormalMonsterAirborne));
-        }
-        else if (!isDie && !isAirborne && isStun && !isStunAction)
-        {
-            isStunAction = true;
-            nMHandler.ChangeState(typeof(NormalMonsterStun));
-        }
         nMHandler.Update();
     }
 
@@ -110,10 +102,19 @@ public class NormalMonster : Monster
     public override void Takedamage(float damage)
     {
         base.Takedamage(damage);
-        if (!isDie && isHit == false)
+        if (!isDie && !isAirborne && !isStun && isHit == false)
         {
             isHit = true;
             this.nMHandler.ChangeState(typeof(NormalMonsterHit));
+        }
+        if (!isDie && isAirborne == true && isAirborneAction == false)
+        {
+            nMHandler.ChangeState(typeof(NormalMonsterAirborne));
+        }
+        else if (!isDie && !isAirborne && isStun && !isStunAction)
+        {
+            isStunAction = true;
+            nMHandler.ChangeState(typeof(NormalMonsterStun));
         }
     }
 
