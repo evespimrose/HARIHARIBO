@@ -12,7 +12,6 @@ public class NormalMonsterDie : BaseState<NormalMonster>
     public override void Enter(NormalMonster monster)
     {
         monster.monsterDebuff.DebuffAllOff();
-        Debug.Log("Die진입");
         monster.animator.SetBool("Die", true);
         monster.DieParticle();
     }
@@ -23,12 +22,12 @@ public class NormalMonsterDie : BaseState<NormalMonster>
         {
             monster.Die();
         }
-        //Debug.Log("크아아악 죽는중");
+        //Debug.Log("?ъ븘?꾩븙 二쎈뒗以?);
         curTime = curTime + Time.deltaTime;
     }
 
     public override void Exit(NormalMonster monster)
     {
-        Debug.Log("사망");
+        ;
     }
 }

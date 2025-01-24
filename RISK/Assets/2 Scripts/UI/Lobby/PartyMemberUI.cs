@@ -10,14 +10,12 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform partyMemberContainer;
     [SerializeField] private GameObject partyMemberInfoPrefab;
-    //public Button closeButton;
     public Button quitButton;
     public Button gameStartButton;
 
 
     private void Awake()
     {
-        //closeButton.onClick.AddListener(OnCloseButtonClick);
         quitButton.onClick.AddListener(OnQuitButtonClick);
         gameStartButton.onClick.AddListener(OnGameStartButtonClick);
     }
