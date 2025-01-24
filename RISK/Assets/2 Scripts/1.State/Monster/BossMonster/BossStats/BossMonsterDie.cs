@@ -12,7 +12,6 @@ public class BossMonsterDie : BaseState<BossMonster>
     public override void Enter(BossMonster monster)
     {
         monster.StopCoroutine(monster.action);
-        Debug.Log("Die진입");
         monster.animator.SetTrigger("Die");
         monster.DieParticle();
     }

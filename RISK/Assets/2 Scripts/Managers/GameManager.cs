@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     [Header("Timer")]
     [SerializeField]
-    private float startTime = 300f; // ?쒖옉 ?쒓컙(珥? (5遺?
+    private float startTime = 300f;
     private float remainingTime;
 
     protected override void Awake()
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public void AttachToNewCanvas(Canvas newCanvas)
     {
-        // ??Canvas??UI ???듬땹??釉띾콦????⑤슡??
+        // ??Canvas??UI ????щ빘???됰씭肄?????ㅼ뒦??
         if (chat != null && newCanvas != null)
         {
             chat.gameObject.transform.SetParent(newCanvas.transform, false);
@@ -244,7 +244,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
 
 
-        remainingTime = startTime; // 移댁슫?몃떎???쒓컙 珥덇린??
+        remainingTime = startTime; // 燁삳똻??紐껊뼄????볦퍢 ?λ뜃由??
         StartCoroutine(GameClock());
 
         StartCoroutine(Dungeon());
@@ -265,7 +265,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield return null;
         }
 
-        // ??대㉧媛 0???섏뿀????
+        // ?????㎩첎? 0????뤿?????
         if (dungeonUIController != null)
         {
             dungeonUIController.UpdateTimerText("00:00");

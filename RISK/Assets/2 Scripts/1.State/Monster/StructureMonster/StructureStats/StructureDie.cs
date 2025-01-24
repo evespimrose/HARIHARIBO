@@ -19,7 +19,6 @@ public class StructureDie : BaseState<StructureMonster>
         monster.monsterDebuff.DebuffAllOff();
         startPosition = monster.model.transform.position;
         targetPosition = new Vector3(startPosition.x, targetHeight, startPosition.z);
-        Debug.Log("Die 시작");
         monster.model.transform.position = new Vector3(monster.model.transform.position.x, 0.1f, monster.model.transform.position.z);
         monster.StartCoroutine(DestroyGameObject(monster, 1f));
     }
@@ -41,7 +40,6 @@ public class StructureDie : BaseState<StructureMonster>
 
     public override void Exit(StructureMonster monster)
     {
-        Debug.Log("Die 종료");
     }
 
     private IEnumerator DestroyGameObject(StructureMonster monster, float dieTime)
