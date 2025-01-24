@@ -88,6 +88,7 @@ public class EliteMonster : Monster
     {
         if (isDie == true)
         {
+            UnitManager.Instance.monsters.Remove(this.gameObject);
             Destroy(this.gameObject);
         }
     }
