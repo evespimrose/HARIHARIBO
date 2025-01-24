@@ -12,14 +12,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 {
-    public static bool isGameRunning;
+    public bool isGameRunning;
 
     public bool isWaveDone = false;
 
     public bool isTickGoes = false;
 
     public bool isGamePaused = false;
-
+    private bool isGameForceOver;
     public List<FireBaseCharacterData> connectedPlayers = new List<FireBaseCharacterData>();
 
     public Transform playerPosition;
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public void AttachToNewCanvas(Canvas newCanvas)
     {
-        // ??Canvas??UI ????щ빘???됰씭肄?????ㅼ뒦??
+        // ??Canvas??UI ?????鍮????곗뵯???????쇰뮚??
         if (chat != null && newCanvas != null)
         {
             chat.gameObject.transform.SetParent(newCanvas.transform, false);
@@ -163,6 +163,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
         spawner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
         riskUIController = (RiskUIController)FindAnyObjectByType(typeof(RiskUIController));
+        dungeonUIController = (DungeonUIController)FindAnyObjectByType(typeof(DungeonUIController));
         riskUIController.gameObject.SetActive(false);
 
         FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
@@ -244,10 +245,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
 
 
-        remainingTime = startTime; // 燁삳똻??紐껊뼄????볦퍢 ?λ뜃由??
+        remainingTime = startTime; // ?곸궠???筌뤾퍓堉????蹂?뜟 ?貫?껆뵳??
         StartCoroutine(GameClock());
 
         StartCoroutine(Dungeon());
+        StartCoroutine(UpdateTimer());
 
         yield return new WaitUntil(() => !isGameRunning);
         // TODO : game over logic initiate
@@ -265,7 +267,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield return null;
         }
 
-        // ?????㎩첎? 0????뤿?????
+        // ???????⑹쾸? 0????琉?????
         if (dungeonUIController != null)
         {
             dungeonUIController.UpdateTimerText("00:00");
@@ -274,7 +276,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public IEnumerator Dungeon() // Main LOOP
     {
-        while (true)
+        while (isGameRunning)
         {
             isWaveDone = false;
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
@@ -289,10 +291,36 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
 
-
+            if (isGameForceOver)
+            {
+                ProcessGameOver(true);
+            }
         }
+    }
 
+
+    public void ProcessGameOver(bool isSurrender)
+    {
+        CalculateRewards(isSurrender);
+        isWaveDone = true;
         isGameRunning = false;
+    }
+
+    private void CalculateRewards(bool isSurrender)
+    {
+        float finalReward = 0;
+
+        float baseReward = roomReward;
+        float surrenderPenalty = isSurrender ? 0f : 1f;
+        finalReward = baseReward * surrenderPenalty;
+
+        photonView.RPC("UpdatePlayerRewardsRPC", RpcTarget.All, finalReward);
+    }
+
+    [PunRPC]
+    private void UpdatePlayerRewardsRPC(int rewardsJson)
+    {
+        FirebaseManager.Instance.RewardUpdate(rewardsJson);
     }
 
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
@@ -357,6 +385,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     {
         isGameRunning = true;
         isGamePaused = false;
+        isGameForceOver = false;
     }
 
     public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)

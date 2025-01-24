@@ -389,6 +389,13 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
             }
         }
     }
+
+    public async void RewardUpdate(int reward, Action<bool> onSuccess = null)
+    {
+        await usersRef.Child("won").SetValueAsync(currentUserData.won + reward);
+
+        onSuccess?.Invoke(true);
+    }
     public void SignOut()
     {
         Auth.SignOut();
