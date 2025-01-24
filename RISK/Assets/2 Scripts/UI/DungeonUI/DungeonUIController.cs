@@ -39,6 +39,11 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
     [SerializeField] private Image[] pcCooldownOverlays;
     [SerializeField] private TMP_Text[] pcKeyBindTexts;
 
+    [Header("Party UI")]
+    [SerializeField] private GameObject partyMemberPrefab;
+    [SerializeField] private Transform partyContainer;
+    private Dictionary<string, DungeonPartyMemberUI> partyMembers = new Dictionary<string, DungeonPartyMemberUI>();
+
 
     private bool[] isSkillInCooldown = new bool[4]; // W, E, R, T ?ㅽ궗??荑⑦????곹깭
     private float[] currentCooldowns;  // ?꾩옱 ?좏깮??吏곸뾽??荑⑦??????
@@ -66,10 +71,44 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
 #endif
     }
 
-    // 異붽???硫붿꽌?? ?뚮젅?댁뼱 李몄“ ?ㅼ젙
+    private void Update()
+    {
+        if (localPlayer != null && localPlayer.Stats != null)
+        {
+            float healthRatio = localPlayer.Stats.currentHealth / localPlayer.Stats.maxHealth;
+            UpdatePlayerInfo(healthRatio);
+
+            UpdatePartyMembersHP();
+        }
+    }
+    private void UpdatePartyMembersHP()
+    {
+        if (UnitManager.Instance != null)
+        {
+            int partyMemberIndex = 0;
+            foreach (var playerObj in UnitManager.Instance.players.Values)
+            {
+                if (playerObj != null && playerObj != localPlayer.gameObject)
+                {
+                    if (playerObj.TryGetComponent<Player>(out var partyMember))
+                    {
+                        float memberHealthRatio = partyMember.Stats.currentHealth / partyMember.Stats.maxHealth;
+                        UpdatePartyHP(partyMemberIndex, memberHealthRatio);
+                        partyMemberIndex++;
+                    }
+                }
+            }
+        }
+    }
+
     public void SetPlayer(Player player)
     {
         localPlayer = player;
+        if (player != null)
+        {
+            float healthRatio = player.Stats.currentHealth / player.Stats.maxHealth;
+            UpdatePlayerInfo(healthRatio);
+        }
     }
 
     // PC 踰꾩쟾 UI ?ㅼ젙
@@ -343,17 +382,16 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)
+        if (stream.IsWriting)  // 데이터 보내기
         {
             if (timerText != null)
             {
                 stream.SendNext(timerText.text);
             }
         }
-        else
+        else  // 데이터 받기
         {
             syncedTimerText = (string)stream.ReceiveNext();
-
             if (timerText != null)
             {
                 timerText.text = syncedTimerText;
