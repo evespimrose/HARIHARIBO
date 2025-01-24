@@ -42,7 +42,6 @@ public class Healer : Player
     protected override void Awake()
     {   
         base.Awake();
-        InitializeStats();
 
         if (effectsHandler == null)
         {
@@ -57,7 +56,6 @@ public class Healer : Player
     protected override void InitializeStats()
     {
         stats = new PlayerStats();
-        Stats = stats;
 
         stats.maxHealth = baseMaxHealth;
         stats.healthPerLevel = baseHealthPerLevel;
