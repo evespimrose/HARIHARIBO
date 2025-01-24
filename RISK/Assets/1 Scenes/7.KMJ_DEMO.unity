@@ -3547,17 +3547,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1212152383570514536, guid: 476c7fe3454834d429cc3269490d8ddc, type: 3}
-      propertyPath: sceneViewId
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 2076494417076438055, guid: 476c7fe3454834d429cc3269490d8ddc, type: 3}
       propertyPath: m_Name
       value: MeleeMonsterB
-      objectReference: {fileID: 0}
-    - target: {fileID: 2076494417076438055, guid: 476c7fe3454834d429cc3269490d8ddc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6118689423993213650, guid: 476c7fe3454834d429cc3269490d8ddc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6419,17 +6411,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4428914736926277156, guid: b829f3af327176e4abb0c5f013e01ff0, type: 3}
-      propertyPath: sceneViewId
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 4895862228875006388, guid: b829f3af327176e4abb0c5f013e01ff0, type: 3}
       propertyPath: m_Name
       value: RangeMonsterB
-      objectReference: {fileID: 0}
-    - target: {fileID: 4895862228875006388, guid: b829f3af327176e4abb0c5f013e01ff0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5016925141092621371, guid: b829f3af327176e4abb0c5f013e01ff0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10232,17 +10216,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3208455014031899618, guid: 33cbafedbe85899448735248ecceee9a, type: 3}
-      propertyPath: sceneViewId
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5179692953179437697, guid: 33cbafedbe85899448735248ecceee9a, type: 3}
       propertyPath: m_Name
       value: EliteMonster
-      objectReference: {fileID: 0}
-    - target: {fileID: 5179692953179437697, guid: 33cbafedbe85899448735248ecceee9a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11989,10 +11965,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6663538432996142289, guid: 963f1bd073720044c9785f3a28cda39d, type: 3}
-      propertyPath: sceneViewId
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 7510064992899699886, guid: 963f1bd073720044c9785f3a28cda39d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -17205,17 +17177,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 349119142852199063, guid: d3c82ddd5efd1e340b34438b948ead87, type: 3}
-      propertyPath: sceneViewId
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 5276453543863218841, guid: d3c82ddd5efd1e340b34438b948ead87, type: 3}
       propertyPath: m_Name
       value: MeleeMonsterA
-      objectReference: {fileID: 0}
-    - target: {fileID: 5276453543863218841, guid: d3c82ddd5efd1e340b34438b948ead87, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6710927545455732149, guid: d3c82ddd5efd1e340b34438b948ead87, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18815,14 +18779,6 @@ PrefabInstance:
     - target: {fileID: 5563592875290583862, guid: f0b5dd53922e8804c8b0786e40045333, type: 3}
       propertyPath: m_Name
       value: RangeMonsterA
-      objectReference: {fileID: 0}
-    - target: {fileID: 5563592875290583862, guid: f0b5dd53922e8804c8b0786e40045333, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5744128124120885697, guid: f0b5dd53922e8804c8b0786e40045333, type: 3}
-      propertyPath: sceneViewId
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21405,17 +21361,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5300683849849550740, guid: 6b7d054db23d0a04ab5af3f676315b95, type: 3}
-      propertyPath: sceneViewId
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8950981073738508888, guid: 6b7d054db23d0a04ab5af3f676315b95, type: 3}
       propertyPath: m_Name
       value: MeleeMonsterC
-      objectReference: {fileID: 0}
-    - target: {fileID: 8950981073738508888, guid: 6b7d054db23d0a04ab5af3f676315b95, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21557,13 +21505,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: StructureMonster
       objectReference: {fileID: 0}
-    - target: {fileID: 504799143444333131, guid: 5e443a1855554384088022b601b6df58, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4595273710974472711, guid: 5e443a1855554384088022b601b6df58, type: 3}
-      propertyPath: sceneViewId
-      value: 8
+    - target: {fileID: 6024525509703421732, guid: 5e443a1855554384088022b601b6df58, type: 3}
+      propertyPath: m_Constraints
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 6808075795417895852, guid: 5e443a1855554384088022b601b6df58, type: 3}
       propertyPath: m_LocalPosition.x
