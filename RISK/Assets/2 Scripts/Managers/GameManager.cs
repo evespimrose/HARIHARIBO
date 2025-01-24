@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     private IEnumerator GameClock()
     {
+        Debug.Log("Time Goes...!");
         while (remainingTime > 0)
         {
             if (isTickGoes && !isGamePaused)
