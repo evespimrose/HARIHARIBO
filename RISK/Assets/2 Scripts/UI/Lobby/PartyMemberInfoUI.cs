@@ -43,8 +43,8 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
         {
             playerNameText.text = playerStats.nickName;
             levelText.text = playerStats.level.ToString();
-            classText.text = PartyManager.Instance.GetPartyMemberClass(player);
-            partyLeaderIcon.gameObject.SetActive(PartyManager.Instance.IsPartyLeader(player));
+            //classText.text = PartyManager.Instance.GetPartyMemberClass(player);
+            //partyLeaderIcon.gameObject.SetActive(PartyManager.Instance.IsPartyLeader(player));
         }
 
     }
@@ -54,5 +54,13 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
         playerNameText.text = fireBaseCharacterData.nickName;
         levelText.text = fireBaseCharacterData.level.ToString();
         classText.text = fireBaseCharacterData.classType.ToString();
+        memberImage.sprite = SetClassImage(fireBaseCharacterData);
+    }
+
+    private Sprite SetClassImage(FireBaseCharacterData fireBaseCharacterData)
+    {
+        Sprite classImage;
+        classImage = GameManager.Instance.characterDataDic[fireBaseCharacterData.classType].headSprite;
+        return classImage;
     }
 }

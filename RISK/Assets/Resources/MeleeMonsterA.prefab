@@ -1674,6 +1674,7 @@ GameObject:
   - component: {fileID: 446861425171215024}
   - component: {fileID: 349119142852199063}
   - component: {fileID: 2866378895290525713}
+  - component: {fileID: 2996580638444609516}
   m_Layer: 6
   m_Name: MeleeMonsterA
   m_TagString: Monster
@@ -1851,6 +1852,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2866378895290525713}
+  - {fileID: 2996580638444609516}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1893,6 +1895,22 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &2996580638444609516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5276453543863218841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &5293651375174694582
 GameObject:
   m_ObjectHideFlags: 0

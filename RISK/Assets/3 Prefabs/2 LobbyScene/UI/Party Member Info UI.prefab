@@ -785,6 +785,7 @@ MonoBehaviour:
   levelText: {fileID: 2487668865788004833}
   classText: {fileID: 210441845080102360}
   partyLeaderIcon: {fileID: 8141747596757341692}
+  memberImage: {fileID: 2892372227715309604}
 --- !u!1 &7163991751476304375
 GameObject:
   m_ObjectHideFlags: 0

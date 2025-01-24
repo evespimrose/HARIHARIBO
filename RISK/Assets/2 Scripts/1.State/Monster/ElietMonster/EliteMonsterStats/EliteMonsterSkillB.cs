@@ -52,10 +52,10 @@ public class EliteMonsterSkillB : BaseState<EliteMonster>
 
     private void SkillCAtk(EliteMonster monster)
     {
-        GameObject skillCObj = monster.ObjSpwan(monster.skillBPrefab, monster.transform.position);
+        Vector3 spawnPos = monster.transform.position;
         Vector3 forwardDir = new Vector3(monster.transform.forward.x, 0f, monster.transform.forward.z).normalized;
-        skillCObj.transform.forward = forwardDir;
-        skillCObj.transform.position = new Vector3(skillCObj.transform.position.x, skillCObj.transform.position.y + 1f, skillCObj.transform.position.z);
+        spawnPos.y = 1f;
+        GameObject skillCObj = monster.ObjSpwan(monster.skillBPrefab, spawnPos, forwardDir);
         skillCObj.GetComponent<EliteSkillBObjcect>().Seting(skillBDamage);
     }
 }

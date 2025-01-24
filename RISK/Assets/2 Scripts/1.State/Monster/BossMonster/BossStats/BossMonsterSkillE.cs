@@ -79,7 +79,9 @@ public class BossMonsterSkillE : BaseState<BossMonster>
     {
         Vector3 spawnPos = monster.transform.position + monster.transform.forward * 0.2f;
         spawnPos.y = 1f;
-        GameObject skillEBullet = monster.ObjSpwan(projectilePrefabA, spawnPos);
+        Vector3 forwardDir = monster.transform.forward;
+        Vector3 rotation = Quaternion.LookRotation(forwardDir).eulerAngles;
+        GameObject skillEBullet = monster.ObjSpwan(projectilePrefabA, spawnPos, rotation);
         BossSkillEObject missileScript = skillEBullet.GetComponent<BossSkillEObject>();
         missileScript.SetMissileProperties(damage, fireDamage, fireInterval, fireDuration);
         missileScript.SetMissileType(1);

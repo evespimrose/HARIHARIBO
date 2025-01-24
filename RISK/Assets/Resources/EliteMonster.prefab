@@ -1182,6 +1182,7 @@ GameObject:
   - component: {fileID: 435053047627587273}
   - component: {fileID: 3208455014031899618}
   - component: {fileID: 5152634894592914764}
+  - component: {fileID: 7325671335450496649}
   m_Layer: 6
   m_Name: EliteMonster
   m_TagString: Monster
@@ -1361,6 +1362,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5152634894592914764}
+  - {fileID: 7325671335450496649}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1400,12 +1402,25 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: Stun
-  - Type: 9
-    SynchronizeType: 0
-    Name: New Trigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &7325671335450496649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5179692953179437697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &5326163200533731838
 GameObject:
   m_ObjectHideFlags: 0

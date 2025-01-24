@@ -10,6 +10,8 @@ public class MonsterSpwan : MonoBehaviour
     public int inWave = 1;
     public float SpwanTiem = 10f;
 
+    public DungeonBossUI bossUI;
+
     [Header("Melee monster")]
     [Tooltip("Melee Monster Count")]
     private int meleeMonsterSpwanCount = 5;
@@ -42,7 +44,7 @@ public class MonsterSpwan : MonoBehaviour
 
     public float meleeMinRadius = 5f;
     public float meleeMaxRadius = 10f;
-    public float rnageMinRadius = 10f;
+    public float rangeMinRadius = 10f;
     public float rangeMaxRadius = 15f;
     public Vector3 center;
 
@@ -220,7 +222,7 @@ public class MonsterSpwan : MonoBehaviour
     public Vector3 GetRangeSpwanPos(int quadrant)
     {
         float angle = 0f;
-        float radius = Random.Range(rnageMinRadius, rangeMaxRadius); 
+        float radius = Random.Range(rangeMinRadius, rangeMaxRadius); 
 
         switch (quadrant)
         {
@@ -249,5 +251,13 @@ public class MonsterSpwan : MonoBehaviour
     public GameObject RangeMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(rangeMonsterPrefab[Random.Range(0, rangeMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
     public GameObject EliteMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(eliteMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, Quaternion.identity);
     public GameObject StructureMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].transform.rotation);
-    public GameObject BossMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(bossMonsterPrefab.name, spwanPos, Quaternion.identity);
+    public GameObject BossMonsterCreate(Vector3 spawnPos)
+    {
+        GameObject bossMonster = PhotonNetwork.Instantiate(bossMonsterPrefab.name, spawnPos, Quaternion.identity);
+
+        bossUI.gameObject.SetActive(true);
+        bossUI.bossMonster = bossMonster.GetComponent<BossMonster>();
+
+        return bossMonster;
+    }
 }

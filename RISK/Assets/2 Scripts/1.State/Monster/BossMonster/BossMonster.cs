@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BossMonster : Monster
 {
-    public string bossName = "吏꾧킅???";
+    public string bossName = "KingJinGwang";
 
     [Header("紐ъ뒪???寃?諛?紐⑤뜽")]
     protected Collider col;
@@ -40,7 +40,7 @@ public class BossMonster : Monster
     public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;
-    public float skillFknockback = 10f; //skillF ?됰갚 嫄곕━
+    public float skillFknockback = 10f;
     public float skillFDamage = 10f; //skillF 怨듦꺽 ?곕?吏
     private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF ?寃⑺븳 ??곷━?ㅽ듃
 

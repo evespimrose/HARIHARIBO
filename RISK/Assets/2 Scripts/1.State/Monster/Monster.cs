@@ -40,7 +40,7 @@ public class Monster : MonoBehaviour, ITakedamage
     [Tooltip("현재체력")]
     public float curHp;
     [Tooltip("최대체력")]
-    protected float maxHp;
+    public float maxHp { get; protected set; }
 
     [Tooltip("드랍 걍험치")]
     public int exp;
@@ -148,10 +148,10 @@ public class Monster : MonoBehaviour, ITakedamage
         rb.MovePosition(moveDir);
     }
 
-    public GameObject ObjSpwan(GameObject obj, Vector3 pos)
+    public GameObject ObjSpwan(GameObject obj, Vector3 pos, Vector3 rot)
     {
-        GameObject gameObject = Instantiate(obj);
-        gameObject.transform.position = pos;
+        Quaternion rotation = Quaternion.LookRotation(rot);
+        GameObject gameObject = PhotonNetwork.Instantiate(obj.name, pos, rotation);
         return gameObject;
     }
 

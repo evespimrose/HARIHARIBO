@@ -76,10 +76,7 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
             spawnPos.y = 1f;  // Y 위치 고정
 
             // 발사체 스폰
-            skillEBullets[i] = monster.ObjSpwan(monster.skillCPrefab, spawnPos);
-
-            // 발사체의 방향 설정
-            skillEBullets[i].transform.rotation = Quaternion.LookRotation(directions[i]);
+            skillEBullets[i] = monster.ObjSpwan(monster.skillCPrefab, spawnPos, directions[i]); // 방향을 Vector3로 넣어줍니다.
 
             // 발사체의 속성 설정 (missileSpeed, missileDistance 등을 직접 설정)
             EliteSkillCObjcect missileScript = skillEBullets[i].GetComponent<EliteSkillCObjcect>();
