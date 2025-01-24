@@ -40,7 +40,7 @@ public class BossMonster : Monster
     public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;
-    public float skillFknockback = 50f; //skillF 넉백 거리
+    public float skillFknockback = 10f; //skillF 넉백 거리
     public float skillFDamage = 10f; //skillF 공격 데미지
     private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF 타격한 대상리스트
 
@@ -92,15 +92,15 @@ public class BossMonster : Monster
             hitTargets.Add(other.gameObject);
 
             // 넉백 적용
-            Vector3 knockbackDir = transform.position - other.transform.position;
+            Vector3 knockbackDir = other.transform.position - transform.position.normalized;
             knockbackDir.y = 0f;
 
             // 넉백 힘 조정
             Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
-            float adjustedKnockback = skillFknockback * 10f;  // 넉백 배율을 키워서 더 강하게 적용
-            playerRb.AddForce(-knockbackDir.normalized * adjustedKnockback, ForceMode.Impulse);
+            float adjustedKnockback = skillFknockback * 2;  // 넉백 배율을 키워서 더 강하게 적용
+            playerRb.AddForce(knockbackDir * adjustedKnockback, ForceMode.Impulse);
 
-            Debug.Log("넉백 방향: " + knockbackDir.normalized + " 힘: " + skillFknockback);
+            Debug.Log("넉백 방향: " + knockbackDir + " 힘: " + skillFknockback);
         }
     }
 
