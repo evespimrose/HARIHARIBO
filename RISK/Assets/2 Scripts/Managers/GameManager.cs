@@ -276,11 +276,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             isWaveDone = false;
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
             // riskUI enable
-            Debug.LogError("All Wave Launched....");
+            Debug.Log("All Wave Launched....");
 
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
-            Debug.LogError("All Monsters Dead || Time Out....");
+            Debug.Log("All Monsters Dead || Time Out....");
             riskUIController.gameObject.SetActive(true);
 
             //
