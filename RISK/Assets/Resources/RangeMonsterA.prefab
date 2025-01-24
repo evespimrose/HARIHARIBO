@@ -1971,9 +1971,6 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: Hit
-  - Type: 9
-    SynchronizeType: 0
-    Name: New Trigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
