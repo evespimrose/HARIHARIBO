@@ -1,53 +1,54 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Mage : Player
 {
-    [Header("筌띾뜄苡????쎄틛 ??쇱젟")]
+    [Header("嶺뚮씭?꾥떋?????꾪떅 ???깆젧")]
     [SerializeField] public float baseMaxHealth;
     [SerializeField] private int baseHealthPerLevel;
     [SerializeField] public float baseAttackPower;
     [SerializeField] private int baseAttackPerLevel;
     [SerializeField] public float baseMoveSpeed;
 
-    [Header("獄쎻뫗堉?& ???궗")]
+    [Header("?꾩렮維쀥젆?& ???沅?")]
     [SerializeField, Range(0f, 1f)] public float baseDamageReduction;
     [SerializeField] public float baseHealthRegen;
     [SerializeField] public float baseRegenInterval;
 
-    [Header("?곕떽? ??쎄틛")]
+    [Header("?怨뺣뼺? ???꾪떅")]
     [SerializeField, Range(0f, 1f)] public float baseCriticalChance;
     [SerializeField] public float baseCriticalDamage;
     [SerializeField, Range(0f, 1f)] public float baseCooldownReduction;
 
-    [Header("??꾨읃??")]
+    [Header("??袁⑥쓢??")]
     [SerializeField] private AnimationEventEffects effectsHandler;
 
-    [Header("?⑤벀爰???꾨읃??")]
+    [Header("??ㅻ?????袁⑥쓢??")]
     [SerializeField] private GameObject ProjectilePrefab;
 
-    [Header("?⑤벀爰??????")]
+    [Header("??ㅻ????????")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform tSkillAttackPoint;
 
-    [Header("?⑤벀爰???쇱젟")]
-    [SerializeField] private float normalSpeed = 3f; // 疫꿸퀡????沅쀯㎗???얜즲
-    [SerializeField] private float finalSpeed = 3f;  // 筌띾뜆?筌??꾠끇????沅쀯㎗???얜즲
+    [Header("??ㅻ??????깆젧")]
+    [SerializeField] private float normalSpeed = 3f; // ?リ옇?????亦낆?럸????쒖┣
+    [SerializeField] private float finalSpeed = 3f;  // 嶺뚮씭??嶺??袁좊걞????亦낆?럸????쒖┣
     [SerializeField] private float finalScale = 2f;
     [SerializeField] private float LifeTime = 5f;
 
-    [Header("기본 공격 데미지 계수")]
+    [Header("湲곕낯 怨듦꺽 ?곕?吏 怨꾩닔")]
     [SerializeField] private float normalAttackDamagePercent = 100f;
     [SerializeField] private float finalAttackDamagePercent = 150f;
 
-    [Header("W??쎄텢 ??쇱젟")]
+    [Header("W???꾪뀬 ???깆젧")]
     [SerializeField] private GameObject wSkillProjectilePrefab;
     [SerializeField] private float wSkillSpeed = 3f;
     [SerializeField] private float wSkillLifeTime = 3f;
     [SerializeField] private float wSkillScale = 2.5f;
 
-    [Header("T ??쎄텢 ??쇱젟")]
+    [Header("T ???꾪뀬 ???깆젧")]
     [SerializeField] private GameObject tSkillProjectilePrefab;
     [SerializeField] private float tSkillSpeed = 3f;
     [SerializeField] private float tSkillLifeTime = 3f;
@@ -145,6 +146,11 @@ public class Mage : Player
             dungeonUI?.StartPCCooldown(3);
         }
 
+        if (PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.I))
+        {
+            UnitManager.Instance.DoomToMonsters();
+        }
+
         stateHandler.Update();
     }
     private Transform GetNearestMonster(Collider[] monsters)
@@ -182,18 +188,18 @@ public class Mage : Player
                 skillDamage.skillName = "MageProjectile";
                 if (comboIndex == 3)
                 {
-                    skillDamage.damagePercent = finalAttackDamagePercent;  // 마지막 콤보는 더 높은 데미지
+                    skillDamage.damagePercent = finalAttackDamagePercent;  // 留덉?留?肄ㅻ낫?????믪? ?곕?吏
                 }
                 else
                 {
-                    skillDamage.damagePercent = normalAttackDamagePercent;  // 기본 데미지
+                    skillDamage.damagePercent = normalAttackDamagePercent;  // 湲곕낯 ?곕?吏
                 }
             }
 
             var projectileMove = Energyball.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection, this); // ??猷?獄쎻뫚堉???쇱젟
+                projectileMove.Initialize(shootDirection, this); // ??????꾩렮維싧젆????깆젧
                 projectileMove.SetLifeTime(LifeTime);
 
                 switch (comboIndex)
@@ -230,7 +236,7 @@ public class Mage : Player
             var projectileMove = projectile.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection,this);
+                projectileMove.Initialize(shootDirection, this);
                 projectileMove.speed = wSkillSpeed;
                 projectileMove.SetLifeTime(wSkillLifeTime);
             }
@@ -259,7 +265,7 @@ public class Mage : Player
             var projectileMove = projectile.GetComponent<ProjectileMove>();
             if (projectileMove != null)
             {
-                projectileMove.Initialize(shootDirection,this);
+                projectileMove.Initialize(shootDirection, this);
                 projectileMove.speed = tSkillSpeed;
                 projectileMove.SetLifeTime(tSkillLifeTime);
             }

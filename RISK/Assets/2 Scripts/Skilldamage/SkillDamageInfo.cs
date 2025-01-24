@@ -48,13 +48,24 @@ public class SkillDamageInfo : MonoBehaviour
         }
         if (ownerPlayer == null)
         {
-            ownerPlayer = GetComponentInParent<Player>();
-            if (ownerPlayer != null)
+            Transform current = transform;
+            while (current != null && ownerPlayer == null)
             {
-                Debug.Log($"[{skillName}] Player를 부모에서 찾음: {ownerPlayer.name}");
+                ownerPlayer = current.GetComponent<Player>();
+                if (ownerPlayer == null)
+                {
+                    current = current.parent;
+                }
+            }
+
+            if (ownerPlayer == null)
+            {
+                Debug.LogError($"[{skillName}] Player를 찾을 수 없습니다!");
             }
         }
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -153,25 +164,48 @@ public class SkillDamageInfo : MonoBehaviour
 
     public float GetDamage()
     {
-        if (ownerPlayer == null) return 0f;
+        Debug.Log($"[{skillName}] GetDamage 호출 - ownerPlayer: {(ownerPlayer != null ? ownerPlayer.name : "null")}");
+
+        if (ownerPlayer == null)
+        {
+            Debug.LogError($"[{skillName}] GetDamage 실패: ownerPlayer가 null입니다");
+            return 0f;
+        }
+
+        if (ownerPlayer.Stats == null)
+        {
+            Debug.LogError($"[{skillName}] GetDamage 실패: ownerPlayer.Stats가 null입니다. ownerPlayer: {ownerPlayer.name}");
+            return 0f;
+        }
 
         PlayerStats stats = ownerPlayer.Stats;
         float damage;
 
-        if (isBasicAttack)
+        try
         {
-            damage = stats.attackPower;
+            if (isBasicAttack)
+            {
+                damage = stats.attackPower;
+            }
+            else
+            {
+                damage = stats.attackPower * (damagePercent / 100f);
+            }
+
+            if (Random.value <= stats.criticalChance)
+            {
+                isCritical = true;
+                damage *= (1f + stats.criticalDamage);
+            }
+
+            Debug.Log($"[{skillName}] 데미지 계산 완료: {damage}");
+            return damage;
         }
-        else
+        catch (System.Exception e)
         {
-            damage = stats.attackPower * (damagePercent / 100f);
+            Debug.LogError($"[{skillName}] 데미지 계산 중 오류 발생: {e.Message}");
+            return 0f;
         }
-        if (Random.value <= stats.criticalChance)
-        {
-            isCritical = true;
-            damage *= (1f + stats.criticalDamage);
-        }
-        return damage;
     }
 
     public float GetHealAmount()
@@ -184,7 +218,6 @@ public class SkillDamageInfo : MonoBehaviour
     {
         ownerPlayer = player;
     }
-
     public void EnableCollider()
     {
         if (damageCollider != null)

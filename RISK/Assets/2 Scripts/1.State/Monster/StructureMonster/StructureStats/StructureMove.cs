@@ -8,7 +8,6 @@ public class StructureMove : BaseState<StructureMonster>
 
     public override void Enter(StructureMonster monster)
     {
-        Debug.Log("Move 시작");
     }
 
     public override void Update(StructureMonster monster)
@@ -21,6 +20,5 @@ public class StructureMove : BaseState<StructureMonster>
 
     public override void Exit(StructureMonster monster)
     {
-        Debug.Log("Move 종료");
     }
 }

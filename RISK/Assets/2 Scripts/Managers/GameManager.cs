@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     private IEnumerator GameClock()
     {
+        Debug.Log("Time Goes...!");
         while (remainingTime > 0)
         {
             if (isTickGoes && !isGamePaused)
@@ -275,11 +276,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             isWaveDone = false;
             yield return StartCoroutine(spawner.MonsterSpwanCorutine());
             // riskUI enable
-            print("All Wave Launched....");
+            Debug.LogError("All Wave Launched....");
 
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
-            print("All Monsters Dead || Time Out....");
+            Debug.LogError("All Monsters Dead || Time Out....");
             riskUIController.gameObject.SetActive(true);
 
             //

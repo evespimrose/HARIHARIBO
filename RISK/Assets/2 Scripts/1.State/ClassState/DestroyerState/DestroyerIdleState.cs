@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,6 +53,10 @@ public class DestroyerIdleState : BaseState<Player>
             handler.ChangeState(typeof(DestroyerTSkill));
             dungeonUI.StartPCCooldown(3);
         }
+        if (PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.I))
+        {
+            UnitManager.Instance.DoomToMonsters();
+        }
     }
-    
+
 }
