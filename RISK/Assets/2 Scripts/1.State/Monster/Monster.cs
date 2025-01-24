@@ -163,6 +163,7 @@ public class Monster : MonoBehaviour, ITakedamage
         if (curHp <= 0 && !isDie)
         {
             //여기에 게임메니저 돈보내기
+            GameManager.Instance.WhenMonsterDies?.Invoke(won);
             isDie = true;
             GameSoundManager.Instance.PlayMonsterEffectSound(dieSoundClips);
             DieStatChange();
