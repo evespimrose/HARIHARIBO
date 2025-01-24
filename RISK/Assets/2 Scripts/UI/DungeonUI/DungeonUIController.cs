@@ -81,6 +81,69 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
             UpdatePartyMembersHP();
         }
     }
+    public void InitializePartyUI()
+    {
+        if (UnitManager.Instance == null) return;
+
+        // 기존 파티원 UI 모두 제거
+        foreach (var memberUI in partyMembers.Values)
+        {
+            Destroy(memberUI.gameObject);
+        }
+        partyMembers.Clear();
+
+        // 새로운 파티원 UI 생성
+        foreach (var playerObj in UnitManager.Instance.players.Values)
+        {
+            if (playerObj != null && playerObj != localPlayer.gameObject)
+            {
+                if (playerObj.TryGetComponent<Player>(out var player))
+                {
+                    CreatePartyMemberUI(player);
+                }
+            }
+        }
+    }
+    private void CreatePartyMemberUI(Player player)
+    {
+        if (partyMemberPrefab == null || partyContainer == null)
+        {
+            Debug.LogError("Party member prefab or container is not assigned!");
+            return;
+        }
+
+        // 이미 존재하는 UI면 스킵
+        if (partyMembers.ContainsKey(player.name)) return;
+
+        // GameManager에서 플레이어 데이터 찾기
+        var playerData = GameManager.Instance.connectedPlayers.Find(p => p.nickName == player.name);
+        if (playerData != null)
+        {
+            // UI 프리팹 생성
+            GameObject uiObj = Instantiate(partyMemberPrefab, partyContainer);
+            var memberUI = uiObj.GetComponent<DungeonPartyMemberUI>();
+            memberUI.Initialize(player, playerData.classType);
+            partyMembers.Add(player.name, memberUI);
+            Debug.Log($"Created party member UI for: {player.name}");
+        }
+    }
+    public void RemovePartyMemberUI(string playerName)
+    {
+        if (partyMembers.TryGetValue(playerName, out var memberUI))
+        {
+            Destroy(memberUI.gameObject);
+            partyMembers.Remove(playerName);
+        }
+    }
+    public void OnPlayerEnteredParty(Player newPlayer)
+    {
+        CreatePartyMemberUI(newPlayer);
+    }
+
+    public void OnPlayerLeftParty(string playerName)
+    {
+        RemovePartyMemberUI(playerName);
+    }
     private void UpdatePartyMembersHP()
     {
         if (UnitManager.Instance != null)
