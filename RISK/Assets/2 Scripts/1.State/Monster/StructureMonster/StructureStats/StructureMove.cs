@@ -13,7 +13,10 @@ public class StructureMove : BaseState<StructureMonster>
 
     public override void Update(StructureMonster monster)
     {
-        monster.Move();
+        if (Vector3.Distance(monster.target.position, monster.transform.position) > 1f)
+        {
+            monster.Move();
+        }
     }
 
     public override void Exit(StructureMonster monster)

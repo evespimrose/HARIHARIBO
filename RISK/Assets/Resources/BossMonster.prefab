@@ -109197,8 +109197,8 @@ Rigidbody:
   m_GameObject: {fileID: 8588490523938595768}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -109284,6 +109284,8 @@ MonoBehaviour:
   atkRange: 0
   atkDelay: 0
   curHp: 0
+  exp: 0
+  won: 0
   isAtk: 0
   isAirborne: 0
   isStun: 0
@@ -109295,6 +109297,7 @@ MonoBehaviour:
   isBleeding: 0
   isPoison: 0
   bodyAtkDamage: 1
+  bossName: "\uC9C4\uAD11\uB300\uC655"
   animator: {fileID: 6463728419022047405}
   atkSoundClips:
   - {fileID: 8300000, guid: cf09a6644b4024c4997c694a0e47d43e, type: 3}
@@ -109353,7 +109356,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 3413244131854154405}
-  sceneViewId: 0
+  sceneViewId: 6
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &3413244131854154405
@@ -109372,49 +109375,49 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Move
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Idle
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: AtkA
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: AtkB
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: AtkC
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillA1
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillA2
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillB
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillC
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillD
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillE
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillF
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: SkillG
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Die
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 2
     LayerIndex: 0
 --- !u!1 &8752723455283472787
 GameObject:

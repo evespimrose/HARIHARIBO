@@ -42,7 +42,6 @@ public class BossMonsterSkillG : BaseState<BossMonster>
         monster.skillGPrefab.SetActive(false);
         // 텔레포트 수행
         SkillGAtk(monster);
-        yield return new WaitForSeconds(endTime);
 
         yield return null;
         monster.bMHandler.ChangeState(typeof(BossMonsterSkillB));

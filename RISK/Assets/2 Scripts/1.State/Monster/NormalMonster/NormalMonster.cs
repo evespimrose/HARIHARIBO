@@ -110,7 +110,7 @@ public class NormalMonster : Monster
     public override void Takedamage(float damage)
     {
         base.Takedamage(damage);
-        if (isHit == false)
+        if (!isDie && isHit == false)
         {
             isHit = true;
             this.nMHandler.ChangeState(typeof(NormalMonsterHit));
