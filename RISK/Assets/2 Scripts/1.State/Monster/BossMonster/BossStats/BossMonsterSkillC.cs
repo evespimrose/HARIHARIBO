@@ -62,10 +62,9 @@ public class BossMonsterSkillC : BaseState<BossMonster>
 
     private void SkillCAtk(BossMonster monster)
     {
-        GameObject skillCObj = monster.ObjSpwan(monster.skillCPrefab, monster.transform.position);
+        Vector3 newPosition = new Vector3(monster.transform.position.x, monster.transform.position.y + 1f, monster.transform.position.z);
         Vector3 forwardDir = new Vector3(monster.transform.forward.x, 0f, monster.transform.forward.z).normalized;
-        skillCObj.transform.forward = forwardDir;
-        skillCObj.transform.position = new Vector3(skillCObj.transform.position.x, skillCObj.transform.position.y + 1f, skillCObj.transform.position.z);
+        GameObject skillCObj = monster.ObjSpwan(monster.skillCPrefab, monster.transform.position, forwardDir);
         skillCObj.GetComponent<BossSkillCObject>().Seting(damage);
     }
 }

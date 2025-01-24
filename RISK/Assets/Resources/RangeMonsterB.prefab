@@ -1056,6 +1056,7 @@ GameObject:
   - component: {fileID: 6714560651485269334}
   - component: {fileID: 4428914736926277156}
   - component: {fileID: 5203240268757965273}
+  - component: {fileID: 9017902718476256393}
   m_Layer: 6
   m_Name: RangeMonsterB
   m_TagString: Monster
@@ -1248,6 +1249,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5203240268757965273}
+  - {fileID: 9017902718476256393}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1287,12 +1289,25 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: Hit
-  - Type: 9
-    SynchronizeType: 0
-    Name: New Trigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &9017902718476256393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4895862228875006388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &4916179752765072414
 GameObject:
   m_ObjectHideFlags: 0

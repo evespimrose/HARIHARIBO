@@ -9,7 +9,6 @@ public class NormalMonsterIdle : BaseState<NormalMonster>
 
     public override void Enter(NormalMonster monster)
     {
-        Debug.Log("Idle진입");
         monster.animator?.SetTrigger("Idle");
     }
 
@@ -30,7 +29,6 @@ public class NormalMonsterIdle : BaseState<NormalMonster>
         }
         else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == true)
         {
-            //공격범위내지만 공격쿨타임
         }
         else
         {

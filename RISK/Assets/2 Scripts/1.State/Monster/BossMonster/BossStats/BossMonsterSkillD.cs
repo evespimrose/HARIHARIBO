@@ -72,8 +72,9 @@ public class BossMonsterSkillD : BaseState<BossMonster>
             float angle = i * angleStep;
             Vector3 rotDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
             rotDir = new Vector3(rotDir.x, 0f, rotDir.z).normalized;
-            GameObject skillDObj = monster.ObjSpwan(monster.skillDPrefab, new Vector3(monster.transform.position.x, 1f, monster.transform.position.z));
-            skillDObj.transform.rotation = Quaternion.LookRotation(rotDir, Vector3.up);
+            Vector3 spawnPos = new Vector3(monster.transform.position.x, 1f, monster.transform.position.z);
+            Vector3 rotation = Quaternion.LookRotation(rotDir).eulerAngles;
+            GameObject skillDObj = monster.ObjSpwan(monster.skillDPrefab, spawnPos, rotation);
             skillDObj.GetComponent<BossSkillDObject>().Seting(damage);
             Rigidbody skillRigidbody = skillDObj.GetComponent<Rigidbody>();
             if (skillRigidbody != null)
