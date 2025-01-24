@@ -92,12 +92,12 @@ public class CharacterUpgradeUI : MonoBehaviour
     {
         characterData = FirebaseManager.Instance.currentCharacterData;
         userData = FirebaseManager.Instance.currentUserData;
+        InitializeUpgradeData();
         UpdateStatsFromServer();
     }
 
     private void Start()
     {
-        InitializeUpgradeData();
         closeButton.onClick.AddListener(CloseUI);
     }
 
@@ -188,6 +188,7 @@ public class CharacterUpgradeUI : MonoBehaviour
     private void InitializeUpgradeData()
     {
         //maxHpUpgradeData
+        maxHpUpgradeData.Clear();
         maxHpUpgradeData.Add(0, new UpgradeData(1f, 2000, 5));
         maxHpUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 5));
         maxHpUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 5));
@@ -216,6 +217,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         maxHpUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 100));
 
         //atkUpgradeData
+        atkUpgradeData.Clear();
         atkUpgradeData.Add(0, new UpgradeData(1f, 2000, 4));
         atkUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 4));
         atkUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 4));
@@ -244,6 +246,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         atkUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 29));
 
         //criUpgradeData
+        criUpgradeData.Clear();
         criUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.01f));
         criUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.01f));
         criUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.01f));
@@ -272,6 +275,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         criUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 0.07f));
 
         //criDmgUpgradeData
+        criDmgUpgradeData.Clear();
         criDmgUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.005f));
         criDmgUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.005f));
         criDmgUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.005f));
@@ -300,6 +304,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         criDmgUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 0.044f));
 
         //hpRegUpgradeData
+        hpRegUpgradeData.Clear();
         hpRegUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.2f));
         hpRegUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.2f));
         hpRegUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.4f));
@@ -328,6 +333,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         hpRegUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 4.2f));
 
         //coolRedUpgradeData
+        coolRedUpgradeData.Clear();
         coolRedUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.005f));
         coolRedUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.005f));
         coolRedUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.005f));

@@ -9,7 +9,6 @@ public class BossMonsterMove : BaseState<BossMonster>
     
     public override void Enter(BossMonster monster)
     {
-        Debug.Log("Move진입");
         monster.animator.SetBool("Move", true);
     }
 
@@ -30,7 +29,6 @@ public class BossMonsterMove : BaseState<BossMonster>
 
     public override void Exit(BossMonster monster)
     {
-        Debug.Log("Move퇴장");
         monster.animator.SetBool("Move", false);
     }
 }

@@ -12,7 +12,7 @@ public class BossMonsterDie : BaseState<BossMonster>
     public override void Enter(BossMonster monster)
     {
         Debug.Log("Die진입");
-        monster.animator.SetBool("Die", true);
+        monster.animator.SetTrigger("Die");
         monster.DieParticle();
     }
 

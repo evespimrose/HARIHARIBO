@@ -1932,7 +1932,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 9155780893821440728}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &9155780893821440728
@@ -1971,6 +1971,9 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: Hit
+  - Type: 9
+    SynchronizeType: 0
+    Name: New Trigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0

@@ -1361,7 +1361,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5152634894592914764}
-  sceneViewId: 3
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &5152634894592914764
@@ -1400,6 +1400,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: Stun
+  - Type: 9
+    SynchronizeType: 0
+    Name: New Trigger
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
