@@ -35,16 +35,16 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     {
         risks = new RiskData[]
         {
-            new RiskData { riskId = 1, riskName = "?洹먮봾裕??1", description = "???닿뎄 1", multiplier = 1.5f },
-            new RiskData { riskId = 2, riskName = "?洹먮봾裕??2", description = "???닿뎄 2", multiplier = 2.0f },
-            new RiskData { riskId = 3, riskName = "?洹먮봾裕??3", description = "???닿뎄 3", multiplier = 2.5f }
+            new RiskData { riskId = 1, riskName = "위험요소1", description = "설명 1", multiplier = 1.5f },
+            new RiskData { riskId = 2, riskName = "위험요소2", description = "설명 2", multiplier = 2.0f },
+            new RiskData { riskId = 3, riskName = "위험요소3", description = "설명 3", multiplier = 2.5f }
         };
 
         // ?貫?껆뵳???筌???⑥щ턄?????깆젧
         var initialVotes = new ExitGames.Client.Photon.Hashtable
         {
             { RISK_VOTES_KEY, new Dictionary<int, int>() },
-            { SURRENDER_VOTES_KEY, new int[]{ } }
+            { SURRENDER_VOTES_KEY, new Dictionary<int, bool>() }
         };
         PhotonNetwork.CurrentRoom.SetCustomProperties(initialVotes);
 
@@ -95,8 +95,8 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     {
         if (isVoting) return;
 
-        var surrenderVotes = (List<int>)PhotonNetwork.CurrentRoom.CustomProperties[SURRENDER_VOTES_KEY];
-        surrenderVotes.Add(PhotonNetwork.LocalPlayer.ActorNumber);
+        var surrenderVotes = (Dictionary<int, bool>)PhotonNetwork.CurrentRoom.CustomProperties[SURRENDER_VOTES_KEY];
+        surrenderVotes[PhotonNetwork.LocalPlayer.ActorNumber] = true;
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable
         {
@@ -113,10 +113,10 @@ public class RiskUIController : MonoBehaviourPunCallbacks
             var votes = (Dictionary<int, int>)propertiesThatChanged[RISK_VOTES_KEY];
             UpdateVoteCounts(votes);
         }
-
+        // [변경] HashSet에서 Dictionary로 타입 변경
         if (propertiesThatChanged.ContainsKey(SURRENDER_VOTES_KEY))
         {
-            var surrenderVotes = (List<int>)propertiesThatChanged[SURRENDER_VOTES_KEY];
+            var surrenderVotes = (Dictionary<int, bool>)propertiesThatChanged[SURRENDER_VOTES_KEY];
             UpdateSurrenderVotes(surrenderVotes);
         }
     }
@@ -143,11 +143,12 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     }
 
 
-    private void UpdateSurrenderVotes(List<int> surrenderVotes)
+    private void UpdateSurrenderVotes(Dictionary<int, bool> surrenderVotes)
     {
-        voteCountText.text = $"??????筌? {surrenderVotes.Count}/{PhotonNetwork.CurrentRoom.PlayerCount}";
+        int voteCount = surrenderVotes.Values.Count(v => v);
+        voteCountText.text = $"항복 투표: {voteCount}/{PhotonNetwork.CurrentRoom.PlayerCount}";
 
-        if (surrenderVotes.Count >= PhotonNetwork.CurrentRoom.PlayerCount)
+        if (voteCount >= PhotonNetwork.CurrentRoom.PlayerCount)
         {
             OnSurrenderConfirmed();
         }
@@ -155,13 +156,8 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
     private void OnSurrenderConfirmed()
     {
-        Debug.Log("??????筌뤿떣泥? ???沅??琉????鍮??");
-        // ?롪퍓???嶺뚮씞??????????嶺뚳퐣瑗????븐슙??
-        // TODO: ?롪퍓???嶺뚮씞??????????嶺뚳퐣瑗??嶺뚮∥?꾥땻????뚮뿭寃??熬곣뫗??
-
         ProcessSurrender();
 
-        // UI ?????繹먮봿??
         gameObject.SetActive(false);
     }
 

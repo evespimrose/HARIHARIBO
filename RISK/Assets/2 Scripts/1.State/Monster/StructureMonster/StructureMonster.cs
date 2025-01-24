@@ -30,14 +30,6 @@ public class StructureMonster : Monster
         monsterDebuff.DebuffCheck(this);
         if (target == null) Targeting();
         if (isHit == false) hit = null;
-        if (isAirborne == true && !isAirborneAction)
-        {
-            sMHandler.ChangeState(typeof(StructureAirborne));
-        }
-        if (isAirborne == false && isStun == true && !isStunAction)
-        {
-            sMHandler.ChangeState(typeof(StructureStun));
-        }
         float newYRotation = model.transform.eulerAngles.y - 90f * Time.deltaTime;
         model.transform.rotation = Quaternion.Euler(model.transform.eulerAngles.x, newYRotation, model.transform.eulerAngles.z);
         sMHandler.Update();
@@ -72,11 +64,20 @@ public class StructureMonster : Monster
     public override void Takedamage(float damage)
     {
         base.Takedamage(damage);
+        if (isAirborne == true && !isAirborneAction)
+        {
+            sMHandler.ChangeState(typeof(StructureAirborne));
+        }
+        if (isAirborne == false && isStun == true && !isStunAction)
+        {
+            sMHandler.ChangeState(typeof(StructureStun));
+        }
         if (hit != null)
         {
             StopCoroutine(hit);
         }
         hit = StartCoroutine(Hit());
+
     }
 
     public override void DieStatChange()
