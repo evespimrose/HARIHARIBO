@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class MageIdleState : BaseState<Player>
     {
         Vector3 moveInput = player.GetMove();
 
-        // 이동 입력이 있으면 이동 상태로 전환
+        // ?대룞 ?낅젰???덉쑝硫??대룞 ?곹깭濡??꾪솚
         if (moveInput != Vector3.zero)
         {
             handler.ChangeState(typeof(MageMoveState));
@@ -47,6 +48,10 @@ public class MageIdleState : BaseState<Player>
         {
             handler.ChangeState(typeof(MageTSkill));
             dungeonUI.StartPCCooldown(3);
+        }
+        if (PhotonNetwork.IsMasterClient && Input.GetKeyDown(KeyCode.I))
+        {
+            UnitManager.Instance.DoomToMonsters();
         }
     }
 }

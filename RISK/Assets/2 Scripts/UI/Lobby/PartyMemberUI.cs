@@ -49,6 +49,14 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
         GameManager.Instance.chat.gameObject.SetActive(true);
     }
 
+    public override void OnDisable()
+    {
+        foreach (Transform child in partyMemberContainer)
+        {
+            DestroyImmediate(child.gameObject);
+        }
+    }
+
     public IEnumerator Start()
     {
         yield return new WaitUntil(() => PhotonNetwork.InRoom);
@@ -59,7 +67,7 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
 
     private void OnQuitButtonClick()
     {
-        LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Party Quit", "SuccessFully Left Party.", () => { OnCloseButtonClick(); LobbyUI.Instance.PopupClose(); });
+        LobbyUI.Instance.PopupOpen<PopupPanel>().SetPopup("Party Quit", "SuccessFully Left Party.", () => { OnCloseButtonClick(); PanelManager.Instance.PopupClose(); });
     }
 
     private void OnCloseButtonClick()
