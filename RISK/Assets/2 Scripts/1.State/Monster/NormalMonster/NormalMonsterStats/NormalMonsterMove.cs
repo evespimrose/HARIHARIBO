@@ -27,7 +27,10 @@ public class NormalMonsterMove : BaseState<NormalMonster>
         }
         else
         {
-            monster.Move();
+            if (Vector3.Distance(monster.target.position, monster.transform.position) > 1f)
+            {
+                monster.Move();
+            }
         }
     }
 

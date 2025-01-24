@@ -97,7 +97,7 @@ public class BossMonster : Monster
 
             // 넉백 힘 조정
             Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
-            float adjustedKnockback = skillFknockback * 4f;  // 넉백 배율을 키워서 더 강하게 적용
+            float adjustedKnockback = skillFknockback * 10f;  // 넉백 배율을 키워서 더 강하게 적용
             playerRb.AddForce(-knockbackDir.normalized * adjustedKnockback, ForceMode.Impulse);
 
             Debug.Log("넉백 방향: " + knockbackDir.normalized + " 힘: " + skillFknockback);

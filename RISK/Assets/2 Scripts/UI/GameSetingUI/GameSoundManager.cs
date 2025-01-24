@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class GameSoundManager : SingletonManager<GameSoundManager>
 {
-    // 배경음악과 효과음의 오디오 소스
+    //audio sources of background music and sound effects
     public AudioSource backgroundMusicSource;
     public AudioSource bossEffectSoundSource;
     public AudioSource[] monsterEffectSoundSources;
 
     public AudioClip backgroundMusicClip;
 
-    // Start는 한 번만 호출됨, 게임 시작 시 저장된 값을 불러옵니다.
     void Start()
     {
         LoadSettings();
@@ -24,12 +23,11 @@ public class GameSoundManager : SingletonManager<GameSoundManager>
         if (backgroundMusicSource != null && backgroundMusicClip != null)
         {
             backgroundMusicSource.clip = backgroundMusicClip;
-            backgroundMusicSource.loop = true;  // 배경 음악은 반복 재생
-            backgroundMusicSource.Play();       // 배경 음악 재생
+            backgroundMusicSource.loop = true;  
+            backgroundMusicSource.Play();      
         }
     }
 
-    // 몬스터 히트, 다이 사운드 재생
     public void PlayMonsterEffectSound(AudioClip clip)
     {
         if (clip != null)
@@ -38,16 +36,15 @@ public class GameSoundManager : SingletonManager<GameSoundManager>
         }
         else
         {
-            Debug.LogError("사운드를 찾을 수 없습니다.");
+            Debug.LogError("Sound not found.");
         }
     }
 
-    // 보스 스킬 사운드 재생
     public void PlayBossEffectSound(AudioClip clip)
     {
         if (clip != null)
         {
-            // 보스 효과음 소스가 이미 재생 중이면 중지하고 새로 재생
+            //If the boss sound source is already playing, stop and play a new one
             if (bossEffectSoundSource.isPlaying)
             {
                 bossEffectSoundSource.Stop();
@@ -56,7 +53,7 @@ public class GameSoundManager : SingletonManager<GameSoundManager>
         }
         else
         {
-            Debug.LogError("사운드를 찾을 수 없습니다.");
+            Debug.LogError("Sound not found.");
         }
     }
 
@@ -64,44 +61,42 @@ public class GameSoundManager : SingletonManager<GameSoundManager>
     {
         foreach (var source in effectSources)
         {
-            if (!source.isPlaying) // 재생 중이지 않은 소스를 찾아서 재생
+            if (!source.isPlaying) //Find a source that is not playing and play it
             {
                 source.PlayOneShot(clip);
                 return;
             }
         }
 
-        // 만약 모든 소스가 재생 중이면, 가장 오래된 소스를 중지하고 새 소리 재생
+        //If all the sources are playing, stop the oldest source and play new sound
         StopAndPlayNewSound(clip, effectSources);
     }
 
     private void StopAndPlayNewSound(AudioClip clip, AudioSource[] effectSources)
     {
-        // 가장 먼저 재생 중인 소스를 중지하고 새로 재생
+        //Stop the source that is playing first and then play a new one
         AudioSource oldestSource = effectSources.OrderBy(source => source.time).FirstOrDefault();
 
         if (oldestSource != null)
         {
-            oldestSource.Stop();  // 가장 오래된 소리 중지
-            oldestSource.PlayOneShot(clip);  // 새 소리 재생
+            oldestSource.Stop();  //Stop the oldest sound
+            oldestSource.PlayOneShot(clip);  //Play New Sound
         }
         else
         {
-            Debug.LogError("효과음 소스를 찾을 수 없습니다.");
+            Debug.LogError("Sound effect source not found");
         }
     }
 
-    // 배경음악 볼륨 설정
     public void SetBackgroundMusicVolume(float volume)
     {
         if (backgroundMusicSource != null)
         {
             backgroundMusicSource.volume = volume;
-            PlayerPrefs.SetFloat("BackgroundMusicVolume", volume);  // PlayerPrefs에 저장
+            PlayerPrefs.SetFloat("BackgroundMusicVolume", volume);  
         }
     }
 
-    // 볼륨 설정 (효과음 전체 소리 크기)
     public void SetEffectSoundVolume(float volume)
     {
         foreach (var source in monsterEffectSoundSources)
@@ -112,10 +107,9 @@ public class GameSoundManager : SingletonManager<GameSoundManager>
         {
             bossEffectSoundSource.volume = volume;
         }
-        PlayerPrefs.SetFloat("EffectSoundVolume", volume);  // 설정값 저장
+        PlayerPrefs.SetFloat("EffectSoundVolume", volume); 
     }
 
-    // 저장된 볼륨 설정을 불러오기
     public void LoadSettings()
     {
         if (PlayerPrefs.HasKey("BackgroundMusicVolume"))
@@ -125,7 +119,7 @@ public class GameSoundManager : SingletonManager<GameSoundManager>
         }
         else
         {
-            SetBackgroundMusicVolume(0.5f);  // 기본값 설정
+            SetBackgroundMusicVolume(0.5f); 
         }
 
         if (PlayerPrefs.HasKey("EffectSoundVolume"))
@@ -135,7 +129,7 @@ public class GameSoundManager : SingletonManager<GameSoundManager>
         }
         else
         {
-            SetEffectSoundVolume(0.5f);  // 기본값 설정
+            SetEffectSoundVolume(0.5f); 
         }
     }
 }

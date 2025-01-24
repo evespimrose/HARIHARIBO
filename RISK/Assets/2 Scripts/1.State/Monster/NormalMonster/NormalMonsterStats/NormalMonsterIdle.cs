@@ -28,6 +28,10 @@ public class NormalMonsterIdle : BaseState<NormalMonster>
                     break;
             }
         }
+        else if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == true)
+        {
+            //공격범위내지만 공격쿨타임
+        }
         else
         {
             monster.nMHandler.ChangeState(typeof(NormalMonsterMove));

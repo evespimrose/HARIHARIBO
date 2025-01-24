@@ -20,7 +20,10 @@ public class EliteMonsterMove : BaseState<EliteMonster>
         }
         else
         {
-            monster.Move();
+            if (Vector3.Distance(monster.target.position, monster.transform.position) > 1f)
+            {
+                monster.Move();
+            }
         }
     }
 

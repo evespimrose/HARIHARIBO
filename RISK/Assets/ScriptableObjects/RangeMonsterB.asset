@@ -16,6 +16,6 @@ MonoBehaviour:
   moveSpeed: 0
   atkRange: 100
   curHp: 2150
-  atkDelay: 2.5
+  atkDelay: 3
   exp: 32
   won: 66

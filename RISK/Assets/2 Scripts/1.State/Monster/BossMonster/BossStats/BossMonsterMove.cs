@@ -17,7 +17,10 @@ public class BossMonsterMove : BaseState<BossMonster>
     {
         if (monster.isChase)
         {
-            monster.Move();
+            if (Vector3.Distance(monster.target.position, monster.transform.position) > 2f)
+            {
+                monster.Move();
+            }
         }
         else
         {

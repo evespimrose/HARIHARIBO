@@ -377,8 +377,8 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                 var snapshot = await characterRef.Child(dataName).GetValueAsync();
                 Debug.Log($"저장된 값 확인: {snapshot.Value}");
 
-                // 성공 후 콜백 호출
-                onSuccess?.Invoke();  // 여기서 UpdateStatsFromServer을 콜백으로 호출합니다.
+                //성공 후 콜백 호출
+                onSuccess?.Invoke();  //여기서 UpdateStatsFromServer을 콜백으로 호출합니다.
 
                 PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
             }

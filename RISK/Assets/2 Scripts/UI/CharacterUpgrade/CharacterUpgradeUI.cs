@@ -9,37 +9,50 @@ using UnityEngine.UI;
 public class StatsSet
 {
     [Tooltip("스탯 이름")]
-    public TextMeshProUGUI statsName;  // 스탯의 이름을 표시하는 UI 텍스트
+    public TextMeshProUGUI statsName; 
     [Tooltip("현재 스탯 값")]
-    public TextMeshProUGUI currentStats;  // 현재 스탯 값을 표시하는 UI 텍스트
+    public TextMeshProUGUI currentStats; 
     [Tooltip("스탯 업그레이드 값")]
-    public TextMeshProUGUI statsUpgradeValue;  // 스탯 업그레이드 값을 표시하는 UI 텍스트
+    public TextMeshProUGUI statsUpgradeValue;  
     [Tooltip("성공 확률")]
-    public TextMeshProUGUI successChance;  // 업그레이드 성공 확률을 표시하는 UI 텍스트
+    public TextMeshProUGUI successChance;  
     [Tooltip("리소스 비용")]
-    public TextMeshProUGUI resourceCost;  // 업그레이드에 필요한 비용을 표시하는 UI 텍스트
+    public TextMeshProUGUI resourceCost; 
     [Tooltip("업그레이드 버튼")]
-    public Button upgradeButton;  // 업그레이드를 위한 버튼
+    public Button upgradeButton;  
 
-    // UI를 업데이트하는 함수
-    public void UpdateUI(string name, float current, float upgradeValue, float chance, int cost)
+    //UI Update
+    public void UpdateUI(string name, float current, float upgradeValue, float chance, int cost, int upgradeLevel)
     {
-        statsName.text = name;  // 스탯 이름 업데이트
-        currentStats.text = $"{current}";  // 현재 스탯 값 표시
-        statsUpgradeValue.text = $"{upgradeValue}";  // 업그레이드 값 표시
-        successChance.text = $"{chance * 100}";  // 성공 확률 표시
-        resourceCost.text = $"{cost}";  // 리소스 비용 표시
+        if (upgradeLevel >= 25)
+        {
+            statsName.text = "MAX";  //statsName
+            currentStats.text = "MAX";   //currentStats
+            statsUpgradeValue.text = "MAX";   //statsUpgradeValue
+            successChance.text = "MAX";   //successChance
+            resourceCost.text = "MAX";   //resourceCost
+            upgradeButton.interactable = false;
+        }
+        else
+        {
+            statsName.text = name;  
+            currentStats.text = $"{current}";  
+            statsUpgradeValue.text = $"{upgradeValue}"; 
+            successChance.text = $"{chance * 100}";
+            resourceCost.text = $"{cost}"; 
+            upgradeButton.interactable = true;
+        }
     }
 }
 
 [System.Serializable]
 public class UpgradeData
 {
-    public float upProb;  // 업그레이드 성공 확률
-    public int useWon;    // 업그레이드 비용 (원)
-    public float statIncrease;  // 스탯 증가 값
+    public float upProb;  //Upgrade %
+    public int useWon;    //Upgrade won
+    public float statIncrease;  //UpStat
 
-    // 업그레이드 데이터를 초기화하는 생성자
+    //Initialize Upgrade Data
     public UpgradeData(float upProb, int useWon, float statIncrease)
     {
         this.upProb = upProb;
@@ -51,36 +64,40 @@ public class UpgradeData
 public class CharacterUpgradeUI : MonoBehaviour
 {
     [Header("Character Info"), SerializeField]
-    public TextMeshProUGUI characterNameText;  // 캐릭터 이름을 표시하는 UI 텍스트
-    public TextMeshProUGUI levelText;  // 캐릭터 레벨을 표시하는 UI 텍스트
-    public TextMeshProUGUI curGold;  // 현재 보유한 골드를 표시하는 UI 텍스트
+    public TextMeshProUGUI characterNameText;
+    public TextMeshProUGUI levelText; 
+    public TextMeshProUGUI curGold; 
     public Image characterImage;
 
     public Button closeButton;
 
     [Header("Stats Sets"), SerializeField]
-    private List<StatsSet> statSets;  // 여러 스탯들을 UI에 업데이트할 리스트
+    private List<StatsSet> statSets; 
 
     [Header("Upgrade Data")]
-    [SerializeField] private Dictionary<int, UpgradeData> maxHpUpgradeData = new Dictionary<int, UpgradeData>();  // 체력 업그레이드 데이터
-    [SerializeField] private Dictionary<int, UpgradeData> atkUpgradeData = new Dictionary<int, UpgradeData>();  // 공격력 업그레이드 데이터
-    [SerializeField] private Dictionary<int, UpgradeData> criUpgradeData = new Dictionary<int, UpgradeData>();  // 치명타 확률 업그레이드 데이터
-    [SerializeField] private Dictionary<int, UpgradeData> criDmgUpgradeData = new Dictionary<int, UpgradeData>();  // 치명타 데미지 업그레이드 데이터
-    [SerializeField] private Dictionary<int, UpgradeData> hpRegUpgradeData = new Dictionary<int, UpgradeData>();  // 체력 회복 업그레이드 데이터
-    [SerializeField] private Dictionary<int, UpgradeData> coolRedUpgradeData = new Dictionary<int, UpgradeData>();  // 쿨타임 감소 업그레이드 데이터
+    [SerializeField] private Dictionary<int, UpgradeData> maxHpUpgradeData = new Dictionary<int, UpgradeData>();  
+    [SerializeField] private Dictionary<int, UpgradeData> atkUpgradeData = new Dictionary<int, UpgradeData>(); 
+    [SerializeField] private Dictionary<int, UpgradeData> criUpgradeData = new Dictionary<int, UpgradeData>(); 
+    [SerializeField] private Dictionary<int, UpgradeData> criDmgUpgradeData = new Dictionary<int, UpgradeData>();  
+    [SerializeField] private Dictionary<int, UpgradeData> hpRegUpgradeData = new Dictionary<int, UpgradeData>();  
+    [SerializeField] private Dictionary<int, UpgradeData> coolRedUpgradeData = new Dictionary<int, UpgradeData>();  
 
-    private int currentGold;  // 현재 보유한 골드
+    private int currentGold; 
 
     private FireBaseCharacterData characterData;
     private FireBaseUserData userData;
 
-    // UI가 활성화되었을 때 스탯을 서버에서 갱신
+    //Update stat on server when UI is enabled
     private void OnEnable()
     {
         characterData = FirebaseManager.Instance.currentCharacterData;
         userData = FirebaseManager.Instance.currentUserData;
-        InitializeUpgradeData();
         UpdateStatsFromServer();
+    }
+
+    private void Start()
+    {
+        InitializeUpgradeData();
         closeButton.onClick.AddListener(CloseUI);
     }
 
@@ -89,58 +106,51 @@ public class CharacterUpgradeUI : MonoBehaviour
         PanelManager.Instance.PanelOpen("PartyListBoard");
     }
 
-    // 서버로부터 받은 데이터를 이용해 UI를 업데이트
+    //Update UI using data received from the server
     public void UpdateStatsFromServer()
     {
         if (characterData != null && userData != null)
         {
-            // 원화 데이터 업데이트
             UpdateGoldUI(userData);
 
-            // 캐릭터 이름과 레벨 업데이트
             characterNameText.text = characterData.nickName;
             levelText.text = $"{characterData.level}";
             characterImage.sprite = GameManager.Instance.characterDataDic[characterData.classType].sprite;
 
-            // 스탯 정보 업데이트
-            List<(string, float, float, float, int)> allStats = new List<(string, float, float, float, int)>
+            List<(string, float, float, float, int, int)> allStats = new List<(string, float, float, float, int, int)>
             {
-                // 스탯 이름, 현재 값, 업그레이드 수치, 성공 확률, 리소스 비용
-                ("maxHp", characterData.maxHp, maxHpUpgradeData[characterData.maxHpUpgradeLevel].statIncrease, maxHpUpgradeData[characterData.maxHpUpgradeLevel].upProb, maxHpUpgradeData[characterData.maxHpUpgradeLevel].useWon),
-                ("atk", characterData.atk, atkUpgradeData[characterData.atkUpgradeLevel].statIncrease, atkUpgradeData[characterData.atkUpgradeLevel].upProb, atkUpgradeData[characterData.atkUpgradeLevel].useWon),
-                ("cri", characterData.cri, criUpgradeData[characterData.criUpgradeLevel].statIncrease, criUpgradeData[characterData.criUpgradeLevel].upProb, criUpgradeData[characterData.criUpgradeLevel].useWon),
-                ("criDmg", characterData.criDmg, criDmgUpgradeData[characterData.criDmgUpgradeLevel].statIncrease, criDmgUpgradeData[characterData.criDmgUpgradeLevel].upProb, criDmgUpgradeData[characterData.criDmgUpgradeLevel].useWon),
-                ("hpReg", characterData.hpReg, hpRegUpgradeData[characterData.hpRegUpgradeLevel].statIncrease, hpRegUpgradeData[characterData.hpRegUpgradeLevel].upProb, hpRegUpgradeData[characterData.hpRegUpgradeLevel].useWon),
-                ("coolRed", characterData.coolRed, coolRedUpgradeData[characterData.coolRedUpgradeLevel].statIncrease, coolRedUpgradeData[characterData.coolRedUpgradeLevel].upProb, coolRedUpgradeData[characterData.coolRedUpgradeLevel].useWon)
+                //stat name, current value, upgrade number, success probability, resource cost, Upgrade Level
+                ("maxHp", characterData.maxHp, maxHpUpgradeData[characterData.maxHpUpgradeLevel].statIncrease, maxHpUpgradeData[characterData.maxHpUpgradeLevel].upProb, maxHpUpgradeData[characterData.maxHpUpgradeLevel].useWon, characterData.maxHpUpgradeLevel),
+                ("atk", characterData.atk, atkUpgradeData[characterData.atkUpgradeLevel].statIncrease, atkUpgradeData[characterData.atkUpgradeLevel].upProb, atkUpgradeData[characterData.atkUpgradeLevel].useWon, characterData.atkUpgradeLevel),
+                ("cri", characterData.cri, criUpgradeData[characterData.criUpgradeLevel].statIncrease, criUpgradeData[characterData.criUpgradeLevel].upProb, criUpgradeData[characterData.criUpgradeLevel].useWon, characterData.criUpgradeLevel),
+                ("criDmg", characterData.criDmg, criDmgUpgradeData[characterData.criDmgUpgradeLevel].statIncrease, criDmgUpgradeData[characterData.criDmgUpgradeLevel].upProb, criDmgUpgradeData[characterData.criDmgUpgradeLevel].useWon, characterData.criDmgUpgradeLevel),
+                ("hpReg", characterData.hpReg, hpRegUpgradeData[characterData.hpRegUpgradeLevel].statIncrease, hpRegUpgradeData[characterData.hpRegUpgradeLevel].upProb, hpRegUpgradeData[characterData.hpRegUpgradeLevel].useWon, characterData.hpRegUpgradeLevel),
+                ("coolRed", characterData.coolRed, coolRedUpgradeData[characterData.coolRedUpgradeLevel].statIncrease, coolRedUpgradeData[characterData.coolRedUpgradeLevel].upProb, coolRedUpgradeData[characterData.coolRedUpgradeLevel].useWon, characterData.coolRedUpgradeLevel)
             };
 
-            // UI 업데이트
+            //UI Update
             for (int i = 0; i < statSets.Count; i++)
             {
                 if (i < allStats.Count)
                 {
-                    var (name, current, upgradeValue, chance, cost) = allStats[i];
+                    var (name, current, upgradeValue, chance, cost, upgradeLavel) = allStats[i];
                     StatsSet uiStat = statSets[i];
 
-                    // UI 업데이트
-                    uiStat.UpdateUI(name, current, upgradeValue, chance, cost);
+                    uiStat.UpdateUI(name, current, upgradeValue, chance, cost, upgradeLavel);
 
-                    // 업그레이드 버튼 이벤트 리스너 추가
                     uiStat.upgradeButton.onClick.RemoveAllListeners();
-                    int index = i; // 클로저 문제를 방지하기 위해 인덱스를 캡처
+                    int index = i; //Capture indexes to avoid closure issues
                     uiStat.upgradeButton.onClick.AddListener(() => UpgradeStat(statSets[index]));
                 }
             }
         }
     }
 
-    // 골드 UI 업데이트
     private void UpdateGoldUI(FireBaseUserData userData)
     {
         curGold.text = $"현재 골드: {userData.won}";
     }
 
-    // 스탯 업그레이드 함수
     private void UpgradeStat(StatsSet stat)
     {
         int resourceCostValue = int.Parse(stat.resourceCost.text);
@@ -151,24 +161,20 @@ public class CharacterUpgradeUI : MonoBehaviour
             return;
         }
 
-        // 골드 차감
         userData.won -= resourceCostValue;
 
-        // 성공 확률 계산
         float chance = float.Parse(stat.successChance.text) / 100f;
         bool isSuccess = Random.value <= chance;
 
         if (isSuccess)
         {
-            // 업그레이드 성공
             float current = float.Parse(stat.currentStats.text);
             float upgradeValue = float.Parse(stat.statsUpgradeValue.text);
-            // Firebase에 업그레이드된 데이터 전송
+            //Send upgraded data to Firebase
             FirebaseManager.Instance.currentUserData = userData;
-            // 콜백을 이용해 업데이트 후 처리
+            //Processing after update using callback
             FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text, upgradeValue, () =>
             {
-                // 업그레이드 후 UI 갱신
                 UpdateStatsFromServer();
             });
         }
@@ -179,10 +185,9 @@ public class CharacterUpgradeUI : MonoBehaviour
         UpdateGoldUI(userData);
     }
 
-    // 업그레이드 데이터를 초기화하는 함수
     private void InitializeUpgradeData()
     {
-        //maxHp 스탯 업그레이드 데이터 초기화
+        //maxHpUpgradeData
         maxHpUpgradeData.Add(0, new UpgradeData(1f, 2000, 5));
         maxHpUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 5));
         maxHpUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 5));
@@ -210,7 +215,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         maxHpUpgradeData.Add(24, new UpgradeData(0.03f, 24221000, 80));
         maxHpUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 100));
 
-        //atk 스탯 업그레이드 데이터 초기화
+        //atkUpgradeData
         atkUpgradeData.Add(0, new UpgradeData(1f, 2000, 4));
         atkUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 4));
         atkUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 4));
@@ -238,7 +243,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         atkUpgradeData.Add(24, new UpgradeData(0.03f, 24221000, 26));
         atkUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 29));
 
-        //cri 스탯 업그레이드 데이터 초기화
+        //criUpgradeData
         criUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.01f));
         criUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.01f));
         criUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.01f));
@@ -266,7 +271,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         criUpgradeData.Add(24, new UpgradeData(0.03f, 24221000, 0.06f));
         criUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 0.07f));
 
-        //criDmg 스탯 업그레이드 데이터 초기화
+        //criDmgUpgradeData
         criDmgUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.005f));
         criDmgUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.005f));
         criDmgUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.005f));
@@ -294,7 +299,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         criDmgUpgradeData.Add(24, new UpgradeData(0.03f, 24221000, 0.043f));
         criDmgUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 0.044f));
 
-        //hpReg 스탯 업그레이드 데이터 초기화
+        //hpRegUpgradeData
         hpRegUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.2f));
         hpRegUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.2f));
         hpRegUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.4f));
@@ -322,7 +327,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         hpRegUpgradeData.Add(24, new UpgradeData(0.03f, 24221000, 4.15f));
         hpRegUpgradeData.Add(25, new UpgradeData(0.03f, 25750000, 4.2f));
 
-        //coolReg 스탯 업그레이드 데이터 초기화
+        //coolRedUpgradeData
         coolRedUpgradeData.Add(0, new UpgradeData(1f, 2000, 0.005f));
         coolRedUpgradeData.Add(1, new UpgradeData(0.99f, 5200, 0.005f));
         coolRedUpgradeData.Add(2, new UpgradeData(0.96f, 10800, 0.005f));
