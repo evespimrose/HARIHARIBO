@@ -246,7 +246,7 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
 
     void IChatClientListener.OnDisconnected()
     {
-        throw new NotImplementedException();
+
     }
 
 }
