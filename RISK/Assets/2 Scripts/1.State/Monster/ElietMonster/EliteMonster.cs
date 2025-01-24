@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class EliteMonster : Monster
 {
-    [Header("몬스터 타겟 및 모델")]
+    [Header("紐ъ뒪???寃?諛?紐⑤뜽")]
     protected Collider col;
     public StateHandler<EliteMonster> eMHandler;
 
-    [Tooltip("모델링의 애니메이터")]
+    [Tooltip("紐⑤뜽留곸쓽 ?좊땲硫붿씠??")]
     public Animator animator;
-    [Tooltip("사망시 파티클")]
+    [Tooltip("?щ쭩???뚰떚??")]
     public ParticleSystem dieParticle;
 
-    [Header("스킬2 관련")]
+    [Header("?ㅽ궗2 愿??")]
     public GameObject skillBPrefab;
-    [Header("스킬3 관련")]
+    [Header("?ㅽ궗3 愿??")]
     public GameObject skillCPrefab;
 
     protected void Awake()
@@ -62,16 +62,16 @@ public class EliteMonster : Monster
     protected void InitializeStateHandler()
     {
         eMHandler = new StateHandler<EliteMonster>(this);
-        // 상태들 등록
+        // ?곹깭???깅줉
         eMHandler.RegisterState(new EliteMonsterIdle(eMHandler));
         eMHandler.RegisterState(new EliteMonsterMove(eMHandler));
         eMHandler.RegisterState(new EliteMonsterDie(eMHandler));
         eMHandler.RegisterState(new EliteMonsterStun(eMHandler));
-        //공격 상태패턴
+        //怨듦꺽 ?곹깭?⑦꽩
         eMHandler.RegisterState(new EliteMonsterSkillA(eMHandler));
         eMHandler.RegisterState(new EliteMonsterSkillB(eMHandler));
         eMHandler.RegisterState(new EliteMonsterSkillC(eMHandler));
-        //// 초기 상태 설정
+        //// 珥덇린 ?곹깭 ?ㅼ젙
         eMHandler.ChangeState(typeof(EliteMonsterIdle));
     }
 
@@ -88,6 +88,7 @@ public class EliteMonster : Monster
     {
         if (isDie == true)
         {
+            UnitManager.Instance.monsters.Remove(this.gameObject);
             Destroy(this.gameObject);
         }
     }
@@ -100,9 +101,9 @@ public class EliteMonster : Monster
     public IEnumerator AtkCoolTime()
     {
         isAtk = true;
-        Debug.Log("쿨타임 시작");
+        Debug.Log("荑⑦????쒖옉");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("쿨타임 종료");
+        Debug.Log("荑⑦???醫낅즺");
         isAtk = false;
     }
 

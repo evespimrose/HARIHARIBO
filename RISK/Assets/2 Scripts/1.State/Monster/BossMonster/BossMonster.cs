@@ -6,43 +6,43 @@ using UnityEngine;
 
 public class BossMonster : Monster
 {
-    public string bossName = "진광대왕";
-    
-    [Header("몬스터 타겟 및 모델")]
+    public string bossName = "吏꾧킅???";
+
+    [Header("紐ъ뒪???寃?諛?紐⑤뜽")]
     protected Collider col;
     public StateHandler<BossMonster> bMHandler;
 
-    [Tooltip("모델링의 애니메이터")]
+    [Tooltip("紐⑤뜽留곸쓽 ?좊땲硫붿씠??")]
     public Animator animator;
-    [Header("공격 관련")]
+    [Header("怨듦꺽 愿??")]
     public AudioClip[] atkSoundClips;
-    [Header("스킬1 관련")]
+    [Header("?ㅽ궗1 愿??")]
     public AudioClip[] skillASoundClips;
-    [Header("스킬2 관련")]
+    [Header("?ㅽ궗2 愿??")]
     public AudioClip[] skillBSoundClips;
     public GameObject[] skillBParticle;
     public GameObject[] skillBFieldParticle;
-    [Header("스킬3 관련")]
+    [Header("?ㅽ궗3 愿??")]
     public AudioClip skillCSoundClips;
     public GameObject skillCPrefab;
-    [Header("스킬4 관련")]
+    [Header("?ㅽ궗4 愿??")]
     public AudioClip skillDSoundClips;
     public GameObject skillDPrefab;
-    [Header("스킬5 관련")]
+    [Header("?ㅽ궗5 愿??")]
     public AudioClip[] skillESoundClips;
     public GameObject skillEPrefab;
-    [Header("스킬6 관련")]
+    [Header("?ㅽ궗6 愿??")]
     public AudioClip skillFSoundClips;
     public GameObject skillFPrefabA;
     public GameObject skillFPrefabB;
-    [Header("스킬7 관련")]
+    [Header("?ㅽ궗7 愿??")]
     public AudioClip skillGSoundClips;
     public GameObject skillGPrefab;
     public bool isMoving = false;
     public bool isWall = false;
-    public float skillFknockback = 10f; //skillF 넉백 거리
-    public float skillFDamage = 10f; //skillF 공격 데미지
-    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF 타격한 대상리스트
+    public float skillFknockback = 10f; //skillF ?됰갚 嫄곕━
+    public float skillFDamage = 10f; //skillF 怨듦꺽 ?곕?吏
+    private HashSet<GameObject> hitTargets = new HashSet<GameObject>();//SkillF ?寃⑺븳 ??곷━?ㅽ듃
 
     public float chaseTime = 1f;
     public bool isChase = false;
@@ -77,7 +77,7 @@ public class BossMonster : Monster
         rb.velocity = Vector3.zero;
     }
 
-    // 벽과의 충돌이 시작되었을 때
+    // 踰쎄낵??異⑸룎???쒖옉?섏뿀????
     protected void OnCollisionEnter(Collision other)
     {
         if (isMoving == false) return;
@@ -85,31 +85,31 @@ public class BossMonster : Monster
         {
             isWall = true;
         }
-        if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer") && !hitTargets.Contains(other.gameObject)) // 중복 오브젝트 체크
+        if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer") && !hitTargets.Contains(other.gameObject)) // 以묐났 ?ㅻ툕?앺듃 泥댄겕
         {
-            Debug.Log("SkillF 공격");
+            Debug.Log("SkillF 怨듦꺽");
             other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
             hitTargets.Add(other.gameObject);
 
-            // 넉백 적용
+            // ?됰갚 ?곸슜
             Vector3 knockbackDir = other.transform.position - transform.position.normalized;
             knockbackDir.y = 0f;
 
-            // 넉백 힘 조정
+            // ?됰갚 ??議곗젙
             Rigidbody playerRb = other.gameObject.GetComponent<Rigidbody>();
-            float adjustedKnockback = skillFknockback * 2;  // 넉백 배율을 키워서 더 강하게 적용
+            float adjustedKnockback = skillFknockback * 2;  // ?됰갚 諛곗쑉???ㅼ썙????媛뺥븯寃??곸슜
             playerRb.AddForce(knockbackDir * adjustedKnockback, ForceMode.Impulse);
 
-            Debug.Log("넉백 방향: " + knockbackDir + " 힘: " + skillFknockback);
+            Debug.Log("?됰갚 諛⑺뼢: " + knockbackDir + " ?? " + skillFknockback);
         }
     }
 
-    // 벽과의 충돌이 종료되었을 때
+    // 踰쎄낵??異⑸룎??醫낅즺?섏뿀????
     protected void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag("Wall"))
         {
-            isWall = false; // 벽과의 충돌이 종료되었으므로 isWall을 false로 설정
+            isWall = false; // 踰쎄낵??異⑸룎??醫낅즺?섏뿀?쇰?濡?isWall??false濡??ㅼ젙
         }
     }
 
@@ -145,11 +145,11 @@ public class BossMonster : Monster
     {
         bMHandler = new StateHandler<BossMonster>(this);
 
-        //상태들 등록
+        //?곹깭???깅줉
         bMHandler.RegisterState(new BossMonsterIdle(bMHandler));
         bMHandler.RegisterState(new BossMonsterMove(bMHandler));
         bMHandler.RegisterState(new BossMonsterDie(bMHandler));
-        //공격 상태패턴
+        //怨듦꺽 ?곹깭?⑦꽩
         bMHandler.RegisterState(new BossMonsterAtk(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillA(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillB(bMHandler));
@@ -158,7 +158,7 @@ public class BossMonster : Monster
         bMHandler.RegisterState(new BossMonsterSkillE(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillF(bMHandler));
         bMHandler.RegisterState(new BossMonsterSkillG(bMHandler));
-        //초기 상태 설정
+        //珥덇린 ?곹깭 ?ㅼ젙
         bMHandler.ChangeState(typeof(BossMonsterIdle));
     }
 
@@ -175,6 +175,8 @@ public class BossMonster : Monster
     {
         if (isDie == true)
         {
+            UnitManager.Instance.monsters.Remove(this.gameObject);
+
             Destroy(this.gameObject);
         }
     }
@@ -201,11 +203,11 @@ public class BossMonster : Monster
         isAction = true;
         yield return null;
 
-        //공격분류1 중에하나스테이트로 변환
+        //怨듦꺽遺꾨쪟1 以묒뿉?섎굹?ㅽ뀒?댄듃濡?蹂??
         AtkA();
 
         yield return null;
-        yield return new WaitUntil(() =>  isAtk == false);
+        yield return new WaitUntil(() => isAtk == false);
         yield return null;
 
         StartCoroutine(Chase());
@@ -213,7 +215,7 @@ public class BossMonster : Monster
         yield return new WaitUntil(() => isChase == false);
         yield return null;
 
-        //공격분류2 중에하나 스테이트로 변환
+        //怨듦꺽遺꾨쪟2 以묒뿉?섎굹 ?ㅽ뀒?댄듃濡?蹂??
         AtkB();
         yield return null;
         yield return new WaitUntil(() => isAtk == false);
@@ -237,7 +239,7 @@ public class BossMonster : Monster
         yield return new WaitUntil(() => isChase == false);
         yield return null;
 
-        //이동기 중에하나 스테이트로 변환
+        //?대룞湲?以묒뿉?섎굹 ?ㅽ뀒?댄듃濡?蹂??
         AtkC();
         yield return null;
         yield return new WaitUntil(() => isAtk == false);

@@ -208,12 +208,12 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
 
     void IChatClientListener.OnSubscribed(string[] channels, bool[] results)
     {
-        AddMessage(string.Format("梨꾨꼸 ?낆옣 ({0})", string.Join(",", channels)));
+        AddMessage(string.Format("chennel ({0}) Subscribed", string.Join(",", channels)));
     }
 
     void IChatClientListener.OnUnsubscribed(string[] channels)
     {
-        AddMessage(string.Format("梨꾨꼸 ?댁옣 ({0})", string.Join(",", channels)));
+        AddMessage(string.Format("chennel ({0}) Unsubscribed", string.Join(",", channels)));
     }
 
     void IChatClientListener.OnGetMessages(string channelName, string[] senders, object[] messages)

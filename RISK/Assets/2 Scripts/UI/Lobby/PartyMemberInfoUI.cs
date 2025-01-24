@@ -27,7 +27,6 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
 
     public void Initialize(FireBaseCharacterData partyMember)
     {
-        print("Initialize");
         UpdateUI(partyMember);
     }
 

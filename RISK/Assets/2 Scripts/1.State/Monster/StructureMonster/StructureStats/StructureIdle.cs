@@ -9,7 +9,6 @@ public class StructureIdle : BaseState<StructureMonster>
 
     public override void Enter(StructureMonster monster)
     {
-        Debug.Log("Idle 시작");
     }
 
     public override void Update(StructureMonster monster)
@@ -19,6 +18,5 @@ public class StructureIdle : BaseState<StructureMonster>
 
     public override void Exit(StructureMonster monster)
     {
-        Debug.Log("Idle 종료");
     }
 }
