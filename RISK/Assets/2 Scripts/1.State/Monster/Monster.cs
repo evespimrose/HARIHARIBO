@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -66,7 +67,7 @@ public class Monster : MonoBehaviour, ITakedamage
 
     //몸박데미지 쿨타임을 위한 부분
     [Tooltip("접촉공격데미지")]
-    public float bodyAtkDamage = 1;
+    public float bodyAtkDamage = 10;
     protected Dictionary<GameObject, float> bodyAtkHit = new Dictionary<GameObject, float>();
     protected float bodyAtkCoolTime = 1f; 
 
@@ -79,7 +80,7 @@ public class Monster : MonoBehaviour, ITakedamage
             float currentTime = Time.time;
             if (!bodyAtkHit.ContainsKey(player) || currentTime - bodyAtkHit[player] >= bodyAtkCoolTime)
             {
-                player.GetComponent<ITakedamage>().Takedamage(bodyAtkDamage);
+                CalculateAndSendDamage(other.gameObject, bodyAtkDamage);
                 bodyAtkHit[player] = currentTime;
             }
         }
@@ -221,5 +222,39 @@ public class Monster : MonoBehaviour, ITakedamage
         yield return new WaitForSeconds(airborneDelay);
         this.isAirborneAction = false;
         this.isAirborne = false;
+    }
+
+    // 데미지 계산 후 전송하는 메서드
+    public void CalculateAndSendDamage(GameObject target, float dmg)
+    {
+        // 방장에서 데미지 계산 (여기서는 단순히 공격력으로 계산)
+        float damage = dmg;
+
+        // 방장만 데미지를 전송
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // PhotonView 컴포넌트를 명시적으로 가져옴
+            PhotonView photonView = GetComponent<PhotonView>();
+
+            if (photonView != null)
+            {
+                // photonView를 통해 RPC 호출
+                photonView.RPC("ApplyDamageToClient", RpcTarget.All, target.GetPhotonView().ViewID, damage);
+            }
+        }
+    }
+
+    // RPC로 다른 클라이언트에 데미지 적용
+    [PunRPC]
+    public void ApplyDamageToClient(int targetPhotonViewID, float damage)
+    {
+        // PhotonView ID로 대상 객체 찾기
+        PhotonView targetView = PhotonView.Find(targetPhotonViewID);
+
+        // 대상 객체가 존재하면, ITakedamage 인터페이스를 통해 데미지를 적용
+        if (targetView != null)
+        {
+            targetView.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+        }
     }
 }

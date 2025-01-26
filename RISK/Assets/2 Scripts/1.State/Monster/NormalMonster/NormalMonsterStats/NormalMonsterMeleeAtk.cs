@@ -60,7 +60,7 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
                 float angle = Vector3.Angle(atkDir, dirToTarget);
                 if (angle <= 90f)
                 {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(meleeAtkDamage);
+                    monster.CalculateAndSendDamage(col.gameObject, meleeAtkDamage);
                 }
                 else
                 {
