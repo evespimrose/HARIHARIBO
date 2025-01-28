@@ -8497,6 +8497,8 @@ MonoBehaviour:
   - {fileID: 2071473183}
   - {fileID: 1741143071}
   - {fileID: 1182635328}
+  partyMemberPrefab: {fileID: 4788088450010402915, guid: c91711b14bee6f6408f734e3ca2bc8c1, type: 3}
+  partyContainer: {fileID: 1424153600}
 --- !u!114 &1359139092
 MonoBehaviour:
   m_ObjectHideFlags: 0
