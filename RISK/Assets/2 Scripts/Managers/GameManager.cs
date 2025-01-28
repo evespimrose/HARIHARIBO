@@ -231,6 +231,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 break;
         }
 
+        UnitManager.Instance.players.Add(PhotonNetwork.LocalPlayer.ActorNumber, GameObject.Find(PhotonNetwork.LocalPlayer.NickName));
+
         if (false == PhotonNetwork.IsMasterClient)
         {
             yield break;

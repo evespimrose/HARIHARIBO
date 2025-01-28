@@ -2,10 +2,12 @@ using Newtonsoft.Json;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using PhotonRealtimePlayer = Photon.Realtime.Player;
 
 public class RiskUIController : MonoBehaviourPunCallbacks
 {
@@ -195,17 +197,9 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         }
     }
 
-    public void ApplyRiskEffect(RiskData selectedRisk)
+    private void ApplyRiskEffect(RiskData riskDataJson)
     {
         if (!PhotonNetwork.IsMasterClient) return;
-
-        photonView.RPC("ApplyRiskEffectRPC", RpcTarget.All, JsonConvert.SerializeObject(selectedRisk));
-    }
-
-    [PunRPC]
-    private void ApplyRiskEffectRPC(string riskDataJson)
-    {
-        RiskData risk = JsonConvert.DeserializeObject<RiskData>(riskDataJson);
 
         foreach (var playerObj in UnitManager.Instance.players.Values)
         {
@@ -213,7 +207,7 @@ public class RiskUIController : MonoBehaviourPunCallbacks
             {
                 PlayerStats stats = player.Stats;
 
-                switch (risk.riskId)
+                switch (riskDataJson.riskId)
                 {
                     case 1:
                         stats.maxHealth *= 0.8f;
@@ -228,7 +222,27 @@ public class RiskUIController : MonoBehaviourPunCallbacks
                         stats.healthRegen *= 0.5f;
                         break;
                 }
+
+                PhotonRealtimePlayer targetPlayer = PhotonNetwork.PlayerList.FirstOrDefault(p => p.NickName == stats.nickName);
+                if (targetPlayer != null)
+                {
+                    photonView.RPC("ApplyRiskEffectRPC", targetPlayer, JsonConvert.SerializeObject(stats));
+                }
             }
+        }
+    }
+
+    private void ApplyRiskEffectRPC(string playerStatJson)
+    {
+        PlayerStats stat = JsonConvert.DeserializeObject<PlayerStats>(playerStatJson);
+
+        if (UnitManager.Instance.players.ContainsKey(PhotonNetwork.LocalPlayer.ActorNumber))
+        {
+            UnitManager.Instance.players.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out GameObject player);
+
+            player.TryGetComponent(out Player component);
+
+            component.InitializeStatsPhoton(stat);
         }
     }
 
