@@ -20,11 +20,11 @@ public class ProjectileMove : MonoBehaviour
 
     public void Initialize(Vector3 direction, Player owner)
     {
-        photonView = owner.photonView;
         moveDirection = direction.normalized;
         transform.forward = moveDirection; // 발사체를 이동 방향으로 회전
         currentLifeTime = lifeTime;
         ownerPlayer = owner;
+        photonView = owner.photonView;
 
         skillDamageInfo = GetComponent<SkillDamageInfo>();
         if (skillDamageInfo != null)
