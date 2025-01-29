@@ -231,6 +231,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 break;
         }
 
+        UnitManager.Instance.players.Add(PhotonNetwork.LocalPlayer.ActorNumber, GameObject.Find(PhotonNetwork.LocalPlayer.NickName));
+
         if (false == PhotonNetwork.IsMasterClient)
         {
             yield break;
@@ -268,7 +270,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
 
         // ???????⑹쾸? 0????琉?????
-        if (dungeonUIController != null)
+        if (dungeonUIController == null)
         {
             dungeonUIController.UpdateTimerText("00:00");
         }
