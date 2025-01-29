@@ -270,7 +270,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
 
         // ???????⑹쾸? 0????琉?????
-        if (dungeonUIController != null)
+        if (dungeonUIController == null)
         {
             dungeonUIController.UpdateTimerText("00:00");
         }
