@@ -88,8 +88,8 @@ public class BossMonsterSkillA : BaseState<BossMonster>
                 float angle = Vector3.Angle(atkDir, dirToTarget);
                 if (angle <= 135f)
                 {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(damage);
-                    //monster.CalculateAndSendDamage(col.gameObject, damage);
+                    //col.gameObject.GetComponent<ITakedamage>().Takedamage(damage);
+                    monster.Atk(col.gameObject, damage);
                     Debug.Log($"{actionNumber} 공격 성공");
                 }
                 else

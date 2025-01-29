@@ -19,8 +19,9 @@ public class EliteMonster : Monster
     [Header("?ㅽ궗3 愿??")]
     public GameObject skillCPrefab;
 
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         InitializeComponents();
         InitializeStateHandler();
     }

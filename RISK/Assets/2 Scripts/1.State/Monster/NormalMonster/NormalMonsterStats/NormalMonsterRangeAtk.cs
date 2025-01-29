@@ -44,6 +44,6 @@ public class NormalMonsterRangeAtk : BaseState<NormalMonster>
     private void Atk(NormalMonster monster)
     {
         GameObject bullet = monster.GetComponent<RangeShooter>().BulletSpwan();
-        bullet.GetComponent<RangeBullet>().Seting(monster.target.transform.position, rangeAtkDamage);
+        bullet.GetComponent<RangeBullet>().Seting(monster.target.transform.position, rangeAtkDamage, monster.photonView);
     }
 }

@@ -2953,6 +2953,7 @@ MonoBehaviour:
   isBleeding: 0
   isPoison: 0
   bodyAtkDamage: 1
+  photonView: {fileID: 0}
   animator: {fileID: 6568851153147162885}
   dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
 --- !u!114 &5300683849849550740

@@ -56,6 +56,6 @@ public class EliteMonsterSkillB : BaseState<EliteMonster>
         Vector3 forwardDir = new Vector3(monster.transform.forward.x, 0f, monster.transform.forward.z).normalized;
         spawnPos.y = 1f;
         GameObject skillCObj = monster.ObjSpwan(monster.skillBPrefab, spawnPos, forwardDir);
-        skillCObj.GetComponent<EliteSkillBObjcect>().Seting(skillBDamage);
+        skillCObj.GetComponent<EliteSkillBObjcect>().Seting(skillBDamage, monster.photonView);
     }
 }

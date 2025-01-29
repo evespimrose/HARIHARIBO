@@ -14,7 +14,6 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
     public override void Enter(NormalMonster monster)
     {
         meleeAtkDamage = monster.atkDamage * 1f;
-        Debug.Log("MeleeAtk공격 시작");
         monster.animator.SetTrigger("Atk");
         action = monster.StartCoroutine(StartAtk(monster));
     }
@@ -27,7 +26,6 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
     public override void Exit(NormalMonster monster)
     {
         monster.StopCoroutine(action);
-        Debug.Log("MeleeAtk공격 종료");
     }
 
     private IEnumerator StartAtk(NormalMonster monster)
@@ -46,7 +44,6 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
 
     private void Atk(NormalMonster monster)
     {
-        Debug.Log("MeleeAtk공격");
         Vector3 atkDir = monster.transform.forward;
         //monster.transform.position = 공격판정범위 중심
         //monster.atkRange = 공격판정의 범위(원형)
@@ -60,12 +57,12 @@ public class NormalMonsterMeleeAtk : BaseState<NormalMonster>
                 float angle = Vector3.Angle(atkDir, dirToTarget);
                 if (angle <= 90f)
                 {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(meleeAtkDamage);
-                    //monster.CalculateAndSendDamage(col.gameObject, meleeAtkDamage);
+                    //col.gameObject.GetComponent<ITakedamage>().Takedamage(meleeAtkDamage);
+                    monster.Atk(col.gameObject, meleeAtkDamage);
                 }
                 else
                 {
-                    Debug.Log("공격판정 밖임");
+                    
                 }
             }
         }

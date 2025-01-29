@@ -21,6 +21,8 @@ public class BossSkillEObject : MonoBehaviour
     private Vector3 targetPos;
     private bool isMoving = false;
 
+    public PhotonView photonView;
+
     public void SetMissileProperties(float bulletDamage, float fireDamage, float fireInterval, float fireDuration)
     {
         this.bulletDamage = bulletDamage;
@@ -98,8 +100,8 @@ public class BossSkillEObject : MonoBehaviour
     {
         if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer"))
         {
-            other.gameObject.GetComponent<ITakedamage>().Takedamage(bulletDamage);
-            //CalculateAndSendDamage(other.gameObject, bulletDamage);
+            //other.gameObject.GetComponent<ITakedamage>().Takedamage(bulletDamage);
+            Atk(other.gameObject, bulletDamage);
             if (skillType == SkillType.First)
             {
                 FireMissiles();
@@ -116,37 +118,34 @@ public class BossSkillEObject : MonoBehaviour
         }
     }
 
-    // 데미지 계산 후 전송하는 메서드
-    public void CalculateAndSendDamage(GameObject target, float dmg)
+    // ✅ 공격 처리 함수 (화살 등은 PhotonView 필요 없음)
+    private void Atk(GameObject target, float damage)
     {
-        // 방장에서 데미지 계산 (여기서는 단순히 공격력으로 계산)
-        float damage = dmg;
-
-        // 방장만 데미지를 전송
-        if (PhotonNetwork.IsMasterClient)
+        // 공격 시 자신이 가진 PhotonView를 사용해서 RPC 호출
+        if (photonView != null && target != null)
         {
-            // PhotonView 컴포넌트를 명시적으로 가져옴
-            PhotonView photonView = GetComponent<PhotonView>();
-
-            if (photonView != null)
+            PhotonView targetView = target.GetComponent<PhotonView>();
+            if (targetView != null)
             {
-                // photonView를 통해 RPC 호출
-                photonView.RPC("ApplyDamageToClient", RpcTarget.All, target.GetPhotonView().ViewID, damage);
+                int targetID = targetView.ViewID;
+
+                if (PhotonNetwork.IsMasterClient) // ✅ 파티장만 데미지 계산
+                {
+                    // 파티장에서만 RPC 호출해서 데미지 전파
+                    photonView.RPC("ApplyDamageRPC", RpcTarget.All, targetID, damage);
+                }
             }
         }
     }
 
-    // RPC로 다른 클라이언트에 데미지 적용
     [PunRPC]
-    public void ApplyDamageToClient(int targetPhotonViewID, float damage)
+    public void ApplyDamageRPC(int targetID, float damage)
     {
-        // PhotonView ID로 대상 객체 찾기
-        PhotonView targetView = PhotonView.Find(targetPhotonViewID);
-
-        // 대상 객체가 존재하면, ITakedamage 인터페이스를 통해 데미지를 적용
+        // 타겟을 찾아서 데미지 적용
+        PhotonView targetView = PhotonView.Find(targetID);
         if (targetView != null)
         {
-            targetView.gameObject.GetComponent<ITakedamage>()?.Takedamage(damage);
+            targetView.GetComponent<ITakedamage>().Takedamage(damage);
         }
     }
 }

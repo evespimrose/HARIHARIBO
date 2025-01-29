@@ -100,8 +100,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
         {
             if (col.gameObject.CompareTag("Player"))
             {
-                col.gameObject.GetComponent<ITakedamage>().Takedamage(meleeDamage);
-                // monster.CalculateAndSendDamage(col.gameObject, meleeDamage);
+                //col.gameObject.GetComponent<ITakedamage>().Takedamage(meleeDamage);
+                monster.Atk(col.gameObject, meleeDamage);
                 Debug.Log("근접 공격 성공");
             }
         }
@@ -120,8 +120,8 @@ public class BossMonsterSkillB : BaseState<BossMonster>
                 float dirTarget = Vector3.Distance(atkCenter, col.transform.position);
                 if (dirTarget >= rangeAtkMinRange && dirTarget <= rangeAtkMaxRange) 
                 {
-                    col.gameObject.GetComponent<ITakedamage>().Takedamage(rangeDamage);
-                    //monster.CalculateAndSendDamage(col.gameObject, rangeDamage);
+                    //col.gameObject.GetComponent<ITakedamage>().Takedamage(rangeDamage);
+                    monster.Atk(col.gameObject, rangeDamage);
                     Debug.Log("원거리 공격 성공");
                 }
             }

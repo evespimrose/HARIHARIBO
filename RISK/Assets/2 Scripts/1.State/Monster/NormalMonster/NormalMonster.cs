@@ -14,8 +14,9 @@ public class NormalMonster : Monster
     [Tooltip("사망시 파티클")]
     public ParticleSystem dieParticle;
 
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         InitializeComponents();
         InitializeStateHandler();
     }
@@ -93,9 +94,7 @@ public class NormalMonster : Monster
     public IEnumerator AtkCoolTime()
     {
         isAtk = true;
-        Debug.Log("쿨타임 시작");
         yield return new WaitForSeconds(atkDelay);
-        Debug.Log("쿨타임 종료");
         isAtk = false;
     }
 

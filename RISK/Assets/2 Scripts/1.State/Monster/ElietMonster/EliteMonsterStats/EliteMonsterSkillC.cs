@@ -81,7 +81,7 @@ public class EliteMonsterSkillC : BaseState<EliteMonster>
             // 발사체의 속성 설정 (missileSpeed, missileDistance 등을 직접 설정)
             EliteSkillCObjcect missileScript = skillEBullets[i].GetComponent<EliteSkillCObjcect>();
             missileScript.InitMissile(directions[i], 20f);
-            missileScript.SetDamage(skillCDamage);
+            missileScript.Setting(skillCDamage, monster.photonView);
         }
     }
 }

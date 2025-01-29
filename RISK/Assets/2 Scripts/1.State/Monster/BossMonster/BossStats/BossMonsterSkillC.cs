@@ -65,6 +65,6 @@ public class BossMonsterSkillC : BaseState<BossMonster>
         Vector3 newPosition = new Vector3(monster.transform.position.x, monster.transform.position.y + 1f, monster.transform.position.z);
         Vector3 forwardDir = new Vector3(monster.transform.forward.x, 0f, monster.transform.forward.z).normalized;
         GameObject skillCObj = monster.ObjSpwan(monster.skillCPrefab, monster.transform.position, forwardDir);
-        skillCObj.GetComponent<BossSkillCObject>().Seting(damage);
+        skillCObj.GetComponent<BossSkillCObject>().Seting(damage, monster.photonView);
     }
 }

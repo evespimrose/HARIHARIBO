@@ -75,7 +75,7 @@ public class BossMonsterSkillD : BaseState<BossMonster>
             Vector3 spawnPos = new Vector3(monster.transform.position.x, 1f, monster.transform.position.z);
             Vector3 rotation = Quaternion.LookRotation(rotDir).eulerAngles;
             GameObject skillDObj = monster.ObjSpwan(monster.skillDPrefab, spawnPos, rotation);
-            skillDObj.GetComponent<BossSkillDObject>().Seting(damage);
+            skillDObj.GetComponent<BossSkillDObject>().Seting(damage, monster.photonView);
             Rigidbody skillRigidbody = skillDObj.GetComponent<Rigidbody>();
             if (skillRigidbody != null)
             {

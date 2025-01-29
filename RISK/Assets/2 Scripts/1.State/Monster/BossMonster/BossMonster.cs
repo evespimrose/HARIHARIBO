@@ -50,8 +50,9 @@ public class BossMonster : Monster
 
     public Coroutine action;
 
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         InitializeComponents();
         InitializeStateHandler();
     }
@@ -90,8 +91,8 @@ public class BossMonster : Monster
         if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer") && !hitTargets.Contains(other.gameObject)) // 以묐났 ?ㅻ툕?앺듃 泥댄겕
         {
             Debug.Log("SkillF 怨듦꺽");
-            other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
-            //CalculateAndSendDamage(other.gameObject, atkDamage);
+            //other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
+            Atk(other.gameObject, atkDamage);
             hitTargets.Add(other.gameObject);
 
             // ?됰갚 ?곸슜

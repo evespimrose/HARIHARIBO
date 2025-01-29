@@ -6419,6 +6419,7 @@ MonoBehaviour:
   buffDuration: 0
   knockbackForce: 0
   knockbackDuration: 0
+  photonView: {fileID: 0}
 --- !u!1 &867625405861799472
 GameObject:
   m_ObjectHideFlags: 0
@@ -26076,6 +26077,7 @@ MonoBehaviour:
   buffDuration: 0
   knockbackForce: 0
   knockbackDuration: 0
+  photonView: {fileID: 0}
 --- !u!1 &3383590558287573795
 GameObject:
   m_ObjectHideFlags: 0
@@ -46438,6 +46440,7 @@ MonoBehaviour:
   buffDuration: 0
   knockbackForce: 0
   knockbackDuration: 0
+  photonView: {fileID: 0}
 --- !u!1 &6092572729980437654
 GameObject:
   m_ObjectHideFlags: 0
@@ -61486,6 +61489,7 @@ MonoBehaviour:
   buffDuration: 0
   knockbackForce: 0
   knockbackDuration: 0
+  photonView: {fileID: 0}
 --- !u!1 &8294262301023697669
 GameObject:
   m_ObjectHideFlags: 0
@@ -66069,6 +66073,7 @@ MonoBehaviour:
   buffDuration: 0
   knockbackForce: 0
   knockbackDuration: 0
+  photonView: {fileID: 0}
 --- !u!1 &8799066727324178907
 GameObject:
   m_ObjectHideFlags: 0

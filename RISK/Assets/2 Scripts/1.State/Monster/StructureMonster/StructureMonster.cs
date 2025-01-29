@@ -12,8 +12,9 @@ public class StructureMonster : Monster
 
     private Coroutine hit = null;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         InitializeComponents();
         InitializeStateHandler();
     }
