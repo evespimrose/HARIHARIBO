@@ -27,20 +27,18 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
     public List<GameObject> monsters = new List<GameObject>();
 
     [SerializeField] public int playersCount;
-    public List<string> playerNames = new List<string>();
+    public List<GameObject> playerobjects = new List<GameObject>();
 
-    [PunRPC]
-    private void RequestPlayerSync(PhotonMessageInfo info)
+
+    public void RequestPlayerSync()
     {
-        if (!PhotonNetwork.IsMasterClient) return;
-
         foreach (var playerPair in players)
         {
-            if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView photonView))
+            if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView pView))
             {
-                photonView.RPC("SyncPlayer", info.Sender,
-                    photonView.ViewID,
-                    photonView.Owner.ActorNumber,
+                photonView.RPC("SyncPlayer", PhotonNetwork.MasterClient,
+                    pView.ViewID,
+                    pView.Owner.ActorNumber,
                     playerPair.Value.name);
             }
         }
@@ -146,12 +144,13 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
     private void Update()
     {
         playersCount = players.Count;
-        if(playerNames.Count != players.Count)
+        if(playerobjects.Count != players.Count)
         {
+            playerobjects.Clear();
             foreach (var i in players)
             {
                 i.Value.TryGetComponent(out Player player);
-                playerNames.Add(player.Stats.nickName);
+                playerobjects.Add(player.gameObject);
             }
         }
     }

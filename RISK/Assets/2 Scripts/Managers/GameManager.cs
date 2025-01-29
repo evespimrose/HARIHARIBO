@@ -230,8 +230,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 break;
         }
         UnitManager.Instance.players.Add(playerNumber, playerObj);
-        UnitManager.Instance.GetComponent<PhotonView>().RPC("RequestPlayerSync", RpcTarget.MasterClient);
-
+        UnitManager.Instance.RequestPlayerSync();
 
         if (false == PhotonNetwork.IsMasterClient)
         {
