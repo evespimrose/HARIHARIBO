@@ -75,6 +75,10 @@ public class Warrior : Player
 
         stateHandler.ChangeState(typeof(WarriorIdleState));
     }
+    protected override void InitializeClassType()
+    {
+        ClassType = ClassType.Warrior;
+    }
 
     protected override void HandleSkillInput()
     {

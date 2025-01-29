@@ -34,6 +34,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
     protected abstract void InitializeStateHandler();
     protected abstract void HandleSkillInput();
     public int TeamID { get; private set; } = 1;
+    public ClassType ClassType { get; protected set; }
 
     protected virtual void Awake()
     {
@@ -41,6 +42,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         InitializeStateHandler();
         SetPlatform();
         InitializeStats();
+        InitializeClassType();
         PhotonPeer.RegisterType(typeof(Destroyer), 100, SerializeDestroyer, DeserializeDestroyer);
         PhotonPeer.RegisterType(typeof(Healer), 101, SerializeHealer, DeserializeHealer);
         PhotonPeer.RegisterType(typeof(Mage), 102, SerializeMage, DeserializeMage);
@@ -62,6 +64,7 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         //}
     }
 
+    protected abstract void InitializeClassType();
     private static byte[] SerializeDestroyer(object customType)
     {
         string json = JsonUtility.ToJson(customType);

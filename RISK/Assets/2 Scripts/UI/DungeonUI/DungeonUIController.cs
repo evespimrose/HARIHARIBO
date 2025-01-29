@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DungeonUIController : MonoBehaviour, IPunObservable
+public class DungeonUIController : MonoBehaviourPun, IPunObservable
 {
     [Header("UI Elements")]
     [SerializeField] private TMP_Text timerText;
@@ -49,6 +49,16 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
     private float[] currentCooldowns;  // ?꾩옱 ?좏깮??吏곸뾽??荑⑦??????
     private Player localPlayer;
 
+    [Serializable]
+    private class PartyMemberData
+    {
+        public string playerName;
+        public float healthRatio;
+        public ClassType classType;
+    }
+    private Dictionary<string, PartyMemberData> syncedPartyData = new Dictionary<string, PartyMemberData>();
+
+
     private void Awake()
     {
 #if UNITY_ANDROID
@@ -66,7 +76,6 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
     private void Start()
     {
 #if !UNITY_ANDROID
-        // Firebase 珥덇린???댄썑???ㅽ뻾
         SetupPCSkillUI();
 #endif
     }
@@ -79,6 +88,15 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
             UpdatePlayerInfo(healthRatio);
 
             UpdatePartyMembersHP();
+        }
+    }
+    public void SetPlayer(Player player)
+    {
+        localPlayer = player;
+        if (player != null)
+        {
+            float healthRatio = player.Stats.currentHealth / player.Stats.maxHealth;
+            UpdatePlayerInfo(healthRatio);
         }
     }
     public void InitializePartyUI()
@@ -115,18 +133,17 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
         // 이미 존재하는 UI면 스킵
         if (partyMembers.ContainsKey(player.name)) return;
 
-        // GameManager에서 플레이어 데이터 찾기
-        var playerData = GameManager.Instance.connectedPlayers.Find(p => p.nickName == player.name);
-        if (playerData != null)
-        {
-            // UI 프리팹 생성
-            GameObject uiObj = Instantiate(partyMemberPrefab, partyContainer);
-            var memberUI = uiObj.GetComponent<DungeonPartyMemberUI>();
-            memberUI.Initialize(player, playerData.classType);
-            partyMembers.Add(player.name, memberUI);
-            Debug.Log($"Created party member UI for: {player.name}");
-        }
+        // UI 프리팹 생성
+        GameObject uiObj = Instantiate(partyMemberPrefab, partyContainer);
+        var memberUI = uiObj.GetComponent<DungeonPartyMemberUI>();
+        memberUI.Initialize(player);  // ClassType 파라미터 제거
+        partyMembers.Add(player.name, memberUI);
     }
+    public void OnPlayerEnteredParty(Player newPlayer)
+    {
+        CreatePartyMemberUI(newPlayer);
+    }
+
     public void RemovePartyMemberUI(string playerName)
     {
         if (partyMembers.TryGetValue(playerName, out var memberUI))
@@ -135,44 +152,16 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
             partyMembers.Remove(playerName);
         }
     }
-    public void OnPlayerEnteredParty(Player newPlayer)
-    {
-        CreatePartyMemberUI(newPlayer);
-    }
 
-    public void OnPlayerLeftParty(string playerName)
-    {
-        RemovePartyMemberUI(playerName);
-    }
     private void UpdatePartyMembersHP()
     {
-        if (UnitManager.Instance != null)
+        foreach (var memberUI in partyMembers.Values)
         {
-            int partyMemberIndex = 0;
-            foreach (var playerObj in UnitManager.Instance.players.Values)
-            {
-                if (playerObj != null && playerObj != localPlayer.gameObject)
-                {
-                    if (playerObj.TryGetComponent<Player>(out var partyMember))
-                    {
-                        float memberHealthRatio = partyMember.Stats.currentHealth / partyMember.Stats.maxHealth;
-                        UpdatePartyHP(partyMemberIndex, memberHealthRatio);
-                        partyMemberIndex++;
-                    }
-                }
-            }
+            memberUI.UpdateLocalHP();
         }
     }
 
-    public void SetPlayer(Player player)
-    {
-        localPlayer = player;
-        if (player != null)
-        {
-            float healthRatio = player.Stats.currentHealth / player.Stats.maxHealth;
-            UpdatePlayerInfo(healthRatio);
-        }
-    }
+   
 
     // PC 踰꾩쟾 UI ?ㅼ젙
     private void SetupPCSkillUI()
@@ -445,19 +434,48 @@ public class DungeonUIController : MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)  // 데이터 보내기
+        if (stream.IsWriting)
         {
-            if (timerText != null)
+            // 파티 멤버 데이터 전송
+            foreach (var member in partyMembers)
             {
-                stream.SendNext(timerText.text);
+                if (member.Value.Player != null && member.Value.Player.Stats != null)
+                {
+                    float healthRatio = member.Value.Player.Stats.currentHealth / member.Value.Player.Stats.maxHealth;
+                    stream.SendNext(member.Key); // 플레이어 이름
+                    stream.SendNext(healthRatio); // HP 비율
+                    stream.SendNext((int)member.Value.Player.ClassType); // 클래스 타입
+                }
             }
         }
-        else  // 데이터 받기
+        else
         {
-            syncedTimerText = (string)stream.ReceiveNext();
-            if (timerText != null)
+            // 파티 멤버 데이터 수신
+            syncedPartyData.Clear();
+            while (stream.Count > 0 && stream.PeekNext() != null)
             {
-                timerText.text = syncedTimerText;
+                string playerName = (string)stream.ReceiveNext();
+                float healthRatio = (float)stream.ReceiveNext();
+                ClassType classType = (ClassType)stream.ReceiveNext();
+
+                syncedPartyData[playerName] = new PartyMemberData
+                {
+                    playerName = playerName,
+                    healthRatio = healthRatio,
+                    classType = classType
+                };
+            }
+            UpdatePartyMembersFromSyncedData();
+        }
+    }
+    private void UpdatePartyMembersFromSyncedData()
+    {
+        foreach (var syncedData in syncedPartyData)
+        {
+            if (partyMembers.TryGetValue(syncedData.Key, out var memberUI))
+            {
+                memberUI.UpdateHP(syncedData.Value.healthRatio);
+                memberUI.UpdateClassIcon(syncedData.Value.classType);
             }
         }
     }

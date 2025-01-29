@@ -73,6 +73,10 @@ public class Healer : Player
 
         stats.InitializeStats();
     }
+    protected override void InitializeClassType()
+    {
+        ClassType = ClassType.Healer;
+    }
 
     protected override void InitializeStateHandler()
     {
