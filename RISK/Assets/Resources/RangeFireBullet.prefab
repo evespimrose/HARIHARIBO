@@ -9511,8 +9511,8 @@ GameObject:
   - component: {fileID: 8710405014075806727}
   - component: {fileID: 5900059020581059291}
   - component: {fileID: 3826306906317794592}
-  - component: {fileID: 5891562916638178763}
   - component: {fileID: 3537345268411893463}
+  - component: {fileID: 5891562916638178763}
   m_Layer: 0
   m_Name: RangeFireBullet
   m_TagString: Untagged
@@ -9550,6 +9550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 20
   lifeTime: 5
+  photonView: {fileID: 0}
 --- !u!136 &3826306906317794592
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9573,22 +9574,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5891562916638178763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4035082772637316073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &3537345268411893463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9612,6 +9597,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &5891562916638178763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4035082772637316073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &8563467313730551931
 GameObject:
   m_ObjectHideFlags: 0

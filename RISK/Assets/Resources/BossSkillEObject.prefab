@@ -4899,8 +4899,8 @@ GameObject:
   - component: {fileID: 5039986988119056383}
   - component: {fileID: 2500389614657374772}
   - component: {fileID: 9054154238597330100}
-  - component: {fileID: 4960961917808617800}
   - component: {fileID: 7170515216708858934}
+  - component: {fileID: 4960961917808617800}
   m_Layer: 0
   m_Name: BossSkillEObject
   m_TagString: Untagged
@@ -4965,22 +4965,7 @@ MonoBehaviour:
   fireDuration: 5
   missileSpeed: 15
   missileDistance: 10
---- !u!114 &4960961917808617800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4598972316749910789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  photonView: {fileID: 0}
 --- !u!114 &7170515216708858934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5004,6 +4989,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &4960961917808617800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4598972316749910789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &8508719486242197379
 GameObject:
   m_ObjectHideFlags: 0

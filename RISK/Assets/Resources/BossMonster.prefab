@@ -109133,8 +109133,8 @@ GameObject:
   - component: {fileID: 1450168479397113446}
   - component: {fileID: 4685548945203114259}
   - component: {fileID: 6663538432996142289}
-  - component: {fileID: 3413244131854154405}
   - component: {fileID: 1527911245250642344}
+  - component: {fileID: 3413244131854154405}
   m_Layer: 6
   m_Name: BossMonster
   m_TagString: Monster
@@ -109298,6 +109298,7 @@ MonoBehaviour:
   isBleeding: 0
   isPoison: 0
   bodyAtkDamage: 1
+  photonView: {fileID: 0}
   bossName: "\uC9C4\uAD11\uB300\uC655"
   animator: {fileID: 6463728419022047405}
   atkSoundClips:
@@ -109361,6 +109362,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1527911245250642344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8588490523938595768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!114 &3413244131854154405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109421,22 +109438,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
---- !u!114 &1527911245250642344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588490523938595768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &8752723455283472787
 GameObject:
   m_ObjectHideFlags: 0

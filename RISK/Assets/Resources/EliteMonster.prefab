@@ -1181,8 +1181,8 @@ GameObject:
   - component: {fileID: 7929464591779868852}
   - component: {fileID: 435053047627587273}
   - component: {fileID: 3208455014031899618}
-  - component: {fileID: 5152634894592914764}
   - component: {fileID: 7325671335450496649}
+  - component: {fileID: 5152634894592914764}
   m_Layer: 6
   m_Name: EliteMonster
   m_TagString: Monster
@@ -1338,6 +1338,7 @@ MonoBehaviour:
   isBleeding: 0
   isPoison: 0
   bodyAtkDamage: 1
+  photonView: {fileID: 0}
   animator: {fileID: 7164595352773947869}
   dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
   skillBPrefab: {fileID: 7341566284177011136, guid: 81027b2e540b02340a8cc54e1c2b9c0a, type: 3}
@@ -1366,6 +1367,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &7325671335450496649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5179692953179437697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!114 &5152634894592914764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,22 +1422,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
---- !u!114 &7325671335450496649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5179692953179437697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &5326163200533731838
 GameObject:
   m_ObjectHideFlags: 0

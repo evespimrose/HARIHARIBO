@@ -1739,8 +1739,8 @@ GameObject:
   - component: {fileID: 4914485850367770201}
   - component: {fileID: 812139669923324684}
   - component: {fileID: 5744128124120885697}
-  - component: {fileID: 9155780893821440728}
   - component: {fileID: 9128499290158296521}
+  - component: {fileID: 9155780893821440728}
   m_Layer: 6
   m_Name: RangeMonsterA
   m_TagString: Monster
@@ -1897,6 +1897,7 @@ MonoBehaviour:
   isBleeding: 0
   isPoison: 0
   bodyAtkDamage: 1
+  photonView: {fileID: 0}
   animator: {fileID: 8914975154521414073}
   dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
 --- !u!114 &812139669923324684
@@ -1937,6 +1938,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &9128499290158296521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563592875290583862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!114 &9155780893821440728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1976,22 +1993,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
---- !u!114 &9128499290158296521
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5563592875290583862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &6123348618735753897
 GameObject:
   m_ObjectHideFlags: 0

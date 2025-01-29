@@ -128,7 +128,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     public IEnumerator CollectPlayerData(PhotonRealtimePlayer player)
     {
         yield return new WaitUntil(() => !string.IsNullOrEmpty(player.NickName));
-        print($"{player.NickName}");
 
         FireBaseCharacterData playerData = JsonConvert.DeserializeObject<FireBaseCharacterData>(player.NickName);
 
@@ -230,22 +229,42 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 }
                 break;
         }
+        UnitManager.Instance.players.Add(playerNumber, playerObj);
+        UnitManager.Instance.GetComponent<PhotonView>().RPC("RequestPlayerSync", RpcTarget.MasterClient);
 
-        UnitManager.Instance.players.Add(PhotonNetwork.LocalPlayer.ActorNumber, GameObject.Find(PhotonNetwork.LocalPlayer.NickName));
 
         if (false == PhotonNetwork.IsMasterClient)
         {
             yield break;
         }
 
-        UnitManager.Instance.players.Clear();
+        //UnitManager.Instance.players.Clear();
 
-        foreach (var player in PhotonNetwork.CurrentRoom.Players)
+        //foreach (var player in PhotonNetwork.CurrentRoom.Players)
+        //{
+        //    string name = player.Value.NickName;
+        //    print($"{player.Key}, {name}, isMasterClient : {player.Value.IsMasterClient}");
+
+        //    if(player.Value.IsMasterClient)
+        //    {
+        //        UnitManager.Instance.players.Add(player.Value.ActorNumber, GameObject.Find(name));
+
+        //        print($"{player.Value.ActorNumber} : {UnitManager.Instance.players[player.Value.ActorNumber].name}");
+        //    }
+        //    else
+        //    {
+        //        PlayerStats playerStat = JsonConvert.DeserializeObject<PlayerStats>(name);
+        //        UnitManager.Instance.players.Add(player.Value.ActorNumber, GameObject.Find(playerStat.nickName));
+        //        print($"{player.Value.ActorNumber} : {UnitManager.Instance.players[player.Value.ActorNumber].name}");
+
+        //    }
+        //}
+
+        foreach (var player in UnitManager.Instance.players)
         {
-            string name = player.Value.NickName;
-            UnitManager.Instance.players.Add(player.Value.ActorNumber, GameObject.Find(name));
+            if(player.Value.TryGetComponent(out Player playerComponent))
+                print($"{playerComponent.Stats.nickName}, {playerComponent.Stats.damageReduction}");
         }
-
 
         remainingTime = startTime; // ?곸궠???筌뤾퍓堉????蹂?뜟 ?貫?껆뵳??
         StartCoroutine(GameClock());
@@ -379,7 +398,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 break;
         }
 
-        playerObj?.GetComponent<PhotonView>().RPC("RequestPlayerSync", RpcTarget.MasterClient);
+        
     }
 
     [PunRPC]

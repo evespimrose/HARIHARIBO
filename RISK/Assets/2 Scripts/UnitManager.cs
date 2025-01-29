@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UnitManager : PhotonSingletonManager<UnitManager>
@@ -25,10 +26,12 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
     public GameObject LocalPlayer { get; private set; }
     public List<GameObject> monsters = new List<GameObject>();
 
+    [SerializeField] public int playersCount;
+    public List<string> playerNames = new List<string>();
+
     [PunRPC]
     private void RequestPlayerSync(PhotonMessageInfo info)
     {
-        print("RequestPlayerSync");
         if (!PhotonNetwork.IsMasterClient) return;
 
         foreach (var playerPair in players)
@@ -136,6 +139,19 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
                     // 파티장에서만 RPC 호출해서 데미지 전파
                     photonView.RPC("ApplyDamageRPC", RpcTarget.All, targetID, damage);
                 }
+            }
+        }
+    }
+
+    private void Update()
+    {
+        playersCount = players.Count;
+        if(playerNames.Count != players.Count)
+        {
+            foreach (var i in players)
+            {
+                i.Value.TryGetComponent(out Player player);
+                playerNames.Add(player.Stats.nickName);
             }
         }
     }

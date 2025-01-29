@@ -639,8 +639,8 @@ GameObject:
   - component: {fileID: 6624975134528634244}
   - component: {fileID: 4659742718063438556}
   - component: {fileID: 1212152383570514536}
-  - component: {fileID: 4159158404558976489}
   - component: {fileID: 6426303642526917279}
+  - component: {fileID: 4159158404558976489}
   m_Layer: 6
   m_Name: MeleeMonsterB
   m_TagString: Monster
@@ -796,6 +796,7 @@ MonoBehaviour:
   isBleeding: 0
   isPoison: 0
   bodyAtkDamage: 1
+  photonView: {fileID: 0}
   animator: {fileID: 9065520721765830130}
   dieParticle: {fileID: 198355779183106702, guid: 3b517eddec185dd4a830743a742ad00b, type: 3}
 --- !u!114 &1212152383570514536
@@ -822,6 +823,22 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &6426303642526917279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2076494417076438055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!114 &4159158404558976489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -861,22 +878,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
---- !u!114 &6426303642526917279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2076494417076438055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &2076977966341379181
 GameObject:
   m_ObjectHideFlags: 0

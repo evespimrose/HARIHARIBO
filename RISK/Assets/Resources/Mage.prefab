@@ -23493,8 +23493,8 @@ GameObject:
   - component: {fileID: 266705742501340079}
   - component: {fileID: 978480504366718017}
   - component: {fileID: -8108350381106507482}
-  - component: {fileID: -4830462955973551265}
   - component: {fileID: 1787947674829355227}
+  - component: {fileID: -4830462955973551265}
   m_Layer: 7
   m_Name: Mage
   m_TagString: Untagged
@@ -23719,6 +23719,21 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &1787947674829355227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2871036966586066559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b901ac5d93280384b84639ed0224bc0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireDamage: 1
+  fireInterval: 1
+  fireDuration: 5
 --- !u!114 &-4830462955973551265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23761,21 +23776,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
---- !u!114 &1787947674829355227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2871036966586066559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b901ac5d93280384b84639ed0224bc0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireDamage: 1
-  fireInterval: 1
-  fireDuration: 5
 --- !u!1 &2893899571063168237
 GameObject:
   m_ObjectHideFlags: 0
@@ -30714,6 +30714,7 @@ MonoBehaviour:
   buffDuration: 0
   knockbackForce: 0
   knockbackDuration: 0
+  photonView: {fileID: 0}
 --- !u!1 &3873282485824874073
 GameObject:
   m_ObjectHideFlags: 0
@@ -34699,6 +34700,7 @@ MonoBehaviour:
   buffDuration: 0
   knockbackForce: 0
   knockbackDuration: 0
+  photonView: {fileID: 0}
 --- !u!135 &8729376416233466223
 SphereCollider:
   m_ObjectHideFlags: 0

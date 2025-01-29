@@ -88,14 +88,8 @@ public class NormalMonster : Monster
         if (isDie == true)
         {
             UnitManager.Instance.monsters.Remove(this.gameObject);
-            photonView.RPC("DestroyMonster", RpcTarget.All);
+            PhotonNetwork.Destroy(this.gameObject);
         }
-    }
-
-    [PunRPC]
-    public void DestroyMonster()
-    {
-        PhotonNetwork.Destroy(this.gameObject);
     }
 
     public IEnumerator AtkCoolTime()
