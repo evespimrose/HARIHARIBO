@@ -92,6 +92,10 @@ public class Mage : Player
 
         stats.InitializeStats();
     }
+    protected override void InitializeClassType()
+    {
+        ClassType = ClassType.Mage;
+    }
     protected override void InitializeStateHandler()
     {
         stateHandler = new StateHandler<Player>(this);

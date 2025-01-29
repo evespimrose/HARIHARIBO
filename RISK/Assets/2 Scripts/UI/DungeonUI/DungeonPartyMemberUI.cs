@@ -9,22 +9,40 @@ public class DungeonPartyMemberUI : MonoBehaviour
     [SerializeField] private Image hpBar;
     private Player targetPlayer;
 
-    public void Initialize(Player player, ClassType classType)
+    public Player Player => targetPlayer;
+
+    public void Initialize(Player player)  // ClassType 파라미터 제거
     {
         targetPlayer = player;
-        // GameManager에서 직업 아이콘 가져오기
-        if (GameManager.Instance.characterDataDic.TryGetValue(classType, out CharacterData characterData))
+        if (player != null)
         {
-            classIcon.sprite = characterData.headSprite;  // 또는 실제 사용하는 아이콘 변수명
+            UpdateClassIcon(player.ClassType);  // Player에서 직접 ClassType 가져오기
+            UpdateLocalHP();
         }
     }
 
-    public void UpdateHP()
+    public void UpdateClassIcon(ClassType classType)
+    {
+        if (GameManager.Instance.characterDataDic.TryGetValue(classType, out CharacterData characterData))
+        {
+            classIcon.sprite = characterData.headSprite;
+        }
+    }
+
+    public void UpdateHP(float healthRatio)
+    {
+        if (hpBar != null)
+        {
+            hpBar.fillAmount = healthRatio;
+        }
+    }
+
+    public void UpdateLocalHP()
     {
         if (targetPlayer != null && targetPlayer.Stats != null)
         {
             float healthRatio = targetPlayer.Stats.currentHealth / targetPlayer.Stats.maxHealth;
-            hpBar.fillAmount = healthRatio;
+            UpdateHP(healthRatio);
         }
     }
 }

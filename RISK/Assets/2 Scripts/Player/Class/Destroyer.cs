@@ -39,6 +39,10 @@ public class Destroyer : Player
             }
         }
     }
+    protected override void InitializeClassType()
+    {
+        ClassType = ClassType.Destroyer;
+    }
 
     protected override void InitializeStats()
     {
