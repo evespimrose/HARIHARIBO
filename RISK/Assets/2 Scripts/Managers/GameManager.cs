@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     public bool isTickGoes = false;
 
     public bool isGamePaused = false;
-    private bool isGameForceOver;
+    public bool isGameForceOver;
     public List<FireBaseCharacterData> connectedPlayers = new List<FireBaseCharacterData>();
 
     public Transform playerPosition;
@@ -273,6 +273,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         yield return new WaitUntil(() => !isGameRunning);
         // TODO : game over logic initiate
+
     }
 
     private IEnumerator UpdateTimer()

@@ -257,7 +257,7 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     private void ProcessSurrenderRPC()
     {
         GameManager.Instance.isWaveDone = true;
-
+        GameManager.Instance.isGameForceOver = false;
         CalculateRewards(true);
     }
 
