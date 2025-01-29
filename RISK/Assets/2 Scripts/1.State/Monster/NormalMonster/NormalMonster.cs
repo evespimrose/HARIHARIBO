@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -87,8 +88,14 @@ public class NormalMonster : Monster
         if (isDie == true)
         {
             UnitManager.Instance.monsters.Remove(this.gameObject);
-            Destroy(this.gameObject);
+            photonView.RPC("DestroyMonster", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void DestroyMonster()
+    {
+        PhotonNetwork.Destroy(this.gameObject);
     }
 
     public IEnumerator AtkCoolTime()
@@ -117,8 +124,10 @@ public class NormalMonster : Monster
         }
     }
 
+    [PunRPC]
     public override void DieStatChange()
     {
+        base.DieStatChange();
         this.nMHandler.ChangeState(typeof(NormalMonsterDie));
     }
 }

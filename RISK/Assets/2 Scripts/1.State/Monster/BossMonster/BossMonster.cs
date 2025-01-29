@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -180,12 +181,20 @@ public class BossMonster : Monster
         if (isDie == true)
         {
             UnitManager.Instance.monsters.Remove(this.gameObject);
-            Destroy(this.gameObject);
+            photonView.RPC("DestroyMonster", RpcTarget.All);
         }
     }
 
+    [PunRPC]
+    public void DestroyMonster()
+    {
+        PhotonNetwork.Destroy(this.gameObject);
+    }
+
+    [PunRPC]
     public override void DieStatChange()
     {
+        base.DieStatChange();
         this.bMHandler.ChangeState(typeof(BossMonsterDie));
     }
 

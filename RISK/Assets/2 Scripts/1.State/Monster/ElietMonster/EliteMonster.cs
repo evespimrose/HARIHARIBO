@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -95,8 +96,14 @@ public class EliteMonster : Monster
         if (isDie == true)
         {
             UnitManager.Instance.monsters.Remove(this.gameObject);
-            Destroy(this.gameObject);
+            photonView.RPC("DestroyMonster", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void DestroyMonster()
+    {
+        PhotonNetwork.Destroy(this.gameObject);
     }
 
     public void AtkEnd()
@@ -113,8 +120,10 @@ public class EliteMonster : Monster
         isAtk = false;
     }
 
+    [PunRPC]
     public override void DieStatChange()
     {
+        base .DieStatChange();
         this.eMHandler.ChangeState(typeof(EliteMonsterDie));
     }
 }

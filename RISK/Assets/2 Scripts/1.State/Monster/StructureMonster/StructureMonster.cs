@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -81,8 +82,10 @@ public class StructureMonster : Monster
 
     }
 
+    [PunRPC]
     public override void DieStatChange()
     {
+        base.DieStatChange();
         this.sMHandler.ChangeState(typeof(StructureDie));
     }
 
@@ -98,7 +101,13 @@ public class StructureMonster : Monster
         if (isDie == true)
         {
             UnitManager.Instance.monsters.Remove(this.gameObject);
-            Destroy(this.gameObject);
+            photonView.RPC("DestroyMonster", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void DestroyMonster()
+    {
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }
