@@ -91,7 +91,8 @@ public class BossMonsterAtk : BaseState<BossMonster>
 
                 if (angle <= angleThreshold)
                 {
-                    monster.CalculateAndSendDamage(col.gameObject, damage);
+                    col.gameObject.GetComponent<ITakedamage>().Takedamage(damage);
+                    //monster.CalculateAndSendDamage(col.gameObject, damage);
                     Debug.Log("공격 성공");
                 }
                 else

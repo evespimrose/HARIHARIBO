@@ -52,7 +52,8 @@ public class RangeBullet : MonoBehaviour
     {
         if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer"))
         {
-            CalculateAndSendDamage(other.gameObject, atkDamage);
+            other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
+            //CalculateAndSendDamage(other.gameObject, atkDamage);
             Destroy(this.gameObject);
         }
         else if (other.CompareTag("Wall"))

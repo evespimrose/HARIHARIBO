@@ -75,7 +75,8 @@ public class ProjectileMove : MonoBehaviour
         if (skillDamageInfo != null)
         {
             float damage = skillDamageInfo.GetDamage();
-            CalculateAndSendDamage(co.gameObject, damage);
+            co.gameObject.GetComponent<ITakedamage>().Takedamage(damage);
+            //CalculateAndSendDamage(co.gameObject, damage);
         }
 
         speed = 0;

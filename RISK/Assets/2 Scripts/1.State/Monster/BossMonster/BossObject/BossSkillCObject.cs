@@ -64,7 +64,8 @@ public class BossSkillCObject : MonoBehaviour
                 //정면 범위
                 if (angle <= 90f)//90도 각도 내로만 공격을 인정
                 {
-                    CalculateAndSendDamage(other.gameObject, atkDamage);
+                    other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
+                    //CalculateAndSendDamage(other.gameObject, atkDamage);
                     Debug.Log($"Player SkilC Hit");
                 }
             }

@@ -80,7 +80,8 @@ public class Monster : MonoBehaviour, ITakedamage
             float currentTime = Time.time;
             if (!bodyAtkHit.ContainsKey(player) || currentTime - bodyAtkHit[player] >= bodyAtkCoolTime)
             {
-                CalculateAndSendDamage(other.gameObject, bodyAtkDamage);
+                other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
+                //CalculateAndSendDamage(other.gameObject, bodyAtkDamage);
                 bodyAtkHit[player] = currentTime;
             }
         }

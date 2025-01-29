@@ -49,7 +49,8 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
         {
             if (monster != null && monster.TryGetComponent(out Monster monsterComponent))
             {
-                CalculateAndSendDamage(monster.gameObject, 2000000);
+                monster.gameObject.GetComponent<ITakedamage>().Takedamage(2000000);
+                //CalculateAndSendDamage(monster.gameObject, 2000000);
             }
         }
     }

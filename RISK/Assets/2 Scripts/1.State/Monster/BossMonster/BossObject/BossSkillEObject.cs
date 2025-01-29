@@ -98,7 +98,8 @@ public class BossSkillEObject : MonoBehaviour
     {
         if (other.gameObject.CompareTag("LocalPlayer") || other.gameObject.CompareTag("RemotePlayer"))
         {
-            CalculateAndSendDamage(other.gameObject, bulletDamage);
+            other.gameObject.GetComponent<ITakedamage>().Takedamage(bulletDamage);
+            //CalculateAndSendDamage(other.gameObject, bulletDamage);
             if (skillType == SkillType.First)
             {
                 FireMissiles();

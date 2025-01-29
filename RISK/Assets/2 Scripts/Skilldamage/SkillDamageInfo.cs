@@ -150,7 +150,8 @@ public class SkillDamageInfo : MonoBehaviour
     private void HandleDamage(Collider other)
     {
         float damage = GetDamage();
-        CalculateAndSendDamage(other.gameObject, damage);
+        other.gameObject.GetComponent<ITakedamage>().Takedamage(damage);
+        //CalculateAndSendDamage(other.gameObject, damage);
     }
 
     private IEnumerator ResetKnockback(Rigidbody rb)

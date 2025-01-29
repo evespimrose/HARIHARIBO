@@ -80,7 +80,8 @@ public class EliteMonsterSkillA : BaseState<EliteMonster>
                 float angle = Vector3.Angle(atkDir, dirToTarget);
                 if (angle <= 135f)
                 {
-                    monster.CalculateAndSendDamage(col.gameObject, aDamage);
+                    col.gameObject.GetComponent<ITakedamage>().Takedamage(aDamage);
+                    //monster.CalculateAndSendDamage(col.gameObject, aDamage);
                     Debug.Log($"{actionNumber} 공격 성공");
                 }
                 else
