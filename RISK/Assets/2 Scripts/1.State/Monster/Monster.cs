@@ -166,13 +166,20 @@ public class Monster : MonoBehaviour, ITakedamage
 
     public virtual void Takedamage(float damage)
     {
-        if (false == PhotonNetwork.IsMasterClient) return;
+        if (!PhotonNetwork.IsMasterClient) return;
         GameSoundManager.Instance.PlayMonsterEffectSound(hitSoundClips);
         curHp -= Mathf.RoundToInt(damage);
+        photonView.RPC("SyncHealth", RpcTarget.All, curHp);
         if (curHp <= 0 && !isDie)
         {
             photonView.RPC("DieStatChange", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void SyncHealth(int newHp)
+    {
+        curHp = newHp;
     }
 
     [PunRPC]
