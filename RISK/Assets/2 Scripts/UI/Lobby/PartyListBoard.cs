@@ -35,13 +35,11 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        //createButton.interactable = !PartyManager.Instance.isInParty;
-        //partyMemberUIOpenButton.interactable = PartyManager.Instance.isInParty;
     }
 
     private void OnRefreshButtonClick()
     {
-        //UpdateRoomList(PanelManager.Instance.currentRoomInfoList);
+        
     }
 
     private void OnCreateButtonClick()
@@ -51,8 +49,6 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnCloseButtonClick()
     {
-        PanelManager.Instance.PanelOpen("Lobby");
-
     }
 
     public override void OnEnable()
@@ -65,37 +61,15 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
         foreach (Transform child in partyListContainer)
         {
-            Destroy(child.gameObject);
+            DestroyImmediate(child.gameObject);
         }
-
-        List<RoomInfo> destroyCanditate = new List<RoomInfo>();
-        destroyCanditate = currentRoomList.FindAll(x => false == roomList.Contains(x));
 
         foreach (RoomInfo roomInfo in roomList)
         {
-            if (currentRoomList.Contains(roomInfo)) continue;
             AddRoomButton(roomInfo);
         }
 
-        foreach (Transform child in partyListContainer)
-        {
-            if (destroyCanditate.Exists(x => x.Name == child.name))
-                Destroy(child.gameObject);
-        }
-
         currentRoomList = roomList;
-
-        //PhotonNetwork.GetCustomRoomList();
-
-        //if (PhotonManager.Instance.partyRoomInfoList != null)
-        //{
-        //    foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
-        //    {
-        //        GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
-        //        if (partyItem.TryGetComponent(out PartyInfoDisplay component))
-        //            component.Initialize(party);
-        //    }
-        //}
 
     }
 

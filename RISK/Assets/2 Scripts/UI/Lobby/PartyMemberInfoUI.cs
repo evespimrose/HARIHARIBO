@@ -5,7 +5,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using HashTable = ExitGames.Client.Photon.Hashtable;
-using Photon.Pun.UtilityScripts;
 
 
 public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
