@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield break;
         }
 
-        if(UnitManager.Instance.players.Count == PhotonNetwork.CurrentRoom.PlayerCount)
+        if (UnitManager.Instance.players.Count == PhotonNetwork.CurrentRoom.PlayerCount)
             UnitManager.Instance.RequestPlayerSyncToRoomMembers();
         else
         {
@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
             Debug.Log("All Monsters Dead || Time Out....");
-            riskUIController.gameObject.SetActive(true);
+            photonView.RPC("RiskUIActiveRPC", RpcTarget.All, true);
 
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
@@ -301,6 +301,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
     }
 
+    [PunRPC]
+    private void RiskUIActiveRPC(bool isActive)
+    {
+        riskUIController.gameObject.SetActive(isActive);
+    }
 
     public void ProcessGameOver(bool isSurrender)
     {
