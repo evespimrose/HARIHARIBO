@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     private float startTime = 300f;
     private float remainingTime;
 
+    private Coroutine gameCoroutine;
+    private bool isGameCoroutineRunning = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -155,107 +158,138 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         Debug.Log($"Player data synchronized with all clients! : {FirebaseManager.Instance.currentCharacterData.nickName}");
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return new WaitUntil(() => isGameRunning);
-        print("isGameReady!!! GOGOGOGO!!!!");
-        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
-        spawner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
-        riskUIController = (RiskUIController)FindAnyObjectByType(typeof(RiskUIController));
-        dungeonUIController = (DungeonUIController)FindAnyObjectByType(typeof(DungeonUIController));
-        riskUIController.gameObject.SetActive(false);
+        gameCoroutine = StartCoroutine(Game());
+    }
 
-        FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
-
-        PlayerStats playerStats = new PlayerStats
+    private void Update()
+    {
+        if (!isGameCoroutineRunning && isGameRunning && !isGameForceOver)
         {
-            nickName = fireBaseCharacterData.nickName,
-            level = fireBaseCharacterData.level,
-            maxExp = fireBaseCharacterData.maxExp,
-            currentExp = fireBaseCharacterData.currExp,
-            maxHealth = fireBaseCharacterData.maxHp,
-            currentHealth = fireBaseCharacterData.maxHp,
-            moveSpeed = fireBaseCharacterData.moveSpeed,
-            attackPower = fireBaseCharacterData.atk,
-            damageReduction = fireBaseCharacterData.dmgRed,
-            healthRegen = fireBaseCharacterData.hpReg,
-            regenInterval = fireBaseCharacterData.regInt,
-            criticalChance = fireBaseCharacterData.cri,
-            criticalDamage = fireBaseCharacterData.criDmg,
-            cooldownReduction = fireBaseCharacterData.coolRed,
-            healthPerLevel = fireBaseCharacterData.hPperLv,
-            attackPerLevel = fireBaseCharacterData.atkperLv,
-        };
-
-        playerPosition = GameObject.Find("SpawnPosition").transform;
-        int playerNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-
-        Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
-
-
-        GameObject playerObj = null;
-        switch (FirebaseManager.Instance.currentCharacterData.classType)
-        {
-            case ClassType.Warrior:
-                playerObj = PhotonNetwork.Instantiate("Warrior", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
-                playerObj.name = fireBaseCharacterData.nickName;
-                if (playerObj.TryGetComponent(out Warrior warrior))
-                {
-                    warrior.InitializeStatsPhoton(playerStats);
-                }
-                break;
-            case ClassType.Destroyer:
-                playerObj = PhotonNetwork.Instantiate("Destroyer", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
-                playerObj.name = playerStats.nickName;
-                if (playerObj.TryGetComponent(out Destroyer destroyer))
-                {
-                    destroyer.InitializeStatsPhoton(playerStats);
-                }
-                break;
-            case ClassType.Healer:
-                playerObj = PhotonNetwork.Instantiate("Healer", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
-                playerObj.name = playerStats.nickName;
-                if (playerObj.TryGetComponent(out Healer healer))
-                {
-                    healer.InitializeStatsPhoton(playerStats);
-                }
-                break;
-            case ClassType.Mage:
-                playerObj = PhotonNetwork.Instantiate("Mage", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
-                playerObj.name = playerStats.nickName;
-                if (playerObj.TryGetComponent(out Mage mage))
-                {
-                    mage.InitializeStatsPhoton(playerStats);
-                }
-                break;
+            gameCoroutine = StartCoroutine(Game());
         }
-        UnitManager.Instance.players.Add(playerNumber, playerObj);
-        UnitManager.Instance.RequestPlayerSync();
+    }
 
-        if (false == PhotonNetwork.IsMasterClient)
+    private IEnumerator Game()
+    {
+        if (isGameCoroutineRunning) yield break;
+        isGameCoroutineRunning = true;
+
+        try 
         {
-            yield break;
-        }
+            yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
+            spawner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
+            riskUIController = (RiskUIController)FindAnyObjectByType(typeof(RiskUIController));
+            dungeonUIController = (DungeonUIController)FindAnyObjectByType(typeof(DungeonUIController));
+            riskUIController.gameObject.SetActive(false);
 
-        if (UnitManager.Instance.players.Count == PhotonNetwork.CurrentRoom.PlayerCount)
-            UnitManager.Instance.RequestPlayerSyncToRoomMembers();
-        else
+            FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
+
+            PlayerStats playerStats = new PlayerStats
+            {
+                nickName = fireBaseCharacterData.nickName,
+                level = fireBaseCharacterData.level,
+                maxExp = fireBaseCharacterData.maxExp,
+                currentExp = fireBaseCharacterData.currExp,
+                maxHealth = fireBaseCharacterData.maxHp,
+                currentHealth = fireBaseCharacterData.maxHp,
+                moveSpeed = fireBaseCharacterData.moveSpeed,
+                attackPower = fireBaseCharacterData.atk,
+                damageReduction = fireBaseCharacterData.dmgRed,
+                healthRegen = fireBaseCharacterData.hpReg,
+                regenInterval = fireBaseCharacterData.regInt,
+                criticalChance = fireBaseCharacterData.cri,
+                criticalDamage = fireBaseCharacterData.criDmg,
+                cooldownReduction = fireBaseCharacterData.coolRed,
+                healthPerLevel = fireBaseCharacterData.hPperLv,
+                attackPerLevel = fireBaseCharacterData.atkperLv,
+            };
+
+            playerPosition = GameObject.Find("SpawnPosition").transform;
+            int playerNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+
+            Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
+
+            GameObject playerObj = null;
+            switch (FirebaseManager.Instance.currentCharacterData.classType)
+            {
+                case ClassType.Warrior:
+                    playerObj = PhotonNetwork.Instantiate("Warrior", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
+                    playerObj.name = fireBaseCharacterData.nickName;
+                    if (playerObj.TryGetComponent(out Warrior warrior))
+                    {
+                        warrior.InitializeStatsPhoton(playerStats);
+                    }
+                    break;
+                case ClassType.Destroyer:
+                    playerObj = PhotonNetwork.Instantiate("Destroyer", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
+                    playerObj.name = playerStats.nickName;
+                    if (playerObj.TryGetComponent(out Destroyer destroyer))
+                    {
+                        destroyer.InitializeStatsPhoton(playerStats);
+                    }
+                    break;
+                case ClassType.Healer:
+                    playerObj = PhotonNetwork.Instantiate("Healer", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
+                    playerObj.name = playerStats.nickName;
+                    if (playerObj.TryGetComponent(out Healer healer))
+                    {
+                        healer.InitializeStatsPhoton(playerStats);
+                    }
+                    break;
+                case ClassType.Mage:
+                    playerObj = PhotonNetwork.Instantiate("Mage", playerPos, Quaternion.identity, 0, new object[] { playerStats.nickName });
+                    playerObj.name = playerStats.nickName;
+                    if (playerObj.TryGetComponent(out Mage mage))
+                    {
+                        mage.InitializeStatsPhoton(playerStats);
+                    }
+                    break;
+            }
+            UnitManager.Instance.players.Add(playerNumber, playerObj);
+            UnitManager.Instance.RequestPlayerSync();
+
+            if (false == PhotonNetwork.IsMasterClient)
+            {
+                StopGameCoroutine();
+                yield break;
+            }
+
+            if(UnitManager.Instance.players.Count == PhotonNetwork.CurrentRoom.PlayerCount)
+                UnitManager.Instance.RequestPlayerSyncToRoomMembers();
+            else
+            {
+                yield return new WaitUntil(() => { return UnitManager.Instance.players.Count == PhotonNetwork.CountOfPlayers; });
+                UnitManager.Instance.RequestPlayerSyncToRoomMembers();
+            }
+
+            remainingTime = startTime;
+            StartCoroutine(GameClock());
+
+            StartCoroutine(Dungeon());
+            StartCoroutine(UpdateTimer());
+
+            yield return new WaitUntil(() => !isGameRunning || isGameForceOver);
+            
+            PhotonNetwork.LoadLevel("TitleScene");
+            yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "TitleScene");
+            photonView.RPC("GameOverRPC", RpcTarget.All);
+        }
+        finally 
         {
-            yield return new WaitUntil(() => { return UnitManager.Instance.players.Count == PhotonNetwork.CountOfPlayers; });
-            UnitManager.Instance.RequestPlayerSyncToRoomMembers();
+            StopGameCoroutine();
         }
+    }
 
-        remainingTime = startTime; // ?곸궠???筌뤾퍓堉????蹂?뜟 ?貫?껆뵳??
-        StartCoroutine(GameClock());
-
-        StartCoroutine(Dungeon());
-        StartCoroutine(UpdateTimer());
-
-        yield return new WaitUntil(() => !isGameRunning);
-        // TODO : game over logic initiate
-        PhotonNetwork.LoadLevel("TitleScene");
-        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "TitleScene");
-        photonView.RPC("GameOverRPC", RpcTarget.All);
+    private void StopGameCoroutine()
+    {
+        if (gameCoroutine != null)
+        {
+            StopCoroutine(gameCoroutine);
+            gameCoroutine = null;
+        }
+        isGameCoroutineRunning = false;
     }
 
     private IEnumerator UpdateTimer()
@@ -277,13 +311,15 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
     }
 
-    public IEnumerator Dungeon() // Main LOOP
+    public IEnumerator Dungeon()
     {
-        while (isGameRunning)
+        while (isGameRunning && !isGameForceOver)
         {
             isWaveDone = false;
-            yield return StartCoroutine(spawner.MonsterSpwanCorutine());
-            // riskUI enable
+            if (spawner != null)
+            {
+                yield return StartCoroutine(spawner.MonsterSpwanCorutine());
+            }
             Debug.Log("All Wave Launched....");
 
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
@@ -291,7 +327,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             Debug.Log("All Monsters Dead || Time Out....");
             photonView.RPC("RiskUIActiveRPC", RpcTarget.All, true);
 
-            //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
 
             if (isGameForceOver)
@@ -312,6 +347,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         CalculateRewards(isSurrender);
         isWaveDone = true;
         isGameRunning = false;
+        isGameCoroutineRunning = false;
     }
 
     private void CalculateRewards(bool isSurrender)
@@ -394,11 +430,14 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         isGameRunning = true;
         isGamePaused = false;
         isGameForceOver = false;
+        isGameCoroutineRunning = true;
     }
 
     [PunRPC]
     private void GameOverRPC()
     {
+        StopGameCoroutine();
+        isGameCoroutineRunning = false;
         PhotonNetwork.LeaveRoom();
         chat.gameObject.SetActive(false);
         PanelManager.Instance?.PanelOpen("PartyListBoard");
@@ -419,4 +458,15 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         SyncAllPlayers();
     }
+
+    private void OnDisable()
+    {
+        StopGameCoroutine();
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopGameCoroutine();
+    }
+
 }
