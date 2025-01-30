@@ -39,7 +39,7 @@ public class EliteSkillCObjcect : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, targetPos) < 0.2f)
         {
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
         else
         {
@@ -55,11 +55,11 @@ public class EliteSkillCObjcect : MonoBehaviour
         {
             //other.gameObject.GetComponent<ITakedamage>().Takedamage(bulletDamage);
             Atk(other.gameObject, bulletDamage);
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
         else if (other.CompareTag("Wall"))
         {
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 

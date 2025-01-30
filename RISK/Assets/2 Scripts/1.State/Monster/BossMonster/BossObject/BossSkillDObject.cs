@@ -30,7 +30,7 @@ public class BossSkillDObject : MonoBehaviour
         // 이동 거리 확인
         if (Vector3.Distance(startPos, transform.position) >= moveDistance)
         {
-            Destroy(gameObject); // 이동 거리 도달 시 오브젝트 삭제
+            PhotonNetwork.Destroy(gameObject); // 이동 거리 도달 시 오브젝트 삭제
         }
     }
 
@@ -48,7 +48,7 @@ public class BossSkillDObject : MonoBehaviour
         {
             //other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
             Atk(other.gameObject, atkDamage);
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 

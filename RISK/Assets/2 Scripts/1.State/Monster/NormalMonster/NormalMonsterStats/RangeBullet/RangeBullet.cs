@@ -48,7 +48,7 @@ public class RangeBullet : MonoBehaviour
     private IEnumerator BulletLifeTime()
     {
         yield return new WaitForSeconds(lifeTime);
-        Destroy(this.gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -57,11 +57,11 @@ public class RangeBullet : MonoBehaviour
         {
             //other.gameObject.GetComponent<ITakedamage>().Takedamage(atkDamage);
             Atk(other.gameObject, atkDamage);
-            Destroy(this.gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
         else if (other.CompareTag("Wall"))
         {
-            Destroy(this.gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 

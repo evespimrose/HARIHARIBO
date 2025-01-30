@@ -49,7 +49,7 @@ public class BossSkillEObject : MonoBehaviour
             {
                 FireMissiles();
             }
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
         else
         {
@@ -110,11 +110,11 @@ public class BossSkillEObject : MonoBehaviour
             {
                 other.gameObject.GetComponent<PlayerDebuff>().Fire(bulletDamage, fireInterval, fireDuration); // 화상 데미지
             }
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
         else if (other.CompareTag("Wall"))
         {
-            Destroy(this.gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 

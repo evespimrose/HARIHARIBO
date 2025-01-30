@@ -32,7 +32,7 @@ public class BossSkillCObject : MonoBehaviour
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 10);
         if (Vector3.Distance(startPos, transform.position) >= moveDistance)
         {
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
@@ -75,7 +75,7 @@ public class BossSkillCObject : MonoBehaviour
         }
         else if (other.CompareTag("Wall"))
         {
-            Destroy(this.gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 

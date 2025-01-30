@@ -31,7 +31,7 @@ public class EliteSkillBObjcect : MonoBehaviour
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime * 2);
         if (Vector3.Distance(startPos, transform.position) >= moveDistance)
         {
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
@@ -74,7 +74,7 @@ public class EliteSkillBObjcect : MonoBehaviour
         }
         else if (other.CompareTag("Wall"))
         {
-            Destroy(this.gameObject);
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
 
