@@ -11827,6 +11827,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MonsterSpwan
       objectReference: {fileID: 0}
+    - target: {fileID: 8605495471719027381, guid: 6295a14f5f4c0c4438d921b984e87dba, type: 3}
+      propertyPath: sceneViewId
+      value: 980
+      objectReference: {fileID: 0}
     - target: {fileID: 9160253216166541495, guid: 6295a14f5f4c0c4438d921b984e87dba, type: 3}
       propertyPath: bossUI
       value: 
