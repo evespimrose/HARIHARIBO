@@ -49,7 +49,7 @@ public class StateHandler<T> where T : class
         if (owner is Monster monster)
         {
             if (PhotonNetwork.IsMasterClient) // ✅ 방장만 상태 변경 관리
-                monster.photonView.RPC("SyncStateChange", RpcTarget.All, stateType.ToString());
+                monster.photonView.RPC("SyncStateChange", RpcTarget.Others, stateType.ToString());
         }
     }
 
