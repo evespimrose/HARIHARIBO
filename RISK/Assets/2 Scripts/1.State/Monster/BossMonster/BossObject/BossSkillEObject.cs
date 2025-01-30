@@ -23,7 +23,7 @@ public class BossSkillEObject : MonoBehaviour
 
     public PhotonView photonView;
 
-    public void SetMissileProperties(float bulletDamage, float fireDamage, float fireInterval, float fireDuration)
+    public void SetMissileProperties(float bulletDamage, float fireDamage, float fireInterval, float fireDuration, PhotonView view)
     {
         this.bulletDamage = bulletDamage;
         this.fireDamage = fireDamage;
@@ -31,6 +31,7 @@ public class BossSkillEObject : MonoBehaviour
         this.fireDuration = fireDuration;
         missileSpeed = 15f;
         missileDistance = 20f;
+        photonView = view;
     }
 
     private void Update()

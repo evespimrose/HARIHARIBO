@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class NormalMonster : Monster
@@ -123,5 +124,15 @@ public class NormalMonster : Monster
     {
         base.DieStatChange();
         this.nMHandler.ChangeState(typeof(NormalMonsterDie));
+    }
+
+    [PunRPC]
+    public void SyncStateChange(string stateName, PhotonMessageInfo info)
+    {
+        Type stateType = Type.GetType(stateName);
+        if (stateType != null)
+        {
+            nMHandler.ChangeState(stateType);
+        }
     }
 }

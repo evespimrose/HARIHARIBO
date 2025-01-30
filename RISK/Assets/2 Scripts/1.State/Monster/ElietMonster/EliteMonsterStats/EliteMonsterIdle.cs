@@ -1,6 +1,8 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Type = System.Type;
 
 public class EliteMonsterIdle : BaseState<EliteMonster>
 {
@@ -14,29 +16,18 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
 
     public override void Update(EliteMonster monster)
     {
-        if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && monster.isAtk == false)
+        if (Vector3.Distance(monster.target.position, monster.transform.position) < monster.atkRange && !monster.isAtk)
         {
-            if (!monster.isAtk)
-            {
-            //공격으로 이동
             monster.AtkEnd();
-            int a = Random.Range(0, 3);
-                switch (a)
-                {
-                    case 0:
-                        monster.eMHandler.ChangeState(typeof(EliteMonsterSkillA));
-                        break;
-                    case 1:
-                        monster.eMHandler.ChangeState(typeof(EliteMonsterSkillB));
-                        break;
-                    case 2:
-                        monster.eMHandler.ChangeState(typeof(EliteMonsterSkillC));
-                        break;
-                }
-            }
-            else
+
+            // 스킬 랜덤 선택
+            Type selectedSkillType = GetRandomSkillType();
+
+            // 방장만 상태 변경 관리
+            if (PhotonNetwork.IsMasterClient)
             {
-                Debug.Log("공격범위지만 공격쿨타임임");
+                monster.eMHandler.ChangeState(selectedSkillType);
+                monster.photonView.RPC("SyncSkillStateChange", RpcTarget.All, selectedSkillType.ToString());
             }
         }
         else
@@ -48,5 +39,17 @@ public class EliteMonsterIdle : BaseState<EliteMonster>
     public override void Exit(EliteMonster monster)
     {
         Debug.Log("Idle퇴장");
+    }
+
+    private Type GetRandomSkillType()
+    {
+        // 랜덤으로 스킬 선택
+        switch (Random.Range(0, 3))
+        {
+            case 0: return typeof(EliteMonsterSkillA);
+            case 1: return typeof(EliteMonsterSkillB);
+            case 2: return typeof(EliteMonsterSkillC);
+            default: return null;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -109,5 +110,15 @@ public class StructureMonster : Monster
     public void DestroyMonster()
     {
         PhotonNetwork.Destroy(this.gameObject);
+    }
+
+    [PunRPC]
+    public void SyncStateChange(string stateName, PhotonMessageInfo info)
+    {
+        Type stateType = Type.GetType(stateName);
+        if (stateType != null)
+        {
+            sMHandler.ChangeState(stateType);
+        }
     }
 }

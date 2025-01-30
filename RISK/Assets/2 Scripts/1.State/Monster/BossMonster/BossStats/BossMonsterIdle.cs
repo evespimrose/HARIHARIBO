@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,11 +17,18 @@ public class BossMonsterIdle : BaseState<BossMonster>
 
     public override void Update(BossMonster monster)
     {
-        if (monster.isAction == false)
+        if (PhotonNetwork.IsMasterClient) // ✅ 방장만 공격 패턴 실행
         {
-            monster.action = monster.StartCoroutine(monster.AtkSet());
+            if (!monster.isAction)
+            {
+                monster.action = monster.StartCoroutine(monster.AtkSet());
+            }
+
+            if (monster.isChase)
+            {
+                monster.bMHandler.ChangeState(typeof(BossMonsterMove));
+            }
         }
-        if (monster.isChase) monster.bMHandler.ChangeState(typeof(BossMonsterMove));
         //monster.bMHandler.ChangeState(typeof(BossMonsterSkillE));
         //분류 1 : BossMonsterSkillA , BossMonsterSkillD , BossMonsterSkillE
         //분류 2 : BossMonsterSkillB , BossMonsterSkillC

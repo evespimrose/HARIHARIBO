@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Type = System.Type;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -215,55 +216,62 @@ public class BossMonster : Monster
         isAction = true;
         yield return null;
 
-        //怨듦꺽遺꾨쪟1 以묒뿉?섎굹?ㅽ뀒?댄듃濡?蹂??
-        AtkA();
+        if (PhotonNetwork.IsMasterClient) // ✅ 방장만 공격 실행 & 동기화
+        {
+            AtkA();
+            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillA");
+        }
 
-        yield return null;
         yield return new WaitUntil(() => isAtk == false);
         yield return null;
 
-        StartCoroutine(Chase());
-        yield return null;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(Chase());
+            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterMove");
+        }
+
         yield return new WaitUntil(() => isChase == false);
         yield return null;
 
-        //怨듦꺽遺꾨쪟2 以묒뿉?섎굹 ?ㅽ뀒?댄듃濡?蹂??
-        AtkB();
-        yield return null;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            AtkB();
+            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillB");
+        }
+
         yield return new WaitUntil(() => isAtk == false);
         yield return null;
 
-        Targeting();
-        yield return null;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Targeting();
+            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterTargeting");
+        }
 
-        StartCoroutine(Chase());
-        yield return null;
         yield return new WaitUntil(() => isChase == false);
         yield return null;
 
-        bMHandler.ChangeState(typeof(BossMonsterAtk));
-        yield return null;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            bMHandler.ChangeState(typeof(BossMonsterAtk));
+            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterAtk");
+        }
+
         yield return new WaitUntil(() => isAtk == false);
-        yield return null;
-
-        StartCoroutine(Chase());
-        yield return null;
-        yield return new WaitUntil(() => isChase == false);
-        yield return null;
-
-        //?대룞湲?以묒뿉?섎굹 ?ㅽ뀒?댄듃濡?蹂??
-        AtkC();
-        yield return null;
-        yield return new WaitUntil(() => isAtk == false);
-        yield return null;
-
-        StartCoroutine(Chase());
-        yield return null;
-        yield return new WaitUntil(() => isChase == false);
         yield return null;
 
         isAction = false;
-        yield return null;
+    }
+
+    [PunRPC]
+    public void SyncStateChange(string stateName, PhotonMessageInfo info)
+    {
+        Type stateType = Type.GetType(stateName);
+        if (stateType != null)
+        {
+            bMHandler.ChangeState(stateType);
+        }
     }
 
     protected void AtkA()

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -125,5 +126,15 @@ public class EliteMonster : Monster
     {
         base .DieStatChange();
         this.eMHandler.ChangeState(typeof(EliteMonsterDie));
+    }
+
+    [PunRPC]
+    public void SyncStateChange(string stateName, PhotonMessageInfo info)
+    {
+        Type stateType = Type.GetType(stateName);
+        if (stateType != null)
+        {
+            eMHandler.ChangeState(stateType);
+        }
     }
 }

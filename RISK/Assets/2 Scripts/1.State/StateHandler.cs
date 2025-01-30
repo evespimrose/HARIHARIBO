@@ -45,6 +45,12 @@ public class StateHandler<T> where T : class
             if (player.photonView.IsMine)
                 player.photonView.RPC("SyncStateChange", RpcTarget.Others, stateType.ToString());
         }
+
+        if (owner is Monster monster)
+        {
+            if (PhotonNetwork.IsMasterClient) // ✅ 방장만 상태 변경 관리
+                monster.photonView.RPC("SyncStateChange", RpcTarget.All, stateType.ToString());
+        }
     }
 
     public void RevertToPreviousState()
