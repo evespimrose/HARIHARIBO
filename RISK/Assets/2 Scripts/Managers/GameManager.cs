@@ -253,7 +253,9 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         yield return new WaitUntil(() => !isGameRunning);
         // TODO : game over logic initiate
-
+        PhotonNetwork.LoadLevel("TitleScene");
+        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "TitleScene");
+        photonView.RPC("GameOverRPC", RpcTarget.All);
     }
 
     private IEnumerator UpdateTimer()
@@ -387,6 +389,14 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         isGameRunning = true;
         isGamePaused = false;
         isGameForceOver = false;
+    }
+
+    [PunRPC]
+    private void GameOverRPC()
+    {
+        PhotonNetwork.LeaveRoom();
+        chat.gameObject.SetActive(false);
+        PanelManager.Instance?.PanelOpen("PartyListBoard");
     }
 
     public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)
