@@ -110,7 +110,7 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
 
     private IEnumerator WaitForUnitManagerAndInitialize()
     {
-        yield return new WaitUntil(() => UnitManager.Instance != null && UnitManager.Instance.players.Count > 0);
+        yield return new WaitUntil(() => UnitManager.Instance != null && UnitManager.Instance.players.Count >= PhotonNetwork.CurrentRoom.PlayerCount);
         InitializePartyUI();
     }
     public void InitializePartyUI()
