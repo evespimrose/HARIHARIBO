@@ -311,13 +311,6 @@ public abstract class Player : MonoBehaviourPun, ITakedamage, IPunObservable
         }
     }
 
-    [PunRPC]
-    private void NotifyPlayerRegistered(int actorNumber)
-    {
-        print("NotifyPlayerRegistered");
-        Debug.Log($"Player {actorNumber} has been registered to all clients");
-    }
-
     // ✅ 공격 처리 함수 (화살 등은 PhotonView 필요 없음)
     public void Atk(GameObject target, float damage)
     {

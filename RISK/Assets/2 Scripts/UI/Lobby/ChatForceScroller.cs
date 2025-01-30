@@ -64,7 +64,7 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
         else
             hideText.text = "-";
 
-        gameObject.SetActive(!gameObject.activeSelf);
+        Users.SetActive(!gameObject.activeSelf);
     }
 
     private void OnSendButtonClick()
