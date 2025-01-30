@@ -48758,7 +48758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3248797422282132254, guid: 9f97c408ecb4d294c9804d5de69c4d53, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 19604.11
+      value: 19604.115
       objectReference: {fileID: 0}
     - target: {fileID: 3949639182440948591, guid: 9f97c408ecb4d294c9804d5de69c4d53, type: 3}
       propertyPath: m_fontAsset

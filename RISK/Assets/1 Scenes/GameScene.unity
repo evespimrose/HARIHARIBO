@@ -8588,6 +8588,7 @@ MonoBehaviour:
   partyHPBars: []
   playerHPBar: {fileID: 1038868673}
   joystickUI: {fileID: 1751751531}
+  playerNameText: {fileID: 822908909}
   combatPanel: {fileID: 735712325}
   basicAttackButton: {fileID: 1922815586}
   skillButtons:
