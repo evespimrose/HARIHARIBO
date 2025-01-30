@@ -170,10 +170,10 @@ public class Monster : MonoBehaviour, ITakedamage
         if (!PhotonNetwork.IsMasterClient) return;
         GameSoundManager.Instance.PlayMonsterEffectSound(hitSoundClips);
         curHp -= Mathf.RoundToInt(damage);
-        photonView.RPC("SyncHealth", RpcTarget.Others, curHp);
+        photonView.RPC("SyncHealth", RpcTarget.All, curHp);
         if (curHp <= 0 && !isDie)
         {
-            photonView.RPC("DieStatChange", RpcTarget.Others);
+            photonView.RPC("DieStatChange", RpcTarget.All);
         }
     }
 

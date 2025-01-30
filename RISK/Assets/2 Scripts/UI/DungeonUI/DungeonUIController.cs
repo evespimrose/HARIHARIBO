@@ -462,6 +462,7 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
                     stream.SendNext(member.Key); // 플레이어 이름
                     stream.SendNext(healthRatio); // HP 비율
                     stream.SendNext((int)member.Value.Player.ClassType); // 클래스 타입
+                    stream.SendNext(timerText.text);
                 }
             }
         }
@@ -474,6 +475,8 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
                 string playerName = (string)stream.ReceiveNext();
                 float healthRatio = (float)stream.ReceiveNext();
                 ClassType classType = (ClassType)stream.ReceiveNext();
+                syncedTimerText = (string)stream.ReceiveNext();
+
 
                 syncedPartyData[playerName] = new PartyMemberData
                 {
@@ -483,6 +486,7 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
                 };
             }
             UpdatePartyMembersFromSyncedData();
+            UpdateTimerText(syncedTimerText);
         }
     }
     private void UpdatePartyMembersFromSyncedData()

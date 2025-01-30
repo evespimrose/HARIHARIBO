@@ -77,6 +77,8 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     private IEnumerator GameClock()
     {
         isTickGoes = true;
+        remainingTime = startTime;
+
         while (remainingTime > 0)
         {
             if (isTickGoes && !isGamePaused)
@@ -264,7 +266,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
                 UnitManager.Instance.RequestPlayerSyncToRoomMembers();
             }
 
-            remainingTime = startTime;
             StartCoroutine(GameClock());
 
             StartCoroutine(Dungeon());
