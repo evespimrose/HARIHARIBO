@@ -65,7 +65,14 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
 
     private void OnQuitButtonClick()
     {
+        StartCoroutine(QuitCoroutine());
+    }
+
+    private IEnumerator QuitCoroutine()
+    {
         PhotonNetwork.LeaveRoom();
+
+        yield return new WaitUntil(()=>  PhotonNetwork.InLobby);
 
         PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Party Quit", "SuccessFully Left Party.", () => { OnCloseButtonClick(); PanelManager.Instance.PopupClose(); });
     }
