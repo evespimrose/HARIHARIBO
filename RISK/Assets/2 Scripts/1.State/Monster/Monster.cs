@@ -170,15 +170,15 @@ public class Monster : MonoBehaviour, ITakedamage
         if (!PhotonNetwork.IsMasterClient) return;
         GameSoundManager.Instance.PlayMonsterEffectSound(hitSoundClips);
         curHp -= Mathf.RoundToInt(damage);
-        photonView.RPC("SyncHealth", RpcTarget.All, curHp);
+        photonView.RPC("SyncHealth", RpcTarget.Others, curHp);
         if (curHp <= 0 && !isDie)
         {
-            photonView.RPC("DieStatChange", RpcTarget.All);
+            photonView.RPC("DieStatChange", RpcTarget.Others);
         }
     }
 
     [PunRPC]
-    public void SyncHealth(int newHp)
+    public void SyncHealth(float newHp)
     {
         curHp = newHp;
     }
