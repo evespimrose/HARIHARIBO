@@ -125,15 +125,34 @@ public class Monster : MonoBehaviour, ITakedamage
 
     public void Targeting()
     {
+        if (!PhotonNetwork.IsMasterClient) return; // 방장만 실행
+
+        Transform newTarget = null;
+
         foreach (var tr in UnitManager.Instance.players)
         {
-            if (target == null) target = tr.Value.transform;
-            else if (target != null &&
-                (Vector3.Distance(target.position, transform.position)
-                < Vector3.Distance(tr.Value.transform.position, transform.position)))
+            if (newTarget == null) newTarget = tr.Value.transform;
+            else if (Vector3.Distance(newTarget.position, transform.position)
+                < Vector3.Distance(tr.Value.transform.position, transform.position))
             {
-                target = tr.Value.transform;
+                newTarget = tr.Value.transform;
             }
+        }
+
+        if (newTarget != null)
+        {
+            target = newTarget;
+            photonView.RPC("SyncTarget", RpcTarget.Others, target.GetComponent<PhotonView>().ViewID);
+        }
+    }
+
+    [PunRPC]
+    void SyncTarget(int targetViewID)
+    {
+        PhotonView targetPhotonView = PhotonView.Find(targetViewID);
+        if (targetPhotonView != null)
+        {
+            target = targetPhotonView.transform;
         }
     }
 

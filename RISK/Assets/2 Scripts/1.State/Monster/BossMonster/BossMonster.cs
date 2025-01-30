@@ -215,53 +215,55 @@ public class BossMonster : Monster
     {
         isAction = true;
         yield return null;
-
         if (PhotonNetwork.IsMasterClient) // ✅ 방장만 공격 실행 & 동기화
         {
             AtkA();
-            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillA");
         }
-
         yield return new WaitUntil(() => isAtk == false);
-        yield return null;
-
         if (PhotonNetwork.IsMasterClient)
         {
             StartCoroutine(Chase());
-            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterMove");
+            photonView.RPC("StartChase", RpcTarget.All);
         }
-
         yield return new WaitUntil(() => isChase == false);
-        yield return null;
 
+        yield return null;
         if (PhotonNetwork.IsMasterClient)
         {
             AtkB();
-            photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillB");
         }
-
         yield return new WaitUntil(() => isAtk == false);
-        yield return null;
-
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(Chase());
+            photonView.RPC("StartChase", RpcTarget.All);
+        }
+        yield return new WaitUntil(() => isChase == false);
         if (PhotonNetwork.IsMasterClient)
         {
             Targeting();
             photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterTargeting");
         }
-
-        yield return new WaitUntil(() => isChase == false);
-        yield return null;
-
         if (PhotonNetwork.IsMasterClient)
         {
             bMHandler.ChangeState(typeof(BossMonsterAtk));
             photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterAtk");
         }
-
         yield return new WaitUntil(() => isAtk == false);
-        yield return null;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(Chase());
+            photonView.RPC("StartChase", RpcTarget.All);
+        }
+        yield return new WaitUntil(() => isChase == false);
 
         isAction = false;
+    }
+
+    [PunRPC]
+    public void StartChase()
+    {
+        StartCoroutine(Chase());
     }
 
     [PunRPC]
@@ -281,12 +283,15 @@ public class BossMonster : Monster
         {
             case 0:
                 bMHandler.ChangeState(typeof(BossMonsterSkillA));
+                photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillA");
                 break;
             case 1:
                 bMHandler.ChangeState(typeof(BossMonsterSkillD));
+                photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillD");
                 break;
             case 2:
                 bMHandler.ChangeState(typeof(BossMonsterSkillE));
+                photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillE");
                 break;
         }
     }
@@ -298,9 +303,11 @@ public class BossMonster : Monster
         {
             case 0:
                 bMHandler.ChangeState(typeof(BossMonsterSkillB));
+                photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillB");
                 break;
             case 1:
                 bMHandler.ChangeState(typeof(BossMonsterSkillC));
+                photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillC");
                 break;
         }
     }
@@ -312,9 +319,11 @@ public class BossMonster : Monster
         {
             case 0:
                 bMHandler.ChangeState(typeof(BossMonsterSkillF));
+                photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillF");
                 break;
             case 1:
                 bMHandler.ChangeState(typeof(BossMonsterSkillG));
+                photonView.RPC("SyncStateChange", RpcTarget.All, "BossMonsterSkillG");
                 break;
         }
     }
