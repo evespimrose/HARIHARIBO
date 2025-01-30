@@ -237,32 +237,12 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield break;
         }
 
-        //UnitManager.Instance.players.Clear();
-
-        //foreach (var player in PhotonNetwork.CurrentRoom.Players)
-        //{
-        //    string name = player.Value.NickName;
-        //    print($"{player.Key}, {name}, isMasterClient : {player.Value.IsMasterClient}");
-
-        //    if(player.Value.IsMasterClient)
-        //    {
-        //        UnitManager.Instance.players.Add(player.Value.ActorNumber, GameObject.Find(name));
-
-        //        print($"{player.Value.ActorNumber} : {UnitManager.Instance.players[player.Value.ActorNumber].name}");
-        //    }
-        //    else
-        //    {
-        //        PlayerStats playerStat = JsonConvert.DeserializeObject<PlayerStats>(name);
-        //        UnitManager.Instance.players.Add(player.Value.ActorNumber, GameObject.Find(playerStat.nickName));
-        //        print($"{player.Value.ActorNumber} : {UnitManager.Instance.players[player.Value.ActorNumber].name}");
-
-        //    }
-        //}
-
-        foreach (var player in UnitManager.Instance.players)
+        if(UnitManager.Instance.players.Count == PhotonNetwork.CurrentRoom.PlayerCount)
+            UnitManager.Instance.RequestPlayerSyncToRoomMembers();
+        else
         {
-            if(player.Value.TryGetComponent(out Player playerComponent))
-                print($"{playerComponent.Stats.nickName}, {playerComponent.Stats.damageReduction}");
+            yield return new WaitUntil(() => { return UnitManager.Instance.players.Count == PhotonNetwork.CountOfPlayers; });
+            UnitManager.Instance.RequestPlayerSyncToRoomMembers();
         }
 
         remainingTime = startTime; // ?곸궠???筌뤾퍓堉????蹂?뜟 ?貫?껆뵳??

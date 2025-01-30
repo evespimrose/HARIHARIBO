@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -36,7 +37,21 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
         {
             if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView pView))
             {
-                photonView.RPC("SyncPlayer", PhotonNetwork.MasterClient,
+                photonView.RPC("SyncPlayer", RpcTarget.MasterClient,
+                    pView.ViewID,
+                    pView.Owner.ActorNumber,
+                    playerPair.Value.name);
+            }
+        }
+    }
+
+    public void RequestPlayerSyncToRoomMembers()
+    {
+        foreach (var playerPair in players)
+        {
+            if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView pView))
+            {
+                photonView.RPC("SyncPlayer", RpcTarget.Others,
                     pView.ViewID,
                     pView.Owner.ActorNumber,
                     playerPair.Value.name);
@@ -87,12 +102,8 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
 
                 if (photonView.IsMine)
                 {
-                    print($"RegisterPlayer - RegisterLocalPlayer : {actorNumber}");
                     LocalPlayer = player;
                 }
-
-                // Player??PhotonView?????퉸 RPC ?紐꾪뀱
-                photonView.RPC("NotifyPlayerRegistered", RpcTarget.All, actorNumber);
             }
         }
         else
