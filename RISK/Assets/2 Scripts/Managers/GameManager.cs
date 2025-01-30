@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield break;
         }
 
-        if(UnitManager.Instance.players.Count == PhotonNetwork.CurrentRoom.PlayerCount)
+        if (UnitManager.Instance.players.Count == PhotonNetwork.CurrentRoom.PlayerCount)
             UnitManager.Instance.RequestPlayerSyncToRoomMembers();
         else
         {
@@ -253,7 +253,9 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         yield return new WaitUntil(() => !isGameRunning);
         // TODO : game over logic initiate
-
+        PhotonNetwork.LoadLevel("TitleScene");
+        yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "TitleScene");
+        photonView.RPC("GameOverRPC", RpcTarget.All);
     }
 
     private IEnumerator UpdateTimer()
@@ -287,7 +289,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
             Debug.Log("All Monsters Dead || Time Out....");
-            riskUIController.gameObject.SetActive(true);
+            photonView.RPC("RiskUIActiveRPC", RpcTarget.All, true);
 
             //
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
@@ -299,6 +301,11 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
     }
 
+    [PunRPC]
+    private void RiskUIActiveRPC(bool isActive)
+    {
+        riskUIController.gameObject.SetActive(isActive);
+    }
 
     public void ProcessGameOver(bool isSurrender)
     {
@@ -387,6 +394,14 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         isGameRunning = true;
         isGamePaused = false;
         isGameForceOver = false;
+    }
+
+    [PunRPC]
+    private void GameOverRPC()
+    {
+        PhotonNetwork.LeaveRoom();
+        chat.gameObject.SetActive(false);
+        PanelManager.Instance?.PanelOpen("PartyListBoard");
     }
 
     public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)

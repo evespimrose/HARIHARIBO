@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using HashTable = ExitGames.Client.Photon.Hashtable;
+using Photon.Pun.UtilityScripts;
 
 
 public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
@@ -15,6 +16,8 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI classText;
     [SerializeField] private Image partyLeaderIcon;
     [SerializeField] private Image memberImage;
+    [SerializeField] private Button fireButton;
+
 
     private PhotonRealtimePlayer player;
     private PlayerStats playerStats;
@@ -28,6 +31,8 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
     public void Initialize(FireBaseCharacterData partyMember)
     {
         UpdateUI(partyMember);
+        fireButton.onClick.RemoveAllListeners();
+        fireButton.onClick.AddListener(FireButtonOnClick);
     }
 
     private void Start()
@@ -62,5 +67,34 @@ public class PartyMemberInfoUI : MonoBehaviourPunCallbacks
         Sprite classImage;
         classImage = GameManager.Instance.characterDataDic[fireBaseCharacterData.classType].headSprite;
         return classImage;
+    }
+
+    private void FireButtonOnClick()
+    {
+        if (player != null && PhotonNetwork.IsMasterClient)
+        {
+            if (PartyManager.Instance.IsPartyLeader(PhotonNetwork.LocalPlayer))
+            {
+                if (player != PhotonNetwork.LocalPlayer)
+                {
+                    PhotonManager.Instance.photonView?.RPC("KickPlayerRPC", PhotonNetwork.CurrentRoom.GetPlayer(player.ActorNumber));
+                }
+                else
+                {
+                    PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "You cannot kick yourself.");
+                }
+            }
+            else
+            {
+                PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "Only party leader can kick members.");
+            }
+        }
+    }
+
+    public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+        if(player == otherPlayer)
+            DestroyImmediate(gameObject);
     }
 }

@@ -334,6 +334,13 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         }
     }
 
+    [PunRPC]
+    public void KickPlayerRPC()
+    {
+        PhotonNetwork.LeaveRoom();
+        PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Notice", "You have been kicked from the party.");
+    }
+
     public override void OnRoomPropertiesUpdate(HashTable propertiesThatChanged)
     {
 

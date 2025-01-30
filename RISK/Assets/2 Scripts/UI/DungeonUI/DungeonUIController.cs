@@ -13,6 +13,7 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
     [SerializeField] private Image[] partyHPBars;
     [SerializeField] private Image playerHPBar;
     [SerializeField] private GameObject joystickUI;
+    [SerializeField] private TMP_Text playerNameText;
 
     [Header("Combat UI")]
     [SerializeField] private GameObject combatPanel;
@@ -97,6 +98,14 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
         {
             float healthRatio = player.Stats.currentHealth / player.Stats.maxHealth;
             UpdatePlayerInfo(healthRatio);
+            if (playerNameText != null && UnitManager.Instance != null)
+            {
+                if (UnitManager.Instance.LocalPlayer != null)
+                {
+                    string playerName = UnitManager.Instance.LocalPlayer.name;
+                    playerNameText.text = playerName;
+                }
+            }
             InitializePartyUI();
         }
     }

@@ -181,7 +181,7 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         // TODO: ??ルㅎ臾???洹먮봾裕????節뗪땁 ??⑤챷???β돦裕뉐퐲???뚮뿭寃??熬곣뫗??
         ApplyRiskEffect(selectedRisk);
 
-        gameObject.SetActive(false);
+        GameManager.Instance.photonView.RPC("RiskUIActiveRPC", RpcTarget.All, false);
 
         if (PhotonNetwork.IsMasterClient)
         {
