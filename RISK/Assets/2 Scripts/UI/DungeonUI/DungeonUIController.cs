@@ -97,7 +97,21 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
         {
             float healthRatio = player.Stats.currentHealth / player.Stats.maxHealth;
             UpdatePlayerInfo(healthRatio);
+            InitializePartyUI();
         }
+    }
+    private void OnEnable()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            StartCoroutine(WaitForUnitManagerAndInitialize());
+        }
+    }
+
+    private IEnumerator WaitForUnitManagerAndInitialize()
+    {
+        yield return new WaitUntil(() => UnitManager.Instance != null && UnitManager.Instance.players.Count > 0);
+        InitializePartyUI();
     }
     public void InitializePartyUI()
     {
