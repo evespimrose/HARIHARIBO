@@ -49,6 +49,7 @@ public class MonsterSpwan : MonoBehaviour
     public Vector3 center;
 
     private Vector3 bossSpawnPoint = Vector3.zero; //Boss Monster Spwan Point
+    public PhotonView photonView;
 
     //Spawn Table Set
     private Dictionary<(int wave, int inWave), (int meleeCount, int rangeCount, int eliteCount, int bossCount, int structureCount)> spawnSettings = new Dictionary<(int wave, int inWave), (int, int, int, int, int)>
@@ -91,6 +92,7 @@ public class MonsterSpwan : MonoBehaviour
     {
         center = transform.position;
         bossSpawnPoint = new Vector3(0f, 0f, 20f);
+        photonView = GetComponent<PhotonView>();
     }
 
     void Start()
@@ -253,11 +255,30 @@ public class MonsterSpwan : MonoBehaviour
     public GameObject StructureMonsterCreate(Vector3 spwanPos) => PhotonNetwork.Instantiate(structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].name, spwanPos, structureMonsterPrefab[Random.Range(0, eliteMonsterPrefab.Count)].transform.rotation);
     public GameObject BossMonsterCreate(Vector3 spawnPos)
     {
+        // 보스 몬스터 생성
         GameObject bossMonster = PhotonNetwork.Instantiate(bossMonsterPrefab.name, spawnPos, Quaternion.identity);
 
-        bossUI.gameObject.SetActive(true);
-        bossUI.bossMonster = bossMonster.GetComponent<BossMonster>();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // 보스 UI 활성화 - 마스터 클라이언트에서만 한 번 호출되도록
+            photonView.RPC("ActivateBossUI", RpcTarget.All, bossMonster.GetComponent<PhotonView>().ViewID);
+        }
 
         return bossMonster;
+    }
+
+    [PunRPC]
+    public void ActivateBossUI(int bossViewID)
+    {
+        // 보스 몬스터의 PhotonView를 찾아 UI를 활성화
+        GameObject bossObject = PhotonView.Find(bossViewID).gameObject;
+        BossMonster bossMonster = bossObject.GetComponent<BossMonster>();
+
+        // UI 연결 및 활성화
+        bossUI.gameObject.SetActive(true);
+        bossUI.bossMonster = bossMonster;
+
+        // 이름 설정
+        bossUI.bossName.text = bossMonster.bossName;
     }
 }
