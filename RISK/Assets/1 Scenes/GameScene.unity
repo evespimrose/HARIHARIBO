@@ -8588,6 +8588,7 @@ MonoBehaviour:
   partyHPBars: []
   playerHPBar: {fileID: 1038868673}
   joystickUI: {fileID: 1751751531}
+  playerNameText: {fileID: 822908909}
   combatPanel: {fileID: 735712325}
   basicAttackButton: {fileID: 1922815586}
   skillButtons:
@@ -11826,6 +11827,10 @@ PrefabInstance:
     - target: {fileID: 7229919873533714608, guid: 6295a14f5f4c0c4438d921b984e87dba, type: 3}
       propertyPath: m_Name
       value: MonsterSpwan
+      objectReference: {fileID: 0}
+    - target: {fileID: 8605495471719027381, guid: 6295a14f5f4c0c4438d921b984e87dba, type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9160253216166541495, guid: 6295a14f5f4c0c4438d921b984e87dba, type: 3}
       propertyPath: bossUI
