@@ -125,7 +125,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        print("OnRoomListUpdate?????");
         currentRoomInfoList = roomList;
         partyListBoard.UpdateRoomList(roomList);
     }

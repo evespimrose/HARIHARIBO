@@ -41,7 +41,7 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnRefreshButtonClick()
     {
-        //UpdateRoomList(PanelManager.Instance.currentRoomInfoList);
+        
     }
 
     private void OnCreateButtonClick()
