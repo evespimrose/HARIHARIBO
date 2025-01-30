@@ -87,6 +87,8 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
         {
             float healthRatio = localPlayer.Stats.currentHealth / localPlayer.Stats.maxHealth;
             UpdatePlayerInfo(healthRatio);
+            if (string.IsNullOrEmpty(playerNameText.text))
+                playerNameText.text = localPlayer.Stats.nickName;
 
             UpdatePartyMembersHP();
         }
@@ -98,14 +100,6 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
         {
             float healthRatio = player.Stats.currentHealth / player.Stats.maxHealth;
             UpdatePlayerInfo(healthRatio);
-            if (playerNameText != null && UnitManager.Instance != null)
-            {
-                if (UnitManager.Instance.LocalPlayer != null)
-                {
-                    string playerName = UnitManager.Instance.LocalPlayer.name;
-                    playerNameText.text = playerName;
-                }
-            }
             InitializePartyUI();
         }
     }
