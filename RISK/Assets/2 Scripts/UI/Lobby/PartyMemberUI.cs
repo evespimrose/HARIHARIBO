@@ -25,7 +25,12 @@ public class PartyMemberUI : MonoBehaviourPunCallbacks
         if (false == PhotonNetwork.IsMasterClient) return;
         else
         {
-            GameManager.Instance.photonView.RPC("SetGameReady", RpcTarget.All);
+            ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+
+            customProperties["IsPlaying"] = true;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(customProperties);
+
+            PhotonRequest.Instance.SetGameReady();
             PhotonNetwork.LoadLevel("GameScene");
         }
     }

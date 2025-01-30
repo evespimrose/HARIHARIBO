@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,22 +20,31 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private List<RoomInfo> currentRoomList = new List<RoomInfo>();
 
-    private void Awake()
-    {
-        refreshButton.onClick.AddListener(OnRefreshButtonClick);
-        createButton.onClick.AddListener(OnCreateButtonClick);
-        closeButton.onClick.AddListener(OnCloseButtonClick);
-        partyMemberUIOpenButton.onClick.AddListener(OnPartyMemberUIOpenButtonClick);
-        upgadeButton.onClick.AddListener(CharacterUpgradeOpen);
-    }
-
     private void OnPartyMemberUIOpenButtonClick()
     {
         PanelManager.Instance.PanelOpen("PartyMember");
     }
 
-    private void Update()
+    public override void OnEnable()
     {
+        base.OnEnable();
+        refreshButton.onClick.AddListener(OnRefreshButtonClick);
+        createButton.onClick.AddListener(OnCreateButtonClick);
+        closeButton.onClick.AddListener(OnCloseButtonClick);
+        partyMemberUIOpenButton.onClick.AddListener(OnPartyMemberUIOpenButtonClick);
+        upgadeButton.onClick.AddListener(CharacterUpgradeOpen);
+
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        refreshButton.onClick.RemoveAllListeners();
+        createButton.onClick.RemoveAllListeners();
+        closeButton.onClick.RemoveAllListeners();
+        partyMemberUIOpenButton.onClick.RemoveAllListeners();
+        upgadeButton.onClick.RemoveAllListeners();
+        UpdateRoomList(currentRoomList);
     }
 
     private void OnRefreshButtonClick()
@@ -51,11 +61,6 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
     {
     }
 
-    public override void OnEnable()
-    {
-        base.OnEnable();
-    }
-
     public void UpdateRoomList(List<RoomInfo> roomList)
     {
 
@@ -66,10 +71,34 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
         foreach (RoomInfo roomInfo in roomList)
         {
+            if (roomInfo.CustomProperties.TryGetValue("IsPlaying", out object isPlaying) && (bool)isPlaying)
+                continue;
+
             AddRoomButton(roomInfo);
         }
 
         currentRoomList = roomList;
+
+    }
+
+    public void UpdateRoomList()
+    {
+        currentRoomList.Clear();
+
+        foreach (Transform child in partyListContainer)
+        {
+            DestroyImmediate(child.gameObject);
+        }
+
+        foreach (RoomInfo roomInfo in PanelManager.Instance.currentRoomInfoList)
+        {
+            if (roomInfo.CustomProperties.TryGetValue("IsPlaying", out object isPlaying) && (bool)isPlaying)
+                continue;
+
+            AddRoomButton(roomInfo);
+        }
+
+        currentRoomList = PanelManager.Instance.currentRoomInfoList;
 
     }
 

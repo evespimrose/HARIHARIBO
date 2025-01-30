@@ -114,7 +114,7 @@ public class ClassNameToCharacterData
 public class FireBaseUserData
 {
     public string userId { get; set; }
-    public int won;
+    public float won;
 
     public FireBaseUserData() { }
     public FireBaseUserData(string userId)
@@ -122,7 +122,7 @@ public class FireBaseUserData
         this.userId = userId;
         won = 2000000000;
     }
-    public FireBaseUserData(string userId, int won)
+    public FireBaseUserData(string userId, float won)
     {
         this.userId = userId;
         this.won = won;

@@ -42,7 +42,7 @@ public class PartyInfo
 public class PhotonManager : PhotonSingletonManager<PhotonManager>
 {
     private const string PARTY_LIST_KEY = "PartyList";
-
+    
     public string roomInfoText;
     public string playerInfoText;
     public List<PartyInfo> partyRoomInfoList = new List<PartyInfo>();
@@ -272,14 +272,6 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             playerInfoText += $"Player: {player.NickName}, ID: {player.ActorNumber}\n";
         }
     }
-
-
-
-    //public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    //{
-
-    //}
-
     public override void OnCreatedRoom()
     {
         //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("RoomType")
@@ -317,6 +309,10 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
             print("StartCoroutine : CollectPlayerData");
             StartCoroutine(GameManager.Instance.CollectPlayerData(newPlayer));
         }
+
+        FireBaseCharacterData data = JsonConvert.DeserializeObject<FireBaseCharacterData>(newPlayer.NickName);
+        string msg = string.Format("<color=#00ff00>[{0}] joined room.</color>", data.nickName);
+        ChatScrollController.Instance.AddMessage(msg);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -332,6 +328,10 @@ public class PhotonManager : PhotonSingletonManager<PhotonManager>
         {
             GameManager.Instance.RemovePlayerData(otherPlayer);
         }
+
+        FireBaseCharacterData data = JsonConvert.DeserializeObject<FireBaseCharacterData>(otherPlayer.NickName);
+        string msg = string.Format("<color=#ff0000>[{0}] left room.</color>", data.nickName);
+        ChatScrollController.Instance.AddMessage(msg);
     }
 
     [PunRPC]

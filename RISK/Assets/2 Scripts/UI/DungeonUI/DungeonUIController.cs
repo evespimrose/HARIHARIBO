@@ -103,6 +103,16 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
             InitializePartyUI();
         }
     }
+    public void SetSkillPanelsActive(bool active)
+    {
+#if UNITY_ANDROID
+        if (combatPanel != null)
+            combatPanel.SetActive(active);
+#else
+        if (pcSkillPanel != null)
+            pcSkillPanel.SetActive(active);
+#endif
+    }
     private void OnEnable()
     {
         if (PhotonNetwork.IsConnected)

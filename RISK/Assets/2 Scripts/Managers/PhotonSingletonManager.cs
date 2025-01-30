@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PhotonSingletonManager<T> : MonoBehaviourPunCallbacks where T : MonoBehaviourPunCallbacks
 {
@@ -18,6 +19,14 @@ public class PhotonSingletonManager<T> : MonoBehaviourPunCallbacks where T : Mon
         else
         {
             DestroyImmediate(gameObject);
+        }
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (instance == this)
+        {
+            instance = null;
         }
     }
 }

@@ -11,15 +11,6 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
 {
     protected override void Awake()
     {
-        // PhotonView揶쎛 ?醫???롫즲嚥?base.Awake() ?紐꾪뀱 ?袁⑸퓠 ?類ㅼ뵥
-        if (Instance != null && Instance != this)
-        {
-            // 疫꿸퀣??PhotonView??ViewID????덉쨮??揶쏆빘猿쒏에??袁⑤뼎
-            if (Instance.photonView != null && photonView != null)
-            {
-                photonView.ViewID = Instance.photonView.ViewID;
-            }
-        }
         base.Awake();
     }
 
@@ -29,32 +20,31 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
 
     [SerializeField] public int playersCount;
     public List<GameObject> playerobjects = new List<GameObject>();
-
+    
 
     public void RequestPlayerSync()
     {
-        foreach (var playerPair in players)
+        var playersCopy = new Dictionary<int, GameObject>(players);
+        
+        foreach (var playerPair in playersCopy)
         {
             if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView pView))
             {
-                photonView.RPC("SyncPlayer", RpcTarget.MasterClient,
-                    pView.ViewID,
-                    pView.Owner.ActorNumber,
-                    playerPair.Value.name);
+                print("RequestPlayerSync()?");
+                PhotonRequest.Instance.RequestPlayerSync(pView.ViewID, pView.Owner.ActorNumber, playerPair.Value.name);
             }
         }
     }
 
     public void RequestPlayerSyncToRoomMembers()
     {
-        foreach (var playerPair in players)
+        var playersCopy = new Dictionary<int, GameObject>(players);
+
+        foreach (var playerPair in playersCopy)
         {
             if (playerPair.Value != null && playerPair.Value.TryGetComponent(out PhotonView pView))
             {
-                photonView.RPC("SyncPlayer", RpcTarget.Others,
-                    pView.ViewID,
-                    pView.Owner.ActorNumber,
-                    playerPair.Value.name);
+                PhotonRequest.Instance.RequestPlayerSync(pView.ViewID, pView.Owner.ActorNumber, playerPair.Value.name);
             }
         }
     }
@@ -67,23 +57,6 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
             {
                 //monster.gameObject.GetComponent<ITakedamage>().Takedamage(2000000);
                 Atk(monster.gameObject, 2000000);
-            }
-        }
-    }
-
-    [PunRPC]
-    private void SyncPlayer(int viewId, int actorNumber, string playerName)
-    {
-        print("SyncPlayer");
-        PhotonView targetView = PhotonView.Find(viewId);
-        if (targetView != null)
-        {
-            GameObject playerObj = targetView.gameObject;
-            playerObj.name = playerName;
-
-            if (!HasPlayer(actorNumber))
-            {
-                RegisterPlayer(playerObj);
             }
         }
     }
@@ -136,7 +109,7 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
     public void Atk(GameObject target, float damage)
     {
         // 공격 시 자신이 가진 PhotonView를 사용해서 RPC 호출
-        if (photonView != null && target != null)
+        if (target != null)
         {
             PhotonView targetView = target.GetComponent<PhotonView>();
             if (targetView != null)
@@ -146,7 +119,7 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
                 if (PhotonNetwork.IsMasterClient) // ✅ 파티장만 데미지 계산
                 {
                     // 파티장에서만 RPC 호출해서 데미지 전파
-                    photonView.RPC("ApplyDamageRPC", RpcTarget.All, targetID, damage);
+                    PhotonRequest.Instance.ApplyDamage(targetID, damage);
                 }
             }
         }
@@ -163,17 +136,6 @@ public class UnitManager : PhotonSingletonManager<UnitManager>
                 i.Value.TryGetComponent(out Player player);
                 playerobjects.Add(player.gameObject);
             }
-        }
-    }
-
-    [PunRPC]
-    protected void ApplyDamageRPC(int targetID, float damage)
-    {
-        // 타겟을 찾아서 데미지 적용
-        PhotonView targetView = PhotonView.Find(targetID);
-        if (targetView != null)
-        {
-            targetView.GetComponent<ITakedamage>().Takedamage(damage);
         }
     }
 }
