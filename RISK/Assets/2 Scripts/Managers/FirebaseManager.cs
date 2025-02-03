@@ -390,7 +390,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
     }
 
-    public async void RewardUpdate(int reward, Action<bool> onSuccess = null)
+    public async void RewardUpdate(float reward, Action<bool> onSuccess = null)
     {
         await usersRef.Child("won").SetValueAsync(currentUserData.won + reward);
 

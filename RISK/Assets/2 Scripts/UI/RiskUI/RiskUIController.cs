@@ -16,6 +16,7 @@ public class RiskUIController : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Button surrenderButton;
     [SerializeField] private TextMeshProUGUI voteCountText;
+    public TextMeshProUGUI rewardText;
 
     private RiskData[] risks;
     private int selectedCard = -1;
@@ -31,6 +32,24 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
             InitializeRiskData();
+    }
+
+    public override void OnEnable()
+    {
+        // 리스크 UI가 활성화될 때 스킬 패널 비활성화
+        if (GameManager.Instance.dungeonUIController != null)
+        {
+            GameManager.Instance.dungeonUIController.SetSkillPanelsActive(false);
+        }
+    }
+
+    public override void OnDisable()
+    {
+        // 리스크 UI가 비활성화될 때 스킬 패널 다시 활성화
+        if (GameManager.Instance.dungeonUIController != null)
+        {
+            GameManager.Instance.dungeonUIController.SetSkillPanelsActive(true);
+        }
     }
 
     private void InitializeRiskData()
@@ -95,7 +114,15 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
     private void OnSurrenderClick()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            OnSurrenderConfirmed();
+            return;
+        }
+        print("OnSurrenderClick1");
         if (isVoting) return;
+
+        print("OnSurrenderClick2");
 
         var surrenderVotes = (Dictionary<int, bool>)PhotonNetwork.CurrentRoom.CustomProperties[SURRENDER_VOTES_KEY];
         surrenderVotes[PhotonNetwork.LocalPlayer.ActorNumber] = true;
@@ -110,6 +137,7 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
+        print("OnRoomPropertiesUpdate");
         if (propertiesThatChanged.ContainsKey(RISK_VOTES_KEY))
         {
             var votes = (Dictionary<int, int>)propertiesThatChanged[RISK_VOTES_KEY];
@@ -150,6 +178,8 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         int voteCount = surrenderVotes.Values.Count(v => v);
         voteCountText.text = $"항복 투표: {voteCount}/{PhotonNetwork.CurrentRoom.PlayerCount}";
 
+        print("UpdateSurrenderVotes");
+
         if (voteCount >= PhotonNetwork.CurrentRoom.PlayerCount)
         {
             OnSurrenderConfirmed();
@@ -158,7 +188,8 @@ public class RiskUIController : MonoBehaviourPunCallbacks
 
     private void OnSurrenderConfirmed()
     {
-        ProcessSurrender();
+        print("OnSurrenderConfirmed");
+        PhotonRequest.Instance.ProcessSurrender();
 
         gameObject.SetActive(false);
     }
@@ -181,7 +212,7 @@ public class RiskUIController : MonoBehaviourPunCallbacks
         // TODO: ??ルㅎ臾???洹먮봾裕????節뗪땁 ??⑤챷???β돦裕뉐퐲???뚮뿭寃??熬곣뫗??
         ApplyRiskEffect(selectedRisk);
 
-        GameManager.Instance.photonView.RPC("RiskUIActiveRPC", RpcTarget.All, false);
+        PhotonRequest.Instance.RiskUIActive(false);
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -212,14 +243,18 @@ public class RiskUIController : MonoBehaviourPunCallbacks
                     case 1:
                         stats.maxHealth *= 0.8f;
                         stats.currentHealth = Mathf.Min(stats.currentHealth, stats.maxHealth);
+                        GameManager.Instance.rewardMagnification += 0.2f;
                         break;
                     case 2:
                         stats.attackPower *= 1.3f;
                         stats.damageReduction *= 0.7f;
+                        GameManager.Instance.rewardMagnification -= 0.3f;
+
                         break;
                     case 3:
                         stats.moveSpeed *= 1.2f;
                         stats.healthRegen *= 0.5f;
+                        GameManager.Instance.rewardMagnification -= 0.1f;
                         break;
                 }
 
@@ -243,58 +278,6 @@ public class RiskUIController : MonoBehaviourPunCallbacks
             player.TryGetComponent(out Player component);
 
             component.InitializeStatsPhoton(stat);
-        }
-    }
-
-    public void ProcessSurrender()
-    {
-        if (!PhotonNetwork.IsMasterClient) return;
-
-        photonView.RPC("ProcessSurrenderRPC", RpcTarget.All);
-    }
-
-    [PunRPC]
-    private void ProcessSurrenderRPC()
-    {
-        GameManager.Instance.isWaveDone = true;
-        GameManager.Instance.isGameForceOver = false;
-        CalculateRewards(true);
-    }
-
-    private void CalculateRewards(bool isSurrender)
-    {
-        if (!PhotonNetwork.IsMasterClient) return;
-
-        Dictionary<string, float> playerRewards = new Dictionary<string, float>();
-
-        foreach (var playerObj in UnitManager.Instance.players.Values)
-        {
-            if (playerObj.TryGetComponent(out Player player))
-            {
-                float baseReward = 1000f; // ?リ옇????곌랜?삥묾?
-                float levelMultiplier = player.Stats.level * 0.1f; // ???뉖낵 ?곌랜????
-                float surrenderPenalty = isSurrender ? 0.5f : 1f; // ??????濡れ꽢??
-
-                float finalReward = baseReward * (1 + levelMultiplier) * surrenderPenalty;
-                playerRewards.Add(player.Stats.nickName, finalReward);
-            }
-        }
-
-        photonView.RPC("UpdatePlayerRewardsRPC", RpcTarget.All, JsonConvert.SerializeObject(playerRewards));
-    }
-
-    [PunRPC]
-    private void UpdatePlayerRewardsRPC(string rewardsJson)
-    {
-        Dictionary<string, float> rewards = JsonConvert.DeserializeObject<Dictionary<string, float>>(rewardsJson);
-
-        foreach (var reward in rewards)
-        {
-
-            if (reward.Key == FirebaseManager.Instance.currentCharacterData.nickName)
-            {
-                // TODO: Update reward to Firebase Database
-            }
         }
     }
 }

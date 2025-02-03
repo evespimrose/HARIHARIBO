@@ -91,6 +91,15 @@ public class CreatePartyUI : MonoBehaviour
 
         if (!string.IsNullOrEmpty(partyName))
         {
+            foreach (var roomInfo in PanelManager.Instance.currentRoomInfoList)
+            {
+                if (roomInfo.Name == partyName)
+                {
+                    PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Error", "A party with this name already exists.", () => { PanelManager.Instance.PanelOpen("PartyListBoard"); });
+                    return;
+                }
+            }
+
             PartyInfo newPartyInfo = new PartyInfo
             {
                 name = partyName,
@@ -111,10 +120,13 @@ public class CreatePartyUI : MonoBehaviour
                 IsOpen = true,
                 CustomRoomProperties = new HashTable {
                     { "Difficulty", newPartyInfo.goal }, { "minLevel", newPartyInfo.minPartyLevel },
-                    { "maxLevel", newPartyInfo.maxPartyLevel },{ "roomId", newPartyInfo.partyId }
+                    { "maxLevel", newPartyInfo.maxPartyLevel },{ "roomId", newPartyInfo.partyId },
+                    { "IsPlaying", false }
                 },
-                CustomRoomPropertiesForLobby = new string[] { "Difficulty", "minLevel", "maxLevel", "roomId" }
+                CustomRoomPropertiesForLobby = new string[] { "Difficulty", "minLevel", "maxLevel", "roomId", "IsPlaying" }
             };
+
+            roomOptions.EmptyRoomTtl = 0;
 
             PhotonNetwork.CreateRoom(newPartyInfo.name, roomOptions, TypedLobby.Default);
 

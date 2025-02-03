@@ -60,16 +60,6 @@ public class PanelManager : MonoBehaviourPunCallbacks
         PanelOpen("Login");
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
-
     public void PanelOpen(string panelName)
     {
         if (openPanel == panelName) return;
@@ -125,7 +115,7 @@ public class PanelManager : MonoBehaviourPunCallbacks
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        print("OnRoomListUpdate?????");
+        print("OnRoomListUpdate!!!!!!!!!!!!!!!!!!!!!");
         currentRoomInfoList = roomList;
         partyListBoard.UpdateRoomList(roomList);
     }

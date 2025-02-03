@@ -10,7 +10,7 @@ using Button = UnityEngine.UI.Button;
 using PhotonRealtimePlayer = Photon.Realtime.Player;
 using ExitGames.Client.Photon;
 
-public class ChatScrollController : PhotonSingletonManager<ChatScrollController>, IChatClientListener
+public class ChatScrollController : SingletonManager<ChatScrollController>, IChatClientListener
 {
     public ScrollRect scrollRect;
     public VerticalLayoutGroup layoutGroup;
@@ -59,23 +59,12 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
 
     private void OnShowButtonClick()
     {
-        if (gameObject.activeSelf)
-            hideText.text = "+";
-        else
-            hideText.text = "-";
-
-        Users.SetActive(!gameObject.activeSelf);
+        Users.SetActive(!Users.gameObject.activeSelf);
     }
 
     private void OnSendButtonClick()
     {
         AddMessage(chatInputField.text);
-    }
-
-    public override void OnEnable()
-    {
-        base.OnEnable();
-        gameObject.SetActive(true);
     }
 
     private void OnSendButtonClick(string msg)
@@ -110,24 +99,6 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
         chatClient.Service();
     }
 
-    public void SendMessage()
-    {
-        if (chatInputField.text.Equals(""))
-        {
-            Debug.Log("Empty");
-            return;
-        }
-
-        string msg =
-            string.Format("[{0}] (lv.{1}, {2}) : {3}", FirebaseManager.Instance.currentCharacterData.nickName, FirebaseManager.Instance.currentCharacterData.level,
-            FirebaseManager.Instance.currentCharacterData.classType.ToString(), chatInputField.text);
-
-        photonView.RPC("ReceiveMsg", RpcTarget.OthersBuffered, msg);
-        AddMessage(msg);
-        chatInputField.ActivateInputField();
-        chatInputField.text = "";
-    }
-
     [PunRPC]
     public void ReceiveMsg(string msg)
     {
@@ -143,20 +114,6 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
             players += data.nickName + "(Lv." + data.level + ", " + data.classType.ToString() + ")\n";
         }
         playerList.text = players;
-    }
-
-    public override void OnPlayerEnteredRoom(PhotonRealtimePlayer newPlayer)
-    {
-        FireBaseCharacterData data = JsonConvert.DeserializeObject<FireBaseCharacterData>(newPlayer.NickName);
-        string msg = string.Format("<color=#00ff00>[{0}] joined room.</color>", data.nickName);
-        AddMessage(msg);
-    }
-
-    public override void OnPlayerLeftRoom(PhotonRealtimePlayer otherPlayer)
-    {
-        FireBaseCharacterData data = JsonConvert.DeserializeObject<FireBaseCharacterData>(otherPlayer.NickName);
-        string msg = string.Format("<color=#ff0000>[{0}] left room.</color>", data.nickName);
-        AddMessage(msg);
     }
 
     public void AddMessage()
@@ -208,12 +165,12 @@ public class ChatScrollController : PhotonSingletonManager<ChatScrollController>
 
     void IChatClientListener.OnSubscribed(string[] channels, bool[] results)
     {
-        AddMessage(string.Format("chennel ({0}) Subscribed", string.Join(",", channels)));
+        AddMessage(string.Format("channel ({0}) Subscribed", string.Join(",", channels)));
     }
 
     void IChatClientListener.OnUnsubscribed(string[] channels)
     {
-        AddMessage(string.Format("chennel ({0}) Unsubscribed", string.Join(",", channels)));
+        AddMessage(string.Format("channel ({0}) Unsubscribed", string.Join(",", channels)));
     }
 
     void IChatClientListener.OnGetMessages(string channelName, string[] senders, object[] messages)

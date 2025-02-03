@@ -87,6 +87,8 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
         {
             float healthRatio = localPlayer.Stats.currentHealth / localPlayer.Stats.maxHealth;
             UpdatePlayerInfo(healthRatio);
+            if (string.IsNullOrEmpty(playerNameText.text))
+                playerNameText.text = localPlayer.Stats.nickName;
 
             UpdatePartyMembersHP();
         }
@@ -98,16 +100,18 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
         {
             float healthRatio = player.Stats.currentHealth / player.Stats.maxHealth;
             UpdatePlayerInfo(healthRatio);
-            if (playerNameText != null && UnitManager.Instance != null)
-            {
-                if (UnitManager.Instance.LocalPlayer != null)
-                {
-                    string playerName = UnitManager.Instance.LocalPlayer.name;
-                    playerNameText.text = playerName;
-                }
-            }
             InitializePartyUI();
         }
+    }
+    public void SetSkillPanelsActive(bool active)
+    {
+#if UNITY_ANDROID
+        if (combatPanel != null)
+            combatPanel.SetActive(active);
+#else
+        if (pcSkillPanel != null)
+            pcSkillPanel.SetActive(active);
+#endif
     }
     private void OnEnable()
     {
@@ -468,6 +472,7 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
                     stream.SendNext(member.Key); // 플레이어 이름
                     stream.SendNext(healthRatio); // HP 비율
                     stream.SendNext((int)member.Value.Player.ClassType); // 클래스 타입
+                    stream.SendNext(timerText.text);
                 }
             }
         }
@@ -480,6 +485,8 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
                 string playerName = (string)stream.ReceiveNext();
                 float healthRatio = (float)stream.ReceiveNext();
                 ClassType classType = (ClassType)stream.ReceiveNext();
+                syncedTimerText = (string)stream.ReceiveNext();
+
 
                 syncedPartyData[playerName] = new PartyMemberData
                 {
@@ -489,6 +496,7 @@ public class DungeonUIController : MonoBehaviourPun, IPunObservable
                 };
             }
             UpdatePartyMembersFromSyncedData();
+            UpdateTimerText(syncedTimerText);
         }
     }
     private void UpdatePartyMembersFromSyncedData()

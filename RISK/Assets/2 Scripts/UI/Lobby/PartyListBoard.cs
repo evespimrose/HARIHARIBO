@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,29 +20,36 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private List<RoomInfo> currentRoomList = new List<RoomInfo>();
 
-    private void Awake()
-    {
-        refreshButton.onClick.AddListener(OnRefreshButtonClick);
-        createButton.onClick.AddListener(OnCreateButtonClick);
-        closeButton.onClick.AddListener(OnCloseButtonClick);
-        partyMemberUIOpenButton.onClick.AddListener(OnPartyMemberUIOpenButtonClick);
-        upgadeButton.onClick.AddListener(CharacterUpgradeOpen);
-    }
-
     private void OnPartyMemberUIOpenButtonClick()
     {
         PanelManager.Instance.PanelOpen("PartyMember");
     }
 
-    private void Update()
+    public override void OnEnable()
     {
-        //createButton.interactable = !PartyManager.Instance.isInParty;
-        //partyMemberUIOpenButton.interactable = PartyManager.Instance.isInParty;
+        base.OnEnable();
+        refreshButton.onClick.AddListener(OnRefreshButtonClick);
+        createButton.onClick.AddListener(OnCreateButtonClick);
+        closeButton.onClick.AddListener(OnCloseButtonClick);
+        partyMemberUIOpenButton.onClick.AddListener(OnPartyMemberUIOpenButtonClick);
+        upgadeButton.onClick.AddListener(CharacterUpgradeOpen);
+
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        refreshButton.onClick.RemoveAllListeners();
+        createButton.onClick.RemoveAllListeners();
+        closeButton.onClick.RemoveAllListeners();
+        partyMemberUIOpenButton.onClick.RemoveAllListeners();
+        upgadeButton.onClick.RemoveAllListeners();
+        UpdateRoomList(currentRoomList);
     }
 
     private void OnRefreshButtonClick()
     {
-        //UpdateRoomList(PanelManager.Instance.currentRoomInfoList);
+        
     }
 
     private void OnCreateButtonClick()
@@ -51,13 +59,6 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
     private void OnCloseButtonClick()
     {
-        PanelManager.Instance.PanelOpen("Lobby");
-
-    }
-
-    public override void OnEnable()
-    {
-        base.OnEnable();
     }
 
     public void UpdateRoomList(List<RoomInfo> roomList)
@@ -65,37 +66,39 @@ public class PartyListBoard : MonoBehaviourPunCallbacks
 
         foreach (Transform child in partyListContainer)
         {
-            Destroy(child.gameObject);
+            DestroyImmediate(child.gameObject);
         }
-
-        List<RoomInfo> destroyCanditate = new List<RoomInfo>();
-        destroyCanditate = currentRoomList.FindAll(x => false == roomList.Contains(x));
 
         foreach (RoomInfo roomInfo in roomList)
         {
-            if (currentRoomList.Contains(roomInfo)) continue;
-            AddRoomButton(roomInfo);
-        }
+            if (roomInfo.CustomProperties.TryGetValue("IsPlaying", out object isPlaying) && (bool)isPlaying)
+                continue;
 
-        foreach (Transform child in partyListContainer)
-        {
-            if (destroyCanditate.Exists(x => x.Name == child.name))
-                Destroy(child.gameObject);
+            AddRoomButton(roomInfo);
         }
 
         currentRoomList = roomList;
 
-        //PhotonNetwork.GetCustomRoomList();
+    }
 
-        //if (PhotonManager.Instance.partyRoomInfoList != null)
-        //{
-        //    foreach (PartyInfo party in PhotonManager.Instance.partyRoomInfoList)
-        //    {
-        //        GameObject partyItem = Instantiate(partyListItemPrefab, partyListContainer);
-        //        if (partyItem.TryGetComponent(out PartyInfoDisplay component))
-        //            component.Initialize(party);
-        //    }
-        //}
+    public void UpdateRoomList()
+    {
+        currentRoomList.Clear();
+
+        foreach (Transform child in partyListContainer)
+        {
+            DestroyImmediate(child.gameObject);
+        }
+
+        foreach (RoomInfo roomInfo in PanelManager.Instance.currentRoomInfoList)
+        {
+            if (roomInfo.CustomProperties.TryGetValue("IsPlaying", out object isPlaying) && (bool)isPlaying)
+                continue;
+
+            AddRoomButton(roomInfo);
+        }
+
+        currentRoomList = PanelManager.Instance.currentRoomInfoList;
 
     }
 

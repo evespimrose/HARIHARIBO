@@ -10,7 +10,7 @@ using PhotonRealtimePlayer = Photon.Realtime.Player;
 using System;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
+public class GameManager : SingletonManager<GameManager>
 {
     public bool isGameRunning;
 
@@ -32,10 +32,10 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     private Canvas persistentCanvas;
 
-    private DungeonUIController dungeonUIController;
+    public DungeonUIController dungeonUIController;
 
     public float roomReward = 0f;
-    private float rewardMagnification = 1.0f;
+    public float rewardMagnification = 1.0f;
 
     public Action<float> WhenMonsterDies;
 
@@ -48,6 +48,9 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
     [SerializeField]
     private float startTime = 300f;
     private float remainingTime;
+
+    private Coroutine gameCoroutine;
+    private bool isGameCoroutineRunning = false;
 
     protected override void Awake()
     {
@@ -68,12 +71,14 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
     public void MonsterReward(float won)
     {
-        roomReward += won;
+        roomReward += won * rewardMagnification;
     }
 
     private IEnumerator GameClock()
     {
         isTickGoes = true;
+        remainingTime = startTime;
+
         while (remainingTime > 0)
         {
             if (isTickGoes && !isGamePaused)
@@ -143,27 +148,39 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         if (PhotonNetwork.IsMasterClient)
         {
             string jsonData = JsonConvert.SerializeObject(connectedPlayers);
-            photonView.RPC("SyncPlayerDataRPC", RpcTarget.All, jsonData);
+            PhotonRequest.Instance.SyncPlayerData(jsonData);
         }
     }
 
-    [PunRPC]
-    public void SyncPlayerDataRPC(string jsonData)
+    private void Start()
     {
-        connectedPlayers = JsonConvert.DeserializeObject<List<FireBaseCharacterData>>(jsonData);
-
-        Debug.Log($"Player data synchronized with all clients! : {FirebaseManager.Instance.currentCharacterData.nickName}");
+        gameCoroutine = StartCoroutine(Game());
     }
 
-    private IEnumerator Start()
+    private void Update()
     {
-        yield return new WaitUntil(() => isGameRunning);
-        print("isGameReady!!! GOGOGOGO!!!!");
+        if (!isGameCoroutineRunning && isGameRunning && !isGameForceOver)
+        {
+            gameCoroutine = StartCoroutine(Game());
+        }
+    }
+
+    private IEnumerator Game()
+    {
+        if (isGameCoroutineRunning) yield break;
+        isGameCoroutineRunning = true;
+
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "GameScene");
         spawner = (MonsterSpwan)FindAnyObjectByType(typeof(MonsterSpwan));
         riskUIController = (RiskUIController)FindAnyObjectByType(typeof(RiskUIController));
         dungeonUIController = (DungeonUIController)FindAnyObjectByType(typeof(DungeonUIController));
-        riskUIController.gameObject.SetActive(false);
+
+        if (riskUIController == null)
+        {
+            print("??????????");
+        }
+        else if (riskUIController.gameObject.activeSelf)
+            riskUIController.gameObject.SetActive(false);
 
         FireBaseCharacterData fireBaseCharacterData = FirebaseManager.Instance.currentCharacterData;
 
@@ -191,7 +208,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         int playerNumber = PhotonNetwork.LocalPlayer.ActorNumber;
 
         Vector3 playerPos = playerPosition.GetChild(playerNumber).position;
-
 
         GameObject playerObj = null;
         switch (FirebaseManager.Instance.currentCharacterData.classType)
@@ -234,6 +250,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         if (false == PhotonNetwork.IsMasterClient)
         {
+            StopGameCoroutine();
             yield break;
         }
 
@@ -245,17 +262,26 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
             UnitManager.Instance.RequestPlayerSyncToRoomMembers();
         }
 
-        remainingTime = startTime; // ?곸궠???筌뤾퍓堉????蹂?뜟 ?貫?껆뵳??
         StartCoroutine(GameClock());
 
         StartCoroutine(Dungeon());
         StartCoroutine(UpdateTimer());
 
-        yield return new WaitUntil(() => !isGameRunning);
-        // TODO : game over logic initiate
+        yield return new WaitUntil(() => !isGameRunning || isGameForceOver);
+        print("!!!!!!!!!!!!!!");
         PhotonNetwork.LoadLevel("TitleScene");
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "TitleScene");
-        photonView.RPC("GameOverRPC", RpcTarget.All);
+        PhotonRequest.Instance.GameOver();
+    }
+
+    private void StopGameCoroutine()
+    {
+        if (gameCoroutine != null)
+        {
+            StopCoroutine(gameCoroutine);
+            gameCoroutine = null;
+        }
+        isGameCoroutineRunning = false;
     }
 
     private IEnumerator UpdateTimer()
@@ -277,21 +303,24 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
     }
 
-    public IEnumerator Dungeon() // Main LOOP
+    public IEnumerator Dungeon()
     {
-        while (isGameRunning)
+        while (isGameRunning && !isGameForceOver)
         {
             isWaveDone = false;
-            yield return StartCoroutine(spawner.MonsterSpwanCorutine());
-            // riskUI enable
+            if (spawner != null)
+            {
+                yield return StartCoroutine(spawner.MonsterSpwanCorutine());
+            }
             Debug.Log("All Wave Launched....");
 
             yield return new WaitUntil(() => isWaveDone && UnitManager.Instance.monsters.Count <= 0);
 
             Debug.Log("All Monsters Dead || Time Out....");
-            photonView.RPC("RiskUIActiveRPC", RpcTarget.All, true);
 
-            //
+            PhotonRequest.Instance.RiskUIActive(true);
+            PhotonRequest.Instance.RequestRiskUIGold(roomReward);
+
             yield return new WaitUntil(() => false == riskUIController.gameObject.activeSelf);
 
             if (isGameForceOver)
@@ -301,34 +330,12 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         }
     }
 
-    [PunRPC]
-    private void RiskUIActiveRPC(bool isActive)
-    {
-        riskUIController.gameObject.SetActive(isActive);
-    }
-
     public void ProcessGameOver(bool isSurrender)
     {
-        CalculateRewards(isSurrender);
+        PhotonRequest.Instance.CalculateRewards(isSurrender);
         isWaveDone = true;
         isGameRunning = false;
-    }
-
-    private void CalculateRewards(bool isSurrender)
-    {
-        float finalReward = 0;
-
-        float baseReward = roomReward;
-        float surrenderPenalty = isSurrender ? 0f : 1f;
-        finalReward = baseReward * surrenderPenalty;
-
-        photonView.RPC("UpdatePlayerRewardsRPC", RpcTarget.All, finalReward);
-    }
-
-    [PunRPC]
-    private void UpdatePlayerRewardsRPC(int rewardsJson)
-    {
-        FirebaseManager.Instance.RewardUpdate(rewardsJson);
+        isGameCoroutineRunning = false;
     }
 
     public IEnumerator InstantiatePlayer(PlayerStats playerStats)
@@ -388,22 +395,6 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         
     }
 
-    [PunRPC]
-    private void SetGameReady()
-    {
-        isGameRunning = true;
-        isGamePaused = false;
-        isGameForceOver = false;
-    }
-
-    [PunRPC]
-    private void GameOverRPC()
-    {
-        PhotonNetwork.LeaveRoom();
-        chat.gameObject.SetActive(false);
-        PanelManager.Instance?.PanelOpen("PartyListBoard");
-    }
-
     public void RemovePlayerData(PhotonRealtimePlayer otherPlayer)
     {
         FireBaseCharacterData playerToRemove = connectedPlayers.Find(player => player.nickName == otherPlayer.NickName);
@@ -411,6 +402,7 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
         if (playerToRemove != null)
         {
             connectedPlayers.Remove(playerToRemove);
+            PhotonRequest.Instance.SyncPlayerData(JsonConvert.SerializeObject(playerToRemove));
         }
         else
         {
@@ -419,4 +411,15 @@ public class GameManager : MonoBehaviourPunSingletonManager<GameManager>
 
         SyncAllPlayers();
     }
+
+    private void OnDisable()
+    {
+        StopGameCoroutine();
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopGameCoroutine();
+    }
+
 }
