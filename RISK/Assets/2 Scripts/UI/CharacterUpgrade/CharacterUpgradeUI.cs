@@ -159,18 +159,23 @@ public class CharacterUpgradeUI : MonoBehaviour
             Debug.Log("골드가 부족합니다");
             return;
         }
-
         userData.won -= resourceCostValue;
+        Debug.Log($"골드소모 {userData.won}");
+        //userData에 골드 업데이트
+        FirebaseManager.Instance.currentUserData = userData;
+        FirebaseManager.Instance.UpdateWon(() => UpdateGoldUI(userData));
 
         float chance = float.Parse(stat.successChance.text) / 100f;
         bool isSuccess = Random.value <= chance;
+        Debug.Log("강화 시작");
 
         if (isSuccess)
         {
+            Debug.Log($"{stat.statsName.text} 강화 성공");
+
             float current = float.Parse(stat.currentStats.text);
             float upgradeValue = float.Parse(stat.statsUpgradeValue.text);
-            //Send upgraded data to Firebase
-            FirebaseManager.Instance.currentUserData = userData;
+
             //Processing after update using callback
             FirebaseManager.Instance.UpgradeCharacter(stat.statsName.text, upgradeValue, () =>
             {
@@ -179,7 +184,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         }
         else
         {
-            Debug.Log($"{stat.statsName.text} 업그레이드 실패");
+            Debug.Log($"{stat.statsName.text} 강화 실패");
         }
         UpdateGoldUI(userData);
     }

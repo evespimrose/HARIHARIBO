@@ -297,55 +297,81 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         return result;
     }
 
+    public async void UpdateWon(Action onSuccess)
+    {
+        if (usersRef != null)
+        {
+            Debug.Log("골드업데이트 시작");
+
+            try
+            {
+                await usersRef.Child("won").SetValueAsync(currentUserData.won);
+            }
+            catch(Exception e)
+            {
+                //에러 발생 시 처리
+                PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", $"Character upgrade failed.\n{e.Message}",
+                    ok =>
+                    {
+                        if (ok)
+                            CopyToClipboard(e.Message);
+                        else
+                            PanelManager.Instance.PopupClose();
+                    });
+            }
+            Debug.Log("골드업데이트 끝");
+
+        }
+    }
+
     public async void UpgradeCharacter(string dataName, float statIncrease, Action onSuccess)
     {
         if (currentCharacterData != null)
         {
             try
             {
-                // Firebase 참조 경로
+                //Firebase 참조 경로
                 DatabaseReference characterRef = FirebaseManager.Instance.DB.GetReference($"characters/{FirebaseManager.Instance.Auth.CurrentUser.UserId}/{currentCharacterData.nickName}");
 
-                // 스탯을 업데이트할 데이터 필드
-                var statProperty = currentCharacterData.GetType().GetProperty(dataName);
-                var upgradeLevelProperty = currentCharacterData.GetType().GetProperty(dataName + "UpgradeLevel");
+                //스탯을 업데이트할 데이터 필드
+                var stat = currentCharacterData.GetType().GetField(dataName);
+                var upgradeLevel = currentCharacterData.GetType().GetField(dataName + "UpgradeLevel");
 
-                if (statProperty == null || upgradeLevelProperty == null)
+                if (stat == null || upgradeLevel == null)
                 {
-                    Debug.LogWarning($"Invalid dataName: {dataName}");
+                    Debug.LogWarning($"{stat == null}, {upgradeLevel == null}");
                     return;
                 }
+                Debug.Log("값넣기직전");
 
-                // 기존 값들 가져오기
-                float currentStatValue = (float)statProperty.GetValue(currentCharacterData);
-                int currentUpgradeLevel = (int)upgradeLevelProperty.GetValue(currentCharacterData);
+                //기존 값들 가져오기
+                float currentStatValue = (float)stat.GetValue(currentCharacterData);
+                int currentUpgradeLevel = (int)upgradeLevel.GetValue(currentCharacterData);
+                Debug.Log($"값넣음 {currentStatValue}, {currentUpgradeLevel}");
 
-                // 객체 내의 데이터 업데이트
-                statProperty.SetValue(currentCharacterData, currentStatValue + statIncrease);
-                upgradeLevelProperty.SetValue(currentCharacterData, currentUpgradeLevel + 1);
+                //객체 내의 데이터 업데이트
+                stat.SetValue(currentCharacterData, currentStatValue + statIncrease);
+                upgradeLevel.SetValue(currentCharacterData, currentUpgradeLevel + 1);
+                Debug.Log($"값에 강화한거넣음 {stat.GetValue(currentCharacterData)}, {upgradeLevel.GetValue(currentCharacterData)}");
 
-                // Firebase에 데이터 업데이트 (나중에 파이어베이스에 반영)
+                //Firebase에 데이터 업데이트 (나중에 파이어베이스에 반영)
                 await characterRef.Child(dataName).SetValueAsync(currentStatValue + statIncrease);
                 await characterRef.Child($"{dataName}UpgradeLevel").SetValueAsync(currentUpgradeLevel + 1);
+                Debug.Log("파이어베이스에보냄");
 
-                Debug.Log($"{dataName} 업데이트 완료");
-
-                // won 값도 업데이트
-                await usersRef.Child("won").SetValueAsync(currentUserData.won);
-
-                // 업데이트된 값 확인
+                //업데이트된 값 확인
                 var snapshot = await characterRef.Child(dataName).GetValueAsync();
-                Debug.Log($"저장된 값 확인: {snapshot.Value}");
+                Debug.Log($"{snapshot}");
 
-                // 성공 시 콜백 호출
+                //성공 시 콜백 호출
                 onSuccess?.Invoke();
 
-                // 팝업 표시
+                //팝업 표시
                 PanelManager.Instance.PopupOpen<PopupPanel>().SetPopup("Success", "Character upgraded successfully.");
             }
             catch (Exception e)
             {
-                // 에러 발생 시 처리
+                //에러 발생 시 처리
                 PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", $"Character upgrade failed.\n{e.Message}",
                     ok =>
                     {
