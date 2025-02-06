@@ -94,16 +94,8 @@ public class Monster : MonoBehaviour, ITakedamage
             }
         }
     }
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    var projectile = other.GetComponent<ProjectileMove>();
-    //    if (projectile != null)
-    //    {
-    //        projectile.OnHit(other.ClosestPoint(transform.position));
-    //    }
-    //}
 
-    //업데이트에서 돌리기
+    //몸박뎀 쿨타임 - 업데이트에서 돌리기
     protected void RemoveBodyAtkHit()
     {
         List<GameObject> playersToRemove = new List<GameObject>();

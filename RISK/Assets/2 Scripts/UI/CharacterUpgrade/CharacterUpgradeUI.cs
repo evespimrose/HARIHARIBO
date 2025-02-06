@@ -21,16 +21,15 @@ public class StatsSet
     [Tooltip("업그레이드 버튼")]
     public Button upgradeButton;  
 
-    //UI Update
     public void UpdateUI(string name, float current, float upgradeValue, float chance, int cost, int upgradeLevel)
     {
         if (upgradeLevel >= 25)
         {
-            statsName.text = "MAX";  //statsName
-            currentStats.text = "MAX";   //currentStats
-            statsUpgradeValue.text = "MAX";   //statsUpgradeValue
-            successChance.text = "MAX";   //successChance
-            resourceCost.text = "MAX";   //resourceCost
+            statsName.text = "MAX";         //statsName
+            currentStats.text = "MAX";      //currentStats
+            statsUpgradeValue.text = "MAX"; //statsUpgradeValue
+            successChance.text = "MAX";     //successChance
+            resourceCost.text = "MAX";      //resourceCost
             upgradeButton.interactable = false;
         }
         else
@@ -48,9 +47,9 @@ public class StatsSet
 [System.Serializable]
 public class UpgradeData
 {
-    public float upProb;  //Upgrade %
-    public int useWon;    //Upgrade won
-    public float statIncrease;  //UpStat
+    public float upProb;       //Upgrade %
+    public int useWon;         //Upgrade won
+    public float statIncrease; //UpStat
 
     //Initialize Upgrade Data
     public UpgradeData(float upProb, int useWon, float statIncrease)
@@ -180,7 +179,7 @@ public class CharacterUpgradeUI : MonoBehaviour
         }
         else
         {
-            Debug.Log($"{stat.statsName.text} 업그레이드 실패...");
+            Debug.Log($"{stat.statsName.text} 업그레이드 실패");
         }
         UpdateGoldUI(userData);
     }
