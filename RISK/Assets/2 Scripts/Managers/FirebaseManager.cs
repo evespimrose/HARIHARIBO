@@ -342,26 +342,21 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                     Debug.LogWarning($"{stat == null}, {upgradeLevel == null}");
                     return;
                 }
-                Debug.Log("값넣기직전");
 
                 //기존 값들 가져오기
                 float currentStatValue = (float)stat.GetValue(currentCharacterData);
                 int currentUpgradeLevel = (int)upgradeLevel.GetValue(currentCharacterData);
-                Debug.Log($"값넣음 {currentStatValue}, {currentUpgradeLevel}");
 
                 //객체 내의 데이터 업데이트
                 stat.SetValue(currentCharacterData, currentStatValue + statIncrease);
                 upgradeLevel.SetValue(currentCharacterData, currentUpgradeLevel + 1);
-                Debug.Log($"값에 강화한거넣음 {stat.GetValue(currentCharacterData)}, {upgradeLevel.GetValue(currentCharacterData)}");
 
                 //Firebase에 데이터 업데이트 (나중에 파이어베이스에 반영)
-                await characterRef.Child(dataName).SetValueAsync(currentStatValue + statIncrease);
-                await characterRef.Child($"{dataName}UpgradeLevel").SetValueAsync(currentUpgradeLevel + 1);
-                Debug.Log("파이어베이스에보냄");
+                await characterRef.Child(dataName).SetValueAsync(stat.ToString());
+                await characterRef.Child($"{dataName}UpgradeLevel").SetValueAsync(upgradeLevel.ToString());
 
                 //업데이트된 값 확인
                 var snapshot = await characterRef.Child(dataName).GetValueAsync();
-                Debug.Log($"{snapshot}");
 
                 //성공 시 콜백 호출
                 onSuccess?.Invoke();
