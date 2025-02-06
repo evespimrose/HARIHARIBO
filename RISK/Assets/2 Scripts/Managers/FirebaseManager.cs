@@ -248,6 +248,7 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
         }
         catch (Exception e)
         {
+            Debug.LogError($"[Error] Character creation failed: {e.Message}\n{e.StackTrace}");
             PanelManager.Instance.PopupOpen<TwoButtonPopupPanel>().SetPopup("Error", "character creation failed.\n" + e.Message,
                ok =>
                {
@@ -319,13 +320,13 @@ public class FirebaseManager : SingletonManager<FirebaseManager>
                 float currentStatValue = (float)statProperty.GetValue(currentCharacterData);
                 int currentUpgradeLevel = (int)upgradeLevelProperty.GetValue(currentCharacterData);
 
-                // Firebase에 데이터 업데이트
-                await characterRef.Child(dataName).SetValueAsync(currentStatValue + statIncrease);
-                await characterRef.Child($"{dataName}UpgradeLevel").SetValueAsync(currentUpgradeLevel + 1);
-
                 // 객체 내의 데이터 업데이트
                 statProperty.SetValue(currentCharacterData, currentStatValue + statIncrease);
                 upgradeLevelProperty.SetValue(currentCharacterData, currentUpgradeLevel + 1);
+
+                // Firebase에 데이터 업데이트 (나중에 파이어베이스에 반영)
+                await characterRef.Child(dataName).SetValueAsync(currentStatValue + statIncrease);
+                await characterRef.Child($"{dataName}UpgradeLevel").SetValueAsync(currentUpgradeLevel + 1);
 
                 Debug.Log($"{dataName} 업데이트 완료");
 
